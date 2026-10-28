@@ -100,7 +100,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
      * provides; a {@link TradeLevel.OfTrades} carries trades a mod defines in code. {@code levels} is called when the
      * scan runs, so it may read the server's registries through the {@link IServerUtils} it is given.
      */
-    void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
+    void registerTrades(Identifier traderId, EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels);
 
     void registerTradeOverride(BiFunction<IServerUtils, Identifier, @Nullable Int2ObjectMap<TradeLevel>> override);
 

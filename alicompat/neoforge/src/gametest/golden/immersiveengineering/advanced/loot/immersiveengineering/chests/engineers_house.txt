@@ -409,7 +409,7 @@ ali:loot_table
       |   -> Components:
       |     -> minecraft:rarity
       |       -> Rarity: Common
-      | Secret Bluprintz:
+      | Secret Bluprintz
       |   -> Predicates:
       |     -> Random Chance:
       |       -> Chance: 0.13
@@ -441,7 +441,7 @@ ali:loot_table
       |   -> Components:
       |     -> minecraft:rarity
       |       -> Rarity: Common
-      | Secret Bluprintz:
+      | Secret Bluprintz
       |   -> Predicates:
       |     -> Random Chance:
       |       -> Chance: 0.13
@@ -473,7 +473,7 @@ ali:loot_table
       |   -> Components:
       |     -> minecraft:rarity
       |       -> Rarity: Common
-      | Secret Bluprintz:
+      | Secret Bluprintz
       |   -> Predicates:
       |     -> Random Chance:
       |       -> Chance: 0.13
@@ -505,7 +505,7 @@ ali:loot_table
       |   -> Components:
       |     -> minecraft:rarity
       |       -> Rarity: Common
-      | Secret Bluprintz:
+      | Secret Bluprintz
       |   -> Predicates:
       |     -> Random Chance:
       |       -> Chance: 0.13

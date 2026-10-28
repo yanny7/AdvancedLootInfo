@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record TraderHeader(@Nullable Item spawnEgg, Rect spawnEggRect, Component title, @Nullable Component titleTooltip,
+public record TraderHeader(@Nullable Item spawnEgg, Rect spawnEggRect, Component title, Component titleTooltip,
                            Rect titleRect, List<Rect> pois, Component acceptsLabel, Rect acceptsLabelRect, List<Rect> accepts, int height,
                            int minContentHeight) {
 }

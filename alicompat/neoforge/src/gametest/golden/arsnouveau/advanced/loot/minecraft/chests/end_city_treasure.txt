@@ -871,8 +871,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_harvest x1
-    | Chance: 0.31%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.pranks_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Pranks",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_linger","ars_nouveau:glyph_launch","ars_nouveau:glyph_amplify","ars_nouveau:glyph_delay","ars_nouveau:glyph_duration_down","ars_nouveau:glyph_firework","ars_nouveau:glyph_amplify","ars_nouveau:glyph_summon_vex","ars_nouveau:glyph_wind_shear"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Pranks","italic":true,"translate":"ars_nouveau.tome_name.pranks_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -906,8 +906,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_restoration x1
-    | Chance: 0.28%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.chosenarchitect_tome",spells:{0:{color:{b:32,g:114,id:"ars_nouveau:constant",r:255},name:"Chosen's Chaotic Shift",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_exchange","ars_nouveau:glyph_amplify","ars_nouveau:glyph_randomize","ars_nouveau:glyph_pickup"],sound:{pitch:2.0f,sound:{id:"ars_nouveau:gaia_family"},volume:0.55f}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Chosen\'s Chaotic Shift","italic":true,"translate":"ars_nouveau.tome_name.chosenarchitect_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -941,8 +941,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_gravity x1
-    | Chance: 0.26%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.shoob_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"",particleTimeline:{"ars_nouveau:orbit":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:orbit"},"ars_nouveau:self":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:warped_spore",subProperties:{"ars_nouveau:color":{particleColor:{b:1,g:255,id:"ars_nouveau:constant",r:67},tintDisabled:0b}}}},type:"ars_nouveau:warped_spore"}},resolveSound:{sound:{sound:{id:"ars_nouveau:totem_use"}}},type:"ars_nouveau:self"},"ars_nouveau:touch":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},type:"ars_nouveau:touch"}},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_explosion","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_blink","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_invisibility","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"","italic":true,"translate":"ars_nouveau.tome_name.shoob_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -976,8 +976,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_flight x1
-    | Chance: 0.26%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.pandoxyy_tome",spells:{0:{color:{b:239,g:220,id:"ars_nouveau:constant",r:178},name:"Pandoxyy's Spin Cycle",particleTimeline:{"ars_nouveau:self":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:239,g:220,id:"ars_nouveau:constant",r:178},tintDisabled:0b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},type:"ars_nouveau:self"}},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_orbit","ars_nouveau:glyph_wind_burst","ars_nouveau:glyph_orbit","ars_nouveau:glyph_split","ars_nouveau:glyph_split","ars_nouveau:glyph_orbit","ars_nouveau:glyph_rotate","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_exchange"],sound:{pitch:1.2f,sound:{id:"ars_nouveau:puffer_fish_blow_up"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Pandoxyy\'s Spin Cycle","italic":true,"translate":"ars_nouveau.tome_name.pandoxyy_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1011,8 +1011,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_sunrise x1
-    | Chance: 0.24%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.vault_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Vault",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_launch","ars_nouveau:glyph_delay","ars_nouveau:glyph_leap","ars_nouveau:glyph_slowfall"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Vault","italic":true,"translate":"ars_nouveau.tome_name.vault_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1046,8 +1046,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_containment x1
-    | Chance: 0.23%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.poseidon_tome",spells:{0:{color:{b:255,g:1,id:"ars_nouveau:constant",r:1},name:"Poseidon's Refuge",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_light","ars_nouveau:glyph_burst","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_freeze","ars_nouveau:glyph_break","ars_nouveau:glyph_freeze"],sound:{sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Poseidon\'s Refuge","italic":true,"translate":"ars_nouveau.tome_name.poseidon_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1081,8 +1081,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_warping x1
-    | Chance: 0.21%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.sloppybox_tome",spells:{0:{color:{b:1,g:1,id:"ars_nouveau:constant",r:139},name:"Arcane Smelt",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_rune","ars_nouveau:glyph_smelt","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Arcane Smelt","italic":true,"translate":"ars_nouveau.tome_name.sloppybox_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1116,8 +1116,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_disintegration x1
-    | Chance: 0.21%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.worsecookie_tome",spells:{0:{color:{b:1,g:153,id:"ars_nouveau:constant",r:204},name:"The Yellow Sun",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_rune","ars_nouveau:glyph_hex","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_wither","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"The Yellow Sun","italic":true,"translate":"ars_nouveau.tome_name.worsecookie_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1151,8 +1151,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_cloudshaping x1
-    | Chance: 0.21%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.oaksa_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"0AKSA's Obliterating Open-Mine",particleTimeline:{"ars_nouveau:projectile":{castSound:{sound:{sound:{id:"ars_nouveau:illusioner_cast_spell"}}},flairEffect:{motion:{propMap:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:enchant",subProperties:{"ars_nouveau:color":{particleColor:{b:1,g:216,id:"ars_nouveau:constant",r:255},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:helix"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:1.0d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:39,rotation:{x:0.0f,y:89.99999f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:enchant",subProperties:{"ars_nouveau:color":{particleColor:{b:204,g:101,id:"ars_nouveau:constant",r:153},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:enchant"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:-35.927013f,y:-100.465324f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:sonic_boom",subProperties:{"ars_nouveau:color":{particleColor:{b:226,g:44,id:"ars_nouveau:constant",r:138},tintDisabled:0b}}}},type:"ars_nouveau:sonic_boom"}},onSpawnEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:10,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:89.99999f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:ominous_spawning",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:229,id:"ars_nouveau:constant",r:1},tintDisabled:0b}}}},type:"ars_nouveau:ominous_spawning"}},resolveSound:{sound:{sound:{id:"ars_nouveau:enderman_teleport"}}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:electric_spark",subProperties:{"ars_nouveau:color":{particleColor:{b:1,g:140,id:"ars_nouveau:constant",r:255},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:helix"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.30000001192092896d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:39,rotation:{x:0.0f,y:89.99999f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:electric_spark",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:1},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:electric_spark"}},type:"ars_nouveau:projectile"}},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_break","ars_nouveau:glyph_extract","ars_nouveau:glyph_pickup"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"0AKSA\'s Obliterating Open-Mine","italic":true,"translate":"ars_nouveau.tome_name.oaksa_tome"}'}
+    | Chance: 0.2%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1186,8 +1186,1443 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_scrying x1
-    | Chance: 0.21%
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.darkfira_tome",spells:{0:{color:{b:255,g:255,id:"ars_nouveau:constant",r:25},name:"Darkfira's Flash Freeze",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_conjure_water","ars_nouveau:glyph_freeze","ars_nouveau:glyph_lightning","ars_nouveau:glyph_amplify"],sound:{pitch:1.9f,sound:{id:"ars_nouveau:tempestry_family"},volume:1.69f}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Darkfira\'s Flash Freeze","italic":true,"translate":"ars_nouveau.tome_name.darkfira_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.frantastic_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Simulmancer's Storm",particleTimeline:{"ars_nouveau:linger":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:10,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{pitch:0.6f,sound:{id:"ars_nouveau:end_portal_frame_fill"},volume:1.2f}},trailEffect:{particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.2d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}},"ars_nouveau:wall":{chance:5,direction:"south",num_particles:20,range:3}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:linger"},"ars_nouveau:orbit":{castSound:{sound:{pitch:0.5f,sound:{id:"ars_nouveau:bell_block"},volume:0.4f}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:10,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:0.0f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:62,g:199,id:"ars_nouveau:constant",r:223},tintDisabled:0b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{pitch:0.5f,sound:{id:"ars_nouveau:bell_block"},volume:0.25f}},trailEffect:{motion:{propMap:{},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:electric_spark",subProperties:{"ars_nouveau:color":{particleColor:{b:62,g:199,id:"ars_nouveau:constant",r:223},tintDisabled:0b}}}},type:"ars_nouveau:electric_spark"}},type:"ars_nouveau:orbit"},"ars_nouveau:projectile":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:-28.677368f,y:10.835834f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}}},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:projectile"}},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_orbit","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_orbit","ars_nouveau:glyph_linger","ars_nouveau:glyph_orbit","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_lightning"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Simulmancer\'s Storm","italic":true,"translate":"ars_nouveau.tome_name.frantastic_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.urticantodin_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"",particleTimeline:{"ars_nouveau:pantomime":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},type:"ars_nouveau:pantomime"},"ars_nouveau:projectile":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}}},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:projectile"},"ars_nouveau:self":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.45d,spawnType:"CUBE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:0.0f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:large_smoke",subProperties:{"ars_nouveau:color":{particleColor:{b:178,g:178,id:"ars_nouveau:constant",r:178},tintDisabled:0b},"ars_nouveau:sound":{sound:{sound:{id:"ars_nouveau:pointed_dripstone_drip_water"}}}}}},type:"ars_nouveau:large_smoke"}},resolveSound:{sound:{pitch:1.3f,sound:{id:"ars_nouveau:shulker_bullet_hit"},volume:0.55f}},type:"ars_nouveau:self"},"ars_nouveau:wololo":{propMap:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}},type:"ars_nouveau:wololo"}},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_leap","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_bounce","ars_nouveau:glyph_duration_down","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"","italic":true,"translate":"ars_nouveau.tome_name.urticantodin_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.sebuss_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Sebuss's Very Hot Smelt",particleTimeline:{"ars_nouveau:light":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:light"},particleOptions:{properties:{"ars_nouveau:density":{density:1,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.01d,yMinSpeed:0.0d}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:light"},"ars_nouveau:mageblock":{propMap:{"ars_nouveau:color":{particleColor:{b:127,g:127,id:"ars_nouveau:constant",r:127},tintDisabled:0b}},type:"ars_nouveau:mageblock"},"ars_nouveau:projectile":{castSound:{sound:{sound:{id:"ars_nouveau:fire_family_2"}}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:-29.06898f,y:2.5588632f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{sound:{id:"ars_nouveau:empty"}}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:flame",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}}},type:"ars_nouveau:helix"},particleOptions:{properties:{"ars_nouveau:density":{density:200,radius:0.6000000000000001d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:flame",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:flame"}},type:"ars_nouveau:projectile"},"ars_nouveau:touch":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:0.0f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:enchant",subProperties:{"ars_nouveau:color":{particleColor:{b:1,g:66,id:"ars_nouveau:constant",r:132},tintDisabled:0b}}}},type:"ars_nouveau:enchant"}},resolveSound:{sound:{sound:{id:"ars_nouveau:empty"}}},type:"ars_nouveau:touch"},"ars_nouveau:wololo":{propMap:{"ars_nouveau:color":{particleColor:{b:50,g:50,id:"ars_nouveau:constant",r:255},tintDisabled:0b}},type:"ars_nouveau:wololo"}},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_smelt","ars_nouveau:glyph_aoe","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_ignite"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Sebuss\'s Very Hot Smelt","italic":true,"translate":"ars_nouveau.tome_name.sebuss_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.plauged757_tome",spells:{0:{color:{b:1,g:1,id:"ars_nouveau:constant",r:255},name:"Self Atomic",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_explosion","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe"],sound:{sound:{id:"ars_nouveau:gaia_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Self Atomic","italic":true,"translate":"ars_nouveau.tome_name.plauged757_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.treeleafs_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Treeleafs gardeners dream",particleTimeline:{"ars_nouveau:burst":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:0.0f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:glow_squid",subProperties:{"ars_nouveau:color":{particleColor:{b:187,g:119,id:"ars_nouveau:constant",r:1},tintDisabled:0b}}}},type:"ars_nouveau:glow_squid"}},resolveSound:{sound:{pitch:0.35f,sound:{id:"ars_nouveau:allay_death"},volume:1.6f}},type:"ars_nouveau:burst"},"ars_nouveau:projectile":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}}},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:projectile"},"ars_nouveau:self":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:0.0f,y:0.0f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:glow_squid",subProperties:{"ars_nouveau:color":{particleColor:{b:187,g:119,id:"ars_nouveau:constant",r:1},tintDisabled:0b}}}},type:"ars_nouveau:glow_squid"}},resolveSound:{sound:{sound:{id:"ars_nouveau:empty"}}},type:"ars_nouveau:self"}},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_grow","ars_nouveau:glyph_harvest","ars_nouveau:glyph_pickup"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Treeleafs gardeners dream","italic":true,"translate":"ars_nouveau.tome_name.treeleafs_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.bailey_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Bailey's Bovine Rocket",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_launch","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_delay","ars_nouveau:glyph_explosion","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Bailey\'s Bovine Rocket","italic":true,"translate":"ars_nouveau.tome_name.bailey_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.shadow_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"The Shadow's Temporary Tunnel",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_intangible","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"The Shadow\'s Temporary Tunnel","italic":true,"translate":"ars_nouveau.tome_name.shadow_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.lootz_tome",spells:{0:{color:{b:1,g:255,id:"ars_nouveau:constant",r:255},name:"Fireworks and Mobs",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_harm","ars_nouveau:glyph_amplify","ars_nouveau:glyph_launch","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_firework","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_explosion"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Fireworks and Mobs","italic":true,"translate":"ars_nouveau.tome_name.lootz_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.xacris_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Xacris' Tiny Hut",particleTimeline:{},recipe:["ars_nouveau:glyph_underfoot","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Xacris\' Tiny Hut","italic":true,"translate":"ars_nouveau.tome_name.xacris_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.nikk_tome",spells:{0:{color:{b:204,g:204,id:"ars_nouveau:constant",r:255},name:"Sutokahs LOVE",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_hex","ars_nouveau:glyph_harm","ars_nouveau:glyph_blink","ars_nouveau:glyph_amplify","ars_nouveau:glyph_pickup","ars_nouveau:glyph_aoe"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Sutokahs LOVE","italic":true,"translate":"ars_nouveau.tome_name.nikk_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.fireball_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Fireball!",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_ignite","ars_nouveau:glyph_explosion","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Fireball!","italic":true,"translate":"ars_nouveau.tome_name.fireball_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.yuukiukami_tome",spells:{0:{color:{b:105,g:1,id:"ars_nouveau:constant",r:48},name:"Yuuki's Mineral Assimilator",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_break","ars_nouveau:glyph_amplify","ars_nouveau:glyph_extract","ars_nouveau:glyph_pickup"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Yuuki\'s Mineral Assimilator","italic":true,"translate":"ars_nouveau.tome_name.yuukiukami_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.crowdrone_tome",spells:{0:{color:{b:1,g:1,id:"ars_nouveau:constant",r:1},name:"Crow's Gluttonous Gaze",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_sense_magic","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_light","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Crow\'s Gluttonous Gaze","italic":true,"translate":"ars_nouveau.tome_name.crowdrone_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.chems_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Repulsion Runes",particleTimeline:{"ars_nouveau:burst":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},type:"ars_nouveau:burst"},"ars_nouveau:delay":{onTickEffect:{motion:{propMap:{},type:"ars_nouveau:light"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.1d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.01d,yMinSpeed:0.0d}},type:"ars_nouveau:new_glow"}},resolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolvingSound:{sound:{}},type:"ars_nouveau:delay"},"ars_nouveau:linger":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:10,radius:0.5d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:glow_ink",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b},"ars_nouveau:sound":{sound:{sound:{id:"ars_nouveau:pointed_dripstone_drip_water"}}}}}},type:"ars_nouveau:glow_ink"}},resolveSound:{sound:{sound:{id:"ars_nouveau:empty"}}},trailEffect:{motion:{propMap:{},type:"ars_nouveau:upward_field"},particleOptions:{properties:{"ars_nouveau:density":{density:50,radius:1.0d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:dripping_water",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b},"ars_nouveau:sound":{sound:{sound:{id:"ars_nouveau:pointed_dripstone_drip_lava"}}}}},"ars_nouveau:wall":{chance:5,direction:"south",num_particles:20,range:1}},type:"ars_nouveau:dripping_water"}},type:"ars_nouveau:linger"},"ars_nouveau:mageblock":{propMap:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}},type:"ars_nouveau:mageblock"},"ars_nouveau:orbit":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{},type:"ars_nouveau:trail"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:orbit"},"ars_nouveau:pantomime":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},type:"ars_nouveau:pantomime"},"ars_nouveau:prestidigitation":{onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:light"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.1d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.01d,yMinSpeed:0.0d}},type:"ars_nouveau:new_glow"}},randomSound:{sound:{sound:{id:"ars_nouveau:empty"}}},type:"ars_nouveau:prestidigitation"},"ars_nouveau:projectile":{castSound:{sound:{pitch:1.4f,sound:{id:"ars_nouveau:wind_charge_burst"}}},flairEffect:{motion:{propMap:{},type:"ars_nouveau:zigzag"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:warped_spore",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b},"ars_nouveau:sound":{sound:{sound:{id:"ars_nouveau:pointed_dripstone_drip_water"}}}}}},type:"ars_nouveau:warped_spore"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:10,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:-24.063683f,y:1.428963f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:big_gust",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b}}}},type:"ars_nouveau:big_gust"}},onSpawnEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:20,radius:0.05d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{pitch:0.7f,sound:{id:"ars_nouveau:tempestry_family"}}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{"ars_nouveau:color":{particleColor:{b:248,g:186,id:"ars_nouveau:constant",r:63},tintDisabled:0b}}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:zigzag"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.2d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:ominous_spawning",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b},"ars_nouveau:sound":{sound:{sound:{id:"ars_nouveau:pointed_dripstone_drip_water"}}}}}},type:"ars_nouveau:ominous_spawning"}},type:"ars_nouveau:projectile"},"ars_nouveau:rune":{propMap:{"ars_nouveau:color":{particleColor:{b:255,g:200,id:"ars_nouveau:constant",r:91},tintDisabled:0b},"ars_nouveau:rune":{texture:"rune_water"}},type:"ars_nouveau:rune"}},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_linger","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_rune","ars_nouveau:glyph_launch","ars_nouveau:glyph_launch"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Repulsion Runes","italic":true,"translate":"ars_nouveau.tome_name.chems_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.warp_impact_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Warp Impact",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_blink","ars_nouveau:glyph_explosion","ars_nouveau:glyph_aoe"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Warp Impact","italic":true,"translate":"ars_nouveau.tome_name.warp_impact_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.renew_rune_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Rune of Renewing",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_rune","ars_nouveau:glyph_dispel","ars_nouveau:glyph_heal","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Rune of Renewing","italic":true,"translate":"ars_nouveau.tome_name.renew_rune_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.aurellia_tome",spells:{0:{color:{b:203,g:119,id:"ars_nouveau:constant",r:255},name:"Aurellia's Bite Storm",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_linger","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_fangs","ars_nouveau:glyph_lightning","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Aurellia\'s Bite Storm","italic":true,"translate":"ars_nouveau.tome_name.aurellia_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.spinoftw_tome",spells:{0:{color:{b:1,g:90,id:"ars_nouveau:constant",r:225},name:"You were hurt, but you're fine",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_conjure_water","ars_nouveau:glyph_heal","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"You were hurt, but you\'re fine","italic":true,"translate":"ars_nouveau.tome_name.spinoftw_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.mystifi_tome",spells:{0:{color:{b:1,g:128,id:"ars_nouveau:constant",r:255},name:"Mysti's Gravely Dig",particleTimeline:{},recipe:["ars_nouveau:glyph_underfoot","ars_nouveau:glyph_linger","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_intangible","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{sound:{id:"ars_nouveau:fire_family_2"},volume:0.27f}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Mysti\'s Gravely Dig","italic":true,"translate":"ars_nouveau.tome_name.mystifi_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.beepsterr_tome",spells:{0:{color:{b:201,g:145,id:"ars_nouveau:constant",r:145},name:"Verdant Aura",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_orbit","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_split","ars_nouveau:glyph_grow","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe"],sound:{sound:{id:"ars_nouveau:gaia_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Verdant Aura","italic":true,"translate":"ars_nouveau.tome_name.beepsterr_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.silvanus_tome",spells:{0:{color:{b:1,g:255,id:"ars_nouveau:constant",r:1},name:"Emergency Flair",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_light","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Emergency Flair","italic":true,"translate":"ars_nouveau.tome_name.silvanus_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.glow_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Glow Trap",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_rune","ars_nouveau:glyph_snare","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_light"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Glow Trap","italic":true,"translate":"ars_nouveau.tome_name.glow_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.yeet_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Knocked out of Orbit",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_orbit","ars_nouveau:glyph_launch","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_delay","ars_nouveau:glyph_gust","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Knocked out of Orbit","italic":true,"translate":"ars_nouveau.tome_name.yeet_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.lufia_tome",spells:{0:{color:{b:1,g:128,id:"ars_nouveau:constant",r:255},name:"Lufia's Bwomp",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_intangible","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe"],sound:{pitch:0.5f,sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Lufia\'s Bwomp","italic":true,"translate":"ars_nouveau.tome_name.lufia_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.farfalla_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Farfalla's Frosty Flames",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_ignite","ars_nouveau:glyph_delay","ars_nouveau:glyph_conjure_water","ars_nouveau:glyph_freeze"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Farfalla\'s Frosty Flames","italic":true,"translate":"ars_nouveau.tome_name.farfalla_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.arachne_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Arachne's Weaving",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_split","ars_nouveau:glyph_split","ars_nouveau:glyph_snare","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Arachne\'s Weaving","italic":true,"translate":"ars_nouveau.tome_name.arachne_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.cocoaeyebrows_tome",spells:{0:{color:{b:1,g:128,id:"ars_nouveau:constant",r:255},name:"Gobute's Humble Tunnel",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_break","ars_nouveau:glyph_dampen","ars_nouveau:glyph_dampen","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce","ars_nouveau:glyph_pierce"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Gobute\'s Humble Tunnel","italic":true,"translate":"ars_nouveau.tome_name.cocoaeyebrows_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.kamiihoney_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Kamii's Curse",particleTimeline:{"ars_nouveau:projectile":{castSound:{sound:{}},flairEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onResolvingEffect:{motion:{propMap:{},type:"ars_nouveau:burst"},particleOptions:{properties:{"ars_nouveau:density":{density:5,radius:0.10000000149011612d,spawnType:"SPHERE"},"ars_nouveau:emitter":{age:0,rotation:{x:74.28657f,y:-87.508156f}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},onSpawnEffect:{particleOptions:{properties:{"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:180,g:25,id:"ars_nouveau:constant",r:255},tintDisabled:1b}}}},type:"ars_nouveau:new_glow"}},resolveSound:{sound:{}},trailEffect:{motion:{propMap:{"ars_nouveau:model":{resource:"ars_nouveau:empty",subPropMap:{}},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:255,g:255,id:"ars_nouveau:constant",r:50},tintDisabled:0b}}}},type:"ars_nouveau:helix"},particleOptions:{properties:{"ars_nouveau:density":{density:100,radius:0.30000001192092896d,spawnType:"SPHERE"},"ars_nouveau:particle_type":{particleType:"ars_nouveau:new_glow",subProperties:{"ars_nouveau:color":{particleColor:{b:204,g:193,id:"ars_nouveau:constant",r:255},tintDisabled:0b}}},"ars_nouveau:speed":{xzMaxSpeed:0.0d,xzMinSpeed:0.0d,yMaxSpeed:0.0d,yMinSpeed:0.0d}},type:"ars_nouveau:new_glow"}},type:"ars_nouveau:projectile"}},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_harm","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_wither","ars_nouveau:glyph_bubble","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Kamii\'s Curse","italic":true,"translate":"ars_nouveau.tome_name.kamiihoney_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.gootastic_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Gootastic's Telekinetic Fishing Rod",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_launch","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_delay","ars_nouveau:glyph_pull","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Gootastic\'s Telekinetic Fishing Rod","italic":true,"translate":"ars_nouveau.tome_name.gootastic_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.riftderp_tome",spells:{0:{color:{b:255,g:25,id:"ars_nouveau:constant",r:120},name:"Rift's Blink Strike",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_harm","ars_nouveau:glyph_blink"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Rift\'s Blink Strike","italic":true,"translate":"ars_nouveau.tome_name.riftderp_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.uni_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Uni's Windshield",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_orbit","ars_nouveau:glyph_gust","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Uni\'s Windshield","italic":true,"translate":"ars_nouveau.tome_name.uni_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.ivy_tome",spells:{0:{color:{b:180,g:105,id:"ars_nouveau:constant",r:255},name:"Ivy",particleTimeline:{},recipe:["ars_nouveau:glyph_touch","ars_nouveau:glyph_animate_block","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_name"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Ivy","italic":true,"translate":"ars_nouveau.tome_name.ivy_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.lyrellion_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Lyrellion’s Wall of Force",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_accelerate","ars_nouveau:glyph_wall","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_pierce","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Lyrellion’s Wall of Force","italic":true,"translate":"ars_nouveau.tome_name.lyrellion_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.alex_tome",spells:{0:{color:<unstable>,name:"Alex's Magnificent Mansion",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_burst","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_dampen","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_aoe","ars_nouveau:glyph_phantom_block","ars_nouveau:glyph_amplify","ars_nouveau:glyph_pierce"],sound:{sound:{id:"ars_nouveau:tempestry_family"}}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Alex\'s Magnificent Mansion","italic":true,"translate":"ars_nouveau.tome_name.alex_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.takeoff_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Takeoff!",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_launch","ars_nouveau:glyph_launch","ars_nouveau:glyph_glide","ars_nouveau:glyph_duration_down"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Takeoff!","italic":true,"translate":"ars_nouveau.tome_name.takeoff_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.kirin_tome",spells:{0:{color:{b:255,g:255,id:"ars_nouveau:constant",r:25},name:"KirinDave's Sinister Switch",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_blink","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"KirinDave\'s Sinister Switch","italic":true,"translate":"ars_nouveau.tome_name.kirin_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.othy_tome",spells:{0:{color:{b:255,g:255,id:"ars_nouveau:constant",r:255},name:"Othy's Misdirection",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_summon_decoy","ars_nouveau:glyph_blink","ars_nouveau:glyph_amplify","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Othy\'s Misdirection","italic":true,"translate":"ars_nouveau.tome_name.othy_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.xacris_2_tome",spells:{0:{color:{b:255,g:255,id:"ars_nouveau:constant",r:25},name:"Xacris's Firework Display",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_wall","ars_nouveau:glyph_sensitive","ars_nouveau:glyph_aoe","ars_nouveau:glyph_firework","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_amplify"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Xacris\'s Firework Display","italic":true,"translate":"ars_nouveau.tome_name.xacris_2_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.bugcolez_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Pixie Pummel",particleTimeline:{},recipe:["ars_nouveau:glyph_self","ars_nouveau:glyph_summon_vex","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time","ars_nouveau:glyph_extend_time"],sound:{pitch:1.9f}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Pixie Pummel","italic":true,"translate":"ars_nouveau.tome_name.bugcolez_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:caster_tome x1 {"ars_nouveau:tome_caster":{flavor_text:"ars_nouveau.tome_flavor.toxin_tome",spells:{0:{color:{b:180,g:25,id:"ars_nouveau:constant",r:255},name:"Potent Toxin",particleTimeline:{},recipe:["ars_nouveau:glyph_projectile","ars_nouveau:glyph_hex","ars_nouveau:glyph_harm","ars_nouveau:glyph_extend_time"],sound:{}}}},"minecraft:custom_name":'{"color":"dark_purple","fallback":"Potent Toxin","italic":true,"translate":"ars_nouveau.tome_name.toxin_tome"}'}
+    | Chance: 0.2%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_burrowing x1
+    | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1222,6 +2657,531 @@ ali:loot_table
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_challenge x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_binding x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_awakening x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_disintegration x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_sunrise x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_cloudshaping x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_flight x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_conjure_island_plains x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_restoration x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_animal_summon x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_forestation x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_warping x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_moonfall x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_containment x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_scrying x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_gravity x1
     | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
@@ -1291,323 +3251,8 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_moonfall x1
-    | Chance: 0.17%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_animal_summon x1
-    | Chance: 0.16%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_wilden_summon x1
-    | Chance: 0.16%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_binding x1
-    | Chance: 0.16%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_conjure_island_desert x1
-    | Chance: 0.16%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_overgrowth x1
-    | Chance: 0.14%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_awakening x1
-    | Chance: 0.14%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_forestation x1
-    | Chance: 0.12%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_burrowing x1
-    | Chance: 0.12%
-    | Count: 1
-    | ----- Predicates -----
-    | Any Of:
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/simple_dungeon
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/jungle_temple
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/abandoned_mineshaft
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/bastion_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/desert_pyramid
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/end_city_treasure
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/ruined_portal
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/pillager_outpost
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/nether_bridge
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_corridor
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_crossing
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/stronghold_library
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/woodland_mansion
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_big
-    |   -> Loot Table Id:
-    |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_sanctuary x1
-    | Chance: 0.12%
+    | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1642,7 +3287,7 @@ ali:loot_table
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
   ali:item ars_nouveau:ritual_fertility x1
-    | Chance: 0.12%
+    | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
     | Any Of:
@@ -1676,8 +3321,113 @@ ali:loot_table
     |     -> minecraft:chests/underwater_ruin_big
     |   -> Loot Table Id:
     |     -> minecraft:chests/underwater_ruin_small
-  ali:item ars_nouveau:ritual_conjure_island_plains x1
-    | Chance: 0.09%
+  ali:item ars_nouveau:ritual_overgrowth x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_conjure_island_desert x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_harvest x1
+    | Chance: 0.19%
+    | Count: 1
+    | ----- Predicates -----
+    | Any Of:
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/simple_dungeon
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/jungle_temple
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/abandoned_mineshaft
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/bastion_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/desert_pyramid
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/end_city_treasure
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/ruined_portal
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/pillager_outpost
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/nether_bridge
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_corridor
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_crossing
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/stronghold_library
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/woodland_mansion
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_big
+    |   -> Loot Table Id:
+    |     -> minecraft:chests/underwater_ruin_small
+  ali:item ars_nouveau:ritual_wilden_summon x1
+    | Chance: 0.19%
     | Count: 1
     | ----- Predicates -----
     | Any Of:

@@ -12,15 +12,140 @@ import com.yanny.ali.plugin.common.nodes.GroupNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 public class TradeUtils {
+    private static final int MAX_KEY_DEPTH = 4;
+
+    public static Object[] distinctListings(Object[] listings) {
+        Set<Object> seen = new HashSet<>();
+        List<Object> distinct = new ArrayList<>(listings.length);
+
+        for (Object listing : listings) {
+            if (listing == null || seen.add(valueKey(listing))) {
+                distinct.add(listing);
+            }
+        }
+
+        return distinct.size() == listings.length ? listings : distinct.toArray();
+    }
+
+    public static Object valueKey(@Nullable Object value) {
+        try {
+            Object key = structuralKey(value, new IdentityHashMap<>(), 0);
+
+            // hashed here so a foreign hashCode that throws is caught, not inside the caller's HashSet
+            Objects.hashCode(key);
+            return key;
+        } catch (Throwable e) {
+            return new Ref(value);
+        }
+    }
+
+    @Nullable
+    private static Object structuralKey(@Nullable Object value, Map<Object, Boolean> visiting, int depth) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof ItemStack stack) {
+            return Arrays.asList(ItemStack.class, stack.getItem(), stack.getCount(), stack.getComponentsPatch());
+        }
+
+        Class<?> type = value.getClass();
+        boolean container = type.isArray() || value instanceof Collection<?> || value instanceof Map<?, ?>;
+
+        if (!container && !isStructural(type)) {
+            return value;
+        }
+        if (depth >= MAX_KEY_DEPTH || visiting.containsKey(value)) {
+            return new Ref(value);
+        }
+
+        visiting.put(value, true);
+
+        try {
+            if (type.isArray()) {
+                List<Object> elements = new ArrayList<>();
+
+                elements.add(type);
+
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    elements.add(structuralKey(Array.get(value, i), visiting, depth + 1));
+                }
+
+                return elements;
+            }
+            if (value instanceof Set<?> set) {
+                Set<Object> elements = new HashSet<>();
+
+                set.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                return Arrays.asList(Set.class, elements);
+            }
+            if (value instanceof Collection<?> collection) {
+                List<Object> elements = new ArrayList<>();
+
+                elements.add(List.class);
+                collection.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                return elements;
+            }
+            if (value instanceof Map<?, ?> map) {
+                Map<Object, Object> entries = new HashMap<>();
+
+                map.forEach((k, v) -> entries.put(structuralKey(k, visiting, depth + 1), structuralKey(v, visiting, depth + 1)));
+                return Arrays.asList(Map.class, entries);
+            }
+
+            List<Object> fields = new ArrayList<>();
+
+            fields.add(type);
+
+            for (Class<?> c = type; c != null && c != Object.class; c = c.getSuperclass()) {
+                for (Field field : c.getDeclaredFields()) {
+                    if (!Modifier.isStatic(field.getModifiers())) {
+                        field.setAccessible(true);
+                        fields.add(structuralKey(field.get(value), visiting, depth + 1));
+                    }
+                }
+            }
+
+            return fields;
+        } catch (Throwable e) {
+            return new Ref(value);
+        } finally {
+            visiting.remove(value);
+        }
+    }
+
+    private static boolean isStructural(Class<?> type) {
+        String name = type.getName();
+
+        if (type.isEnum() || name.startsWith("java.")) {
+            return false;
+        }
+        if (type.isRecord()) {
+            return true;
+        }
+        if (name.startsWith("net.minecraft.") || name.startsWith("com.mojang.")) {
+            return false;
+        }
+
+        try {
+            return type.getMethod("equals", Object.class).getDeclaringClass() == Object.class;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
     @NotNull
     public static IDataNode getSlotNode(IServerUtils utils, LootPoolEntryContainer entry) {
         List<TooltipNode> conditions = new ArrayList<>();
@@ -45,7 +170,39 @@ public class TradeUtils {
     }
 
     @NotNull
+    public static ItemsToItemsNode getNode(IServerUtils utils, MerchantOffer offer, TooltipNode condition) {
+        return new ItemsToItemsNode(
+                utils,
+                Either.left(offer.getBaseCostA()),
+                NumberExpr.constant(offer.getBaseCostA().getCount()),
+                TooltipNode.empty(),
+                Either.left(offer.getCostB()),
+                NumberExpr.constant(offer.getCostB().getCount()),
+                TooltipNode.empty(),
+                Either.left(offer.getResult()),
+                NumberExpr.constant(offer.getResult().getCount()),
+                TooltipNode.empty(),
+                NumberExpr.constant(offer.getMaxUses()),
+                NumberExpr.constant(offer.getXp()),
+                condition
+        );
+    }
+
+    @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrade trade) {
+        return tradeNode(utils, trade, utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS));
+    }
+
+    @NotNull
+    public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrade trade, TooltipNode condition) {
+        return tradeNode(utils, trade, TooltipBuilder.array((b) -> b
+                .add(condition)
+                .add(utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS))
+        ).build());
+    }
+
+    @NotNull
+    private static ItemsToItemsNode tradeNode(IServerUtils utils, VillagerTrade trade, TooltipNode tooltip) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
@@ -59,7 +216,7 @@ public class TradeUtils {
                 utils.getValueTooltip(utils, trade.givenItemModifiers).build(),
                 utils.convertNumber(utils, trade.maxUses, new ArrayList<>()),
                 utils.convertNumber(utils, trade.xp, new ArrayList<>()),
-                utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
+                tooltip
         );
     }
 
@@ -73,5 +230,17 @@ public class TradeUtils {
         outputs.add(trade.gives.item().value());
 
         return new Pair<>(inputs, outputs);
+    }
+
+    private record Ref(@Nullable Object value) {
+        @Override
+        public boolean equals(Object o) {
+            return o instanceof Ref ref && ref.value == value;
+        }
+
+        @Override
+        public int hashCode() {
+            return System.identityHashCode(value);
+        }
     }
 }

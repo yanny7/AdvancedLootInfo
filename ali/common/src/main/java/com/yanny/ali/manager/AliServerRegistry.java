@@ -16,6 +16,7 @@ import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -27,6 +28,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -97,7 +99,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
 
-    private final Set<String> failedRenderers = new HashSet<>();
+    private final Set<String> loggedOnce = new HashSet<>();
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
     private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -117,7 +119,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public void clearData() {
         super.clearData();
-        failedRenderers.clear();
+        loggedOnce.clear();
         NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
@@ -262,12 +264,12 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @Override
     public <T> void registerPageResolver(Class<T> type, IPageResolver<T> resolver) {
-        pageResolvers.put(type, (u, v, p) -> resolver.test(u, type.cast(v), p));
+        pageResolvers.put(type, (u, v, p) -> attempt("page resolver", v, () -> resolver.test(u, type.cast(v), p), () -> null));
     }
 
     @Override
     public <T extends EntitySubPredicate> void registerEntitySubPredicateResolver(Class<T> type, IEntitySubPredicateResolver<T> resolver) {
-        entitySubPredicateResolvers.put(type, (u, s, p) -> resolver.test(u, type.cast(s), p));
+        entitySubPredicateResolvers.put(type, (u, s, p) -> attempt("entity sub-predicate resolver", s, () -> resolver.test(u, type.cast(s), p), () -> null));
     }
 
     @Override
@@ -286,7 +288,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void registerTrades(Identifier traderId, @Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
+    public void registerTrades(Identifier traderId, EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
         trades.put(traderId, new Trades(entityType, levels));
     }
 
@@ -356,7 +358,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
         for (Function<Ingredient, Object> unwrapper : ingredientUnwrappers) {
-            Object unwrapped = unwrapper.apply(ingredient);
+            Object unwrapped = attempt("ingredient unwrapper", unwrapper, () -> unwrapper.apply(ingredient), () -> null);
 
             if (unwrapped != null) {
                 return valueTooltips.get(unwrapped.getClass())
@@ -521,14 +523,22 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return result;
     }
 
-    private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
-        try {
-            return renderer.get();
-        } catch (Throwable e) {
-            String name = ManagedRegistry.classKeyName(value.getClass());
+    private <R> R attempt(String kind, Object value, Supplier<R> call, Supplier<R> fallback) {
+        return isolate(value, call, fallback, (name) -> "Failed to run " + kind + " " + name);
+    }
 
-            if (failedRenderers.add(kind + " " + name)) {
-                LOGGER.warn("Failed to build {} for {}, showing it as unsupported: {}", kind, name, e.getMessage(), e);
+    private <R> R guarded(String kind, Object value, Supplier<R> renderer, Supplier<R> fallback) {
+        return isolate(value, renderer, fallback, (name) -> "Failed to build " + kind + " for " + name + ", showing it as unsupported");
+    }
+
+    private <R> R isolate(Object value, Supplier<R> call, Supplier<R> fallback, Function<String, String> message) {
+        try {
+            return call.get();
+        } catch (Throwable e) {
+            String text = message.apply(ManagedRegistry.classKeyName(value.getClass()));
+
+            if (loggedOnce.add(text)) {
+                LOGGER.warn("{}: {}", text, e.getMessage(), e);
             }
 
             return fallback.get();
@@ -622,17 +632,44 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
     }
 
+    public TradeNode parseTrade(EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
+        TradeNode node = new TradeNode(this, entityType, guardedLevels(levels));
+
+        if (incomplete && node.nodes().isEmpty()) {
+            node.addChildren(new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.UNKNOWN_TRADES.singular())).build()));
+        }
+
+        return node;
+    }
+
     @NotNull
     private Int2ObjectMap<TradeLevel> getTradeLevels(Identifier traderId, Trades trades) {
         for (BiFunction<IServerUtils, Identifier, Int2ObjectMap<TradeLevel>> override : tradeOverrides) {
-            Int2ObjectMap<TradeLevel> levels = override.apply(this, traderId);
+            Int2ObjectMap<TradeLevel> levels = attempt("trade override", override, () -> override.apply(this, traderId), Int2ObjectOpenHashMap::new);
 
             if (levels != null) {
-                return levels;
+                return guardedLevels(levels);
             }
         }
 
-        return trades.levels().apply(this);
+        return guardedLevels(attempt("trade levels", trades.levels(), () -> trades.levels().apply(this), Int2ObjectOpenHashMap::new));
+    }
+
+    @NotNull
+    private Int2ObjectMap<TradeLevel> guardedLevels(Int2ObjectMap<TradeLevel> levels) {
+        Int2ObjectMap<TradeLevel> guardedLevels = new Int2ObjectOpenHashMap<>();
+
+        levels.int2ObjectEntrySet().forEach((e) -> guardedLevels.put(e.getIntKey(), guardedLevel(e.getValue())));
+        return guardedLevels;
+    }
+
+    @NotNull
+    private TradeLevel guardedLevel(TradeLevel level) {
+        if (level instanceof TradeLevel.OfTrades ofTrades) {
+            return new TradeLevel.OfTrades(ofTrades.levelInfo(), (u) -> attempt("trade level", ofTrades.trades(), () -> ofTrades.trades().apply(u), List::of));
+        }
+
+        return level;
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
@@ -672,11 +709,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
         try {
             for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
-                lootModifierMap.addAll(lootModifierGetter.apply(this));
+                lootModifierMap.addAll(attempt("loot modifier getter", lootModifierGetter, () -> lootModifierGetter.apply(this), List::of));
             }
 
             for (Function<IServerUtils, List<IPageLootModifier>> pageLootModifierGetter : pageLootModifierGetters) {
-                pageLootModifiers.addAll(pageLootModifierGetter.apply(this));
+                pageLootModifiers.addAll(attempt("loot modifier getter", pageLootModifierGetter, () -> pageLootModifierGetter.apply(this), List::of));
             }
         } finally {
             TooltipContext.clearPalette();
@@ -703,7 +740,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return String.valueOf(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.codec()));
     }
 
-    public record Trades(@Nullable EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {}
+    public record Trades(EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {}
 
     private static <T> void unwrap(IServerUtils utils, T value, ManagedRegistry<Class<?>, BiFunction<IServerUtils, T, List<T>>> unwrappers, Set<Object> visiting, List<T> result) {
         // predicate and item modifier references can form cycles, vanilla only logs them

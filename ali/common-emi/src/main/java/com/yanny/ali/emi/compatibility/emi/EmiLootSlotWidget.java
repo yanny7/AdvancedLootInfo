@@ -16,6 +16,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,7 +95,9 @@ public class EmiLootSlotWidget extends SlotWidget {
     }
 
     private static EmiIngredient getIngredient(IDataNode entry) {
-        return ((IItemNode) entry).getItem().map(EmiStack::of, EmiIngredient::of);
+        IItemNode node = (IItemNode) entry;
+
+        return node.getItem().map(EmiStack::of, (t) -> t.isFor(Registries.ITEM) ? EmiIngredient.of(t) : EmiIngredient.of(node.getItems().stream().map(EmiStack::of).toList()));
     }
 
     private record Option(IDataNode entry, EmiIngredient ingredient, @Nullable Component count, boolean isRange) {

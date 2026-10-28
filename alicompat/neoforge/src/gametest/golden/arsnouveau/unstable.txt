@@ -1,0 +1,4 @@
+# Ars Nouveau decodes a rainbow ParticleColor (ParticleColor.STREAM -> ParticleColorRegistry.from) into a new
+# RainbowParticleColor, which rolls tickOffset from the unseeded static ParticleColor.random, and its codec writes the
+# offset-dependent getRedInt/getGreenInt/getBlueInt
+(?<=color:)\{[^}]*id:"ars_nouveau:rainbow"[^}]*\}

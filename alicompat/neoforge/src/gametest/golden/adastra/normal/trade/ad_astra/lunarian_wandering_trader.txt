@@ -153,13 +153,6 @@ ali:trade
       ali:item minecraft:air x0
       ali:item ad_astra:launch_pad x1
     ali:items_to_items
-      | Uses: 3
-      | XP: 1
-      | Price Multiplier: 0.05
-      ali:item minecraft:emerald x3
-      ali:item minecraft:air x0
-      ali:item ad_astra:launch_pad x1
-    ali:items_to_items
       | Uses: 20
       | XP: 1
       | Price Multiplier: 0.05

@@ -124,23 +124,3 @@ ali:trade
         ali:item immersiveengineering:gunpart_barrel x1
         ali:item immersiveengineering:gunpart_drum x1
         ali:item immersiveengineering:gunpart_hammer x1
-    ali:items_to_items
-      | Uses: 1
-      | XP: 45
-      | Price Multiplier: 0.25
-      ali:item minecraft:emerald x5-29
-      ali:item minecraft:air x0
-      ali:group
-        ali:item immersiveengineering:gunpart_barrel x1
-        ali:item immersiveengineering:gunpart_drum x1
-        ali:item immersiveengineering:gunpart_hammer x1
-    ali:items_to_items
-      | Uses: 1
-      | XP: 45
-      | Price Multiplier: 0.25
-      ali:item minecraft:emerald x5-29
-      ali:item minecraft:air x0
-      ali:group
-        ali:item immersiveengineering:gunpart_barrel x1
-        ali:item immersiveengineering:gunpart_drum x1
-        ali:item immersiveengineering:gunpart_hammer x1

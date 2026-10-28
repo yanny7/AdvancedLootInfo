@@ -19,6 +19,24 @@ import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
+import com.yanny.ali.plugin.server.bytecode.AggregationTest;
+import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
+import com.yanny.ali.plugin.server.bytecode.ComponentModelTest;
+import com.yanny.ali.plugin.server.bytecode.FieldModelTest;
+import com.yanny.ali.plugin.server.bytecode.IndyTest;
+import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
+import com.yanny.ali.plugin.server.bytecode.ItemCostModelTest;
+import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
+import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
+import com.yanny.ali.plugin.server.bytecode.MapModelTest;
+import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
+import com.yanny.ali.plugin.server.bytecode.NumberModelTest;
+import com.yanny.ali.plugin.server.bytecode.OffersModelTest;
+import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
+import com.yanny.ali.plugin.server.bytecode.PickModelTest;
+import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
+import com.yanny.ali.plugin.server.bytecode.TraderModelTest;
+import com.yanny.ali.plugin.server.bytecode.WorldModelTest;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
@@ -29,6 +47,7 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -80,6 +99,9 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+
 @Suite
 @SelectClasses({
         GenericTooltipTest.class,
@@ -98,9 +120,28 @@ import java.util.concurrent.ExecutionException;
         ServerUtilsTest.class,
         SlotSourceTooltipTest.class,
         GlobalLootModifierTest.class,
+        BytecodeInterpreterTest.class,
         ConfigTest.class,
         ValueCharacterizationTest.class,
-        EntryWeightTest.class
+        EntryWeightTest.class,
+        LoggerModelTest.class,
+        OptionalModelTest.class,
+        MapItemModelTest.class,
+        RandomModelTest.class,
+        ItemStackModelTest.class,
+        ItemCostModelTest.class,
+        MerchantOfferModelTest.class,
+        CollectionsModelTest.class,
+        MapModelTest.class,
+        TraderModelTest.class,
+        WorldModelTest.class,
+        NumberModelTest.class,
+        ComponentModelTest.class,
+        FieldModelTest.class,
+        IndyTest.class,
+        PickModelTest.class,
+        OffersModelTest.class,
+        AggregationTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -129,7 +170,10 @@ public class TooltipTestSuite {
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
-        PluginManager.getInstance().registerServerEvent(null);
+        ServerLevel level = mock(ServerLevel.class);
+
+        doReturn(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)).when(level).registryAccess();
+        PluginManager.getInstance().registerServerEvent(level);
         TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
             @NotNull
