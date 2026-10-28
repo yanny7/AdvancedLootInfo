@@ -36,10 +36,10 @@ sealed interface PathCondition {
         }
 
         if (sets.size() == 1) {
-            return allOf(sets.get(0));
+            return allOf(sets.getFirst());
         }
 
-        Set<Decision> common = new LinkedHashSet<>(sets.get(0));
+        Set<Decision> common = new LinkedHashSet<>(sets.getFirst());
         List<PathCondition> alternatives = new ArrayList<>();
 
         sets.forEach(common::retainAll);
@@ -59,7 +59,7 @@ sealed interface PathCondition {
             }
         }
 
-        PathCondition any = alternatives.size() == 1 ? alternatives.get(0) : new AnyOf(alternatives);
+        PathCondition any = alternatives.size() == 1 ? alternatives.getFirst() : new AnyOf(alternatives);
 
         return common.isEmpty() ? any : allOf(common).and(any);
     }
@@ -68,8 +68,8 @@ sealed interface PathCondition {
         List<PathCondition> terms = new ArrayList<>();
 
         for (PathCondition condition : List.of(this, other)) {
-            if (condition instanceof AllOf all) {
-                terms.addAll(all.terms());
+            if (condition instanceof AllOf(List<PathCondition> terms1)) {
+                terms.addAll(terms1);
             } else if (condition != ALWAYS) {
                 terms.add(condition);
             }
@@ -79,7 +79,7 @@ sealed interface PathCondition {
             return ALWAYS;
         }
 
-        return terms.size() == 1 ? terms.get(0) : new AllOf(terms);
+        return terms.size() == 1 ? terms.getFirst() : new AllOf(terms);
     }
 
     TooltipNode tooltip(IServerUtils utils);
@@ -160,7 +160,7 @@ sealed interface PathCondition {
         for (List<Object> values : excluded.values()) {
             List<PathCondition> options = values.stream().<PathCondition>map(Is::new).sorted(Comparator.comparing(PathCondition::text)).toList();
 
-            terms.add(new Not(options.size() == 1 ? options.get(0) : new AnyOf(options)));
+            terms.add(new Not(options.size() == 1 ? options.getFirst() : new AnyOf(options)));
         }
 
         if (random) {
@@ -173,7 +173,7 @@ sealed interface PathCondition {
             return ALWAYS;
         }
 
-        return terms.size() == 1 ? terms.get(0) : new AllOf(terms);
+        return terms.size() == 1 ? terms.getFirst() : new AllOf(terms);
     }
 
     record Always() implements PathCondition {

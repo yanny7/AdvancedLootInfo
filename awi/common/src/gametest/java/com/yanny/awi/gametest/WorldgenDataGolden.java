@@ -106,17 +106,13 @@ public class WorldgenDataGolden {
         return new GoldenRenderer(isAdvanced, new NumberOptions(isAdvanced, config.showCharts, Locale.ROOT)) {
             @Override
             protected String describe(ICoreDataNode<?> node) {
-                if (node instanceof IBlockNode blockNode) {
-                    return blockNode.getBlock().map((block) -> BuiltInRegistries.BLOCK.getKey(block).toString(), (tag) -> "#" + tag.location());
-                } else if (node instanceof PlacedFeatureNode placedFeatureNode) {
-                    return placedFeatureNode.getFeatureId().toString();
-                } else if (node instanceof GenerationStepNode generationStepNode) {
-                    return String.valueOf(generationStepNode.getGenerationStep());
-                } else if (node instanceof BiomeNode biomeNode) {
-                    return biomeNode.getBiomeId().toString();
-                }
-
-                return null;
+                return switch (node) {
+                    case IBlockNode blockNode -> blockNode.getBlock().map((block) -> BuiltInRegistries.BLOCK.getKey(block).toString(), (tag) -> "#" + tag.location());
+                    case PlacedFeatureNode placedFeatureNode -> placedFeatureNode.getFeatureId().toString();
+                    case GenerationStepNode generationStepNode -> String.valueOf(generationStepNode.getGenerationStep());
+                    case BiomeNode biomeNode -> biomeNode.getBiomeId().toString();
+                    default -> null;
+                };
             }
 
             @Override

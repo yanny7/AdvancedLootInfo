@@ -35,7 +35,7 @@ final class ItemCostModel implements MethodModel {
             return NO_OPINION;
         }
 
-        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().get(0);
+        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().getFirst();
 
         if (receiver instanceof Value.Stack stack && insn.owner.equals(ITEM_COST)) {
             return costCall(context, call, stack);
@@ -50,12 +50,12 @@ final class ItemCostModel implements MethodModel {
             boolean hasCostB = TradeTypes.isObject(params[1], OPTIONAL);
             int resultIndex = hasCostB ? 2 : 1;
             List<Value> numbers = args.subList(resultIndex + 1, args.size());
-            Value costA = cost(args.get(0));
+            Value costA = cost(args.getFirst());
             Value costB = hasCostB ? optionalCost(args.get(1)) : new Value.Known(ItemStack.EMPTY);
             Value result = args.get(resultIndex);
 
             if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() == 3) {
-                return new Value.Offer(costA, costB, result, intOf(numbers.get(0)), intOf(numbers.get(1)), floatOf(numbers.get(2)));
+                return new Value.Offer(costA, costB, result, intOf(numbers.getFirst()), intOf(numbers.get(1)), floatOf(numbers.get(2)));
             }
             if (TradeTypes.isObject(params[resultIndex], ITEM_STACK) && numbers.size() >= 4) {
                 return new Value.Offer(costA, costB, result, intOf(numbers.get(1)), intOf(numbers.get(2)), floatOf(numbers.get(3)));
@@ -77,18 +77,18 @@ final class ItemCostModel implements MethodModel {
     }
 
     private static Value cost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemCost cost) {
+        if (value instanceof Value.Known(ItemCost cost)) {
             return new Value.Known(cost.itemStack());
         }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemCost.class::isInstance)) {
-            return new Value.Choice(choice.options().stream().<Object>map((o) -> ((ItemCost) o).itemStack()).toList(), choice.draw());
+        if (value instanceof Value.Choice(List<Object> options, Object draw) && options.stream().allMatch(ItemCost.class::isInstance)) {
+            return new Value.Choice(options.stream().<Object>map((o) -> ((ItemCost) o).itemStack()).toList(), draw);
         }
 
         return value;
     }
 
     private static Value optionalCost(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Optional<?> optional) {
+        if (value instanceof Value.Known(Optional<?> optional)) {
             return optional.isPresent() ? cost(new Value.Known(optional.get())) : new Value.Known(ItemStack.EMPTY);
         }
 
@@ -117,7 +117,7 @@ final class ItemCostModel implements MethodModel {
 
             copy.set(0, new Value.Known(new ItemCost(template.getItemHolder(), 1, DataComponentPredicate.EMPTY)));
 
-            if (!(context.concreteCall(new Call(insn, copy, call.loader(), call.depth()), true) instanceof Value.Known known) || !(known.value() instanceof ItemCost cost)) {
+            if (!(context.concreteCall(new Call(insn, copy, call.loader(), call.depth()), true) instanceof Value.Known(Object value1)) || !(value1 instanceof ItemCost cost)) {
                 throw new Fail("item cost call " + insn.name);
             }
 

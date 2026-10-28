@@ -315,7 +315,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> trades = ((ListNode) interpret(new BackupMapListing())).nodes();
 
         Assertions.assertEquals(2, trades.size());
-        assertTooltip(trades.get(0).getTooltip(), List.of(
+        assertTooltip(trades.getFirst().getTooltip(), List.of(
                 "Structure: minecraft:on_ocean_explorer_maps",
                 "Uses: 12",
                 "XP: 5",
@@ -509,7 +509,7 @@ public class BytecodeInterpreterTest {
 
         Assertions.assertEquals(NumberInterval.point(2), level.levelInfo().offers().bounds());
         Assertions.assertEquals(2, groups.size());
-        Assertions.assertEquals(2, ((TradeGroupNode) groups.get(0)).nodes().size());
+        Assertions.assertEquals(2, ((TradeGroupNode) groups.getFirst()).nodes().size());
         Assertions.assertFalse(groups.get(1) instanceof TradeGroupNode);
     }
 
@@ -551,7 +551,7 @@ public class BytecodeInterpreterTest {
             Assertions.assertTrue(groups.stream().allMatch(TradeGroupNode.class::isInstance));
         }
 
-        assertTooltip(((TradeGroupNode) ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS).get(0)).nodes().get(0).getTooltip(), List.of(
+        assertTooltip(((TradeGroupNode) ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS).getFirst()).nodes().getFirst().getTooltip(), List.of(
                 "Value: minecraft:armorer",
                 "Uses: 12",
                 "XP: 5",
@@ -636,7 +636,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
 
         Assertions.assertEquals(1, trades.size());
-        assertSlot(trades.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(trades.getFirst(), 2, Items.APPLE, NumberExpr.constant(1));
     }
 
     @Test
@@ -718,7 +718,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
 
         Assertions.assertEquals(1, trades.size());
-        assertTooltip(trades.get(0).getTooltip(), List.of(
+        assertTooltip(trades.getFirst().getTooltip(), List.of(
                 "Unknown additional predicate",
                 "Uses: 12",
                 "XP: 5",
@@ -749,8 +749,8 @@ public class BytecodeInterpreterTest {
 
         Assertions.assertEquals(NumberExpr.constant(4), level.levelInfo().offers());
         Assertions.assertEquals(2, trades.size());
-        Assertions.assertEquals(NumberExpr.constant(3), ((TradeGroupNode) trades.get(0)).selectionCount);
-        Assertions.assertEquals(1, ((TradeGroupNode) trades.get(0)).nodes().size());
+        Assertions.assertEquals(NumberExpr.constant(3), ((TradeGroupNode) trades.getFirst()).selectionCount);
+        Assertions.assertEquals(1, ((TradeGroupNode) trades.getFirst()).nodes().size());
     }
 
     @Test
@@ -790,7 +790,7 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(oneOrTwo(), level.levelInfo().offers());
         Assertions.assertEquals(1F, level.levelInfo().chance());
         Assertions.assertEquals(3, trades.size());
-        assertSlot(trades.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(trades.getFirst(), 2, Items.APPLE, NumberExpr.constant(1));
         assertSlot(trades.get(1), 2, Items.BREAD, NumberExpr.constant(1));
         assertSlot(trades.get(2), 2, Items.CARROT, NumberExpr.constant(1));
     }
@@ -809,7 +809,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
 
         Assertions.assertEquals(2, trades.size());
-        assertSlot(trades.get(0), 2, Items.BREAD, NumberExpr.constant(1));
+        assertSlot(trades.getFirst(), 2, Items.BREAD, NumberExpr.constant(1));
         assertSlot(trades.get(1), 2, Items.APPLE, NumberExpr.constant(1));
     }
 
@@ -860,7 +860,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> trades = ((TradeLevel.OfTrades) levels.get(1)).trades().apply(UTILS);
 
         Assertions.assertEquals(2, trades.size());
-        assertTooltip(trades.get(0).getTooltip(), List.of(
+        assertTooltip(trades.getFirst().getTooltip(), List.of(
                 "Uses: 12",
                 "XP: 5",
                 "Price Multiplier: 0.05"
@@ -963,8 +963,8 @@ public class BytecodeInterpreterTest {
         Assertions.assertNotNull(apple);
         Assertions.assertNotNull(pick);
         Assertions.assertEquals(List.of(Items.ARROW), arrows.options().stream().map((o) -> o.stack().getItem()).toList());
-        Assertions.assertEquals(NumberExpr.uniformInt(16, 31), arrows.options().get(0).count());
-        Assertions.assertEquals(NumberExpr.constant(1), apple.options().get(0).count());
+        Assertions.assertEquals(NumberExpr.uniformInt(16, 31), arrows.options().getFirst().count());
+        Assertions.assertEquals(NumberExpr.constant(1), apple.options().getFirst().count());
         Assertions.assertEquals(List.of(Items.APPLE, Items.BREAD), pick.options().stream().map((o) -> o.stack().getItem()).toList());
         Assertions.assertEquals(List.of(0.5, 0.5), pick.options().stream().map(BytecodeInterpreter.Option::chance).toList());
         Assertions.assertSame(random, Suppliers.random);
@@ -989,7 +989,7 @@ public class BytecodeInterpreterTest {
     public void testUnknownPredicateInErrorColor() {
         List<IDataNode> trades = ((ListNode) interpret(new HeightListing())).nodes();
 
-        Assertions.assertEquals(List.of("Unknown additional predicate"), errorLines(trades.get(0).getTooltip()));
+        Assertions.assertEquals(List.of("Unknown additional predicate"), errorLines(trades.getFirst().getTooltip()));
     }
 
     @Test
@@ -1271,7 +1271,7 @@ public class BytecodeInterpreterTest {
         List<IDataNode> nodes = ((TradeLevel.OfTrades) trades.levels().get(1)).trades().apply(UTILS);
 
         Assertions.assertEquals(2, nodes.size());
-        assertSlot(nodes.get(0), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(nodes.getFirst(), 2, Items.APPLE, NumberExpr.constant(1));
         Assertions.assertInstanceOf(MissingNode.class, nodes.get(1));
     }
 
@@ -1295,7 +1295,7 @@ public class BytecodeInterpreterTest {
     @Test
     public void testLambdaInListChangedAfterInitialization() {
         if (ShiftedLambdas.LIST.size() == 2) {
-            ShiftedLambdas.LIST.add(0, (trader, random) -> offerFor(Items.CARROT));
+            ShiftedLambdas.LIST.addFirst((trader, random) -> offerFor(Items.CARROT));
         }
 
         assertSlot(interpret(ShiftedLambdas.LIST.get(ShiftedLambdas.LIST.size() - 2)), 2, Items.APPLE, NumberExpr.constant(1));
@@ -1313,7 +1313,7 @@ public class BytecodeInterpreterTest {
 
     @Test
     public void testLambdasDrawingManyTimes() {
-        assertSlot(interpret(ManyDraws.LISTINGS.get(0)), 2, Items.APPLE, NumberExpr.constant(1));
+        assertSlot(interpret(ManyDraws.LISTINGS.getFirst()), 2, Items.APPLE, NumberExpr.constant(1));
     }
 
     @Test

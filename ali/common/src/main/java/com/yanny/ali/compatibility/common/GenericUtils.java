@@ -539,7 +539,7 @@ public class GenericUtils {
             return 0;
         }
 
-        return rects.get(rects.size() - 1).y() + SLOT_SIZE - y + HEADER_GAP;
+        return rects.getLast().y() + SLOT_SIZE - y + HEADER_GAP;
     }
 
     // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
@@ -555,9 +555,7 @@ public class GenericUtils {
 
     // split table path and make uppercased text
     private static String getFallbackText(String fallback) {
-        List<String> pathSegments = Pattern.compile("/").splitAsStream(fallback).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-
-        Collections.reverse(pathSegments);
+        List<String> pathSegments = Pattern.compile("/").splitAsStream(fallback).filter(s -> !s.isEmpty()).toList().reversed();
 
         return pathSegments.stream()
                 .flatMap(segment -> Arrays.stream(segment.split("_")))

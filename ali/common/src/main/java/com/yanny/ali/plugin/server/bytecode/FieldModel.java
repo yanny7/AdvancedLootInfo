@@ -39,20 +39,23 @@ final class FieldModel {
         if (self && insn.desc.equals(Type.getDescriptor(MerchantOffers.class))) {
             return NULL;
         }
-        if (receiver instanceof Value.Unknown && Type.getType(insn.desc).getSort() == Type.OBJECT && isRandomType(Type.getType(insn.desc), loader)) {
-            return new Value.Rng(isLegacyRandom(Type.getType(insn.desc), loader));
-        }
-        if (receiver instanceof Value.Unknown) {
-            return Value.Unknown.of(Type.getType(insn.desc), Origin.of(receiver, insn.name, List.of()));
-        }
-        if (receiver instanceof Value.Choice choice) {
-            List<Value> results = new ArrayList<>();
-
-            for (Object option : choice.options()) {
-                results.add(get(context, insn, context.wrap(option), loader));
+        switch (receiver) {
+            case Value.Unknown ignored when Type.getType(insn.desc).getSort() == Type.OBJECT && isRandomType(Type.getType(insn.desc), loader) -> {
+                return new Value.Rng(isLegacyRandom(Type.getType(insn.desc), loader));
             }
+            case Value.Unknown ignored -> {
+                return Value.Unknown.of(Type.getType(insn.desc), Origin.of(receiver, insn.name, List.of()));
+            }
+            case Value.Choice choice -> {
+                List<Value> results = new ArrayList<>();
 
-            return Objects.requireNonNull(sameDraw(context.combine(results), choice));
+                for (Object option : choice.options()) {
+                    results.add(get(context, insn, context.wrap(option), loader));
+                }
+
+                return Objects.requireNonNull(sameDraw(context.combine(results), choice));
+            }
+            default -> {}
         }
         if (!(receiver instanceof Value.Known known) || known.value() == null) {
             throw new Fail("field of a symbolic value");
@@ -88,17 +91,17 @@ final class FieldModel {
             context.putTraderField(insn.owner + "." + insn.name, value);
             return;
         }
-        if (!(receiver instanceof Value.Known known) || !context.isOwned(known.value()) || !(value instanceof Value.Known known2)) {
+        if (!(receiver instanceof Value.Known(Object value1)) || !context.isOwned(value1) || !(value instanceof Value.Known known2)) {
             throw new Fail("write to a field");
         }
-        if (known.value() != null && context.isFrozen(known.value())) {
+        if (value1 != null && context.isFrozen(value1)) {
             throw new Fail("change under a random choice");
         }
 
         Field field = field(load(insn.owner, loader), insn.name);
 
         try {
-            field.set(known.value(), context.toJava(known2, field.getType()));
+            field.set(value1, context.toJava(known2, field.getType()));
         } catch (Throwable e) {
             throw new Fail("field write " + insn.owner + "." + insn.name);
         }

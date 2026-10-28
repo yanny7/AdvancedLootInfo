@@ -228,7 +228,7 @@ public class NodeUtils {
             conditions.addAll(weightConditions);
         }
 
-        if (sumWeight instanceof NumberExpr.Const c && c.value() == 0) {
+        if (sumWeight instanceof NumberExpr.Const(double value) && value == 0) {
             return new LootCount(NumberExpr.constant(0), List.of());
         }
 
@@ -267,14 +267,14 @@ public class NodeUtils {
 
     @NotNull
     private static LootCount withUsedConditions(NumberExpr value, List<TooltipNode> conditions) {
-        if (!(value instanceof NumberExpr.Cond cond)) {
+        if (!(value instanceof NumberExpr.Cond(List<NumberExpr.Branch> branches1, NumberExpr otherwise))) {
             return new LootCount(value.transform(NodeUtils::dropConditions), List.of());
         }
 
         List<TooltipNode> used = new ArrayList<>();
         List<NumberExpr.Branch> branches = new ArrayList<>();
 
-        for (NumberExpr.Branch branch : cond.branches()) {
+        for (NumberExpr.Branch branch : branches1) {
             int index = -1;
 
             if (branch.condition() >= 0) {
@@ -285,13 +285,13 @@ public class NodeUtils {
             branches.add(new NumberExpr.Branch(index, branch.value().transform(NodeUtils::dropConditions)));
         }
 
-        return new LootCount(NumberExpr.cond(branches, cond.otherwise().transform(NodeUtils::dropConditions)), used);
+        return new LootCount(NumberExpr.cond(branches, otherwise.transform(NodeUtils::dropConditions)), used);
     }
 
     @NotNull
     private static NumberExpr dropConditions(NumberExpr expr) {
-        if (expr instanceof NumberExpr.Cond c) {
-            return NumberExpr.cond(c.branches().stream().map((b) -> new NumberExpr.Branch(-1, b.value())).toList(), c.otherwise());
+        if (expr instanceof NumberExpr.Cond(List<NumberExpr.Branch> branches, NumberExpr otherwise)) {
+            return NumberExpr.cond(branches.stream().map((b) -> new NumberExpr.Branch(-1, b.value())).toList(), otherwise);
         }
 
         return expr;
@@ -353,8 +353,8 @@ public class NodeUtils {
     public static float toFloat(NumberExpr chance) {
         NumberExpr value = chance.bind(TooltipUtils.luck(), 0);
 
-        if (value instanceof NumberExpr.Const c) {
-            return (float) c.value();
+        if (value instanceof NumberExpr.Const(double value1)) {
+            return (float) value1;
         }
 
         NumberInterval bounds = NumberEvaluator.bounds(value);

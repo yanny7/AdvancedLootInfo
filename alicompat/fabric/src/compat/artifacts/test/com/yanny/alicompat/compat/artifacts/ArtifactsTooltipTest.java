@@ -1,13 +1,11 @@
 package com.yanny.alicompat.compat.artifacts;
 
 import artifacts.loot.ArtifactRarityAdjustedChance;
-import artifacts.loot.ConfigValueChance;
 import artifacts.loot.IsAprilFools;
 import artifacts.loot.ReplaceWithLootTableFunction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

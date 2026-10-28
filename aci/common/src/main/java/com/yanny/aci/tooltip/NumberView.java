@@ -173,14 +173,14 @@ final class NumberView {
         NumberExpr expr = number.expr();
         List<Row> rows = new ArrayList<>();
 
-        if (expr instanceof NumberExpr.Cond c) {
-            for (int i = 0; i < c.branches().size(); i++) {
-                NumberExpr.Branch branch = c.branches().get(i);
+        if (expr instanceof NumberExpr.Cond(List<NumberExpr.Branch> branches, NumberExpr otherwise)) {
+            for (int i = 0; i < branches.size(); i++) {
+                NumberExpr.Branch branch = branches.get(i);
 
                 block(rows, branch.value(), number, showFormulas, 1, branch.condition(), null, i > 0);
             }
 
-            block(rows, c.otherwise(), number, showFormulas, 1, -1, null, true);
+            block(rows, otherwise, number, showFormulas, 1, -1, null, true);
             return new NumberView(null, rows, null, false);
         }
         if (expr instanceof NumberExpr.Weighted w) {
@@ -305,8 +305,8 @@ final class NumberView {
             args.addAll(var.args());
             return new NumberText.Key(key + (value < 0 ? ".row.negative" : ".row"), args);
         }
-        if (!var.args().isEmpty() && var.args().get(0) instanceof NumberText.Str s) {
-            ResourceLocation id = ResourceLocation.tryParse(s.text());
+        if (!var.args().isEmpty() && var.args().getFirst() instanceof NumberText.Str(String text)) {
+            ResourceLocation id = ResourceLocation.tryParse(text);
 
             if (id != null) {
                 return NumberText.key("enchantment." + id.getNamespace() + "." + id.getPath());

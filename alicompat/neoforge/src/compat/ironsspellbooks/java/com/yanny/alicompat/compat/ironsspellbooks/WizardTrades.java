@@ -234,7 +234,7 @@ public class WizardTrades {
 
         for (Potion potion : BuiltInRegistries.POTION) {
             if (!potion.getEffects().isEmpty()) {
-                MobEffectInstance effect = potion.getEffects().get(0);
+                MobEffectInstance effect = potion.getEffects().getFirst();
                 NumberExpr surcharge = NumberExpr.add(
                         NumberExpr.mul(NumberExpr.constant(effect.getAmplifier()), NumberExpr.uniformInt(4, 6)),
                         NumberExpr.constant(effect.getDuration() / 1200)

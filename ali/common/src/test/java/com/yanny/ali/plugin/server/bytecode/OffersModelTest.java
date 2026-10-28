@@ -47,7 +47,7 @@ public class OffersModelTest {
         assertEquals(new Value.Known(1), offersCall("add", ADD, new Value.Pick(List.of(SECOND), pool, 2)));
         assertEquals(1, offers.entries.size());
 
-        Value.Offers.Listings listings = assertInstanceOf(Value.Offers.Listings.class, offers.entries.get(0));
+        Value.Offers.Listings listings = assertInstanceOf(Value.Offers.Listings.class, offers.entries.getFirst());
 
         assertArrayEquals(new VillagerTrades.ItemListing[]{FIRST, SECOND}, listings.listings());
         assertEquals(new Value.Known(2), listings.count());
@@ -61,7 +61,7 @@ public class OffersModelTest {
 
         context.drawCounts.put(pool, count);
         offersCall("add", ADD, new Value.Pick(List.of(FIRST, SECOND), pool, null));
-        assertEquals(new Value.Num(count, Value.Kind.INT), ((Value.Offers.Listings) offers.entries.get(0)).count());
+        assertEquals(new Value.Num(count, Value.Kind.INT), ((Value.Offers.Listings) offers.entries.getFirst()).count());
     }
 
     @Test

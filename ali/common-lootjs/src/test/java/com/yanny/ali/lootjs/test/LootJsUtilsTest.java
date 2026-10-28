@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,7 @@ public class LootJsUtilsTest {
     @Test
     public void testGetCapturedInstancesFindsRequiredType() {
         String captured = "captured";
-        Predicate<Object> predicate = (value) -> captured.equals(value);
+        Predicate<Object> predicate = captured::equals;
 
         Assertions.assertEquals(List.of(captured), Utils.getCapturedInstances(predicate, String.class));
     }
@@ -39,7 +38,7 @@ public class LootJsUtilsTest {
     @Test
     public void testGetCapturedInstancesSkipsOtherTypes() {
         Integer captured = 42;
-        Predicate<Object> predicate = (value) -> captured.equals(value);
+        Predicate<Object> predicate = captured::equals;
 
         Assertions.assertTrue(Utils.getCapturedInstances(predicate, String.class).isEmpty());
     }

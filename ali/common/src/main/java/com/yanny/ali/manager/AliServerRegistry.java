@@ -17,7 +17,6 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -719,8 +718,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private TradeLevel guardedLevel(TradeLevel level) {
-        if (level instanceof TradeLevel.OfTrades ofTrades) {
-            return new TradeLevel.OfTrades(ofTrades.levelInfo(), (u) -> attempt("trade level", ofTrades.trades(), () -> ofTrades.trades().apply(u), List::of));
+        if (level instanceof TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades)) {
+            return new TradeLevel.OfTrades(levelInfo, (u) -> attempt("trade level", trades, () -> trades.apply(u), List::of));
         }
 
         return level;

@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -22,17 +23,17 @@ final class CollectionsModel implements MethodModel {
         List<Value> args = call.args();
         boolean isStatic = insn.getOpcode() == Opcodes.INVOKESTATIC;
 
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && insn.name.equals("get")
+        if (!isStatic && args.getFirst() instanceof Value.Known(List<?> list) && insn.name.equals("get")
                 && insn.desc.equals("(I)Ljava/lang/Object;") && args.get(1) instanceof Value.Num num) {
             return pick(list, num);
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && context.isOwned(list)
+        if (!isStatic && args.getFirst() instanceof Value.Known(List<?> list) && context.isOwned(list)
                 && insn.name.equals("remove") && insn.desc.equals("(I)Ljava/lang/Object;")
                 && (args.get(1) instanceof Value.Num || context.removals(list) > 0 || context.traderRun() != null && list.size() == 1)) {
             return removeRandom(context, list, args.get(1));
         }
-        if (isStatic && insn.owner.equals("java/util/Collections") && insn.name.equals("shuffle") && args.get(0) instanceof Value.Known known
-                && known.value() instanceof List<?> list && context.isOwned(list) && list.size() <= Limits.OPTIONS) {
+        if (isStatic && insn.owner.equals("java/util/Collections") && insn.name.equals("shuffle") && args.getFirst() instanceof Value.Known(List<?> list)
+                && context.isOwned(list) && list.size() <= Limits.OPTIONS) {
             if (!list.isEmpty()) {
                 CollState coll = context.coll(list);
 
@@ -42,24 +43,24 @@ final class CollectionsModel implements MethodModel {
 
             return null;
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.shuffled(known.value()) != null) {
-            return shuffled(context, insn, args, Objects.requireNonNull(context.shuffled(known.value())));
+        if (!isStatic && args.getFirst() instanceof Value.Known(Object value) && value != null && context.shuffled(value) != null) {
+            return shuffled(context, insn, args, Objects.requireNonNull(context.shuffled(value)));
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Set<?> set && context.isOwned(set)
+        if (!isStatic && args.getFirst() instanceof Value.Known(Set<?> set) && context.isOwned(set)
                 && insn.name.equals("add") && insn.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Num num) {
             return addRandom(context, set, num);
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.randomIndexSet(known.value()) != null) {
-            int[] draws = Objects.requireNonNull(context.randomIndexSet(known.value()));
+        if (!isStatic && args.getFirst() instanceof Value.Known(Object value) && value != null && context.randomIndexSet(value) != null) {
+            int[] draws = Objects.requireNonNull(context.randomIndexSet(value));
 
             return switch (insn.name + insn.desc) {
                 case "size()I" -> new Value.Known(draws[1]);
-                case "iterator()Ljava/util/Iterator;" -> new Value.Draws(known.value(), IntStream.range(0, draws[0]).boxed().map(Object.class::cast).toList(), draws[1]);
+                case "iterator()Ljava/util/Iterator;" -> new Value.Draws(value, IntStream.range(0, draws[0]).boxed().map(Object.class::cast).toList(), draws[1]);
                 default -> throw new Fail("change under a random choice");
             };
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.removals(known.value()) > 0) {
-            int remaining = ((List<?>) known.value()).size() - context.removals(known.value());
+        if (!isStatic && args.getFirst() instanceof Value.Known(Object value) && value != null && context.removals(value) > 0) {
+            int remaining = ((List<?>) value).size() - context.removals(value);
 
             return switch (insn.name + insn.desc) {
                 case "size()I" -> new Value.Known(remaining);
@@ -72,10 +73,10 @@ final class CollectionsModel implements MethodModel {
     }
 
     private static NumberExpr withoutCap(NumberExpr count, int size) {
-        if (count instanceof NumberExpr.Fn fn && fn.id().equals(NumberFunctions.MIN)) {
-            List<NumberExpr> args = fn.args().stream().filter((a) -> !(a instanceof NumberExpr.Const c && c.value() >= size)).map((a) -> withoutCap(a, size)).toList();
+        if (count instanceof NumberExpr.Fn(ResourceLocation id, List<NumberExpr> args1) && id.equals(NumberFunctions.MIN)) {
+            List<NumberExpr> args = args1.stream().filter((a) -> !(a instanceof NumberExpr.Const(double value) && value >= size)).map((a) -> withoutCap(a, size)).toList();
 
-            return args.size() == 1 ? args.get(0) : NumberExpr.fn(NumberFunctions.MIN, args.toArray(new NumberExpr[0]));
+            return args.size() == 1 ? args.getFirst() : NumberExpr.fn(NumberFunctions.MIN, args.toArray(new NumberExpr[0]));
         }
 
         return count;
@@ -85,7 +86,7 @@ final class CollectionsModel implements MethodModel {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
 
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() instanceof List<?> list && context.isOwned(list)
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known(List<?> list) && context.isOwned(list)
                 && insn.name.equals("remove") && insn.desc.equals("(Ljava/lang/Object;)Z") && args.get(1) instanceof Value.Choice choice
                 && choice.options().size() == list.size() - context.removals(list) && new HashSet<Object>(list).containsAll(choice.options())) {
             context.coll(list).removals++;
@@ -122,12 +123,12 @@ final class CollectionsModel implements MethodModel {
                 return new Value.Draws(draws.pool, draws.options, draws.left);
             }
             case "get(I)Ljava/lang/Object;" -> {
-                if (args.get(1) instanceof Value.Known index && (Integer) index.value() < draws.left) {
+                if (args.get(1) instanceof Value.Known(Object index) && (Integer) index < draws.left) {
                     return new Value.Choice(draws.options, draws.pool);
                 }
             }
             case "subList(II)Ljava/util/List;" -> {
-                if (args.get(1) instanceof Value.Known from && Integer.valueOf(0).equals(from.value())
+                if (args.get(1) instanceof Value.Known(Object from) && Integer.valueOf(0).equals(from)
                         && (args.get(2) instanceof Value.Known || args.get(2) instanceof Value.Num)) {
                     NumberExpr to = context.expr(args.get(2));
                     Object view = new ArrayList<>();

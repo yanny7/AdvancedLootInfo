@@ -150,7 +150,7 @@ public class BaseLayoutTest {
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
         SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0));
+                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.getFirst());
         SurfaceRuleSpecializer specializer = new SurfaceRuleSpecializer(rule, BaseLayoutTestUtils.lookup(),
                 Map.of(BandlandsLayout.TYPE.toString(), BandlandsLayout.create(randomState)), false);
         List<Executable> checks = new ArrayList<>();

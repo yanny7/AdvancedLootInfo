@@ -122,7 +122,7 @@ public final class NumberDistribution {
         }
 
         double width = max - min;
-        DoubleUnaryOperator cdf = (x) -> Math.min(Math.max((x - min) / width, 0), 1);
+        DoubleUnaryOperator cdf = (x) -> Math.clamp((x - min) / width, 0, 1);
 
         return continuous(new Density(cdf, min, max, 1, min, max, 1 / width, true));
     }
@@ -183,8 +183,8 @@ public final class NumberDistribution {
         double mass = continuousParts.stream().mapToDouble((w) -> w.weight * w.density.mass).sum();
 
         if (continuousParts.size() == 1) {
-            Density d = continuousParts.get(0).density;
-            double weight = continuousParts.get(0).weight;
+            Density d = continuousParts.getFirst().density;
+            double weight = continuousParts.getFirst().weight;
 
             return new NumberDistribution(atoms, new Density(cdf, lo, hi, mass, d.peakLo, d.peakHi, d.peakDensity * weight, d.flat));
         }
@@ -337,7 +337,7 @@ public final class NumberDistribution {
             return new NumberDistribution(clamped, null);
         }
 
-        DoubleUnaryOperator cdf = (x) -> Math.min(Math.max(c.cdf.applyAsDouble(x) - below, 0), mass);
+        DoubleUnaryOperator cdf = (x) -> Math.clamp(c.cdf.applyAsDouble(x) - below, 0, mass);
         boolean peakInside = c.hasPeak() && c.peakHi >= lo && c.peakLo <= hi;
         double peakLo = peakInside ? Math.max(c.peakLo, lo) : Double.NaN;
         double peakHi = peakInside ? Math.min(c.peakHi, hi) : Double.NaN;

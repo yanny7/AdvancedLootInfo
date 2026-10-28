@@ -15,7 +15,7 @@ final class MapModel implements MethodModel {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
 
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() instanceof Map<?, ?> map && LOOKUPS.contains(insn.name)
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known(Map<?, ?> map) && LOOKUPS.contains(insn.name)
                 && args.get(1) instanceof Value.Unknown key && key.origin() != null && args.subList(2, args.size()).stream().allMatch(context::isConcrete)) {
             return lookup(context, call, map, key.origin());
         }

@@ -4,8 +4,6 @@ import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 
-import java.util.List;
-
 public class ReiBiomeDisplay extends ReiBaseDisplay {
     private final RecipeHolder entry;
     private final CategoryIdentifier<ReiBiomeDisplay> identifier;

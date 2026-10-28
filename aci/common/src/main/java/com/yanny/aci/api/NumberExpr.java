@@ -6,12 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.Set;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 public sealed interface NumberExpr {
@@ -210,14 +205,14 @@ public sealed interface NumberExpr {
 
     @NotNull
     static NumberExpr lookup(NumberExpr index, List<NumberExpr> values, @Nullable NumberExpr fallback) {
-        if (index instanceof Const c) {
-            int i = (int) c.value;
+        if (index instanceof Const(double value)) {
+            int i = (int) value;
 
             if (i >= 0 && i < values.size()) {
                 return values.get(i);
             }
 
-            return fallback != null ? fallback : values.get(values.size() - 1);
+            return fallback != null ? fallback : values.getLast();
         }
 
         return new Lookup(index, values, fallback);
@@ -228,11 +223,11 @@ public sealed interface NumberExpr {
         if (branches.isEmpty()) {
             return otherwise;
         }
-        if (otherwise instanceof Cond inner) {
+        if (otherwise instanceof Cond(List<Branch> branches1, NumberExpr otherwise1)) {
             List<Branch> merged = new ArrayList<>(branches);
 
-            merged.addAll(inner.branches());
-            return new Cond(merged, inner.otherwise());
+            merged.addAll(branches1);
+            return new Cond(merged, otherwise1);
         }
 
         return new Cond(branches, otherwise);
@@ -240,7 +235,7 @@ public sealed interface NumberExpr {
 
     @NotNull
     static NumberExpr weighted(List<WeightedEntry> entries) {
-        return entries.size() == 1 ? entries.get(0).value : new Weighted(entries);
+        return entries.size() == 1 ? entries.getFirst().value : new Weighted(entries);
     }
 
     @NotNull
@@ -266,19 +261,22 @@ public sealed interface NumberExpr {
     }
 
     default boolean isSimple() {
-        if (this instanceof Const) {
-            return true;
-        }
-        if (this instanceof Range r) {
-            boolean minSimple = r.min == null || (r.min instanceof Const && r.minClosed);
-            boolean maxSimple = r.max == null || (r.max instanceof Const && r.maxClosed);
+        switch (this) {
+            case Const ignored -> {
+                return true;
+            }
+            case Range(NumberExpr min, NumberExpr max, boolean minClosed, boolean maxClosed) -> {
+                boolean minSimple = min == null || (min instanceof Const && minClosed);
+                boolean maxSimple = max == null || (max instanceof Const && maxClosed);
 
-            return minSimple && maxSimple;
-        }
-        if (this instanceof Fn f) {
-            NumberFunction function = f.function();
+                return minSimple && maxSimple;
+            }
+            case Fn f -> {
+                NumberFunction function = f.function();
 
-            return function != null && function.isSimple(f.args);
+                return function != null && function.isSimple(f.args);
+            }
+            default -> {}
         }
 
         return false;
@@ -309,8 +307,8 @@ public sealed interface NumberExpr {
         }
 
         return transform((e) -> {
-            if (e instanceof Cond c) {
-                return cond(c.branches.stream().map((b) -> new Branch(b.condition < 0 ? b.condition : b.condition + offset, b.value)).toList(), c.otherwise);
+            if (e instanceof Cond(List<Branch> branches, NumberExpr otherwise)) {
+                return cond(branches.stream().map((b) -> new Branch(b.condition < 0 ? b.condition : b.condition + offset, b.value)).toList(), otherwise);
             }
 
             return e;
@@ -319,75 +317,82 @@ public sealed interface NumberExpr {
 
     @NotNull
     default NumberExpr transform(UnaryOperator<NumberExpr> mapper) {
-        NumberExpr rebuilt;
-
-        if (this instanceof Range r) {
-            rebuilt = range(r.min != null ? r.min.transform(mapper) : null, r.max != null ? r.max.transform(mapper) : null, r.minClosed, r.maxClosed);
-        } else if (this instanceof Lookup l) {
-            rebuilt = lookup(
-                    l.index.transform(mapper),
-                    l.values.stream().map((v) -> v.transform(mapper)).toList(),
-                    l.fallback != null ? l.fallback.transform(mapper) : null
+        NumberExpr rebuilt = switch (this) {
+            case Range(NumberExpr min, NumberExpr max, boolean minClosed, boolean maxClosed) ->
+                    range(min != null ? min.transform(mapper) : null, max != null ? max.transform(mapper) : null, minClosed, maxClosed);
+            case Lookup(NumberExpr index, List<NumberExpr> values, NumberExpr fallback) -> lookup(
+                    index.transform(mapper),
+                    values.stream().map((v) -> v.transform(mapper)).toList(),
+                    fallback != null ? fallback.transform(mapper) : null
             );
-        } else if (this instanceof Fn f) {
-            rebuilt = fn(f.id, f.args.stream().map((a) -> a.transform(mapper)).toList());
-        } else if (this instanceof Cond c) {
-            rebuilt = cond(
-                    c.branches.stream().map((b) -> new Branch(b.condition, b.value.transform(mapper))).toList(),
-                    c.otherwise.transform(mapper)
+            case Fn(ResourceLocation id, List<NumberExpr> args) ->
+                    fn(id, args.stream().map((a) -> a.transform(mapper)).toList());
+            case Cond(List<Branch> branches, NumberExpr otherwise) -> cond(
+                    branches.stream().map((b) -> new Branch(b.condition, b.value.transform(mapper))).toList(),
+                    otherwise.transform(mapper)
             );
-        } else if (this instanceof Weighted w) {
-            rebuilt = weighted(w.entries.stream().map((e) -> new WeightedEntry(e.weight, e.value.transform(mapper))).toList());
-        } else {
-            rebuilt = this;
-        }
+            case Weighted(List<WeightedEntry> entries) ->
+                    weighted(entries.stream().map((e) -> new WeightedEntry(e.weight, e.value.transform(mapper))).toList());
+            default -> this;
+        };
 
         return mapper.apply(rebuilt);
     }
 
     default void encode(FriendlyByteBuf buf) {
-        if (this instanceof Const c) {
-            buf.writeByte(0);
-            buf.writeDouble(c.value);
-        } else if (this instanceof Range r) {
-            buf.writeByte(1);
-            buf.writeNullable(r.min, NumberExpr::write);
-            buf.writeNullable(r.max, NumberExpr::write);
-            buf.writeBoolean(r.minClosed);
-            buf.writeBoolean(r.maxClosed);
-        } else if (this instanceof Var v) {
-            buf.writeByte(2);
-            buf.writeResourceLocation(v.type);
-            NumberText.encodeList(buf, v.args);
-            buf.writeDouble(v.min);
-            buf.writeDouble(v.max);
-        } else if (this instanceof Lookup l) {
-            buf.writeByte(3);
-            l.index.encode(buf);
-            encodeList(buf, l.values);
-            buf.writeNullable(l.fallback, NumberExpr::write);
-        } else if (this instanceof Fn f) {
-            buf.writeByte(4);
-            buf.writeResourceLocation(f.id);
-            encodeList(buf, f.args);
-        } else if (this instanceof Cond c) {
-            buf.writeByte(5);
-            buf.writeVarInt(c.branches.size());
-            c.branches.forEach((b) -> {
-                buf.writeVarInt(b.condition);
-                b.value.encode(buf);
-            });
-            c.otherwise.encode(buf);
-        } else if (this instanceof Weighted w) {
-            buf.writeByte(6);
-            buf.writeVarInt(w.entries.size());
-            w.entries.forEach((e) -> {
-                buf.writeDouble(e.weight);
-                e.value.encode(buf);
-            });
-        } else if (this instanceof Opaque o) {
-            buf.writeByte(7);
-            buf.writeUtf(o.typeId);
+        switch (this) {
+            case Const c -> {
+                buf.writeByte(0);
+                buf.writeDouble(c.value);
+            }
+            case Range r -> {
+                buf.writeByte(1);
+                buf.writeNullable(r.min, NumberExpr::write);
+                buf.writeNullable(r.max, NumberExpr::write);
+                buf.writeBoolean(r.minClosed);
+                buf.writeBoolean(r.maxClosed);
+            }
+            case Var v -> {
+                buf.writeByte(2);
+                buf.writeResourceLocation(v.type);
+                NumberText.encodeList(buf, v.args);
+                buf.writeDouble(v.min);
+                buf.writeDouble(v.max);
+            }
+            case Lookup l -> {
+                buf.writeByte(3);
+                l.index.encode(buf);
+                encodeList(buf, l.values);
+                buf.writeNullable(l.fallback, NumberExpr::write);
+            }
+            case Fn f -> {
+                buf.writeByte(4);
+                buf.writeResourceLocation(f.id);
+                encodeList(buf, f.args);
+            }
+            case Cond c -> {
+                buf.writeByte(5);
+                buf.writeVarInt(c.branches.size());
+                c.branches.forEach((b) -> {
+                    buf.writeVarInt(b.condition);
+                    b.value.encode(buf);
+                });
+                c.otherwise.encode(buf);
+            }
+            case Weighted w -> {
+                buf.writeByte(6);
+                buf.writeVarInt(w.entries.size());
+                w.entries.forEach((e) -> {
+                    buf.writeDouble(e.weight);
+                    e.value.encode(buf);
+                });
+            }
+            case Opaque o -> {
+                buf.writeByte(7);
+                buf.writeUtf(o.typeId);
+            }
+            default -> {
+            }
         }
     }
 

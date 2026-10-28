@@ -17,63 +17,60 @@ public final class NumberEvaluator {
 
     @NotNull
     public static NumberInterval bounds(NumberExpr expr) {
-        if (expr instanceof NumberExpr.Const c) {
-            return NumberInterval.point(c.value());
-        } else if (expr instanceof NumberExpr.Range r) {
-            return range(r);
-        } else if (expr instanceof NumberExpr.Var v) {
-            return new NumberInterval(v.min(), v.max(), true, true);
-        } else if (expr instanceof NumberExpr.Lookup l) {
-            NumberInterval result = l.fallback() != null ? bounds(l.fallback()) : bounds(l.values().get(0));
+        return switch (expr) {
+            case NumberExpr.Const c -> NumberInterval.point(c.value());
+            case NumberExpr.Range r -> range(r);
+            case NumberExpr.Var v -> new NumberInterval(v.min(), v.max(), true, true);
+            case NumberExpr.Lookup l -> {
+                NumberInterval result = l.fallback() != null ? bounds(l.fallback()) : bounds(l.values().getFirst());
 
-            for (NumberExpr value : l.values()) {
-                result = result.union(bounds(value));
+                for (NumberExpr value : l.values()) {
+                    result = result.union(bounds(value));
+                }
+
+                yield result;
             }
+            case NumberExpr.Fn f -> function(f);
+            case NumberExpr.Cond c -> {
+                NumberInterval result = bounds(c.otherwise());
 
-            return result;
-        } else if (expr instanceof NumberExpr.Fn f) {
-            return function(f);
-        } else if (expr instanceof NumberExpr.Cond c) {
-            NumberInterval result = bounds(c.otherwise());
+                for (NumberExpr.Branch branch : c.branches()) {
+                    result = result.union(bounds(branch.value()));
+                }
 
-            for (NumberExpr.Branch branch : c.branches()) {
-                result = result.union(bounds(branch.value()));
+                yield result;
             }
+            case NumberExpr.Weighted w -> {
+                NumberInterval result = bounds(w.entries().getFirst().value());
 
-            return result;
-        } else if (expr instanceof NumberExpr.Weighted w) {
-            NumberInterval result = bounds(w.entries().get(0).value());
+                for (NumberExpr.WeightedEntry entry : w.entries()) {
+                    result = result.union(bounds(entry.value()));
+                }
 
-            for (NumberExpr.WeightedEntry entry : w.entries()) {
-                result = result.union(bounds(entry.value()));
+                yield result;
             }
-
-            return result;
-        }
-
-        return NumberInterval.UNKNOWN;
+            default -> NumberInterval.UNKNOWN;
+        };
     }
 
     @Nullable
     public static NumberDistribution distribution(NumberExpr expr) {
-        if (expr instanceof NumberExpr.Const c) {
-            return NumberDistribution.constant(c.value());
-        } else if (expr instanceof NumberExpr.Lookup l) {
-            return lookup(l);
-        } else if (expr instanceof NumberExpr.Fn f) {
-            return functionDistribution(f);
-        } else if (expr instanceof NumberExpr.Weighted w) {
-            double total = w.totalWeight();
-            List<NumberDistribution.Weight> parts = new ArrayList<>();
+        return switch (expr) {
+            case NumberExpr.Const c -> NumberDistribution.constant(c.value());
+            case NumberExpr.Lookup l -> lookup(l);
+            case NumberExpr.Fn f -> functionDistribution(f);
+            case NumberExpr.Weighted w -> {
+                double total = w.totalWeight();
+                List<NumberDistribution.Weight> parts = new ArrayList<>();
 
-            for (NumberExpr.WeightedEntry entry : w.entries()) {
-                parts.add(new NumberDistribution.Weight(entry.weight() / total, distribution(entry.value())));
+                for (NumberExpr.WeightedEntry entry : w.entries()) {
+                    parts.add(new NumberDistribution.Weight(entry.weight() / total, distribution(entry.value())));
+                }
+
+                yield NumberDistribution.mixture(parts);
             }
-
-            return NumberDistribution.mixture(parts);
-        }
-
-        return null;
+            default -> null;
+        };
     }
 
     @NotNull
@@ -168,7 +165,7 @@ public final class NumberEvaluator {
             if (i >= 0 && i < l.values().size()) {
                 value = l.values().get(i);
             } else {
-                value = l.fallback() != null ? l.fallback() : l.values().get(l.values().size() - 1);
+                value = l.fallback() != null ? l.fallback() : l.values().getLast();
             }
 
             parts.add(new NumberDistribution.Weight(entry.getValue(), distribution(value)));

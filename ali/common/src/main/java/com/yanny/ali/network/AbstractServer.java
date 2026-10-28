@@ -323,7 +323,7 @@ public abstract class AbstractServer {
     }
 
     private static boolean isConstant(NumberExpr expr, float value) {
-        return expr instanceof NumberExpr.Const constant && constant.value() == value;
+        return expr instanceof NumberExpr.Const(double value1) && value1 == value;
     }
 
     private static void collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
@@ -543,7 +543,7 @@ public abstract class AbstractServer {
                 } else if (pending.kind() == PageKind.BLOCK && page.blocks().stream().noneMatch((b) -> b.getLootTable().equals(BuiltInLootTables.EMPTY))) {
                     // noLootTable() blocks are keyed by themselves and have no table by definition
                     LOGGER.debug("Missing block loot table for {}", location);
-                } else if (pending.kind() == PageKind.ENTITY && !location.equals(BuiltInLootTables.EMPTY)) {
+                } else if (pending.kind() == PageKind.ENTITY && !location.equals(BuiltInLootTables.EMPTY.location())) {
                     LOGGER.debug("Missing entity loot table for {}", location);
                 }
             } catch (Throwable e) {

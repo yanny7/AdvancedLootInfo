@@ -30,7 +30,7 @@ public class ItemCostModelTest {
         Value.Stack cost = assertInstanceOf(Value.Stack.class, result);
 
         assertNotSame(shown, cost);
-        assertTrue(cost.options.get(0).is(Items.EMERALD));
+        assertTrue(cost.options.getFirst().is(Items.EMERALD));
         assertEquals(ONE_TO_THREE.expr(), cost.count);
     }
 
@@ -39,7 +39,7 @@ public class ItemCostModelTest {
         Value.Stack cost = assertInstanceOf(Value.Stack.class, model.apply(context, construct("(Lnet/minecraft/world/level/ItemLike;I)V", new Value.Known(Items.EMERALD),
                 new Value.Known(3))));
 
-        assertTrue(cost.options.get(0).is(Items.EMERALD));
+        assertTrue(cost.options.getFirst().is(Items.EMERALD));
         assertEquals(NumberExpr.constant(3), cost.count);
     }
 
@@ -60,9 +60,9 @@ public class ItemCostModelTest {
         Value.Stack changed = assertInstanceOf(Value.Stack.class, model.apply(context, call(INVOKEVIRTUAL, ITEM_COST, "withComponents", WITH_COMPONENTS, cost,
                 new Value.Known(null))));
 
-        assertTrue(changed.options.get(0).is(Items.DIAMOND));
+        assertTrue(changed.options.getFirst().is(Items.DIAMOND));
         assertEquals(NumberExpr.constant(3), changed.count);
-        assertTrue(((ItemCost) ((Value.Known) context.concreteCalls.get(0).args().get(0)).value()).itemStack().is(Items.EMERALD));
+        assertTrue(((ItemCost) ((Value.Known) context.concreteCalls.getFirst().args().getFirst()).value()).itemStack().is(Items.EMERALD));
     }
 
     @Test

@@ -24,16 +24,16 @@ final class PickModel implements MethodModel {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
-            if (args.get(0) instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
+            if (args.getFirst() instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
                 return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), context.poolKey(choice.options()));
             }
-            if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
+            if (args.getFirst() instanceof Value.Known(VillagerTrades.ItemListing listing)) {
                 Object source = context.listingSource(listing);
 
                 return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? context.levelKey(source) : null);
             }
         }
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Choice choice && isPick(context, choice)
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Choice choice && isPick(context, choice)
                 && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(insn, call.loader())) {
             List<Object> bound = bound(context, run, args.subList(1, args.size()));
 
@@ -71,10 +71,10 @@ final class PickModel implements MethodModel {
         for (Value arg : args) {
             if (run.isSelf(arg)) {
                 bound.add(BoundOffer.Bound.TRADER);
-            } else if (arg instanceof Value.Rng rng) {
-                bound.add(rng.legacy() ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
-            } else if (arg instanceof Value.Known known && context.isConcrete(arg)) {
-                bound.add(known.value());
+            } else if (arg instanceof Value.Rng(boolean legacy)) {
+                bound.add(legacy ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
+            } else if (arg instanceof Value.Known(Object value1) && context.isConcrete(arg)) {
+                bound.add(value1);
             } else {
                 return null;
             }

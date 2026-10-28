@@ -107,7 +107,7 @@ sealed interface Value {
         @NotNull
         List<ItemStack> templates() {
             List<ItemStack> templates = new ArrayList<>();
-            int each = count instanceof NumberExpr.Const c ? (int) c.value() : 1;
+            int each = count instanceof NumberExpr.Const(double value1) ? (int) value1 : 1;
 
             for (ItemStack option : options) {
                 templates.add(option.copyWithCount(each));
