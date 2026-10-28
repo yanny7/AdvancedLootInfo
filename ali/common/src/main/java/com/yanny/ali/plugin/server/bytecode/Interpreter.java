@@ -485,16 +485,16 @@ final class Interpreter implements Opcodes {
 
         Object object = concrete(value);
 
-        if (!(object instanceof Integer)) {
+        if (!(object instanceof Integer integer)) {
             return object;
         } else if (type == boolean.class) {
-            return ((Integer) object) != 0;
+            return integer != 0;
         } else if (type == char.class) {
-            return (char) (int) (Integer) object;
+            return (char) (int) integer;
         } else if (type == byte.class) {
-            return (byte) (int) (Integer) object;
+            return (byte) (int) integer;
         } else if (type == short.class) {
-            return (short) (int) (Integer) object;
+            return (short) (int) integer;
         }
 
         return object;
