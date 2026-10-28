@@ -7,6 +7,7 @@ import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -190,6 +191,23 @@ sealed interface PathCondition {
     }
 
     record Is(Object value) implements PathCondition {
+        private static final Map<ResourceLocation, Lang.Value> LABELS = Map.ofEntries(
+                Map.entry(Registries.ATTRIBUTE.location(), Lang.Value.ATTRIBUTE),
+                Map.entry(Registries.BANNER_PATTERN.location(), Lang.Value.BANNER_PATTERN),
+                Map.entry(Registries.BIOME.location(), Lang.Value.BIOME),
+                Map.entry(Registries.BLOCK.location(), Lang.Value.BLOCK),
+                Map.entry(Registries.BLOCK_ENTITY_TYPE.location(), Lang.Value.BLOCK_ENTITY_TYPE),
+                Map.entry(Registries.DIMENSION.location(), Lang.Value.DIMENSION),
+                Map.entry(Registries.ENCHANTMENT.location(), Lang.Value.ENCHANTMENT),
+                Map.entry(Registries.ENTITY_TYPE.location(), Lang.Value.ENTITY_TYPE),
+                Map.entry(Registries.FLUID.location(), Lang.Value.FLUID),
+                Map.entry(Registries.ITEM.location(), Lang.Value.ITEM),
+                Map.entry(Registries.MOB_EFFECT.location(), Lang.Value.MOB_EFFECT),
+                Map.entry(Registries.POTION.location(), Lang.Value.POTION),
+                Map.entry(Registries.STRUCTURE.location(), Lang.Value.STRUCTURE),
+                Map.entry(Registries.VILLAGER_TYPE.location(), Lang.Value.VILLAGER_TYPE)
+        );
+
         @Override
         public TooltipNode tooltip(IServerUtils utils) {
             return utils.getValueTooltip(utils, shown(value)).build(label(value));
@@ -242,18 +260,7 @@ sealed interface PathCondition {
         private static Lang.Value label(Object value) {
             ResourceLocation registry = registry(value);
 
-            if (registry != null) {
-                String path = registry.getPath();
-                String key = "ali.property.value." + path.substring(path.lastIndexOf('/') + 1);
-
-                for (Lang.Value label : Lang.Value.values()) {
-                    if (label.getTranslation().sKey().equals(key)) {
-                        return label;
-                    }
-                }
-            }
-
-            return Lang.Value.VALUE;
+            return registry != null ? LABELS.getOrDefault(registry, Lang.Value.VALUE) : Lang.Value.VALUE;
         }
     }
 
