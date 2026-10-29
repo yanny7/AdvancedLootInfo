@@ -233,7 +233,7 @@ dependencies {
     runtimeOnly project(path: ":aci:fabric", configuration: "namedElements")
     runtimeOnly project(path: ":ali:fabric", configuration: "namedElements")
     gametestCompileOnly project(path: ":ali:fabric", configuration: "namedElements")
-    testImplementation "net.fabricmc:access-widener:2.1.0"
+    testImplementation "net.fabricmc:class-tweaker:0.3.0"
     testImplementation "org.junit.platform:junit-platform-launcher:1.12.0"
 
     gametestMods.findAll { gametestCoordinates(it) }.each { mod ->
