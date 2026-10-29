@@ -27,7 +27,7 @@ public class TradeTierAccessor extends BaseAccessor<TradeTier> {
         NumberExpr offers = accessors.stream().map((a) -> a.getSelectionCount(utils)).reduce(NumberExpr.constant(0), NumberExpr::add);
 
         if (accessors.size() == 1) {
-            return new TradeLevel.OfTrades(new TradeLevelInfo(offers), accessors.get(0)::getTrades);
+            return new TradeLevel.OfTrades(new TradeLevelInfo(offers), accessors.getFirst()::getTrades);
         }
 
         return new TradeLevel.OfTrades(new TradeLevelInfo(offers), (u) -> accessors.stream().map((a) -> a.getNode(u)).toList());

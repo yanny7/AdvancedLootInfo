@@ -3,11 +3,7 @@ package com.yanny.aci.test.utils;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.CoreLang;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.aci.tooltip.NumberOptions;
-import com.yanny.aci.tooltip.TooltipLine;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.aci.tooltip.TooltipStyle;
+import com.yanny.aci.tooltip.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -142,7 +138,7 @@ public class TestUtils {
 
     @NotNull
     public static List<Component> toComponents(List<TooltipLine> lines) {
-        return lines.stream().map((l) -> l instanceof TooltipLine.Text t ? t.component() : Component.literal("[chart]")).toList();
+        return lines.stream().map((l) -> l instanceof TooltipLine.Text(Component component) ? component : Component.literal("[chart]")).toList();
     }
 
     @NotNull
@@ -203,7 +199,7 @@ public class TestUtils {
                     }
                 }
             } catch (Exception e) {
-                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, e.toString(), e);
+                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, e, e);
             }
         }
 

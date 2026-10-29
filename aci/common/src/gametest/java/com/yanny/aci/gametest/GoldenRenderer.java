@@ -7,6 +7,7 @@ import com.yanny.aci.tooltip.NumberOptions;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipStyle;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,8 +68,8 @@ public class GoldenRenderer {
 
     @NotNull
     private static String lineToString(TooltipLine line) {
-        if (line instanceof TooltipLine.Text text) {
-            return text.component().getString();
+        if (line instanceof TooltipLine.Text(Component component)) {
+            return component.getString();
         }
 
         TooltipLine.Chart chart = (TooltipLine.Chart) line;

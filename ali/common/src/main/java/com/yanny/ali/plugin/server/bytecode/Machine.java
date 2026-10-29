@@ -55,7 +55,7 @@ final class Machine implements Opcodes {
         for (Type type : Type.getArgumentTypes(method.desc)) {
             Value arg = args.get(index++);
 
-            frame.locals[slot] = arg instanceof Value.Known known ? interpreter.wrap(known.value(), javaType(type)) : arg;
+            frame.locals[slot] = arg instanceof Value.Known(Object value1) ? interpreter.wrap(value1, javaType(type)) : arg;
             slot += type.getSize();
         }
 
@@ -297,11 +297,11 @@ final class Machine implements Opcodes {
                 case NEWARRAY -> f.push(newArray(primitiveArrayType(((IntInsnNode) insn).operand), f.pop()));
                 case ANEWARRAY -> f.push(newArray(arrayComponent(((TypeInsnNode) insn).desc, loader), f.pop()));
                 case ARRAYLENGTH -> {
-                    if (!(f.pop() instanceof Value.Known known) || known.value() == null || !known.value().getClass().isArray()) {
+                    if (!(f.pop() instanceof Value.Known(Object value1)) || value1 == null || !value1.getClass().isArray()) {
                         throw new Fail("array length");
                     }
 
-                    f.push(new Value.Known(Array.getLength(known.value())));
+                    f.push(new Value.Known(Array.getLength(value1)));
                 }
                 case CHECKCAST -> f.push(checkCast(f.pop(), ((TypeInsnNode) insn).desc, loader));
                 case INSTANCEOF -> f.push(new Value.Known(instanceOf(f.pop(), ((TypeInsnNode) insn).desc, loader) ? 1 : 0));
@@ -377,8 +377,8 @@ final class Machine implements Opcodes {
     }
 
     private Value binary(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
-            return new Value.Known(Arithmetic.compute(op, ka.value(), kb.value()));
+        if (a instanceof Value.Known(Object value1) && b instanceof Value.Known(Object value2) && value1 != null && value2 != null) {
+            return new Value.Known(Arithmetic.compute(op, value1, value2));
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
             return unknownNumber(Arithmetic.kindOf(op));
@@ -400,8 +400,8 @@ final class Machine implements Opcodes {
     }
 
     private Value negate(int op, Value a) {
-        if (a instanceof Value.Known known && known.value() != null) {
-            return new Value.Known(Arithmetic.negate(known.value()));
+        if (a instanceof Value.Known(Object value1) && value1 != null) {
+            return new Value.Known(Arithmetic.negate(value1));
         }
         if (a instanceof Value.Unknown) {
             return unknownNumber(Arithmetic.kindOf(op - INEG + IADD));
@@ -411,8 +411,8 @@ final class Machine implements Opcodes {
     }
 
     private Value convert(int op, Value a) {
-        if (a instanceof Value.Known known && known.value() != null) {
-            return new Value.Known(Arithmetic.convert(op, known.value()));
+        if (a instanceof Value.Known(Object value1) && value1 != null) {
+            return new Value.Known(Arithmetic.convert(op, value1));
         }
         if (a instanceof Value.Unknown) {
             return unknownNumber(switch (op) {
@@ -436,8 +436,8 @@ final class Machine implements Opcodes {
 
     @NotNull
     private Value compare(int op, Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb && ka.value() != null && kb.value() != null) {
-            return new Value.Known(Arithmetic.compare(op, ka.value(), kb.value()));
+        if (a instanceof Value.Known(Object value1) && b instanceof Value.Known(Object value2) && value1 != null && value2 != null) {
+            return new Value.Known(Arithmetic.compare(op, value1, value2));
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
             return unknownNumber(Value.Kind.INT);
@@ -452,69 +452,68 @@ final class Machine implements Opcodes {
     }
 
     private Value arrayLoad(Value array, Value index) {
-        if (!(array instanceof Value.Known known) || known.value() == null || !known.value().getClass().isArray()) {
+        if (!(array instanceof Value.Known(Object arr)) || arr == null || !arr.getClass().isArray()) {
             throw new Fail("array load");
         }
-
-        Object arr = known.value();
-
         if (interpreter.heap.isTainted(arr)) {
             throw new Fail("uncertain array element");
         }
-        if (index instanceof Value.Known k) {
-            int i = (Integer) k.value();
+        switch (index) {
+            case Value.Known(Object value) -> {
+                int i = (Integer) value;
 
-            if (i < 0 || i >= Array.getLength(arr)) {
-                throw new Fail("array index");
+                if (i < 0 || i >= Array.getLength(arr)) {
+                    throw new Fail("array index");
+                }
+
+                Object element = Array.get(arr, i);
+
+                if (TradeTypes.isListing(element)) {
+                    interpreter.pickSources.putSource(element, arr);
+                }
+
+                return interpreter.wrap(element, arr.getClass().getComponentType());
             }
+            case Value.Choice choice when choice.options().stream().allMatch((o) -> o instanceof Integer i && i >= 0 && i < Array.getLength(arr)) -> {
+                List<Object> elements = choice.options().stream().map((o) -> Array.get(arr, (Integer) o)).toList();
 
-            Object element = Array.get(arr, i);
+                if (arr.getClass().getComponentType().isPrimitive()) {
+                    return sameDraw(interpreter.combine(elements.stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
+                }
 
-            if (TradeTypes.isListing(element)) {
-                interpreter.pickSources.putSource(element, arr);
+                elements.stream().filter(TradeTypes::isListing).forEach((e) -> interpreter.pickSources.putSource(e, arr));
+                return new Value.Choice(elements, choice.draw());
             }
+            case Value.Num num -> {
+                List<Object> elements = new ArrayList<>();
 
-            return interpreter.wrap(element, arr.getClass().getComponentType());
-        }
-        if (index instanceof Value.Choice choice && choice.options().stream().allMatch((o) -> o instanceof Integer i && i >= 0 && i < Array.getLength(arr))) {
-            List<Object> elements = choice.options().stream().map((o) -> Array.get(arr, (Integer) o)).toList();
+                for (int i = 0; i < Array.getLength(arr); i++) {
+                    elements.add(Array.get(arr, i));
+                }
 
-            if (arr.getClass().getComponentType().isPrimitive()) {
-                return sameDraw(interpreter.combine(elements.stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
+                Value.Choice choice = (Value.Choice) pick(elements, num);
+
+                if (arr.getClass().getComponentType().isPrimitive()) {
+                    return sameDraw(interpreter.combine(choice.options().stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
+                }
+
+                return choice;
             }
-
-            elements.stream().filter(TradeTypes::isListing).forEach((e) -> interpreter.pickSources.putSource(e, arr));
-            return new Value.Choice(elements, choice.draw());
-        }
-        if (index instanceof Value.Num num) {
-            List<Object> elements = new ArrayList<>();
-
-            for (int i = 0; i < Array.getLength(arr); i++) {
-                elements.add(Array.get(arr, i));
-            }
-
-            Value.Choice choice = (Value.Choice) pick(elements, num);
-
-            if (arr.getClass().getComponentType().isPrimitive()) {
-                return sameDraw(interpreter.combine(choice.options().stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
-            }
-
-            return choice;
+            default -> {}
         }
 
         throw new Fail("array index");
     }
 
     private void arrayStore(int op, Value array, Value index, Value value) {
-        if (!(array instanceof Value.Known known) || !interpreter.heap.isOwned(known.value()) || !(index instanceof Value.Known k)) {
+        if (!(array instanceof Value.Known(Object arr)) || !interpreter.heap.isOwned(arr) || !(index instanceof Value.Known(Object value1))) {
             throw new Fail("array store");
         }
-        if (known.value() != null && interpreter.heap.isFrozen(known.value())) {
+        if (interpreter.heap.isFrozen(arr)) {
             throw new Fail("change under a random choice");
         }
 
-        Object arr = known.value();
-        int i = (Integer) k.value();
+        int i = (Integer) value1;
 
         if (value instanceof Value.Num || value instanceof Value.Choice || value instanceof Value.Unknown) {
             interpreter.heap.taint(arr);
@@ -538,11 +537,11 @@ final class Machine implements Opcodes {
     }
 
     private Value newArray(Class<?> component, Value size) {
-        if (!(size instanceof Value.Known known)) {
+        if (!(size instanceof Value.Known(Object value1))) {
             throw new Fail("symbolic array size");
         }
 
-        Object array = Array.newInstance(component, (Integer) known.value());
+        Object array = Array.newInstance(component, (Integer) value1);
 
         interpreter.heap.own(array);
         return new Value.Known(array);
@@ -575,7 +574,7 @@ final class Machine implements Opcodes {
     }
 
     private Value checkCast(Value value, String desc, ClassLoader loader) {
-        if (value instanceof Value.Known known && known.value() != null && !arrayComponent(desc, loader).isInstance(known.value())) {
+        if (value instanceof Value.Known(Object value1) && value1 != null && !arrayComponent(desc, loader).isInstance(value1)) {
             throw new Fail("class cast");
         }
         if (value instanceof Value.Unknown unknown && !desc.startsWith("[")) {
@@ -592,25 +591,17 @@ final class Machine implements Opcodes {
     private boolean instanceOf(Value value, String desc, ClassLoader loader) {
         Class<?> type = arrayComponent(desc, loader);
 
-        if (value instanceof Value.Known known) {
-            return type.isInstance(known.value());
-        } else if (value instanceof Value.Stack) {
-            return type.isAssignableFrom(ItemStack.class);
-        } else if (value instanceof Value.Offer) {
-            return type.isAssignableFrom(MerchantOffer.class);
-        } else if (value instanceof Value.Closure closure) {
-            return type.isAssignableFrom(closure.iface());
-        } else if (value instanceof Value.Rng rng) {
-            return type.isAssignableFrom(rng.legacy() ? Random.class : RandomSource.class);
-        } else if (value instanceof Value.Choice choice) {
-            return interpreter.decisions.decided(choice, type::isInstance);
-        } else if (value instanceof Value.Unknown unknown && unknown.type() != null && type.isAssignableFrom(onServer(load(unknown.type(), loader)))) {
-            return true;
-        } else if (value instanceof Value.Unknown unknown) {
-            return interpreter.decisions.decide(Decision.Kind.UNKNOWN, unknown.origin(), desc, "instanceof of an unknown value");
-        }
-
-        throw new Fail("instanceof of an unknown value");
+        return switch (value) {
+            case Value.Known(Object value1) -> type.isInstance(value1);
+            case Value.Stack ignored -> type.isAssignableFrom(ItemStack.class);
+            case Value.Offer ignored -> type.isAssignableFrom(MerchantOffer.class);
+            case Value.Closure closure -> type.isAssignableFrom(closure.iface());
+            case Value.Rng(boolean legacy) -> type.isAssignableFrom(legacy ? Random.class : RandomSource.class);
+            case Value.Choice choice -> interpreter.decisions.decided(choice, type::isInstance);
+            case Value.Unknown unknown when unknown.type() != null && type.isAssignableFrom(onServer(load(unknown.type(), loader))) -> true;
+            case Value.Unknown unknown -> interpreter.decisions.decide(Decision.Kind.UNKNOWN, unknown.origin(), desc, "instanceof of an unknown value");
+            case null, default -> throw new Fail("instanceof of an unknown value");
+        };
     }
 
     static Class<?> javaType(Type type) {
@@ -644,7 +635,7 @@ final class Machine implements Opcodes {
                 throw new Fail("empty stack");
             }
 
-            return stack.remove(stack.size() - 1);
+            return stack.removeLast();
         }
 
         Value peek() {
@@ -652,7 +643,7 @@ final class Machine implements Opcodes {
                 throw new Fail("empty stack");
             }
 
-            return stack.get(stack.size() - 1);
+            return stack.getLast();
         }
 
         @NotNull

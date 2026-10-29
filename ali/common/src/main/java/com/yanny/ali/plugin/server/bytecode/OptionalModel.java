@@ -24,13 +24,13 @@ final class OptionalModel implements MethodModel {
         if (!insn.owner.equals(OPTIONAL)) {
             return NO_OPINION;
         }
-        if (isStatic && (insn.name.equals("of") || insn.name.equals("ofNullable")) && args.get(0) instanceof Value.Stack stack) {
+        if (isStatic && (insn.name.equals("of") || insn.name.equals("ofNullable")) && args.getFirst() instanceof Value.Stack stack) {
             return stack;
         }
-        if (!isStatic && args.get(0) instanceof Value.Stack stack) {
+        if (!isStatic && args.getFirst() instanceof Value.Stack stack) {
             return optionalCall(context, call, stack);
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() instanceof Optional<?> optional
+        if (!isStatic && args.getFirst() instanceof Value.Known(Optional<?> optional)
                 && args.stream().skip(1).anyMatch((arg) -> arg instanceof Value.Closure || !context.isConcrete(arg))) {
             return optionalCall(context, call, optional.isPresent() ? context.wrap(optional.get()) : null);
         }
@@ -80,7 +80,7 @@ final class OptionalModel implements MethodModel {
                     return stack;
                 }
                 if (mapped == null || mapped instanceof Value.Known) {
-                    return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known known ? known.value() : null));
+                    return new Value.Known(Optional.ofNullable(mapped instanceof Value.Known(Object value1) ? value1 : null));
                 }
 
                 throw new Fail("symbolic result of Optional.map");

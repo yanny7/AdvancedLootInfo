@@ -33,7 +33,7 @@ public class MapModelTest {
 
         assertEquals(new Value.Known(2), model.apply(context, get(KEY)));
         assertEquals(1, context.jdkCalls.size());
-        assertEquals(new Value.Known("b"), context.jdkCalls.get(0).args().get(1));
+        assertEquals(new Value.Known("b"), context.jdkCalls.getFirst().args().get(1));
         assertEquals(2, context.decisions.size());
     }
 

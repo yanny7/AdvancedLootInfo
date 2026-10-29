@@ -128,17 +128,13 @@ public class GlobalLootModifierUtils {
             }
         }
 
-        if (value instanceof AllOfCondition allOf) {
-            return testAllOf(utils, allOf.terms, page);
-        } else if (value instanceof AnyOfCondition anyOf) {
-            return testAnyOf(utils, anyOf.terms, page);
-        } else if (value instanceof InvertedLootItemCondition inverted) {
-            return invert(utils.testPage(utils, inverted.term(), page));
-        } else if (value instanceof LootItemCondition condition) {
-            return LootContextProbe.probe(utils, condition, page, preparers, lootData);
-        }
-
-        return Verdict.UNKNOWN;
+        return switch (value) {
+            case AllOfCondition allOf -> testAllOf(utils, allOf.terms, page);
+            case AnyOfCondition anyOf -> testAnyOf(utils, anyOf.terms, page);
+            case InvertedLootItemCondition(LootItemCondition term) -> invert(utils.testPage(utils, term, page));
+            case LootItemCondition condition -> LootContextProbe.probe(utils, condition, page, preparers, lootData);
+            default -> Verdict.UNKNOWN;
+        };
     }
 
     @NotNull

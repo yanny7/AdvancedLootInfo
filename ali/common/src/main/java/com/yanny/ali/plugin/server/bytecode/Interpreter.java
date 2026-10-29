@@ -4,6 +4,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -158,10 +159,11 @@ final class Interpreter implements Opcodes {
     }
 
     boolean isTainted(Value value) {
-        return value instanceof Value.Known known && known.value() != null && heap.isTainted(known.value());
+        return value instanceof Value.Known(Object value1) && value1 != null && heap.isTainted(value1);
     }
 
     void taintOwned(List<Value> args) {
+        // javac 21.0.12 crashes on a record pattern here (in a ternary passed as an argument inside a lambda)
         args.forEach((v) -> heap.taint(v instanceof Value.Known known && known.value() != null && heap.isOwned(known.value()) ? known.value() : null));
     }
 
@@ -181,7 +183,7 @@ final class Interpreter implements Opcodes {
                 }
 
                 stackIndex = i;
-            } else if (base.get(i) instanceof Value.Known known && known.value() instanceof ItemStack) {
+            } else if (base.get(i) instanceof Value.Known(ItemStack ignored)) {
                 throw new Fail("choice over a call with a stack argument");
             }
         }
@@ -232,7 +234,7 @@ final class Interpreter implements Opcodes {
     }
 
     private void merge(Value.Stack original, List<Value.Stack> branches) {
-        NumberExpr count = branches.get(0).count;
+        NumberExpr count = branches.getFirst().count;
 
         if (branches.stream().anyMatch((b) -> !b.count.equals(count))) {
             throw new Fail("options with different counts");
@@ -253,7 +255,7 @@ final class Interpreter implements Opcodes {
         if (results.stream().anyMatch(Objects::isNull)) {
             throw new Fail("mixed results");
         }
-        if (results.stream().allMatch((r) -> r instanceof Value.Stack || r instanceof Value.Known known && known.value() instanceof ItemStack)) {
+        if (results.stream().allMatch((r) -> r instanceof Value.Stack || r instanceof Value.Known(ItemStack ignored))) {
             List<ItemStack> options = new ArrayList<>();
             NumberExpr count = null;
 
@@ -276,9 +278,9 @@ final class Interpreter implements Opcodes {
         if (results.stream().allMatch((r) -> r instanceof Value.Known)) {
             List<Object> values = results.stream().map((r) -> ((Value.Known) r).value()).toList();
 
-            return values.stream().allMatch((v) -> v == values.get(0)) ? results.get(0) : new Value.Choice(values);
+            return values.stream().allMatch((v) -> v == values.getFirst()) ? results.getFirst() : new Value.Choice(values);
         }
-        if (results.stream().allMatch((r) -> r instanceof Value.Num || r instanceof Value.Known known && known.value() instanceof Number)) {
+        if (results.stream().allMatch((r) -> r instanceof Value.Num || r instanceof Value.Known(Number ignored))) {
             Value.Kind kind = results.stream().filter(Value.Num.class::isInstance).map((r) -> ((Value.Num) r).kind()).findFirst().orElse(Value.Kind.INT);
 
             return new Value.Num(NumberExpr.weighted(results.stream().map((r) -> new NumberExpr.WeightedEntry(1, NumberDomain.expr(r))).toList()), kind);
@@ -302,7 +304,7 @@ final class Interpreter implements Opcodes {
     }
 
     List<Value> shadowed(List<Value> args) {
-        return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !heap.isOwned(real) ? heap.shadow(real) : v).toList();
+        return args.stream().map((v) -> v instanceof Value.Known(ItemStack real) && !heap.isOwned(real) ? heap.shadow(real) : v).toList();
     }
 
     static Value.Stack stackOf(ItemStack real) {
@@ -380,20 +382,20 @@ final class Interpreter implements Opcodes {
                 return method.invoke(null, all.toArray());
             }
 
-            return method.invoke(all.get(0), all.subList(1, all.size()).toArray());
+            return method.invoke(all.getFirst(), all.subList(1, all.size()).toArray());
         } catch (InvocationTargetException e) {
             throw e.getCause();
         }
     }
 
     static Value pick(List<?> list, Value.Num index) {
-        if (!(index.expr() instanceof NumberExpr.Fn fn) || !fn.id().equals(NumberFunctions.UNIFORM_INT)
-                || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {
+        if (!(index.expr() instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args)) || !id.equals(NumberFunctions.UNIFORM_INT)
+                || !(args.getFirst() instanceof NumberExpr.Const(double lo)) || !(args.get(1) instanceof NumberExpr.Const(double hi))) {
             throw new Fail("non-uniform index");
         }
 
-        int from = (int) lo.value();
-        int to = (int) hi.value();
+        int from = (int) lo;
+        int to = (int) hi;
 
         if (from < 0 || to >= list.size() || from > to) {
             throw new Fail("index out of range");
@@ -406,15 +408,16 @@ final class Interpreter implements Opcodes {
     }
 
     static Value drawnInt(Value value) {
-        if (value instanceof Value.Num num && num.kind() == Value.Kind.INT && num.expr() instanceof NumberExpr.Fn fn && fn.id().equals(NumberFunctions.UNIFORM_INT)
-                && fn.args().get(0) instanceof NumberExpr.Const lo && fn.args().get(1) instanceof NumberExpr.Const hi && hi.value() - lo.value() < Limits.OPTIONS) {
+        if (value instanceof Value.Num(NumberExpr expr, Value.Kind kind) && kind == Value.Kind.INT && expr instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args)
+                && id.equals(NumberFunctions.UNIFORM_INT) && args.getFirst() instanceof NumberExpr.Const(double lo) && args.get(1) instanceof NumberExpr.Const(double hi)
+                && hi - lo < Limits.OPTIONS) {
             List<Object> options = new ArrayList<>();
 
-            for (int i = (int) lo.value(); i <= (int) hi.value(); i++) {
+            for (int i = (int) lo; i <= (int) hi; i++) {
                 options.add(i);
             }
 
-            return new Value.Choice(options, num.expr());
+            return new Value.Choice(options, expr);
         }
 
         return value;
@@ -440,7 +443,7 @@ final class Interpreter implements Opcodes {
             method.setAccessible(true);
         } catch (Throwable ignored) {}
 
-        Object receiver = isStatic ? null : concrete(args.get(0));
+        Object receiver = isStatic ? null : concrete(args.getFirst());
         Object[] javaArgs = javaArgs(args, method.getParameterTypes(), isStatic ? 0 : 1);
         Object result;
 
@@ -475,26 +478,26 @@ final class Interpreter implements Opcodes {
         if (value instanceof Value.Closure closure) {
             return materialize(closure);
         }
-        if (value instanceof Value.Rng rng) {
+        if (value instanceof Value.Rng(boolean legacy)) {
             if (mode != Mode.STUB) {
                 throw new Fail("random argument");
             }
 
-            return rng.legacy() ? new StubRandom.Legacy(pick) : new StubRandom(pick);
+            return legacy ? new StubRandom.Legacy(pick) : new StubRandom(pick);
         }
 
         Object object = concrete(value);
 
-        if (!(object instanceof Integer)) {
+        if (!(object instanceof Integer integer)) {
             return object;
         } else if (type == boolean.class) {
-            return ((Integer) object) != 0;
+            return integer != 0;
         } else if (type == char.class) {
-            return (char) (int) (Integer) object;
+            return (char) (int) integer;
         } else if (type == byte.class) {
-            return (byte) (int) (Integer) object;
+            return (byte) (int) integer;
         } else if (type == short.class) {
-            return (short) (int) (Integer) object;
+            return (short) (int) integer;
         }
 
         return object;
@@ -502,16 +505,16 @@ final class Interpreter implements Opcodes {
 
     @Nullable
     static Object concrete(Value value) {
-        if (value instanceof Value.Known known) {
-            return known.value();
+        if (value instanceof Value.Known(Object value1)) {
+            return value1;
         }
 
         throw new Fail("symbolic value");
     }
 
     boolean isSelection(Value value) {
-        return value instanceof Value.Known known && known.value() != null
-                && (heap.shuffled(known.value()) != null || heap.randomIndexSet(known.value()) != null || heap.removals(known.value()) > 0);
+        return value instanceof Value.Known(Object value1) && value1 != null
+                && (heap.shuffled(value1) != null || heap.randomIndexSet(value1) != null || heap.removals(value1) > 0);
     }
 
     boolean isConcrete(Value value) {
@@ -520,8 +523,8 @@ final class Interpreter implements Opcodes {
     }
 
     static boolean isScalar(Value value) {
-        return value instanceof Value.Known known && (known.value() == null || known.value() instanceof Number || known.value() instanceof String
-                || known.value() instanceof Boolean || known.value() instanceof Character);
+        return value instanceof Value.Known(Object value1) && (value1 == null || value1 instanceof Number || value1 instanceof String
+                || value1 instanceof Boolean || value1 instanceof Character);
     }
 
     Value wrap(@Nullable Object value, Class<?> type) {
@@ -547,12 +550,12 @@ final class Interpreter implements Opcodes {
         if (bounds != null && bounds.isPoint() && Double.isFinite(bounds.lo())) {
             return num(NumberExpr.constant(bounds.lo()), kind);
         }
-        if (expr instanceof NumberExpr.Const c) {
+        if (expr instanceof NumberExpr.Const(double value1)) {
             return new Value.Known(switch (kind) {
-                case INT -> (int) c.value();
-                case LONG -> (long) c.value();
-                case FLOAT -> (float) c.value();
-                case DOUBLE -> c.value();
+                case INT -> (int) value1;
+                case LONG -> (long) value1;
+                case FLOAT -> (float) value1;
+                case DOUBLE -> value1;
             });
         }
 

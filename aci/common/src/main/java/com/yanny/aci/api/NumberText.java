@@ -53,7 +53,7 @@ public sealed interface NumberText {
 
     @NotNull
     static NumberText seq(List<NumberText> parts) {
-        return parts.size() == 1 ? parts.get(0) : new Seq(parts);
+        return parts.size() == 1 ? parts.getFirst() : new Seq(parts);
     }
 
     @NotNull
@@ -76,38 +76,41 @@ public sealed interface NumberText {
     }
 
     default void encode(FriendlyByteBuf buf) {
-        if (this instanceof Key k) {
-            buf.writeByte(0);
-            buf.writeUtf(k.key);
-            encodeList(buf, k.args);
-        } else if (this instanceof Num n) {
-            buf.writeByte(1);
-            buf.writeDouble(n.value);
-        } else if (this instanceof Str s) {
-            buf.writeByte(2);
-            buf.writeUtf(s.text);
-        } else if (this instanceof Seq s) {
-            buf.writeByte(3);
-            encodeList(buf, s.parts);
+        switch (this) {
+            case Key k -> {
+                buf.writeByte(0);
+                buf.writeUtf(k.key);
+                encodeList(buf, k.args);
+            }
+            case Num n -> {
+                buf.writeByte(1);
+                buf.writeDouble(n.value);
+            }
+            case Str s -> {
+                buf.writeByte(2);
+                buf.writeUtf(s.text);
+            }
+            case Seq s -> {
+                buf.writeByte(3);
+                encodeList(buf, s.parts);
+            }
+            default -> {}
         }
     }
 
     @NotNull
     default MutableComponent toComponent(Locale locale) {
-        if (this instanceof Key k) {
-            return Component.translatable(k.key, k.args.stream().map((a) -> a.toComponent(locale)).toArray());
-        } else if (this instanceof Num n) {
-            return Component.literal(formatNumber(n.value, locale));
-        } else if (this instanceof Str s) {
-            return Component.literal(s.text);
-        } else if (this instanceof Seq s) {
-            MutableComponent component = Component.empty();
+        return switch (this) {
+            case Key k -> Component.translatable(k.key, k.args.stream().map((a) -> a.toComponent(locale)).toArray());
+            case Num n -> Component.literal(formatNumber(n.value, locale));
+            case Str s -> Component.literal(s.text);
+            case Seq s -> {
+                MutableComponent component = Component.empty();
 
-            s.parts.forEach((p) -> component.append(p.toComponent(locale)));
-            return component;
-        }
-
-        throw new IllegalStateException("Unhandled number text " + this);
+                s.parts.forEach((p) -> component.append(p.toComponent(locale)));
+                yield component;
+            }
+        };
     }
 
     @NotNull

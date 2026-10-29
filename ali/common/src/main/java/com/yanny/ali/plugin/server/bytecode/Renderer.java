@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 final class Renderer {
@@ -67,7 +68,7 @@ final class Renderer {
                     LOGGER.info("Computed only some variants of trade item listing {} from its bytecode: {}", name, reason);
                 }
 
-                return nodes.size() == 1 ? nodes.get(0) : new ConditionalTradesNode(utils, nodes, outer);
+                return nodes.size() == 1 ? nodes.getFirst() : new ConditionalTradesNode(utils, nodes, outer);
             }
         } catch (Fail fail) {
             reason = fail.describe();
@@ -149,7 +150,7 @@ final class Renderer {
 
     @NotNull
     private static IDataNode node(IServerUtils utils, Value result, TooltipNode condition) {
-        if (result instanceof Value.Known known && known.value() instanceof MerchantOffer offer) {
+        if (result instanceof Value.Known(MerchantOffer offer)) {
             return TradeUtils.getNode(utils, offer, condition);
         }
         if (result instanceof Value.Offer offer) {
@@ -173,17 +174,17 @@ final class Renderer {
 
     @NotNull
     private static TradeLevel incomplete(IServerUtils utils, @Nullable TradeLevel level, String merchant) {
-        if (level instanceof TradeLevel.OfSet set) {
-            return new TradeLevel.OfTrades(new TradeLevelInfo(tradeSetCount(utils, set.tradeSet())), (u) -> {
-                List<IDataNode> nodes = new ArrayList<>(listingNodes(u, new Object[]{set.tradeSet()}, TooltipNode.empty()));
+        if (level instanceof TradeLevel.OfSet(ResourceKey<TradeSet> tradeSet)) {
+            return new TradeLevel.OfTrades(new TradeLevelInfo(tradeSetCount(utils, tradeSet)), (u) -> {
+                List<IDataNode> nodes = new ArrayList<>(listingNodes(u, new Object[]{tradeSet}, TooltipNode.empty()));
 
                 nodes.add(incompleteNode());
                 return nodes;
             });
         }
-        if (level instanceof TradeLevel.OfTrades trades) {
-            return new TradeLevel.OfTrades(trades.levelInfo(), (u) -> {
-                List<IDataNode> nodes = new ArrayList<>(trades.trades().apply(u));
+        if (level instanceof TradeLevel.OfTrades(TradeLevelInfo levelInfo, Function<IServerUtils, List<IDataNode>> trades)) {
+            return new TradeLevel.OfTrades(levelInfo, (u) -> {
+                List<IDataNode> nodes = new ArrayList<>(trades.apply(u));
 
                 nodes.add(incompleteNode());
                 return nodes;
@@ -201,9 +202,9 @@ final class Renderer {
     @NotNull
     private static TradeLevel tradeLevel(IServerUtils utils, Aggregation.Level level) {
         List<Aggregation.Group> groups = level.groups();
-        ResourceKey<TradeSet> onlySet = groups.size() == 1 ? tradeSet(groups.get(0).entry()) : null;
+        ResourceKey<TradeSet> onlySet = groups.size() == 1 ? tradeSet(groups.getFirst().entry()) : null;
 
-        if (onlySet != null && groups.get(0).condition() == PathCondition.ALWAYS && level.chance() >= 1) {
+        if (onlySet != null && groups.getFirst().condition() == PathCondition.ALWAYS && level.chance() >= 1) {
             return new TradeLevel.OfSet(onlySet);
         }
 
@@ -215,7 +216,7 @@ final class Renderer {
             for (Aggregation.Group group : groups) {
                 TooltipNode condition = group.condition().tooltip(u);
 
-                if (!(group.entry() instanceof Value.Offers.Single single)) {
+                if (!(group.entry() instanceof Value.Offers.Single(Value offer))) {
                     List<IDataNode> trades;
 
                     if (group.entry() instanceof Value.Offers.Listings listings) {
@@ -230,7 +231,7 @@ final class Renderer {
                         nodes.addAll(trades);
                     }
                 } else {
-                    IDataNode trade = node(u, single.offer(), condition);
+                    IDataNode trade = node(u, offer, condition);
 
                     nodes.add(group.times() > 1 ? TradeGroupNode.repeated(group.count(), trade) : trade);
                 }
@@ -379,31 +380,32 @@ final class Renderer {
     }
 
     private static IDataNode slot(IServerUtils utils, Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemStack stack) {
-            return new ItemNode(1, NumberExpr.constant(stack.getCount()), stack, TooltipNode.empty(), List.of(), List.of());
-        }
-        if (value instanceof Value.Stack stack) {
-            List<ItemStack> options = stack.templates();
-            TooltipNode tooltip = tooltip(utils, stack);
-
-            if (options.size() == 1) {
-                return new ItemNode(1, stack.count, options.get(0), tooltip, List.of(), List.of());
-            }
-            if (stack.tag != null && !stack.randomTag && ItemStackModel.isTag(stack.tag, options)) {
-                return new ItemNode(1, stack.count, stack.tag, tooltip, List.of(), List.of());
-            }
-
-            return TradeUtils.getItemSlotNode(options, stack.count, tooltip);
-        }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(ItemStack.class::isInstance)) {
-            return TradeUtils.getSlotNode(choice.options().stream().<IDataNode>map((o) -> {
-                ItemStack stack = (ItemStack) o;
-
+        switch (value) {
+            case Value.Known(ItemStack stack) -> {
                 return new ItemNode(1, NumberExpr.constant(stack.getCount()), stack, TooltipNode.empty(), List.of(), List.of());
-            }).toList());
-        }
+            }
+            case Value.Stack stack -> {
+                List<ItemStack> options = stack.templates();
+                TooltipNode tooltip = tooltip(utils, stack);
 
-        throw new Fail("trade slot");
+                if (options.size() == 1) {
+                    return new ItemNode(1, stack.count, options.getFirst(), tooltip, List.of(), List.of());
+                }
+                if (stack.tag != null && !stack.randomTag && ItemStackModel.isTag(stack.tag, options)) {
+                    return new ItemNode(1, stack.count, stack.tag, tooltip, List.of(), List.of());
+                }
+
+                return TradeUtils.getItemSlotNode(options, stack.count, tooltip);
+            }
+            case Value.Choice choice when choice.options().stream().allMatch(ItemStack.class::isInstance) -> {
+                return TradeUtils.getSlotNode(choice.options().stream().<IDataNode>map((o) -> {
+                    ItemStack stack = (ItemStack) o;
+
+                    return new ItemNode(1, NumberExpr.constant(stack.getCount()), stack, TooltipNode.empty(), List.of(), List.of());
+                }).toList());
+            }
+            case null, default -> throw new Fail("trade slot");
+        }
     }
 
     private static TooltipNode tooltip(IServerUtils utils, Value.Stack stack) {

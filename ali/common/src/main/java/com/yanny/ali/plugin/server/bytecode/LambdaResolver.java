@@ -106,7 +106,7 @@ final class LambdaResolver {
         }
 
         if (candidates.size() == 1) {
-            return Optional.of(new Resolved(owner, candidates.get(0), fields));
+            return Optional.of(new Resolved(owner, candidates.getFirst(), fields));
         }
         if (candidates.isEmpty()) {
             REASONS.put(type, "no candidates");
@@ -333,8 +333,8 @@ final class LambdaResolver {
 
             Object first = runReal(lambda, sam, stubArgs);
 
-            if (first instanceof Failed failed) {
-                return fromStackTrace(failed.cause(), matching);
+            if (first instanceof Failed(Throwable cause)) {
+                return fromStackTrace(cause, matching);
             }
 
             Object second = runReal(lambda, sam, freshStubs(stubArgs, pick));
@@ -378,14 +378,14 @@ final class LambdaResolver {
         }
 
         if (matching.size() > 1 && sameCode(matching, owner.getClassLoader())) {
-            return matching.get(0);
+            return matching.getFirst();
         }
         if (matching.size() > 1) {
             REASONS.put(lambda.getClass(), matching.size() + " of " + candidates.size() + " candidates match: "
                     + matching.stream().map(Handle::getName).limit(5).toList());
         }
 
-        return matching.size() == 1 ? matching.get(0) : null;
+        return matching.size() == 1 ? matching.getFirst() : null;
     }
 
     private static Object[] freshStubs(Object[] args, int pick) {
@@ -425,7 +425,7 @@ final class LambdaResolver {
                     && frame.getClassName().equals(c.getOwner().replace('/', '.'))).toList();
 
             if (!named.isEmpty()) {
-                return named.size() == 1 ? named.get(0) : null;
+                return named.size() == 1 ? named.getFirst() : null;
             }
         }
 
@@ -475,32 +475,21 @@ final class LambdaResolver {
         for (AbstractInsnNode insn : method.instructions) {
             code.add(insn.getOpcode());
 
-            if (insn instanceof LabelNode label) {
-                code.add(labels.get(label));
-            } else if (insn instanceof IntInsnNode node) {
-                code.add(node.operand);
-            } else if (insn instanceof VarInsnNode node) {
-                code.add(node.var);
-            } else if (insn instanceof TypeInsnNode node) {
-                code.add(node.desc);
-            } else if (insn instanceof FieldInsnNode node) {
-                code.add(List.of(node.owner, node.name, node.desc));
-            } else if (insn instanceof MethodInsnNode node) {
-                code.add(List.of(node.owner, node.name, node.desc, node.itf));
-            } else if (insn instanceof InvokeDynamicInsnNode node) {
-                code.add(List.of(node.name, node.desc, node.bsm, Arrays.asList(node.bsmArgs)));
-            } else if (insn instanceof JumpInsnNode node) {
-                code.add(labels.get(node.label));
-            } else if (insn instanceof LdcInsnNode node) {
-                code.add(node.cst);
-            } else if (insn instanceof IincInsnNode node) {
-                code.add(List.of(node.var, node.incr));
-            } else if (insn instanceof TableSwitchInsnNode node) {
-                code.add(List.of(node.min, node.max, labels.get(node.dflt), node.labels.stream().map(labels::get).toList()));
-            } else if (insn instanceof LookupSwitchInsnNode node) {
-                code.add(List.of(node.keys, labels.get(node.dflt), node.labels.stream().map(labels::get).toList()));
-            } else if (insn instanceof MultiANewArrayInsnNode node) {
-                code.add(List.of(node.desc, node.dims));
+            switch (insn) {
+                case LabelNode label -> code.add(labels.get(label));
+                case IntInsnNode node -> code.add(node.operand);
+                case VarInsnNode node -> code.add(node.var);
+                case TypeInsnNode node -> code.add(node.desc);
+                case FieldInsnNode node -> code.add(List.of(node.owner, node.name, node.desc));
+                case MethodInsnNode node -> code.add(List.of(node.owner, node.name, node.desc, node.itf));
+                case InvokeDynamicInsnNode node -> code.add(List.of(node.name, node.desc, node.bsm, Arrays.asList(node.bsmArgs)));
+                case JumpInsnNode node -> code.add(labels.get(node.label));
+                case LdcInsnNode node -> code.add(node.cst);
+                case IincInsnNode node -> code.add(List.of(node.var, node.incr));
+                case TableSwitchInsnNode node -> code.add(List.of(node.min, node.max, labels.get(node.dflt), node.labels.stream().map(labels::get).toList()));
+                case LookupSwitchInsnNode node -> code.add(List.of(node.keys, labels.get(node.dflt), node.labels.stream().map(labels::get).toList()));
+                case MultiANewArrayInsnNode node -> code.add(List.of(node.desc, node.dims));
+                default -> {}
             }
         }
 
@@ -664,33 +653,30 @@ final class LambdaResolver {
     }
 
     private static boolean same(@Nullable Value result, @Nullable Object real) {
-        if (real == null) {
-            return result instanceof Value.Known known && known.value() == null;
-        }
-        if (real instanceof ItemStack stack) {
-            return sameStack(result, stack);
-        }
-        if (real instanceof MerchantOffer offer) {
-            if (result instanceof Value.Known known && known.value() instanceof MerchantOffer other) {
-                return sameOffer(other, offer);
+        return switch (real) {
+            case null -> result instanceof Value.Known(Object value) && value == null;
+            case ItemStack stack -> sameStack(result, stack);
+            case MerchantOffer offer -> {
+                if (result instanceof Value.Known(MerchantOffer other)) {
+                    yield sameOffer(other, offer);
+                }
+
+                yield result instanceof Value.Offer(Value costA, Value costB, Value result1, int maxUses, int xp, float priceMultiplier)
+                        && sameStack(costA, offer.getBaseCostA()) && sameStack(costB, offer.getCostB()) && sameStack(result1, offer.getResult())
+                        && maxUses == offer.getMaxUses() && xp == offer.getXp() && Float.compare(priceMultiplier, offer.getPriceMultiplier()) == 0;
             }
-
-            return result instanceof Value.Offer o && sameStack(o.costA(), offer.getBaseCostA()) && sameStack(o.costB(), offer.getCostB())
-                    && sameStack(o.result(), offer.getResult()) && o.maxUses() == offer.getMaxUses() && o.xp() == offer.getXp()
-                    && Float.compare(o.priceMultiplier(), offer.getPriceMultiplier()) == 0;
-        }
-
-        return result instanceof Value.Known known && TradeUtils.valueKey(normalize(known.value())).equals(TradeUtils.valueKey(normalize(real)));
+            default -> result instanceof Value.Known(Object value) && TradeUtils.valueKey(normalize(value)).equals(TradeUtils.valueKey(normalize(real)));
+        };
     }
 
     private static boolean sameStack(@Nullable Value value, ItemStack real) {
-        if (value instanceof Value.Known known && known.value() instanceof ItemStack other) {
+        if (value instanceof Value.Known(ItemStack other)) {
             return ItemStack.matches(other, real);
         }
-        if (value instanceof Value.Stack stack && stack.options.size() == 1 && stack.count instanceof com.yanny.aci.api.NumberExpr.Const c) {
-            ItemStack template = stack.options.get(0).copy();
+        if (value instanceof Value.Stack stack && stack.options.size() == 1 && stack.count instanceof com.yanny.aci.api.NumberExpr.Const(double count)) {
+            ItemStack template = stack.options.getFirst().copy();
 
-            template.setCount((int) c.value());
+            template.setCount((int) count);
             return ItemStack.matches(template, real);
         }
 

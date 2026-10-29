@@ -17,8 +17,8 @@ final class MapItemModel implements MethodModel {
         List<Value> args = call.args();
 
         if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, insn)) {
-            return new Value.Unknown(false, Type.getReturnType(insn.desc).getInternalName(), args.get(1) instanceof Value.Known known ? known.value() : null,
-                    Origin.of(args.get(0), insn.name + insn.desc, args.subList(1, args.size())));
+            return new Value.Unknown(false, Type.getReturnType(insn.desc).getInternalName(), args.get(1) instanceof Value.Known(Object value1) ? value1 : null,
+                    Origin.of(args.getFirst(), insn.name + insn.desc, args.subList(1, args.size())));
         }
         if (RuntimeNames.is(RuntimeNames.MAP_CREATE, insn)) {
             return new Value.Stack(List.of(new ItemStack(Items.FILLED_MAP)), NumberExpr.constant(1), false);
@@ -27,12 +27,12 @@ final class MapItemModel implements MethodModel {
             return null;
         }
         if (RuntimeNames.is(RuntimeNames.MAP_ADD_TARGET_DECORATION, insn)) {
-            if (!(args.get(0) instanceof Value.Stack stack) || !(args.get(3) instanceof Value.Known decoration)) {
+            if (!(args.getFirst() instanceof Value.Stack stack) || !(args.get(3) instanceof Value.Known(Object decoration))) {
                 throw new Fail("map decoration");
             }
 
             stack.destination = args.get(1) instanceof Value.Unknown pos ? pos.found() : null;
-            stack.decoration = decoration.value();
+            stack.decoration = decoration;
             return null;
         }
 

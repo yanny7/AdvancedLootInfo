@@ -30,6 +30,6 @@ public class SimpleTradeAccessor extends BaseAccessor<AdditionalWanderingTrades.
     public <T> T getCaptured(Class<T> type) {
         List<T> captured = com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances(getOffer, type);
 
-        return captured.isEmpty() ? null : captured.get(0);
+        return captured.isEmpty() ? null : captured.getFirst();
     }
 }

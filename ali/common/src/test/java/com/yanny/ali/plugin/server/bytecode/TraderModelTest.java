@@ -63,9 +63,9 @@ public class TraderModelTest {
 
         assertNull(model.apply(context, call(INVOKEVIRTUAL, TRADER, "level", "()I", SELF)));
         assertEquals(1, context.executions.size());
-        assertEquals(Trader.class, context.executions.get(0).owner());
-        assertEquals("level", context.executions.get(0).method().name);
-        assertEquals(List.of(SELF), context.executions.get(0).args());
+        assertEquals(Trader.class, context.executions.getFirst().owner());
+        assertEquals("level", context.executions.getFirst().method().name);
+        assertEquals(List.of(SELF), context.executions.getFirst().args());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class TraderModelTest {
         run(false);
 
         model.apply(context, call(INVOKESPECIAL, Type.getInternalName(BaseTrader.class), "level", "()I", SELF));
-        assertEquals(BaseTrader.class, context.executions.get(0).owner());
+        assertEquals(BaseTrader.class, context.executions.getFirst().owner());
     }
 
     @Test
