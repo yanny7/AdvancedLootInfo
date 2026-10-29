@@ -778,9 +778,9 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getItemStackTemplateTooltip(IServerUtils utils, ItemStackTemplate itemStackTemplate) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build("ali.property.value.item"))
-                .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build("ali.property.value.count"))
-                .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"))
+                .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build(Lang.Value.ITEM))
+                .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build(Lang.Value.COUNT))
+                .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build(Lang.Branch.COMPONENTS))
         );
     }
 
@@ -788,8 +788,8 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getFoodPredicateTooltip(IServerUtils utils, FoodPredicate predicate) {
         if (predicate != FoodPredicate.ANY) {
             return TooltipBuilder.array((b) -> b
-                    .add(utils.getValueTooltip(utils, predicate.level()).build("ali.property.value.level"))
-                    .add(utils.getValueTooltip(utils, predicate.saturation()).build("ali.property.value.saturation"))
+                    .add(utils.getValueTooltip(utils, predicate.level()).build(Lang.Value.LEVEL))
+                    .add(utils.getValueTooltip(utils, predicate.saturation()).build(Lang.Value.SATURATION))
             );
         }
 
