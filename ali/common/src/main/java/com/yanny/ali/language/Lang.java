@@ -648,6 +648,7 @@ public final class Lang {
         MISSING("missing", "Not implemented"),
         RANDOM("random", "Selects random entry"),
         SEQUENCE("sequence", "Selects entries sequentially until first failed"),
+        SLOT("slot", "Drops items from slots"),
         ;
 
         private final Translation translation;
@@ -757,6 +758,25 @@ public final class Lang {
 
         Numbers(String k, String e) {
             this.translation = new Translation("ali.number." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Utils implements ITooltipKey {
+        ACCEPTS("accepts", "Accepts:"),
+        DELIMITER_CONDITIONS("delimiter.conditions", "----- Predicates -----"),
+        DELIMITER_FUNCTIONS("delimiter.functions", "----- Modifiers -----"),
+        ;
+
+        private final Translation translation;
+
+        Utils(String k, String e) {
+            this.translation = new Translation("ali.util.advanced_loot_info." + k, e);
         }
 
         @NotNull

@@ -75,6 +75,7 @@
   "ali.enum.group_type.missing": "Not implemented",
   "ali.enum.group_type.random": "Selects random entry",
   "ali.enum.group_type.sequence": "Selects entries sequentially until first failed",
+  "ali.enum.group_type.slot": "Drops items from slots",
   "ali.enum.horse_variant.black": "Black",
   "ali.enum.horse_variant.brown": "Brown",
   "ali.enum.horse_variant.chestnut": "Chestnut",

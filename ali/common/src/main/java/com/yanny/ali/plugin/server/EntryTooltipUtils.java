@@ -48,7 +48,7 @@ public class EntryTooltipUtils {
     @NotNull
     public static TooltipBuilder getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, LootCount chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
-            b.add(TooltipBuilder.keyOnly("ali.enum.group_type.slot"));
+            b.add(TooltipBuilder.keyOnly(Lang.Group.SLOT));
             b.add(utils.getSlotSourceTooltip(utils, slotSource));
             b.add(getQualityTooltip(quality));
             b.add(getChanceTooltip(chance));
