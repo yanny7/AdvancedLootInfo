@@ -122,7 +122,7 @@ Backs the datapack-based `ali_config.schema.json` format:
 - `datagen.LanguageHolder` — aggregates `aci`'s `CoreLang` translations plus ALI-specific EMI category names and chest/loot-table display names into `TRANSLATION_MAP` (see `aci/CLAUDE.md`'s "Language wiring").
 
 ### `language`
-`Lang` enum (nested tooltip-key groups: `Conditions, Functions, Entry, Value, Branch, Description, Group, Multi, Error`) registered into `aci`'s `CoreLang` by `datagen.LanguageHolder`.
+`Lang` enum (nested tooltip-key groups: `Conditions, Functions, Entry, Value, Branch, Description, Group, ItemFilter, Multi, Numbers, Error, Utils`) registered into `aci`'s `CoreLang` by `datagen.LanguageHolder`.
 
 ## Networking (canonical pattern — `awi/CLAUDE.md` mirrors this)
 
