@@ -11,6 +11,7 @@ import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
@@ -496,7 +497,7 @@ public class GenericUtils {
         int leftWidth = pois.isEmpty() ? maxWidth : maxWidth - SLOT_SIZE - HEADER_GAP;
         Component title = ellipsis(getTraderTranslationKey(type.id(), entityType), type.id().getPath(), leftWidth - titleX);
         Rect titleRect = new Rect(titleX, titleY, font.width(title), TEXT_HEIGHT);
-        Component acceptsLabel = Component.translatable("ali.util.advanced_loot_info.accepts");
+        Component acceptsLabel = Component.translatable(Lang.Utils.ACCEPTS.singular());
         int acceptsLabelWidth = font.width(acceptsLabel);
         Rect acceptsLabelRect = new Rect(0, y + (SLOT_SIZE - TEXT_HEIGHT) / 2, acceptsLabelWidth, TEXT_HEIGHT);
         List<Rect> accepts = wrapSlots(type.accepts().size(), acceptsLabelWidth + HEADER_GAP, y, leftWidth);

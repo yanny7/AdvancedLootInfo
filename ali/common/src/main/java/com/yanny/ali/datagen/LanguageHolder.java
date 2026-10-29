@@ -38,6 +38,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Utils.class);
 
         put(EquipmentSlot.MAINHAND, "Main Hand");
         put(EquipmentSlot.OFFHAND, "Off Hand");
@@ -132,10 +133,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
         TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
-
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");

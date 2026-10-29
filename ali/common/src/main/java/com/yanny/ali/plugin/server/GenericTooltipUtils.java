@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.language.ITooltipKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
@@ -30,7 +31,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getConditionsSectionTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
         if (!conditions.isEmpty()) {
-            return getSectionTooltip(utils.getValueTooltip(utils, conditions).build(), "ali.util.advanced_loot_info.delimiter.conditions");
+            return getSectionTooltip(utils.getValueTooltip(utils, conditions).build(), Lang.Utils.DELIMITER_CONDITIONS);
         }
 
         return TooltipBuilder.empty();
@@ -39,7 +40,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getFunctionsSectionTooltip(IServerUtils utils, List<LootItemFunction> functions) {
         if (!functions.isEmpty()) {
-            return getSectionTooltip(utils.getValueTooltip(utils, functions).build(), "ali.util.advanced_loot_info.delimiter.functions");
+            return getSectionTooltip(utils.getValueTooltip(utils, functions).build(), Lang.Utils.DELIMITER_FUNCTIONS);
         }
 
         return TooltipBuilder.empty();
@@ -51,7 +52,7 @@ public class GenericTooltipUtils {
      * delimiter with nothing under it.
      */
     @NotNull
-    private static TooltipBuilder getSectionTooltip(TooltipNode content, String delimiterKey) {
+    private static TooltipBuilder getSectionTooltip(TooltipNode content, ITooltipKey delimiterKey) {
         if (content.isBlank(true)) {
             return TooltipBuilder.empty();
         }
