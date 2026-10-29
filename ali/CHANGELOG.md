@@ -8,6 +8,9 @@
 - Fixed missing trades and loot that other mods prepare only once the server has started
 - Fixed trade slots of a block tag showing the items of the item tag with the same name, or nothing, like Charm's trades with ALI Compat
 - Trade added several times to the same trader level shows once
+- Recipe viewer stops waiting for data from the server as soon as the connection to it is lost
+- Fixed recipe viewer waiting 30 seconds for data when the game reloads while it is loading
+- Fixed recipe viewer waiting a minute and a half and logging an error on servers without ALI
 
 ## [2.5.0]
 

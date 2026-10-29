@@ -10,18 +10,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BooleanSupplier;
 
 public abstract class CoreClientRegistry<
         TConfig,
@@ -37,6 +37,10 @@ public abstract class CoreClientRegistry<
         ICoreCommonUtils<TConfig>,
         ICoreClientRegistry<TDataNode, TWidgetUtils, TClientUtils> {
 
+    private static final int MAX_REQUESTS = 3;
+    private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration POLL_INTERVAL = Duration.ofMillis(500);
+
     private final Logger logger;
 
     private final ManagedRegistry<ResourceLocation, IWidgetFactory<TDataNode, TWidgetUtils>> widgetMap = register("node widgets", false, HashMap::new, ResourceLocation::toString, null);
@@ -50,6 +54,7 @@ public abstract class CoreClientRegistry<
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
     private ScheduledExecutorService loggerScheduler;
     private final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    private volatile boolean modAvailableOnServer = false;
 
     private volatile DataReceiver currentDataReceiver = null;
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
@@ -170,8 +175,24 @@ public abstract class CoreClientRegistry<
         return commonUtils.getDictionary().inverse().get(index);
     }
 
-    public CompletableFuture<byte[]> getCurrentDataFuture() {
-        return activeDataPromise.get();
+    public final <T> void registerData(T registry, BiConsumer<T, byte[]> registerData, BooleanSupplier canRequestData, Runnable requestData) {
+        logger.info("Starting data registration...");
+
+        try {
+            byte[] data = awaitData(canRequestData, requestData);
+
+            if (data != null) {
+                registerData.accept(registry, data);
+                logger.info("Data registration finished successfully.");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Registration thread interrupted!", e);
+        } catch (ExecutionException e) {
+            logger.error("Failed to finish registering data with error", e);
+        } catch (Throwable e) {
+            logger.error("Failed to finish registering data with unexpected error", e);
+        }
     }
 
     public void addChunkData(int index, byte[] data) {
@@ -190,6 +211,7 @@ public abstract class CoreClientRegistry<
     public synchronized void startReceivingData(int totalMessages) {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
+            stopLogging(true);
         }
 
         currentDataReceiver = new DataReceiver(getModId(), totalMessages);
@@ -202,6 +224,10 @@ public abstract class CoreClientRegistry<
 
         final CompletableFuture<byte[]> promiseToComplete = currentPromise;
         currentDataReceiver.getFuture().whenComplete((data, throwable) -> {
+            if (throwable instanceof CancellationException) {
+                return;
+            }
+
             if (throwable != null) {
                 promiseToComplete.completeExceptionally(throwable);
             } else {
@@ -220,13 +246,12 @@ public abstract class CoreClientRegistry<
             stopLogging(true);
         }
 
-        activeDataPromise.set(new CompletableFuture<>());
+        activeDataPromise.getAndSet(new CompletableFuture<>()).cancel(false);
         logger.info("Cleared data");
     }
 
     public synchronized void reloadData() {
-        // reload is called on login, causing clearing already received data
-        if (loggedIn.get()) {
+        if (loggedIn.get() && modAvailableOnServer) {
             logger.info("Reloading data");
             clearReceivedData();
         }
@@ -235,6 +260,7 @@ public abstract class CoreClientRegistry<
     public synchronized void loggingIn(boolean modAvailableOnServer) {
         logger.info("Player login received");
         loggedIn.set(true);
+        this.modAvailableOnServer = modAvailableOnServer;
 
         if (!modAvailableOnServer) {
             logger.info("Mod is not present on the server. Completing sync with empty data.");
@@ -248,15 +274,8 @@ public abstract class CoreClientRegistry<
 
     public synchronized void loggingOut() {
         logger.info("Player logout received");
-
-        CompletableFuture<byte[]> oldPromise = activeDataPromise.get();
-
-        if (oldPromise != null && !oldPromise.isDone()) {
-            oldPromise.cancel(true);
-        }
-
-        clearReceivedData();
         loggedIn.set(false);
+        clearReceivedData();
     }
 
     public synchronized void doneReceivingData() {
@@ -269,6 +288,56 @@ public abstract class CoreClientRegistry<
         receiver.forceDone();
         stopLogging(false);
         logger.info("Finished receiving data");
+    }
+
+    private byte @Nullable[] awaitData(BooleanSupplier canRequestData, Runnable requestData) throws InterruptedException, ExecutionException {
+        attempts:
+        for (int attempt = 1; attempt <= MAX_REQUESTS; attempt++) {
+            CompletableFuture<byte[]> promise = activeDataPromise.get();
+
+            if (promise.isDone()) {
+                logger.info("Data already received, processing instantly.");
+                return promise.get();
+            }
+
+            if (isDisconnected(canRequestData)) {
+                return null;
+            }
+
+            logger.info("Data not ready. Requesting data from server (Attempt {}/{})", attempt, MAX_REQUESTS);
+            requestData.run();
+
+            long deadline = System.nanoTime() + REQUEST_TIMEOUT.toNanos();
+
+            while (System.nanoTime() < deadline) {
+                try {
+                    return promise.get(POLL_INTERVAL.toMillis(), TimeUnit.MILLISECONDS);
+                } catch (TimeoutException ignored) {
+                } catch (CancellationException e) {
+                    logger.info("Data was cleared while waiting for it");
+                    continue attempts;
+                }
+
+                if (isDisconnected(canRequestData)) {
+                    return null;
+                }
+            }
+
+            logger.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.");
+            clearReceivedData();
+        }
+
+        logger.error("CRITICAL: Could not fetch data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", MAX_REQUESTS);
+        return null;
+    }
+
+    private boolean isDisconnected(BooleanSupplier canRequestData) {
+        if (loggedIn.get() && canRequestData.getAsBoolean()) {
+            return false;
+        }
+
+        logger.info("Not connected to the server, data registration skipped");
+        return true;
     }
 
     private void startLogging() {

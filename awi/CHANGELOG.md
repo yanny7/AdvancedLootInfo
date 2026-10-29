@@ -1,3 +1,9 @@
+## []
+
+- Recipe viewer stops waiting for data from the server as soon as the connection to it is lost
+- Fixed recipe viewer waiting 30 seconds for data when the game reloads while it is loading
+- Fixed recipe viewer waiting a minute and a half and logging an error on servers without AWI
+
 ## [1.3.2]
 
 - Fixed mixins failing when AWI is used as a dependency in a Forge mod development environment

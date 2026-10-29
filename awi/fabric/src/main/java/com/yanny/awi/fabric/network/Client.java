@@ -22,8 +22,15 @@ public class Client extends AbstractClient {
     }
 
     @Override
+    public boolean canRequestData() {
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+
+        return listener != null && listener.getConnection().isConnected() && ClientPlayNetworking.canSend(NetworkUtils.REQUEST_WORLDGEN_DATA_ID);
+    }
+
+    @Override
     public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
-        if (ClientPlayNetworking.canSend(NetworkUtils.REQUEST_WORLDGEN_DATA_ID)) {
+        if (canRequestData()) {
             FriendlyByteBuf buf = PacketByteBufs.create();
 
             message.encode(buf);

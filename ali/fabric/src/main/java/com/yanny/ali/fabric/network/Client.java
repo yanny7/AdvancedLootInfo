@@ -22,8 +22,15 @@ public class Client extends AbstractClient {
     }
 
     @Override
+    public boolean canRequestData() {
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+
+        return listener != null && listener.getConnection().isConnected() && ClientPlayNetworking.canSend(NetworkUtils.REQUEST_LOOT_DATA_ID);
+    }
+
+    @Override
     public void sendLootDataToPlayer(RequestLootDataMessage message) {
-        if (ClientPlayNetworking.canSend(NetworkUtils.REQUEST_LOOT_DATA_ID)) {
+        if (canRequestData()) {
             FriendlyByteBuf buf = PacketByteBufs.create();
 
             message.encode(buf);

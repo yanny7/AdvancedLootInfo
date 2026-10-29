@@ -1,3 +1,8 @@
+## []
+
+- Added `registerData` to the shared client registry
+- Removed `getCurrentDataFuture`, replaced by `registerData`
+
 ## [1.5.0]
 
 - Added `registerEnumTranslation` and `getEnumTranslation` to the shared server registry and utils
