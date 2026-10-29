@@ -132,6 +132,14 @@ Other locales stay hand-written next to the shim, in `src/compat/<slug>/lang/<lo
 
 Register nothing ALI already registers: node ids, widgets and data-node factories for ALI's own node kinds (`ModifiedNode` and friends) come from `ali/common`'s `Plugin.registerClient`.
 
+## Unit tests
+
+`CompatTooltipSuite` in each loader's `test` tree runs every `*TooltipTest` under `com.yanny.alicompat.compat` against the target mods on the test classpath, with no loader launch behind it.
+
+On Fabric that means no Knot, so `AccessWidenerSessionListener`, a JUnit `LauncherSessionListener` that runs before any test class loads, applies the access wideners of every `fabric.mod.json` on the classpath through a ByteBuddy agent, as Knot does at runtime (Fabric API's makes `Ingredient` extendable, which Farmer's Delight's `ToolActionIngredient` needs). The suite then unfreezes the built-in registries, intrusive holders included, and installs a server-side `FabricLauncher`, so target mods can register from their class initializers. It fails when any `com.yanny.alicompat` logger warns or errors while a shim that has a test package of its own is registering, which `CompatFailureAppender` attributes by the first `com.yanny.alicompat.compat.<slug>` frame of the stack. A shim without tests only logs: Ad Astra's trade classes need its mod initializer to have run.
+
+The Forge suite has no such check. Forge mods fill their `DeferredRegister`s from `RegisterEvent`, which nothing fires outside FML, so a registration that reaches one (Twilight Forest, Ribbits) fails there by construction, and only what the tests themselves render is checked.
+
 ## Gametests
 
 One server-side GameTest per loader, in a `gametest` source set of `alicompat/fabric` and `alicompat/forge`, run once per target mod — `-Palicompat_gametest=<slug>`, or `all` for the base and every mod at once — so a shim is checked against the real mod in a real loader. It compiles ACI's shared gametest classes and ALI's `LootDataCapture` (see `ali/CLAUDE.md`'s gametest section) next to `alicompat/common/src/gametest/java/.../CompatDataGolden`, and each loader adds only the `@GameTest` wrapper.

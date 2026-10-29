@@ -8,8 +8,14 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.alicompat.ModCompatManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.impl.launch.FabricLauncher;
+import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
@@ -28,11 +34,14 @@ import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.IncludeClassNamePatterns;
 import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +60,12 @@ public class CompatTooltipSuite {
 
     @BeforeSuite
     public static void beforeAllTests() {
+        CompatFailureAppender failures = CompatFailureAppender.attach();
+
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
         Bootstrap.bootStrap();
+        unfreezeRegistries();
+        installLauncher();
 
         ResourceManager resourceManager = loadClientResources();
         Map<String, String> translations = new HashMap<>(LanguageHolder.TRANSLATION_MAP);
@@ -74,12 +87,43 @@ public class CompatTooltipSuite {
 
         config.showInGameNames = false;
         UTILS = PluginManager.getInstance().serverRegistry;
+
+        failures.detachAndCheck();
     }
 
     @AfterSuite
     static void afterAllTests() {
         LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
         UNUSED.stream().sorted().forEach(LOGGER::info);
+    }
+
+    private static void unfreezeRegistries() {
+        try {
+            Field frozen = MappedRegistry.class.getDeclaredField("frozen");
+            Field intrusiveHolders = MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
+
+            frozen.setAccessible(true);
+            intrusiveHolders.setAccessible(true);
+
+            for (Registry<?> registry : BuiltInRegistries.REGISTRY) {
+                if (registry instanceof MappedRegistry<?> mappedRegistry) {
+                    frozen.set(mappedRegistry, false);
+                }
+            }
+
+            for (Registry<?> registry : List.of(BuiltInRegistries.BLOCK, BuiltInRegistries.ITEM, BuiltInRegistries.ENTITY_TYPE, BuiltInRegistries.FLUID, BuiltInRegistries.GAME_EVENT)) {
+                intrusiveHolders.set(registry, new IdentityHashMap<>());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Failed to unfreeze registries", e);
+        }
+    }
+
+    private static void installLauncher() {
+        FabricLauncher launcher = Mockito.mock(FabricLauncher.class);
+
+        Mockito.when(launcher.getEnvironmentType()).thenReturn(EnvType.SERVER);
+        FabricLauncherBase.setLauncher(launcher);
     }
 
     @NotNull
