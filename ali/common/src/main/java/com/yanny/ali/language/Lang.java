@@ -617,6 +617,7 @@ public final class Lang {
         MISSING("missing", "Not implemented"),
         RANDOM("random", "Selects random entry"),
         SEQUENCE("sequence", "Selects entries sequentially until first failed"),
+        SLOT("slot", "Drops items from slots"),
         ;
 
         private final Translation translation;
