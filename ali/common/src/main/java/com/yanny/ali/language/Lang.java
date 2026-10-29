@@ -668,4 +668,23 @@ public final class Lang {
             return translation;
         }
     }
+
+    public enum Utils implements ITooltipKey {
+        ACCEPTS("accepts", "Accepts:"),
+        DELIMITER_CONDITIONS("delimiter.conditions", "----- Predicates -----"),
+        DELIMITER_FUNCTIONS("delimiter.functions", "----- Modifiers -----"),
+        ;
+
+        private final Translation translation;
+
+        Utils(String k, String e) {
+            this.translation = new Translation("ali.util.advanced_loot_info." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
 }
