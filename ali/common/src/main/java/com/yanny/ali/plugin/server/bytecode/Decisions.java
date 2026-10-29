@@ -98,49 +98,41 @@ final class Decisions implements Opcodes {
     private Value narrowed(Value.Choice choice, List<Integer> kept) {
         List<Object> options = kept.stream().map(choice.options()::get).toList();
 
-        return options.size() == 1 ? heap.wrap(options.get(0)) : new Value.Choice(options, choice.draw());
+        return options.size() == 1 ? heap.wrap(options.getFirst()) : new Value.Choice(options, choice.draw());
     }
 
     boolean isNull(Value value) {
-        if (value instanceof Value.Known known) {
-            return known.value() == null;
-        }
-        if (value instanceof Value.Choice choice) {
-            return decided(choice, Objects::isNull);
-        }
-        if (value instanceof Value.Unknown unknown && unknown.found() != null && unknown.origin() != null) {
-            return !decide(Decision.Kind.FOUND, unknown.origin(), unknown.found(), "null check of an unknown value");
-        }
-        if (value instanceof Value.Unknown unknown) {
-            return !decide(Decision.Kind.UNKNOWN, unknown.origin(), Interpreter.NULL, "null check of an unknown value");
-        }
-        if (value instanceof Value.Uninit) {
-            throw new Fail("null check of an unknown value");
-        }
-
-        return false;
+        return switch (value) {
+            case Value.Known(Object value1) -> value1 == null;
+            case Value.Choice choice -> decided(choice, Objects::isNull);
+            case Value.Unknown unknown when unknown.found() != null && unknown.origin() != null ->
+                    !decide(Decision.Kind.FOUND, unknown.origin(), unknown.found(), "null check of an unknown value");
+            case Value.Unknown unknown -> !decide(Decision.Kind.UNKNOWN, unknown.origin(), Interpreter.NULL, "null check of an unknown value");
+            case Value.Uninit ignored -> throw new Fail("null check of an unknown value");
+            default -> false;
+        };
     }
 
     boolean sameReference(Value a, Value b) {
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
-            return ka.value() == kb.value();
+        if (a instanceof Value.Known(Object value1) && b instanceof Value.Known(Object value2)) {
+            return value1 == value2;
         }
-        if (a instanceof Value.Choice choice && b instanceof Value.Known known) {
-            return decided(choice, (o) -> o == known.value());
+        if (a instanceof Value.Choice choice && b instanceof Value.Known(Object value)) {
+            return decided(choice, (o) -> o == value);
         }
-        if (b instanceof Value.Choice choice && a instanceof Value.Known known) {
-            return decided(choice, (o) -> o == known.value());
+        if (b instanceof Value.Choice choice && a instanceof Value.Known(Object value)) {
+            return decided(choice, (o) -> o == value);
         }
-        if (a instanceof Value.Unknown unknown && b instanceof Value.Known known) {
-            return equality(unknown, known.value());
+        if (a instanceof Value.Unknown unknown && b instanceof Value.Known(Object value)) {
+            return equality(unknown, value);
         }
-        if (b instanceof Value.Unknown unknown && a instanceof Value.Known known) {
-            return equality(unknown, known.value());
+        if (b instanceof Value.Unknown unknown && a instanceof Value.Known(Object value)) {
+            return equality(unknown, value);
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
             return decide(Decision.Kind.UNKNOWN, null, null, "reference comparison of an unknown value");
         }
-        if (a instanceof Value.Known ka && ka.value() == null || b instanceof Value.Known kb && kb.value() == null) {
+        if (a instanceof Value.Known(Object value1) && value1 == null || b instanceof Value.Known(Object value2) && value2 == null) {
             return false;
         }
         if (a instanceof Value.Known || b instanceof Value.Known) {
@@ -162,37 +154,40 @@ final class Decisions implements Opcodes {
     }
 
     int switchCase(Value value, List<Integer> keys) {
-        if (value instanceof Value.Known known) {
-            return keys.indexOf((Integer) known.value());
-        }
-        if (value instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
-            Value.Choice rest = choice;
+        switch (value) {
+            case Value.Known(Object value1) -> {
+                return keys.indexOf((Integer) value1);
+            }
+            case Value.Choice choice when choice.options().stream().allMatch(Integer.class::isInstance) -> {
+                Value.Choice rest = choice;
 
-            for (int i = 0; i < keys.size(); i++) {
-                Integer key = keys.get(i);
-                Value.Choice current = rest;
+                for (int i = 0; i < keys.size(); i++) {
+                    Integer key = keys.get(i);
+                    Value.Choice current = rest;
 
-                if (current.options().stream().allMatch(key::equals)) {
-                    return i;
-                }
-                if (current.options().stream().anyMatch(key::equals)) {
-                    if (decide(Decision.Kind.RANDOM, taken.size(), share(current, key::equals), "switch on a random choice")) {
-                        narrow(current, key::equals);
+                    if (current.options().stream().allMatch(key::equals)) {
                         return i;
                     }
+                    if (current.options().stream().anyMatch(key::equals)) {
+                        if (decide(Decision.Kind.RANDOM, taken.size(), share(current, key::equals), "switch on a random choice")) {
+                            narrow(current, key::equals);
+                            return i;
+                        }
 
-                    rest = narrow(current, (o) -> !key.equals(o));
+                        rest = narrow(current, (o) -> !key.equals(o));
 
-                    if (rest == null) {
-                        return keys.indexOf(current.options().stream().filter((o) -> !key.equals(o)).findFirst().map(Integer.class::cast).orElseThrow());
+                        if (rest == null) {
+                            return keys.indexOf(current.options().stream().filter((o) -> !key.equals(o)).findFirst().map(Integer.class::cast).orElseThrow());
+                        }
                     }
                 }
-            }
 
-            return -1;
-        }
-        if (value instanceof Value.Num num && num.expr().bounds().isPoint()) {
-            return keys.indexOf((int) num.expr().bounds().lo());
+                return -1;
+            }
+            case Value.Num num when num.expr().bounds().isPoint() -> {
+                return keys.indexOf((int) num.expr().bounds().lo());
+            }
+            default -> {}
         }
         NumberDomain.Drawn source = value instanceof Value.Num num ? numbers.drawn(num.expr()) : null;
 
@@ -252,15 +247,15 @@ final class Decisions implements Opcodes {
 
     boolean branch(int op, Value a, Value b) {
         if ((op == IFEQ || op == IFNE) && a instanceof Value.Unknown unknown && unknown.origin() != null && unknown.origin().isBoolean()
-                && b instanceof Value.Known known && Integer.valueOf(0).equals(known.value())) {
+                && b instanceof Value.Known(Object value) && Integer.valueOf(0).equals(value)) {
             return test(unknown.origin()) == (op == IFNE);
         }
         if (a instanceof Value.Unknown || b instanceof Value.Unknown) {
             return decide(Decision.Kind.UNKNOWN, null, null, "value from the trader or world");
         }
-        if (a instanceof Value.Known ka && b instanceof Value.Known kb) {
-            int x = (Integer) ka.value();
-            int y = (Integer) kb.value();
+        if (a instanceof Value.Known(Object value1) && b instanceof Value.Known(Object value2)) {
+            int x = (Integer) value1;
+            int y = (Integer) value2;
 
             return switch (op) {
                 case IFEQ -> x == y;
@@ -280,8 +275,8 @@ final class Decisions implements Opcodes {
 
         NumberInterval difference;
 
-        if (a instanceof Value.Cmp cmp) {
-            difference = cmp.left().bounds().minus(cmp.right().bounds());
+        if (a instanceof Value.Cmp(NumberExpr left, NumberExpr right)) {
+            difference = left.bounds().minus(right.bounds());
         } else {
             difference = NumberDomain.expr(a).bounds().minus(NumberDomain.expr(b).bounds());
         }
@@ -311,12 +306,12 @@ final class Decisions implements Opcodes {
     private Boolean drawnBranch(int op, NumberExpr left, NumberExpr right) {
         NumberDomain.Drawn source = numbers.drawn(left);
 
-        if (source == null || !(right instanceof NumberExpr.Const constant)) {
+        if (source == null || !(right instanceof NumberExpr.Const(double value))) {
             return null;
         }
 
         NumberDomain.Draw draw = source.draw();
-        double bound = constant.value() - source.offset();
+        double bound = value - source.offset();
         double probability = draw.probability(op, bound);
 
         if (probability <= 0) {
@@ -345,8 +340,8 @@ final class Decisions implements Opcodes {
     }
 
     private boolean test(Origin origin) {
-        if (origin.receiver() instanceof Origin subject && origin.args().size() == 1 && origin.args().get(0) != null && !(origin.args().get(0) instanceof Origin)) {
-            return decide(origin.isEquality() ? Decision.Kind.EQUALS : Decision.Kind.TEST, subject, origin.args().get(0), "value from the trader or world");
+        if (origin.receiver() instanceof Origin subject && origin.args().size() == 1 && origin.args().getFirst() != null && !(origin.args().getFirst() instanceof Origin)) {
+            return decide(origin.isEquality() ? Decision.Kind.EQUALS : Decision.Kind.TEST, subject, origin.args().getFirst(), "value from the trader or world");
         }
 
         return decide(Decision.Kind.UNKNOWN, origin, null, "value from the trader or world");

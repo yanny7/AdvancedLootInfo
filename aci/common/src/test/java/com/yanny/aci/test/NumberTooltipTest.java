@@ -194,29 +194,29 @@ public class NumberTooltipTest {
     public void testChartOverlaysLevels() {
         NumberExpr glowstone = clamp(add(uniformInt(2, 4), uniformInt(constant(0), FORTUNE)), constant(1), constant(4));
         List<TooltipLine> lines = CoreTooltipUtils.toLines(TooltipBuilder.number(glowstone).build(COUNT), 0, true, TooltipStyle.DEFAULT, CHARTS);
-        TooltipLine.Chart chart = (TooltipLine.Chart) lines.get(lines.size() - 1);
+        TooltipLine.Chart chart = (TooltipLine.Chart) lines.getLast();
 
         assertEquals(5, lines.size());
         assertEquals(4, chart.series().size());
-        assertEquals(3, chart.series().get(0).heights().size());
-        assertTrue(chart.series().get(0).base());
-        chart.series().get(0).heights().forEach((h) -> assertEquals(1.0 / 3 / 0.75, h, 1e-9));
+        assertEquals(3, chart.series().getFirst().heights().size());
+        assertTrue(chart.series().getFirst().base());
+        chart.series().getFirst().heights().forEach((h) -> assertEquals(1.0 / 3 / 0.75, h, 1e-9));
         assertEquals(1.0, chart.series().get(3).heights().get(2), 1e-9);
-        assertEquals(List.of(false, false, false), chart.series().get(0).modes());
-        assertEquals("2", chart.series().get(0).min().getString());
-        assertEquals("4", chart.series().get(0).max().getString());
+        assertEquals(List.of(false, false, false), chart.series().getFirst().modes());
+        assertEquals("2", chart.series().getFirst().min().getString());
+        assertEquals("4", chart.series().getFirst().max().getString());
         assertEquals(chart.series().get(1).color(), labelColor(lines.get(1)));
     }
 
     @Test
     public void testWideTriangleChartIsSmooth() {
         TooltipLine.Chart chart = chart(add(constant(-80), uniformInt(0, 136), uniformInt(0, 136)));
-        List<Double> heights = chart.series().get(0).heights();
-        double step = heights.get(1) - heights.get(0);
+        List<Double> heights = chart.series().getFirst().heights();
+        double step = heights.get(1) - heights.getFirst();
 
-        assertEquals(55, chart.series().get(0).heights().size());
-        assertEquals(1, chart.series().get(0).modes().stream().filter((m) -> m).count());
-        assertTrue(chart.series().get(0).modes().get(27));
+        assertEquals(55, chart.series().getFirst().heights().size());
+        assertEquals(1, chart.series().getFirst().modes().stream().filter((m) -> m).count());
+        assertTrue(chart.series().getFirst().modes().get(27));
 
         for (int i = 1; i <= 26; i++) {
             assertEquals(step, heights.get(i) - heights.get(i - 1), 1e-9);
@@ -226,17 +226,17 @@ public class NumberTooltipTest {
         }
 
         assertTrue(heights.get(54) < heights.get(53));
-        assertEquals("−80", chart.series().get(0).min().getString());
-        assertEquals("192", chart.series().get(0).max().getString());
+        assertEquals("−80", chart.series().getFirst().min().getString());
+        assertEquals("192", chart.series().getFirst().max().getString());
     }
 
     @Test
     public void testWideBiasedChartIsMonotone() {
         TooltipLine.Chart chart = chart(add(constant(48), uniformInt(constant(0), add(uniformInt(0, 143), constant(7)))));
-        List<Double> heights = chart.series().get(0).heights();
+        List<Double> heights = chart.series().getFirst().heights();
 
-        assertEquals(51, chart.series().get(0).heights().size());
-        assertEquals(List.of(true, true, true, false), chart.series().get(0).modes().subList(0, 4));
+        assertEquals(51, chart.series().getFirst().heights().size());
+        assertEquals(List.of(true, true, true, false), chart.series().getFirst().modes().subList(0, 4));
 
         for (int i = 1; i < heights.size(); i++) {
             assertTrue(heights.get(i) <= heights.get(i - 1) + 1e-12, "column " + i);
@@ -254,7 +254,7 @@ public class NumberTooltipTest {
     public void testFailingNumberRendersErrorInsteadOfThrowing() {
         TooltipNode node = TooltipBuilder.number(fn(BOOM, constant(1))).build(COUNT);
         List<TooltipLine> lines = CoreTooltipUtils.toLines(node, 0, true, TooltipStyle.DEFAULT, CHARTS);
-        Component value = (Component) ((TranslatableContents) ((TooltipLine.Text) lines.get(0)).component().getSiblings().get(0).getContents()).getArgs()[0];
+        Component value = (Component) ((TranslatableContents) ((TooltipLine.Text) lines.getFirst()).component().getSiblings().getFirst().getContents()).getArgs()[0];
 
         assertEquals(List.of("Count: ?"), strings(lines));
         assertEquals(TooltipStyle.DEFAULT.error().getColor(), value.getStyle().getColor());
@@ -311,7 +311,7 @@ public class NumberTooltipTest {
     private static TooltipLine.Chart chart(NumberExpr expr) {
         List<TooltipLine> lines = CoreTooltipUtils.toLines(TooltipBuilder.number(expr).build(COUNT), 0, true, TooltipStyle.DEFAULT, CHARTS);
 
-        return (TooltipLine.Chart) lines.get(lines.size() - 1);
+        return (TooltipLine.Chart) lines.getLast();
     }
 
     @NotNull

@@ -81,9 +81,9 @@ public class RandomModelTest {
         context.executeResult = new Value.Known(0.5D);
         assertEquals(new Value.Known(0.5D), model.apply(context, call));
         assertEquals(1, context.executions.size());
-        assertSame(RandomSource.class, context.executions.get(0).owner());
-        assertEquals("triangle", context.executions.get(0).method().name);
-        assertEquals(call.depth(), context.executions.get(0).depth());
+        assertSame(RandomSource.class, context.executions.getFirst().owner());
+        assertEquals("triangle", context.executions.getFirst().method().name);
+        assertEquals(call.depth(), context.executions.getFirst().depth());
     }
 
     @Test

@@ -30,7 +30,7 @@ public class ItemStackModelTest {
                 new Value.Known(3))));
 
         assertEquals(1, stack.options.size());
-        assertTrue(stack.options.get(0).is(Items.EMERALD));
+        assertTrue(stack.options.getFirst().is(Items.EMERALD));
         assertEquals(NumberExpr.constant(3), stack.count);
         assertFalse(stack.randomTag);
     }
@@ -102,7 +102,7 @@ public class ItemStackModelTest {
 
         context.concreteCall = (call) -> null;
         assertNull(model.apply(context, call(INVOKEVIRTUAL, ITEM_STACK, "enchant", ENCHANT, stack, new Value.Known(null), new Value.Known(1))));
-        assertEquals(List.of(stack.options.get(0), stack.options.get(1)), context.concreteCalls.stream().map((c) -> ((Value.Known) c.args().get(0)).value()).toList());
+        assertEquals(List.of(stack.options.getFirst(), stack.options.get(1)), context.concreteCalls.stream().map((c) -> ((Value.Known) c.args().getFirst()).value()).toList());
         assertEquals(List.of(2, 2), stack.options.stream().map(ItemStack::getCount).toList());
     }
 
@@ -110,7 +110,7 @@ public class ItemStackModelTest {
     public void testCallReturningTemplateReturnsStack() {
         Value.Stack stack = stack(Items.EMERALD, 1);
 
-        context.concreteCall = (call) -> call.args().get(0);
+        context.concreteCall = (call) -> call.args().getFirst();
         assertSame(stack, model.apply(context, call(INVOKEVIRTUAL, ITEM_STACK, "setHoverName", HOVER_NAME, stack, new Value.Known(null))));
     }
 
@@ -161,7 +161,7 @@ public class ItemStackModelTest {
     public void testCopyOfRealStackIsModelledStack() {
         Value.Stack copy = assertInstanceOf(Value.Stack.class, model.apply(context, stackCall(RuntimeNames.STACK_COPY, new Value.Known(new ItemStack(Items.EMERALD, 2)))));
 
-        assertTrue(copy.options.get(0).is(Items.EMERALD));
+        assertTrue(copy.options.getFirst().is(Items.EMERALD));
         assertEquals(NumberExpr.constant(2), copy.count);
     }
 
@@ -171,7 +171,7 @@ public class ItemStackModelTest {
 
         context.concreteCall = (call) -> null;
         assertNull(model.apply(context, call(INVOKEVIRTUAL, ITEM_STACK, "enchant", ENCHANT, new Value.Known(real), new Value.Known(null), new Value.Known(1))));
-        assertSame(context.shadows.get(real).options.get(0), ((Value.Known) context.concreteCalls.get(0).args().get(0)).value());
+        assertSame(context.shadows.get(real).options.getFirst(), ((Value.Known) context.concreteCalls.getFirst().args().getFirst()).value());
     }
 
     @Test
@@ -184,13 +184,13 @@ public class ItemStackModelTest {
         context.concreteCall = (call) -> new Value.Known(offer);
         assertEquals(new Value.Known(offer), ItemStackModel.argumentCall(context, call(INVOKESTATIC, "mod/Trades", "trade", TRADE, cost, result)));
 
-        List<Value> args = context.concreteCalls.get(0).args();
-        ItemStack realCost = (ItemStack) ((Value.Known) args.get(0)).value();
+        List<Value> args = context.concreteCalls.getFirst().args();
+        ItemStack realCost = (ItemStack) ((Value.Known) args.getFirst()).value();
 
         assertTrue(realCost.is(Items.EMERALD));
         assertEquals(3, realCost.getCount());
         assertTrue(context.owned.contains(realCost));
-        assertSame(result.options.get(0), ((Value.Known) args.get(1)).value());
+        assertSame(result.options.getFirst(), ((Value.Known) args.get(1)).value());
     }
 
     @Test

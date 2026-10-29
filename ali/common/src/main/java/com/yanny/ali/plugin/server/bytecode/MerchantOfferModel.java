@@ -57,7 +57,7 @@ final class MerchantOfferModel implements MethodModel, Opcodes {
         List<AbstractInsnNode> insns = Arrays.stream(init.instructions.toArray()).filter((i) -> i.getOpcode() >= 0).toList();
         Type[] params = Type.getArgumentTypes(desc);
 
-        if (insns.size() != params.length + 3 || !(insns.get(0) instanceof VarInsnNode self) || self.getOpcode() != ALOAD || self.var != 0) {
+        if (insns.size() != params.length + 3 || !(insns.getFirst() instanceof VarInsnNode self) || self.getOpcode() != ALOAD || self.var != 0) {
             return false;
         }
 

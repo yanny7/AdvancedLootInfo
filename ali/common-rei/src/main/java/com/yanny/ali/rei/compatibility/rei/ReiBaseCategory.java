@@ -167,7 +167,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             widgets.add(slot);
-            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(() -> TooltipUtils.getSlotCount((IItemNode) optionByStack.getOrDefault(slot.getCurrentEntry(), h.options.get(0))))));
+            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(() -> TooltipUtils.getSlotCount((IItemNode) optionByStack.getOrDefault(slot.getCurrentEntry(), h.options.getFirst())))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }

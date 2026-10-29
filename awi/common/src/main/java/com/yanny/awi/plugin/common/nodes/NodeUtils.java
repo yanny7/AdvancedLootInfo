@@ -447,7 +447,7 @@ public class NodeUtils {
             List<NumberInterval> merged = new ArrayList<>();
 
             for (NumberInterval range : obs.absolute.buildRanges()) {
-                NumberInterval last = merged.isEmpty() ? null : merged.get(merged.size() - 1);
+                NumberInterval last = merged.isEmpty() ? null : merged.getLast();
 
                 if (last != null && range.lo() - last.hi() - 1 <= gap) {
                     merged.set(merged.size() - 1, NumberInterval.closed(last.lo(), range.hi()));
@@ -457,8 +457,8 @@ public class NodeUtils {
             }
 
             int top = obs.waterConstraint() == BlockInfo.WaterConstraint.UNDERWATER ? seaLevel - 1 : maxY - 1;
-            boolean everywhere = merged.size() == 1 && merged.get(0).lo() <= minY + 1 + gap
-                    && merged.get(0).hi() >= top - obs.depths.max() - gap;
+            boolean everywhere = merged.size() == 1 && merged.getFirst().lo() <= minY + 1 + gap
+                    && merged.getFirst().hi() >= top - obs.depths.max() - gap;
 
             return everywhere ? List.of() : merged;
         }

@@ -101,15 +101,15 @@ public class TooltipUtils {
     public static NumberExpr applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, NumberExpr count, List<TooltipNode> ignoredConditions) {
         NumberExpr level = level(function.enchantment);
 
-        if (function.formula instanceof ApplyBonusCount.OreDrops) {
-            return NumberExpr.mul(count, NumberExpr.max(NumberExpr.constant(1), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.add(level, NumberExpr.constant(1)))));
-        } else if (function.formula instanceof ApplyBonusCount.BinomialWithBonusCount formula) {
-            return NumberExpr.add(count, NumberExpr.binomial(NumberExpr.add(level, NumberExpr.constant(formula.extraRounds())), NumberExpr.constant(formula.probability())));
-        } else if (function.formula instanceof ApplyBonusCount.UniformBonusCount formula) {
-            return NumberExpr.add(count, NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.mul(NumberExpr.constant(formula.bonusMultiplier()), level)));
-        }
-
-        return count;
+        return switch (function.formula) {
+            case ApplyBonusCount.OreDrops ignored ->
+                    NumberExpr.mul(count, NumberExpr.max(NumberExpr.constant(1), NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.add(level, NumberExpr.constant(1)))));
+            case ApplyBonusCount.BinomialWithBonusCount(int extraRounds, float probability) ->
+                    NumberExpr.add(count, NumberExpr.binomial(NumberExpr.add(level, NumberExpr.constant(extraRounds)), NumberExpr.constant(probability)));
+            case ApplyBonusCount.UniformBonusCount(int bonusMultiplier) ->
+                    NumberExpr.add(count, NumberExpr.uniformInt(NumberExpr.constant(0), NumberExpr.mul(NumberExpr.constant(bonusMultiplier), level)));
+            default -> count;
+        };
     }
 
     @NotNull
@@ -214,7 +214,7 @@ public class TooltipUtils {
 
     @NotNull
     public static NumberExpr luckBased(NumberExpr base, NumberExpr bonus) {
-        if (bonus instanceof NumberExpr.Const c && c.value() == 0) {
+        if (bonus instanceof NumberExpr.Const(double value) && value == 0) {
             return base;
         }
 
@@ -460,7 +460,7 @@ public class TooltipUtils {
 
     @NotNull
     public static TooltipBuilder getChanceTooltip(LootCount chance) {
-        if (chance.value() instanceof NumberExpr.Const c && c.value() > 0.9999999) {
+        if (chance.value() instanceof NumberExpr.Const(double value) && value > 0.9999999) {
             return TooltipBuilder.empty();
         }
 

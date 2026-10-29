@@ -1,7 +1,6 @@
 package com.yanny.alicompat.compat.ribbits;
 
 import com.yanny.alicompat.ICompatTranslations;
-import com.yanny.alicompat.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;

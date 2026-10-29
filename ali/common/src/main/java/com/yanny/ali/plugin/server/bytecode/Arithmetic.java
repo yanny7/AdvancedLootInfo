@@ -48,17 +48,13 @@ final class Arithmetic implements Opcodes {
     }
 
     static Object negate(Object a) {
-        if (a instanceof Integer i) {
-            return -i;
-        } else if (a instanceof Long l) {
-            return -l;
-        } else if (a instanceof Float f) {
-            return -f;
-        } else if (a instanceof Double d) {
-            return -d;
-        }
-
-        throw new Fail("negate");
+        return switch (a) {
+            case Integer i -> -i;
+            case Long l -> -l;
+            case Float f -> -f;
+            case Double d -> -d;
+            case null, default -> throw new Fail("negate");
+        };
     }
 
     static Object convert(int op, Object a) {
@@ -132,7 +128,7 @@ final class Arithmetic implements Opcodes {
     }
 
     static int intOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Integer i) {
+        if (value instanceof Value.Known(Integer i)) {
             return i;
         }
 
@@ -140,7 +136,7 @@ final class Arithmetic implements Opcodes {
     }
 
     static float floatOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Float f) {
+        if (value instanceof Value.Known(Float f)) {
             return f;
         }
 
@@ -148,7 +144,7 @@ final class Arithmetic implements Opcodes {
     }
 
     static double doubleOf(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Double d) {
+        if (value instanceof Value.Known(Double d)) {
             return d;
         }
 

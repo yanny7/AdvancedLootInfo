@@ -131,14 +131,15 @@ public class TraderDetector {
     private static Class<?> findEntityClass(Type type) {
         Type[] candidates;
 
-        if (type instanceof Class<?> c) {
-            return Entity.class.isAssignableFrom(c) ? c : null;
-        } else if (type instanceof ParameterizedType parameterized) {
-            candidates = parameterized.getActualTypeArguments();
-        } else if (type instanceof WildcardType wildcard) {
-            candidates = wildcard.getUpperBounds();
-        } else {
-            return null;
+        switch (type) {
+            case Class<?> c -> {
+                return Entity.class.isAssignableFrom(c) ? c : null;
+            }
+            case ParameterizedType parameterized -> candidates = parameterized.getActualTypeArguments();
+            case WildcardType wildcard -> candidates = wildcard.getUpperBounds();
+            default -> {
+                return null;
+            }
         }
 
         for (Type candidate : candidates) {

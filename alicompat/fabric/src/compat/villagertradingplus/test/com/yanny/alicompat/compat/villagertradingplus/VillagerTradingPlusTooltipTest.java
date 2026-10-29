@@ -1,21 +1,13 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.google.gson.JsonObject;
-import com.lion.villagertradingplus.tradeoffers.ConditionalTradeFactory;
-import com.lion.villagertradingplus.tradeoffers.conditions.ParsedConditions;
 import com.lion.villagertradingplus.tradeoffers.util.Ingredient;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ListNode;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -109,7 +101,7 @@ public class VillagerTradingPlusTooltipTest {
 
         IDataNode node = UTILS.getItemListing(UTILS, factory("JsonWeightedPoolTradeOffer$Factory", List.of(entry), 4), TooltipNode.empty());
 
-        assertTooltip(((ListNode) node).nodes().get(0).getTooltip(), List.of(
+        assertTooltip(((ListNode) node).nodes().getFirst().getTooltip(), List.of(
                 "Chance: 100%",
                 "Uses: 7",
                 "XP: 5",

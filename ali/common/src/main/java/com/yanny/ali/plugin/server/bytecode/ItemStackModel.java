@@ -41,12 +41,12 @@ final class ItemStackModel implements MethodModel {
             return NO_OPINION;
         }
 
-        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().get(0);
+        Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : call.args().getFirst();
 
         if (receiver instanceof Value.Stack stack) {
             return stackCall(context, call, stack, call.args());
         }
-        if (receiver instanceof Value.Known known && known.value() instanceof ItemStack real) {
+        if (receiver instanceof Value.Known(ItemStack real)) {
             return knownStackCall(context, call, real);
         }
 
@@ -60,7 +60,7 @@ final class ItemStackModel implements MethodModel {
         Map<ItemStack, ItemStack> fixed = new IdentityHashMap<>();
 
         if (stacks.size() > 1) {
-            Value.Stack kept = stacks.stream().filter((s) -> !isFixed(s)).findFirst().orElse(stacks.get(0));
+            Value.Stack kept = stacks.stream().filter((s) -> !isFixed(s)).findFirst().orElse(stacks.getFirst());
 
             shadowedArgs = shadowedArgs.stream().map((v) -> v instanceof Value.Stack s && s != kept && isFixed(s) ? fixedStack(context, s, fixed) : v).toList();
         }
@@ -80,10 +80,10 @@ final class ItemStackModel implements MethodModel {
         NumberExpr count = params.length >= 2 && params[1].getSort() == Type.INT ? context.expr(args.get(1)) : NumberExpr.constant(1);
         List<Object> items;
 
-        if (args.get(0) instanceof Value.Choice choice) {
+        if (args.getFirst() instanceof Value.Choice choice) {
             items = choice.options();
         } else {
-            Object item = concrete(args.get(0));
+            Object item = concrete(args.getFirst());
 
             if (item == null) {
                 throw new Fail("null item");
@@ -100,7 +100,7 @@ final class ItemStackModel implements MethodModel {
             copy.set(0, new Value.Known(item));
 
             if (params.length >= 2 && params[1].getSort() == Type.INT) {
-                copy.set(1, new Value.Known(count instanceof NumberExpr.Const c ? (int) c.value() : 1));
+                copy.set(1, new Value.Known(count instanceof NumberExpr.Const(double value1) ? (int) value1 : 1));
             }
             if (!copy.stream().allMatch(context::isConcrete)) {
                 throw new Fail("symbolic stack argument");
@@ -157,7 +157,7 @@ final class ItemStackModel implements MethodModel {
         } else if (RuntimeNames.is(RuntimeNames.STACK_GET_ITEM, insn)) {
             List<Object> items = stack.options.stream().<Object>map(ItemStack::getItem).distinct().toList();
 
-            return items.size() == 1 ? new Value.Known(items.get(0)) : new Value.Choice(items);
+            return items.size() == 1 ? new Value.Known(items.getFirst()) : new Value.Choice(items);
         } else if (RuntimeNames.is(RuntimeNames.STACK_COPY, insn)) {
             return stack.copy();
         } else if (RuntimeNames.is(RuntimeNames.STACK_COPY_WITH_COUNT, insn)) {
@@ -171,7 +171,7 @@ final class ItemStackModel implements MethodModel {
             if (stack.options.stream().noneMatch(ItemStack::isEmpty) && !bounds.isUnknown() && bounds.lo() >= 1) {
                 return new Value.Known(0);
             }
-            if (stack.count instanceof NumberExpr.Const c && c.value() <= 0) {
+            if (stack.count instanceof NumberExpr.Const(double value1) && value1 <= 0) {
                 return new Value.Known(1);
             }
 
@@ -209,7 +209,7 @@ final class ItemStackModel implements MethodModel {
     }
 
     private static Value fixedStack(CallContext context, Value.Stack stack, Map<ItemStack, ItemStack> fixed) {
-        ItemStack real = stack.options.get(0).copy();
+        ItemStack real = stack.options.getFirst().copy();
 
         real.setCount((int) ((NumberExpr.Const) stack.count).value());
         context.own(real);
@@ -290,12 +290,12 @@ final class ItemStackModel implements MethodModel {
             if (constant == null && template.getCount() != 1) {
                 throw new Fail("stack count changed by an unknown call");
             }
-            if (result instanceof Value.Known known && known.value() != template) {
+            if (result instanceof Value.Known(Object value1) && value1 != template) {
                 returnsTemplate = false;
-                results.add(known.value());
+                results.add(value1);
 
-                if (known.value() != null && !(known.value() instanceof ItemStack)) {
-                    context.stackPart(known.value(), stack);
+                if (value1 != null && !(value1 instanceof ItemStack)) {
+                    context.stackPart(value1, stack);
                 }
             } else if (result != null && !(result instanceof Value.Known)) {
                 return unknownStackChange(insn, stack, "symbolic result of a stack call");
@@ -303,7 +303,7 @@ final class ItemStackModel implements MethodModel {
         }
 
         if (constant != null && !stack.options.isEmpty()) {
-            stack.count = NumberExpr.constant(stack.options.get(0).getCount());
+            stack.count = NumberExpr.constant(stack.options.getFirst().getCount());
         }
         if (Type.getReturnType(insn.desc).getSort() == Type.VOID) {
             return null;
@@ -318,6 +318,6 @@ final class ItemStackModel implements MethodModel {
             return context.combine(results.stream().map(context::wrap).toList());
         }
 
-        return results.size() == 1 ? context.wrap(results.get(0)) : new Value.Choice(results);
+        return results.size() == 1 ? context.wrap(results.getFirst()) : new Value.Choice(results);
     }
 }

@@ -53,8 +53,8 @@ record Origin(@Nullable Object receiver, String member, List<Object> args) {
 
     @Nullable
     private static Object part(Value value) {
-        if (value instanceof Value.Known known) {
-            return known.value();
+        if (value instanceof Value.Known(Object value1)) {
+            return value1;
         }
         if (value instanceof Value.Unknown unknown && unknown.origin() != null) {
             return unknown.origin();

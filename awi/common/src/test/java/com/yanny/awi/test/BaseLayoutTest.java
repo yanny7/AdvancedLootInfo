@@ -151,7 +151,7 @@ public class BaseLayoutTest {
         DynamicOps<JsonElement> ops = BaseLayoutTestUtils.lookup().createSerializationContext(JsonOps.INSTANCE);
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getValueOrThrow(LevelStem.OVERWORLD).generator();
         MaterialRule rule = generator.generatorSettings().value().materialRule().value();
-        RandomState randomState = RandomState.create(BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0),
+        RandomState randomState = RandomState.create(BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.getFirst(),
                 generator.generatorSettings().value());
         SurfaceRuleSpecializer specializer = new SurfaceRuleSpecializer(rule, BaseLayoutTestUtils.lookup(),
                 Map.of(BandlandsLayout.TYPE.toString(), BandlandsLayout.create(randomState)), false);
