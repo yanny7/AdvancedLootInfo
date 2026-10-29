@@ -178,7 +178,7 @@ public abstract class AbstractServer {
 
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
 
-        serverRegistry.printRuntimeInfo();
+        serverRegistry.printRuntimeInfo(config.logMoreStatistics);
     }
 
     public final void syncLootTables(Player player) {
@@ -612,7 +612,9 @@ public abstract class AbstractServer {
             computed.put(traderKey(type), new ComputedTrader(type, trades.levels(), trades.incomplete()));
 
             if (!trades.incomplete()) {
-                LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+                if (config.logMoreStatistics) {
+                    LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+                }
             } else if (!trades.levels().isEmpty()) {
                 LOGGER.warn("Computed only some trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
             } else {

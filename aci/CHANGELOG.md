@@ -2,6 +2,9 @@
 
 - Added `registerData` to the shared client registry
 - Removed `getCurrentDataFuture`, replaced by `registerData`
+- Added `find`, `reportMissing`, `reportAutoDetected` and `shortClassName` to the managed registry
+- Added `getClassTooltip` to the shared tooltip utils
+- `printRuntimeInfo` and `logMissing` take whether to log the types shown auto-detected
 
 ## [1.5.0]
 

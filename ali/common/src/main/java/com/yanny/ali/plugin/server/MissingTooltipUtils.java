@@ -2,9 +2,12 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
@@ -19,16 +22,20 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+
+import java.util.List;
 
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
 public class MissingTooltipUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
+    private static final List<String> INGREDIENT_TYPE_KEYS = List.of("type", "fabric:type");
 
     @NotNull
     public static TooltipBuilder getMissingEntryTooltip(IServerUtils utils, LootPoolEntryContainer entry) {
-        TooltipBuilder tooltip = getEntryTypeTooltip(utils, entry.getType());
+        TooltipBuilder tooltip = getEntryTypeTooltip(utils, entry.getType()).add(CoreTooltipUtils.getClassTooltip(entry.getClass()));
 
         try {
             Gson lootGson = Deserializers.createLootTableSerializer().create();
@@ -48,7 +55,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingFunctionTooltip(IServerUtils utils, LootItemFunction function) {
-        TooltipBuilder tooltip = getFunctionTypeTooltip(utils, function.getType());
+        TooltipBuilder tooltip = getFunctionTypeTooltip(utils, function.getType()).add(CoreTooltipUtils.getClassTooltip(function.getClass()));
 
         try {
             Gson lootGson = Deserializers.createFunctionSerializer().create();
@@ -68,7 +75,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingConditionTooltip(IServerUtils utils, LootItemCondition condition) {
-        TooltipBuilder tooltip = getConditionTypeTooltip(utils, condition.getType());
+        TooltipBuilder tooltip = getConditionTypeTooltip(utils, condition.getType()).add(CoreTooltipUtils.getClassTooltip(condition.getClass()));
 
         try {
             Gson lootGson = Deserializers.createConditionSerializer().create();
@@ -88,15 +95,28 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
-        TooltipBuilder tooltip = TooltipBuilder.value(ingredient.getClass().getName());
+        String type = null;
+        TooltipBuilder fields;
 
         try {
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
+            JsonElement json = ingredient.toJson().deepCopy();
+
+            type = removeIngredientType(json);
+            fields = TooltipUtils.getJsonTooltip(utils, json);
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), TooltipContext.get(), e);
             }
 
+            fields = null;
+        }
+
+        TooltipBuilder tooltip = TooltipBuilder.value(type != null ? type : ManagedRegistry.shortClassName(ingredient.getClass()))
+                .add(CoreTooltipUtils.getClassTooltip(ingredient.getClass()));
+
+        if (fields != null) {
+            tooltip.add(fields);
+        } else {
             TooltipUtils.addObjectFields(utils, tooltip, ingredient, Ingredient.class);
         }
 
@@ -106,7 +126,7 @@ public class MissingTooltipUtils {
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
         Object source = BytecodeInterpreter.listingSource(itemListing);
-        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.classKeyName(source.getClass()));
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.shortClassName(source.getClass())).add(CoreTooltipUtils.getClassTooltip(source.getClass()));
 
         TooltipUtils.addObjectFields(utils, tooltip, source, source == itemListing ? VillagerTrades.ItemListing.class : Object.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
@@ -114,6 +134,22 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object object) {
-        return TooltipBuilder.error("[" + ManagedRegistry.classKeyName(object.getClass()) + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
+        return TooltipBuilder.error("[" + ManagedRegistry.shortClassName(object.getClass()) + "]")
+                .add(CoreTooltipUtils.getClassTooltip(object.getClass()))
+                .key(CoreLang.Utils.NOT_IMPLEMENTED);
+    }
+
+    @Nullable
+    private static String removeIngredientType(JsonElement json) {
+        if (json instanceof JsonObject object) {
+            for (String key : INGREDIENT_TYPE_KEYS) {
+                if (object.get(key) instanceof JsonPrimitive primitive && primitive.isString()) {
+                    object.remove(key);
+                    return primitive.getAsString();
+                }
+            }
+        }
+
+        return null;
     }
 }
