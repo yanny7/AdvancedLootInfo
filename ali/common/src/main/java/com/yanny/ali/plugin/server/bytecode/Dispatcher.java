@@ -14,16 +14,7 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.stream.BaseStream;
 
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.FRESH_RESULTS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_SAFE;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.choiceIndices;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isLegacyRandom;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isRandomType;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isScalar;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
+import static com.yanny.ali.plugin.server.bytecode.Interpreter.*;
 import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
@@ -93,16 +84,16 @@ final class Dispatcher implements Opcodes, CallContext {
     Value invoke(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         Value result = dispatch(call, args, loader, depth);
 
-        if (result instanceof Value.Known known && TradeTypes.isData(known.value()) && args.stream().anyMatch(interpreter::isTainted)) {
-            interpreter.heap.taint(known.value());
+        if (result instanceof Value.Known(Object value1) && TradeTypes.isData(value1) && args.stream().anyMatch(interpreter::isTainted)) {
+            interpreter.heap.taint(value1);
         }
 
-        if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
-                && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
-            if (key.value() instanceof Integer level) {
-                interpreter.pickSources.putLevel(listings.value(), level);
-            } else if (key.value() instanceof Enum<?> constant) {
-                interpreter.pickSources.putLevel(listings.value(), constant.ordinal() + 1);
+        if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.getFirst() instanceof Value.Known(Map<?, ?> ignored)
+                && args.get(1) instanceof Value.Known(Object key) && result instanceof Value.Known(Object listings) && isKeyedList(listings)) {
+            if (key instanceof Integer level) {
+                interpreter.pickSources.putLevel(listings, level);
+            } else if (key instanceof Enum<?> constant) {
+                interpreter.pickSources.putLevel(listings, constant.ordinal() + 1);
             }
         }
 
@@ -254,7 +245,6 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.heap.shuffled(object);
     }
 
-    @Nullable
     @Override
     public int[] randomIndexSet(Object object) {
         return interpreter.heap.randomIndexSet(object);
@@ -359,7 +349,7 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (call.name.equals(CONSTRUCTOR)) {
-            if (!(args.get(0) instanceof Value.Uninit uninit)) {
+            if (!(args.getFirst() instanceof Value.Uninit uninit)) {
                 throw new Fail("constructor chaining");
             }
 
@@ -394,22 +384,22 @@ final class Dispatcher implements Opcodes, CallContext {
             return answer;
         }
 
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
         Class<?> start;
 
         if (isStatic || call.getOpcode() == INVOKESPECIAL) {
             start = load(call.owner, loader);
-        } else if (receiver instanceof Value.Known known) {
-            start = known.value().getClass();
+        } else if (receiver instanceof Value.Known(Object value1)) {
+            start = value1.getClass();
         } else {
             throw new Fail("unsupported receiver");
         }
 
         Declared declared = declaration(start, call.name, call.desc, call.getOpcode() == INVOKESPECIAL);
 
-        if (declared instanceof JdkDeclaration jdk) {
-            return jdk(invocation, jdk.owner());
+        if (declared instanceof JdkDeclaration(Class<?> owner)) {
+            return jdk(invocation, owner);
         }
 
         if (isStatic && isJdk(start)) {
@@ -423,17 +413,17 @@ final class Dispatcher implements Opcodes, CallContext {
         if (declared != null && interpreter.opaque.isOpaque(call) && isWorldCall(call, args, loader)) {
             return worldResult(call, args);
         }
-        if (!isStatic && receiver instanceof Value.Known known && args.stream().skip(1).anyMatch(interpreter::isTainted) && !TradeTypes.returnsTradeData(call)) {
-            return interpreter.uncertainChange(call, known.value());
+        if (!isStatic && receiver instanceof Value.Known(Object value2) && args.stream().skip(1).anyMatch(interpreter::isTainted) && !TradeTypes.returnsTradeData(call)) {
+            return interpreter.uncertainChange(call, value2);
         }
 
         Value result;
 
-        if (declared instanceof Declaration declaration) {
+        if (declared instanceof Declaration(Class<?> owner, MethodNode method)) {
             int before = interpreter.decisions.taken().size();
 
             try {
-                result = interpreter.machine.execute(declaration.owner(), declaration.method(), args, depth + 1);
+                result = interpreter.machine.execute(owner, method, args, depth + 1);
             } catch (Fail fail) {
                 result = fallbackCall(call, args, loader, fail);
             }
@@ -490,7 +480,7 @@ final class Dispatcher implements Opcodes, CallContext {
             return interpreter.concreteCall(call, args, loader, false);
         }
 
-        Object receiver = ((Value.Known) args.get(0)).value();
+        Object receiver = ((Value.Known) args.getFirst()).value();
         boolean ownedReceiver = interpreter.heap.isOwned(receiver) || receiver instanceof BaseStream<?, ?>;
 
         if (READ_ONLY.contains(call.name) && receiver != null && interpreter.heap.isTainted(receiver)) {
@@ -506,8 +496,8 @@ final class Dispatcher implements Opcodes, CallContext {
 
         Value result = interpreter.concreteCall(call, args, loader, false);
 
-        if (result instanceof Value.Known known && known.value() != null && (ownedReceiver || FRESH_RESULTS.contains(call.name))) {
-            interpreter.heap.own(known.value());
+        if (result instanceof Value.Known(Object value1) && value1 != null && (ownedReceiver || FRESH_RESULTS.contains(call.name))) {
+            interpreter.heap.own(value1);
         }
         if (!READ_ONLY.contains(call.name) && args.stream().skip(1).anyMatch(interpreter::isTainted)) {
             interpreter.heap.taint(receiver);
@@ -546,16 +536,16 @@ final class Dispatcher implements Opcodes, CallContext {
     private Value equalsUnknown(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
-        if (!isStatic && call.name.equals("equals") && call.desc.equals("(Ljava/lang/Object;)Z") && args.get(0) instanceof Value.Known known
+        if (!isStatic && call.name.equals("equals") && call.desc.equals("(Ljava/lang/Object;)Z") && args.getFirst() instanceof Value.Known(Object value1)
                 && args.get(1) instanceof Value.Unknown unknown) {
-            return new Value.Unknown(false, null, null, Origin.equality(unknown, known.value()));
+            return new Value.Unknown(false, null, null, Origin.equality(unknown, value1));
         }
 
         return NO_OPINION;
     }
 
     private Value intValue(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
-        if (call.name.equals("intValue") && call.desc.equals("()I") && args.get(0) instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
+        if (call.name.equals("intValue") && call.desc.equals("()I") && args.getFirst() instanceof Value.Choice choice && choice.options().stream().allMatch(Integer.class::isInstance)) {
             return choice;
         }
 
@@ -565,7 +555,7 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     private Value closure(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
         if (receiver instanceof Value.Closure closure) {
             if (!call.name.equals(closure.samName())) {
@@ -583,7 +573,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value draws(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
         if (receiver instanceof Value.Draws draws) {
             if (call.name.equals("hasNext") && call.desc.equals("()Z")) {
@@ -602,7 +592,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value unknown(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
         if (receiver instanceof Value.Unknown) {
             Type returnType = Type.getReturnType(call.desc);
@@ -620,7 +610,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value unsupported(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
         if (receiver instanceof Value.Offer || receiver instanceof Value.Uninit || receiver instanceof Value.Cmp) {
             throw new Fail("unsupported receiver");
@@ -631,9 +621,9 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private Value nullReceiver(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
-        if (receiver instanceof Value.Known known && known.value() == null) {
+        if (receiver instanceof Value.Known(Object value1) && value1 == null) {
             throw new Fail("null receiver");
         }
 
@@ -643,10 +633,10 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     private Value lambda(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
-        Value receiver = isStatic ? null : args.get(0);
+        Value receiver = isStatic ? null : args.getFirst();
 
-        if (receiver instanceof Value.Known known && LambdaResolver.isLambda(known.value())) {
-            return interpreter.lambdaCall(known.value(), args, depth);
+        if (receiver instanceof Value.Known(Object value1) && LambdaResolver.isLambda(value1)) {
+            return interpreter.lambdaCall(value1, args, depth);
         }
 
         return NO_OPINION;
@@ -657,11 +647,11 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (isStatic && call.owner.equals("java/util/Objects") && call.name.startsWith("requireNonNull")) {
-            if (interpreter.decisions.isNull(args.get(0))) {
+            if (interpreter.decisions.isNull(args.getFirst())) {
                 throw new Fail("requireNonNull");
             }
 
-            return args.get(0);
+            return args.getFirst();
         }
 
         return NO_OPINION;
@@ -671,7 +661,7 @@ final class Dispatcher implements Opcodes, CallContext {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
         if (isStatic && call.owner.equals("java/util/Objects") && (call.name.equals("isNull") || call.name.equals("nonNull"))) {
-            return new Value.Known(interpreter.decisions.isNull(args.get(0)) == call.name.equals("isNull") ? 1 : 0);
+            return new Value.Known(interpreter.decisions.isNull(args.getFirst()) == call.name.equals("isNull") ? 1 : 0);
         }
 
         return NO_OPINION;
@@ -701,10 +691,10 @@ final class Dispatcher implements Opcodes, CallContext {
     private Value uncertain(MethodInsnNode call, List<Value> args, ClassLoader loader, int depth) {
         boolean isStatic = call.getOpcode() == INVOKESTATIC;
 
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && interpreter.heap.isOwned(known.value())
+        if (!isStatic && args.getFirst() instanceof Value.Known(Object value1) && value1 != null && interpreter.heap.isOwned(value1)
                 && args.stream().skip(1).anyMatch((v) -> v instanceof Value.Unknown || v instanceof Value.Num)
                 && args.stream().skip(1).allMatch((v) -> interpreter.isConcrete(v) || v instanceof Value.Unknown || v instanceof Value.Num) && !TradeTypes.returnsTradeData(call)) {
-            return interpreter.uncertainChange(call, READ_ONLY.contains(call.name) ? null : known.value());
+            return interpreter.uncertainChange(call, READ_ONLY.contains(call.name) ? null : value1);
         }
 
         return NO_OPINION;
@@ -735,10 +725,10 @@ final class Dispatcher implements Opcodes, CallContext {
 
             return worldResult(call, args);
         }
-        if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null
-                && interpreter.heap.isOwned(known.value()) && args.stream().skip(1).allMatch((v) -> interpreter.isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
+        if (!fail.isBudget() && call.getOpcode() != INVOKESTATIC && args.getFirst() instanceof Value.Known(Object value1) && value1 != null
+                && interpreter.heap.isOwned(value1) && args.stream().skip(1).allMatch((v) -> interpreter.isConcrete(v) || v instanceof Value.Num || v instanceof Value.Unknown)
                 && !TradeTypes.returnsTradeData(call)) {
-            return interpreter.uncertainChange(call, known.value());
+            return interpreter.uncertainChange(call, value1);
         }
 
         throw fail;
@@ -768,7 +758,7 @@ final class Dispatcher implements Opcodes, CallContext {
             return Value.Unknown.of(returnType, Origin.of(null, call.owner + "." + call.name + call.desc, args));
         }
 
-        return Value.Unknown.of(returnType, Origin.of(args.get(0), call.name + call.desc, args.subList(1, args.size())));
+        return Value.Unknown.of(returnType, Origin.of(args.getFirst(), call.name + call.desc, args.subList(1, args.size())));
     }
 
     private boolean holdsStack(Value value) {

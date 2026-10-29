@@ -26,16 +26,16 @@ final class PickModel implements MethodModel {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
-            if (args.get(0) instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrade.class::isInstance)) {
+            if (args.getFirst() instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrade.class::isInstance)) {
                 return new Value.Pick(List.copyOf(choice.options()), choice.draw(), context.poolKey(choice.options()));
             }
-            if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrade listing) {
+            if (args.getFirst() instanceof Value.Known(VillagerTrade listing)) {
                 Object source = context.listingSource(listing);
 
                 return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? context.levelKey(source) : null);
             }
         }
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Choice choice && isPick(context, choice)
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Choice choice && isPick(context, choice)
                 && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(insn, call.loader())) {
             List<Object> bound = bound(context, run, insn, args.subList(1, args.size()), call.loader());
 
@@ -45,7 +45,7 @@ final class PickModel implements MethodModel {
                 return new Value.Pick(listings, choice.draw(), context.poolKey(choice.options()));
             }
         }
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Known known && known.value() != null && TradeTypes.isModType(known.value().getClass())
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known known && known.value() != null && TradeTypes.isModType(known.value().getClass())
                 && returnsOffer(insn, call.loader())) {
             Object source = context.listingSource(known.value());
             List<Object> bound = source != null ? bound(context, run, insn, args.subList(1, args.size()), call.loader()) : null;
@@ -88,10 +88,10 @@ final class PickModel implements MethodModel {
                 bound.add(BoundOffer.Bound.TRADER);
             } else if (arg instanceof Value.Unknown unknown && Origin.WORLD.equals(unknown.origin())) {
                 bound.add(BoundOffer.Bound.WORLD);
-            } else if (arg instanceof Value.Rng rng) {
-                bound.add(rng.legacy() ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
-            } else if (arg instanceof Value.Known known && context.isConcrete(arg)) {
-                bound.add(known.value());
+            } else if (arg instanceof Value.Rng(boolean legacy)) {
+                bound.add(legacy ? BoundOffer.Bound.LEGACY_RANDOM : BoundOffer.Bound.RANDOM);
+            } else if (arg instanceof Value.Known(Object value1) && context.isConcrete(arg)) {
+                bound.add(value1);
             } else if (arg instanceof Value.Unknown && param != null && Level.class.isAssignableFrom(param)) {
                 bound.add(BoundOffer.Bound.WORLD);
             } else if (arg instanceof Value.Unknown && param != null && Entity.class.isAssignableFrom(param)) {

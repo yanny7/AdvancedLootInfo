@@ -84,7 +84,7 @@ public class EntryWeightTest {
                 .add(LootItem.lootTableItem(Items.DIRT).setWeight(5).setQuality(2))
                 .build();
         LootPoolNode node = NodeUtils.getLootPoolNode(UTILS, pool, constant(1), List.of(), Collections.emptyList(), Collections.emptyList());
-        assertTooltip(node.nodes().get(0).getTooltip(), List.of(
+        assertTooltip(node.nodes().getFirst().getTooltip(), List.of(
                 "Quality: -2",
                 "Chance: 66.67%",
                 "  -> Bad Luck: 80%",
@@ -101,7 +101,7 @@ public class EntryWeightTest {
         EntryGroup group = (EntryGroup) EntryGroup.list(itemBuilder(1), itemBuilder(2)).build();
 
         assertEquals(group.children, UTILS.getEntryChildren(UTILS, group));
-        assertEquals(List.of(), UTILS.getEntryChildren(UTILS, group.children.get(0)));
+        assertEquals(List.of(), UTILS.getEntryChildren(UTILS, group.children.getFirst()));
         assertEquals(List.of(), UTILS.getEntryChildren(UTILS, new TestEntry()));
     }
 
@@ -115,9 +115,9 @@ public class EntryWeightTest {
         List<IDataNode> nodes = node.nodes();
 
         assertEquals(2, nodes.size());
-        GroupNode group = assertInstanceOf(GroupNode.class, nodes.get(0));
+        GroupNode group = assertInstanceOf(GroupNode.class, nodes.getFirst());
         assertEquals(2, group.nodes().size());
-        assertEquals(0.25f, group.nodes().get(0).getChance(), 1e-6);
+        assertEquals(0.25f, group.nodes().getFirst().getChance(), 1e-6);
         assertEquals(0.25f, group.nodes().get(1).getChance(), 1e-6);
         assertEquals(0.5f, nodes.get(1).getChance(), 1e-6);
     }
@@ -151,9 +151,9 @@ public class EntryWeightTest {
                 AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemKilledByPlayerCondition.killedByPlayer()), itemBuilder(5)),
                 itemBuilder(4)
         );
-        List<IDataNode> alternatives = alternatives(nodes.get(0));
+        List<IDataNode> alternatives = alternatives(nodes.getFirst());
 
-        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+        assertTooltip(alternatives.getFirst().getTooltip(), List.of(
                 "Chance: 20%",
                 "Count: 1",
                 "----- Predicates -----",
@@ -178,9 +178,9 @@ public class EntryWeightTest {
                 AlternativesEntry.alternatives(LootItem.lootTableItem(Items.DIAMOND).when(LootItemRandomChanceCondition.randomChance(0.3f)), itemBuilder(5)),
                 itemBuilder(4)
         );
-        List<IDataNode> alternatives = alternatives(nodes.get(0));
+        List<IDataNode> alternatives = alternatives(nodes.getFirst());
 
-        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+        assertTooltip(alternatives.getFirst().getTooltip(), List.of(
                 "Chance: 6%",
                 "Count: 1",
                 "----- Predicates -----",
@@ -207,9 +207,9 @@ public class EntryWeightTest {
                 ),
                 itemBuilder(4)
         );
-        List<IDataNode> alternatives = alternatives(nodes.get(0));
+        List<IDataNode> alternatives = alternatives(nodes.getFirst());
 
-        assertTooltip(alternatives.get(0).getTooltip(), List.of(
+        assertTooltip(alternatives.getFirst().getTooltip(), List.of(
                 "Chance: 42.86%",
                 "Count: 1",
                 "----- Predicates -----",
@@ -243,7 +243,7 @@ public class EntryWeightTest {
                 itemBuilder(4)
         );
 
-        assertTooltip(alternatives(nodes.get(0)).get(0).getTooltip(), List.of(
+        assertTooltip(alternatives(nodes.getFirst()).getFirst().getTooltip(), List.of(
                 "Chance: 20%",
                 "Count: 1",
                 "----- Predicates -----",
@@ -265,10 +265,10 @@ public class EntryWeightTest {
                 AlternativesEntry.alternatives(LootItem.lootTableItem(Items.EMERALD).setWeight(2).when(ExplosionCondition.survivesExplosion()), itemBuilder(6)),
                 itemBuilder(4)
         );
-        List<IDataNode> first = alternatives(nodes.get(0));
+        List<IDataNode> first = alternatives(nodes.getFirst());
         List<IDataNode> second = alternatives(nodes.get(1));
 
-        assertTooltip(first.get(0).getTooltip(), List.of(
+        assertTooltip(first.getFirst().getTooltip(), List.of(
                 "Chance:",
                 "  -> 14.29%",
                 "    -> Survives Explosion",
@@ -284,7 +284,7 @@ public class EntryWeightTest {
                 "  -> otherwise 33.33%",
                 "Count: 1"
         ));
-        assertTooltip(second.get(0).getTooltip(), List.of(
+        assertTooltip(second.getFirst().getTooltip(), List.of(
                 "Chance:",
                 "  -> 28.57%",
                 "    -> Killed by player",

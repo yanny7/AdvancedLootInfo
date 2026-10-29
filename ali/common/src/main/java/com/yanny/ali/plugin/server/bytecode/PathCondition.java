@@ -7,8 +7,9 @@ import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,10 +36,10 @@ sealed interface PathCondition {
         }
 
         if (sets.size() == 1) {
-            return allOf(sets.get(0));
+            return allOf(sets.getFirst());
         }
 
-        Set<Decision> common = new LinkedHashSet<>(sets.get(0));
+        Set<Decision> common = new LinkedHashSet<>(sets.getFirst());
         List<PathCondition> alternatives = new ArrayList<>();
 
         sets.forEach(common::retainAll);
@@ -58,7 +59,7 @@ sealed interface PathCondition {
             }
         }
 
-        PathCondition any = alternatives.size() == 1 ? alternatives.get(0) : new AnyOf(alternatives);
+        PathCondition any = alternatives.size() == 1 ? alternatives.getFirst() : new AnyOf(alternatives);
 
         return common.isEmpty() ? any : allOf(common).and(any);
     }
@@ -67,8 +68,8 @@ sealed interface PathCondition {
         List<PathCondition> terms = new ArrayList<>();
 
         for (PathCondition condition : List.of(this, other)) {
-            if (condition instanceof AllOf all) {
-                terms.addAll(all.terms());
+            if (condition instanceof AllOf(List<PathCondition> terms1)) {
+                terms.addAll(terms1);
             } else if (condition != ALWAYS) {
                 terms.add(condition);
             }
@@ -78,7 +79,7 @@ sealed interface PathCondition {
             return ALWAYS;
         }
 
-        return terms.size() == 1 ? terms.get(0) : new AllOf(terms);
+        return terms.size() == 1 ? terms.getFirst() : new AllOf(terms);
     }
 
     TooltipNode tooltip(IServerUtils utils);
@@ -159,7 +160,7 @@ sealed interface PathCondition {
         for (List<Object> values : excluded.values()) {
             List<PathCondition> options = values.stream().<PathCondition>map(Is::new).sorted(Comparator.comparing(PathCondition::text)).toList();
 
-            terms.add(new Not(options.size() == 1 ? options.get(0) : new AnyOf(options)));
+            terms.add(new Not(options.size() == 1 ? options.getFirst() : new AnyOf(options)));
         }
 
         if (random) {
@@ -172,7 +173,7 @@ sealed interface PathCondition {
             return ALWAYS;
         }
 
-        return terms.size() == 1 ? terms.get(0) : new AllOf(terms);
+        return terms.size() == 1 ? terms.getFirst() : new AllOf(terms);
     }
 
     record Always() implements PathCondition {
@@ -190,6 +191,21 @@ sealed interface PathCondition {
     }
 
     record Is(Object value) implements PathCondition {
+        private static final Map<Identifier, Lang.Value> LABELS = Map.ofEntries(
+                Map.entry(Registries.ATTRIBUTE.identifier(), Lang.Value.ATTRIBUTE),
+                Map.entry(Registries.BANNER_PATTERN.identifier(), Lang.Value.BANNER_PATTERN),
+                Map.entry(Registries.BIOME.identifier(), Lang.Value.BIOME),
+                Map.entry(Registries.BLOCK.identifier(), Lang.Value.BLOCK),
+                Map.entry(Registries.BLOCK_ENTITY_TYPE.identifier(), Lang.Value.BLOCK_ENTITY_TYPE),
+                Map.entry(Registries.DIMENSION.identifier(), Lang.Value.DIMENSION),
+                Map.entry(Registries.ENCHANTMENT.identifier(), Lang.Value.ENCHANTMENT),
+                Map.entry(Registries.ENTITY_TYPE.identifier(), Lang.Value.ENTITY_TYPE),
+                Map.entry(Registries.FLUID.identifier(), Lang.Value.FLUID),
+                Map.entry(Registries.ITEM.identifier(), Lang.Value.ITEM),
+                Map.entry(Registries.POTION.identifier(), Lang.Value.POTION),
+                Map.entry(Registries.STRUCTURE.identifier(), Lang.Value.STRUCTURE)
+        );
+
         @Override
         public TooltipNode tooltip(IServerUtils utils) {
             return utils.getValueTooltip(utils, shown(value)).build(label(value));
@@ -242,18 +258,7 @@ sealed interface PathCondition {
         private static Lang.Value label(Object value) {
             Identifier registry = registry(value);
 
-            if (registry != null) {
-                String path = registry.getPath();
-                String key = "ali.property.value." + path.substring(path.lastIndexOf('/') + 1);
-
-                for (Lang.Value label : Lang.Value.values()) {
-                    if (label.getTranslation().sKey().equals(key)) {
-                        return label;
-                    }
-                }
-            }
-
-            return Lang.Value.VALUE;
+            return registry != null ? LABELS.getOrDefault(registry, Lang.Value.VALUE) : Lang.Value.VALUE;
         }
     }
 

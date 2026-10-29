@@ -29,7 +29,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     private final boolean hasPredicates;
 
     public EmiLootSlotWidget(List<IDataNode> options, int x, int y) {
-        super(getIngredient(options.get(0)), x, y);
+        super(getIngredient(options.getFirst()), x, y);
         this.options = options.stream().map(Option::of).toList();
         this.hasPredicates = options.stream().anyMatch((o) -> ((IItemNode) o).hasPredicates());
     }
@@ -88,7 +88,7 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     private Option getOption() {
         if (options.size() == 1) {
-            return options.get(0);
+            return options.getFirst();
         }
 
         return options.get((int) (System.currentTimeMillis() / CYCLE_MILLIS % options.size()));

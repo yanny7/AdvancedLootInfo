@@ -85,24 +85,27 @@ public class TradeUtils {
 
                 return elements;
             }
-            if (value instanceof Set<?> set) {
-                Set<Object> elements = new HashSet<>();
+            switch (value) {
+                case Set<?> set -> {
+                    Set<Object> elements = new HashSet<>();
 
-                set.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
-                return Arrays.asList(Set.class, elements);
-            }
-            if (value instanceof Collection<?> collection) {
-                List<Object> elements = new ArrayList<>();
+                    set.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                    return Arrays.asList(Set.class, elements);
+                }
+                case Collection<?> collection -> {
+                    List<Object> elements = new ArrayList<>();
 
-                elements.add(List.class);
-                collection.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
-                return elements;
-            }
-            if (value instanceof Map<?, ?> map) {
-                Map<Object, Object> entries = new HashMap<>();
+                    elements.add(List.class);
+                    collection.forEach((e) -> elements.add(structuralKey(e, visiting, depth + 1)));
+                    return elements;
+                }
+                case Map<?, ?> map -> {
+                    Map<Object, Object> entries = new HashMap<>();
 
-                map.forEach((k, v) -> entries.put(structuralKey(k, visiting, depth + 1), structuralKey(v, visiting, depth + 1)));
-                return Arrays.asList(Map.class, entries);
+                    map.forEach((k, v) -> entries.put(structuralKey(k, visiting, depth + 1), structuralKey(v, visiting, depth + 1)));
+                    return Arrays.asList(Map.class, entries);
+                }
+                default -> {}
             }
 
             List<Object> fields = new ArrayList<>();
@@ -151,12 +154,12 @@ public class TradeUtils {
         List<TooltipNode> conditions = new ArrayList<>();
         NumberExpr sumWeight = NodeUtils.getTotalWeight(utils, List.of(entry), conditions);
 
-        return NodeUtils.getChildren(utils, List.of(entry), NumberExpr.constant(1), sumWeight, conditions, List.of(), List.of()).get(0);
+        return NodeUtils.getChildren(utils, List.of(entry), NumberExpr.constant(1), sumWeight, conditions, List.of(), List.of()).getFirst();
     }
 
     @NotNull
     public static IDataNode getSlotNode(List<IDataNode> options) {
-        return options.size() == 1 ? options.get(0) : new GroupNode(options, TooltipNode.empty());
+        return options.size() == 1 ? options.getFirst() : new GroupNode(options, TooltipNode.empty());
     }
 
     @NotNull
@@ -235,7 +238,7 @@ public class TradeUtils {
     private record Ref(@Nullable Object value) {
         @Override
         public boolean equals(Object o) {
-            return o instanceof Ref ref && ref.value == value;
+            return o instanceof Ref(Object value1) && value1 == value;
         }
 
         @Override

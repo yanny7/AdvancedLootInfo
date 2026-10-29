@@ -71,7 +71,7 @@ class FakeCallContext implements CallContext {
 
     @Override
     public boolean isTainted(Value value) {
-        return value instanceof Value.Known known && known.value() != null && tainted.contains(known.value());
+        return value instanceof Value.Known(Object value1) && value1 != null && tainted.contains(value1);
     }
 
     @Override
@@ -135,7 +135,7 @@ class FakeCallContext implements CallContext {
 
     @Override
     public NumberExpr expr(Value value) {
-        if (value instanceof Value.Known known && known.value() instanceof Number number) {
+        if (value instanceof Value.Known(Number number)) {
             return NumberExpr.constant(number.doubleValue());
         } else if (value instanceof Value.Num num) {
             return num.expr();
@@ -177,7 +177,7 @@ class FakeCallContext implements CallContext {
 
     @Override
     public List<Value> shadowed(List<Value> args) {
-        return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !owned.contains(real) ? shadow(real) : v).toList();
+        return args.stream().map((v) -> v instanceof Value.Known(ItemStack real) && !owned.contains(real) ? shadow(real) : v).toList();
     }
 
     @Override
@@ -213,7 +213,6 @@ class FakeCallContext implements CallContext {
         return colls.containsKey(object) ? colls.get(object).shuffled : null;
     }
 
-    @Nullable
     @Override
     public int[] randomIndexSet(Object object) {
         return colls.containsKey(object) ? colls.get(object).randomIndexSet : null;

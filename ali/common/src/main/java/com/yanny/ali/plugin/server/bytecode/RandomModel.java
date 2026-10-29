@@ -6,6 +6,7 @@ import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ final class RandomModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
 
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().get(0) instanceof Value.Rng rng) {
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && call.args().getFirst() instanceof Value.Rng rng) {
             return random(context, call, rng);
         }
 
@@ -33,8 +34,8 @@ final class RandomModel implements MethodModel {
         Semantic semantic = rng.legacy() ? legacySemantic(insn) : sourceSemantic(insn);
 
         if (semantic == null) {
-            if (!rng.legacy() && Resolution.declaration(RandomSource.class, insn.name, insn.desc, false) instanceof Resolution.Declaration declaration) {
-                return context.execute(declaration.owner(), declaration.method(), args, call.depth());
+            if (!rng.legacy() && Resolution.declaration(RandomSource.class, insn.name, insn.desc, false) instanceof Resolution.Declaration(Class<?> owner, MethodNode method)) {
+                return context.execute(owner, method, args, call.depth());
             }
 
             throw new Fail("random method " + insn.name);

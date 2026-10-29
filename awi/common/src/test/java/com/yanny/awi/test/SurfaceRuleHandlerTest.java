@@ -48,8 +48,8 @@ public class SurfaceRuleHandlerTest {
         Set<BlockInfo> infos = scan(Map.of(BandlandsLayout.TYPE, (context) -> handler));
         BlockInfo diamond = infos.stream().filter((info) -> info.block() == Blocks.DIAMOND_BLOCK).findFirst().orElseThrow();
 
-        assertEquals("{\"type\":\"minecraft:bandlands\"}", definitions.get(0).toString());
-        assertEquals(NumberInterval.closed(54, 318), diamond.ranges().get(0));
+        assertEquals("{\"type\":\"minecraft:bandlands\"}", definitions.getFirst().toString());
+        assertEquals(NumberInterval.closed(54, 318), diamond.ranges().getFirst());
         assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.LIGHT), "a ghost leaked into the result");
         assertTrue(infos.stream().noneMatch((info) -> info.block() == Blocks.DYED_TERRACOTTA.yellow()), "bands still measured");
     }

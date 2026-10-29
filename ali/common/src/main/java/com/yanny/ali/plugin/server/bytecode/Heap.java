@@ -79,7 +79,7 @@ final class Heap {
             Value.Stack shadow = Interpreter.stackOf(real);
 
             info.shadow = shadow;
-            store.replaceInFrames((v) -> v instanceof Value.Known known && known.value() == real, (v) -> shadow);
+            store.replaceInFrames((v) -> v instanceof Value.Known(Object value) && value == real, (v) -> shadow);
         }
 
         return info.shadow;
@@ -153,7 +153,6 @@ final class Heap {
         return coll != null ? coll.shuffled : null;
     }
 
-    @Nullable
     int[] randomIndexSet(@Nullable Object object) {
         CollState coll = findColl(object);
 

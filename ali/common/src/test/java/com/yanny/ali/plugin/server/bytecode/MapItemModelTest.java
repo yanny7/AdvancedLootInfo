@@ -24,7 +24,7 @@ public class MapItemModelTest {
     public void testFindMapStructureIsPositionKnownByTarget() {
         Object target = new Object();
         List<Value> rest = List.of(new Value.Known(target), new Value.Known(BlockPos.ZERO), new Value.Known(100), new Value.Known(1));
-        Call call = mapCall(RuntimeNames.FIND_MAP_STRUCTURE, INVOKEVIRTUAL, LEVEL, rest.get(0), rest.get(1), rest.get(2), rest.get(3));
+        Call call = mapCall(RuntimeNames.FIND_MAP_STRUCTURE, INVOKEVIRTUAL, LEVEL, rest.getFirst(), rest.get(1), rest.get(2), rest.get(3));
         Value result = model.apply(context, call);
 
         assertEquals(new Value.Unknown(false, "net/minecraft/core/BlockPos", target, Origin.of(LEVEL, call.insn().name + call.insn().desc, rest)), result);
@@ -37,7 +37,7 @@ public class MapItemModelTest {
         Value.Stack stack = assertInstanceOf(Value.Stack.class, result);
 
         assertEquals(1, stack.options.size());
-        assertTrue(stack.options.get(0).is(Items.FILLED_MAP));
+        assertTrue(stack.options.getFirst().is(Items.FILLED_MAP));
         assertEquals(NumberExpr.constant(1), stack.count);
         assertFalse(stack.randomTag);
     }

@@ -128,9 +128,9 @@ public class BaseLayoutBandsTest {
         NavigableSet<Integer> window = new TreeSet<>();
 
         assertEquals(1, filler.size(), "exactly one filler entry");
-        assertEquals(1, filler.get(0).ranges().size(), "the filler is one range");
-        assertEquals(0, filler.get(0).layerShift(), "the filler has no shift");
-        IntStream.rangeClosed((int) filler.get(0).ranges().get(0).lo(), (int) filler.get(0).ranges().get(0).hi()).forEach(window::add);
+        assertEquals(1, filler.getFirst().ranges().size(), "the filler is one range");
+        assertEquals(0, filler.getFirst().layerShift(), "the filler has no shift");
+        IntStream.rangeClosed((int) filler.getFirst().ranges().getFirst().lo(), (int) filler.getFirst().ranges().getFirst().hi()).forEach(window::add);
 
         return window;
     }

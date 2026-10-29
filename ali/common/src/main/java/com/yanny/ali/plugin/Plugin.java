@@ -674,10 +674,10 @@ public class Plugin implements IPlugin {
     private static NumberExpr getScore(ScoreboardValue numberProvider) {
         NumberText target;
 
-        if (numberProvider.target() instanceof ContextScoreboardNameProvider provider) {
-            target = NumberText.key(getTargetKey(provider.target()).singular());
-        } else if (numberProvider.target() instanceof FixedScoreboardNameProvider provider) {
-            target = NumberText.str(provider.name());
+        if (numberProvider.target() instanceof ContextScoreboardNameProvider(LootContext.EntityTarget target1)) {
+            target = NumberText.key(getTargetKey(target1).singular());
+        } else if (numberProvider.target() instanceof FixedScoreboardNameProvider(String name)) {
+            target = NumberText.str(name);
         } else {
             target = NumberText.key(CoreLang.Numbers.UNKNOWN.singular());
         }

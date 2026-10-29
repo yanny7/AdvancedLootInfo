@@ -35,25 +35,25 @@ public class NumberExprTest {
         TEST_TRANSLATIONS.put("test.number.fn.log", "log");
 
         NumberFunctions.register(NumberFunction.builder(BIASED_HEIGHT).arity(3)
-                .expand((a) -> add(a.get(0), uniformInt(constant(0), add(uniformInt(constant(0), sub(sub(a.get(1), a.get(0)), a.get(2))), a.get(2), constant(-1)))))
+                .expand((a) -> add(a.getFirst(), uniformInt(constant(0), add(uniformInt(constant(0), sub(sub(a.get(1), a.getFirst()), a.get(2))), a.get(2), constant(-1)))))
                 .format((a, f) -> a.get(2).equals(constant(1)) ? call(BIASED_HEIGHT, f.subList(0, 2)) : null)
                 .build());
         NumberFunctions.register(NumberFunction.builder(VERY_BIASED_HEIGHT).arity(3)
                 .expand((a) -> {
-                    NumberExpr k = uniformInt(add(a.get(0), a.get(2)), a.get(1));
-                    NumberExpr l = uniformInt(a.get(0), sub(k, constant(1)));
+                    NumberExpr k = uniformInt(add(a.getFirst(), a.get(2)), a.get(1));
+                    NumberExpr l = uniformInt(a.getFirst(), sub(k, constant(1)));
 
-                    return uniformInt(a.get(0), add(l, constant(-1), a.get(2)));
+                    return uniformInt(a.getFirst(), add(l, constant(-1), a.get(2)));
                 })
                 .build());
         NumberFunctions.register(NumberFunction.builder(VERY_BIASED_INT).arity(2)
-                .expand((a) -> add(a.get(0), uniformInt(constant(0), uniformInt(constant(0), uniformInt(constant(0), sub(a.get(1), a.get(0)))))))
+                .expand((a) -> add(a.getFirst(), uniformInt(constant(0), uniformInt(constant(0), uniformInt(constant(0), sub(a.get(1), a.getFirst()))))))
                 .build());
         NumberFunctions.register(NumberFunction.builder(TRAPEZOID_INT).arity(3)
                 .expand(NumberExprTest::trapezoidInt)
                 .build());
         NumberFunctions.register(NumberFunction.builder(DICE).arity(2).units(NumberFunction.Unit.PLAIN)
-                .bounds((a) -> NumberInterval.closed(a.get(0).lo(), a.get(0).hi() * a.get(1).hi()))
+                .bounds((a) -> NumberInterval.closed(a.getFirst().lo(), a.getFirst().hi() * a.get(1).hi()))
                 .distributionOfParameters((p) -> {
                     NumberDistribution sum = NumberDistribution.constant(0);
                     NumberDistribution die = NumberDistribution.uniformInt(1, (long) p[1]);
@@ -67,8 +67,8 @@ public class NumberExprTest {
                 .build());
         NumberFunctions.register(NumberFunction.builder(LOG).arity(1)
                 .evaluate((v) -> Math.log(v[0]))
-                .bounds((a) -> a.get(0).monotone(Math::log))
-                .distribution((a) -> a.get(0).map(Math::log))
+                .bounds((a) -> a.getFirst().monotone(Math::log))
+                .distribution((a) -> a.getFirst().map(Math::log))
                 .build());
     }
 
@@ -430,20 +430,20 @@ public class NumberExprTest {
     }
 
     private static NumberExpr trapezoidInt(List<NumberExpr> a) {
-        if (!(a.get(0) instanceof Const min) || !(a.get(1) instanceof Const max) || !(a.get(2) instanceof Const plateau)) {
+        if (!(a.getFirst() instanceof Const min) || !(a.get(1) instanceof Const(double max)) || !(a.get(2) instanceof Const(double plateau))) {
             return null;
         }
-        if (plateau.value() == 0 && max.value() == -min.value()) {
-            return sub(uniformInt(0, max.value()), uniformInt(0, max.value()));
+        if (plateau == 0 && max == -min.value()) {
+            return sub(uniformInt(0, max), uniformInt(0, max));
         }
 
-        double k = max.value() - min.value();
+        double k = max - min.value();
 
-        if (plateau.value() >= k) {
-            return uniformInt(min.value(), max.value());
+        if (plateau >= k) {
+            return uniformInt(min.value(), max);
         }
 
-        double l = Math.floor((k - plateau.value()) / 2);
+        double l = Math.floor((k - plateau) / 2);
 
         return add(min, uniformInt(0, k - l), uniformInt(0, l));
     }
@@ -540,22 +540,21 @@ public class NumberExprTest {
     }
 
     private static String render(NumberText text) {
-        if (text instanceof NumberText.Key key) {
-            String template = CoreLang.TRANSLATION_MAP.getOrDefault(key.key(), TEST_TRANSLATIONS.get(key.key()));
+        return switch (text) {
+            case NumberText.Key(String key, List<NumberText> args) -> {
+                String template = CoreLang.TRANSLATION_MAP.getOrDefault(key, TEST_TRANSLATIONS.get(key));
 
-            assertNotNull(template, "missing translation " + key.key());
-            return String.format(Locale.ROOT, template, key.args().stream().map(NumberExprTest::render).toArray());
-        } else if (text instanceof NumberText.Num num) {
-            return NumberText.formatNumber(num.value(), Locale.ROOT);
-        } else if (text instanceof NumberText.Str str) {
-            return str.text();
-        } else if (text instanceof NumberText.Seq seq) {
-            StringBuilder builder = new StringBuilder();
+                assertNotNull(template, "missing translation " + key);
+                yield String.format(Locale.ROOT, template, args.stream().map(NumberExprTest::render).toArray());
+            }
+            case NumberText.Num(double value) -> NumberText.formatNumber(value, Locale.ROOT);
+            case NumberText.Str(String text1) -> text1;
+            case NumberText.Seq(List<NumberText> parts) -> {
+                StringBuilder builder = new StringBuilder();
 
-            seq.parts().forEach((p) -> builder.append(render(p)));
-            return builder.toString();
-        }
-
-        throw new IllegalStateException();
+                parts.forEach((p) -> builder.append(render(p)));
+                yield builder.toString();
+            }
+        };
     }
 }

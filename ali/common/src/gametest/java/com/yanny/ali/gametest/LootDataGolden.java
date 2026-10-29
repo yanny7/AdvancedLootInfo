@@ -93,11 +93,11 @@ public class LootDataGolden {
             future.add(server.reloadResources(server.getPackRepository().getSelectedIds()));
         });
         sequence.thenWaitUntil(() -> {
-            if (!future.get(0).isDone()) {
+            if (!future.getFirst().isDone()) {
                 throw new GameTestAssertException(Component.literal("Waiting for datapack reload"), 0);
             }
 
-            future.get(0).join();
+            future.getFirst().join();
         });
     }
 

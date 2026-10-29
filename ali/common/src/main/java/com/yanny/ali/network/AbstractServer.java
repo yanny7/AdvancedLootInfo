@@ -322,7 +322,7 @@ public abstract class AbstractServer {
     }
 
     private static boolean isConstant(NumberExpr expr, float value) {
-        return expr instanceof NumberExpr.Const constant && constant.value() == value;
+        return expr instanceof NumberExpr.Const(double value1) && value1 == value;
     }
 
     private static void collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,

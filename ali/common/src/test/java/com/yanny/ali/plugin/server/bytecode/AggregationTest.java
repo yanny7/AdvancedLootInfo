@@ -24,7 +24,7 @@ public class AggregationTest {
 
         assertNull(listing.reason());
         assertEquals(1, listing.offers().size());
-        assertSame(PathCondition.ALWAYS, listing.offers().get(0).when());
+        assertSame(PathCondition.ALWAYS, listing.offers().getFirst().when());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class AggregationTest {
         Aggregation.Listing listing = Aggregation.listing(List.of(success(offer(Items.APPLE), random(0.5, true)), success(offer(Items.BREAD), random(0.5, false))));
 
         assertEquals(2, listing.offers().size());
-        assertInstanceOf(PathCondition.RandomChance.class, listing.offers().get(0).when());
+        assertInstanceOf(PathCondition.RandomChance.class, listing.offers().getFirst().when());
         assertInstanceOf(PathCondition.RandomChance.class, listing.offers().get(1).when());
     }
 
@@ -75,8 +75,8 @@ public class AggregationTest {
         Aggregation.Listing listing = Aggregation.listing(List.of(success(randomOffer, UNKNOWN), success(offer(Items.APPLE), UNKNOWN.negated())));
 
         assertEquals(1, listing.offers().size());
-        assertSame(randomOffer, listing.offers().get(0).result());
-        assertSame(PathCondition.ALWAYS, listing.offers().get(0).when());
+        assertSame(randomOffer, listing.offers().getFirst().result());
+        assertSame(PathCondition.ALWAYS, listing.offers().getFirst().when());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class AggregationTest {
         assertNull(trader.reason());
         assertEquals(Set.of(1), trader.levels().keySet());
 
-        Aggregation.Group group = trader.levels().get(1).groups().get(0);
+        Aggregation.Group group = trader.levels().get(1).groups().getFirst();
 
         assertEquals(1F, trader.levels().get(1).chance());
         assertSame(PathCondition.ALWAYS, group.condition());
@@ -122,7 +122,7 @@ public class AggregationTest {
     @Test
     public void testTraderRandomCountsAreWeighted() {
         Aggregation.Trader trader = Aggregation.trader(List.of(success(offers(listings(1, FIRST)), random(0.25, true)), success(offers(listings(2, FIRST)), random(0.25, false))));
-        Aggregation.Group group = trader.levels().get(1).groups().get(0);
+        Aggregation.Group group = trader.levels().get(1).groups().getFirst();
 
         assertNull(trader.reason());
         assertEquals(1F, trader.levels().get(1).chance());
@@ -159,7 +159,7 @@ public class AggregationTest {
     @Test
     public void testTraderSameSingleTwiceIsRepeated() {
         Aggregation.Trader trader = Aggregation.trader(List.of(success(offers(single(offer(Items.APPLE)), single(offer(Items.APPLE))))));
-        Aggregation.Group group = trader.levels().get(1).groups().get(0);
+        Aggregation.Group group = trader.levels().get(1).groups().getFirst();
 
         assertNull(trader.reason());
         assertEquals(2, group.times());
@@ -217,8 +217,8 @@ public class AggregationTest {
 
         assertNotNull(stacks);
         assertEquals(1, stacks.options().size());
-        assertEquals(count, stacks.options().get(0).count());
-        assertEquals(1, stacks.options().get(0).stack().getCount());
+        assertEquals(count, stacks.options().getFirst().count());
+        assertEquals(1, stacks.options().getFirst().stack().getCount());
     }
 
     @Test

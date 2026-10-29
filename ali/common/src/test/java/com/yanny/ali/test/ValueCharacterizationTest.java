@@ -145,7 +145,7 @@ public class ValueCharacterizationTest {
         lines.add(format(bindLevels(expr, levels, null, 0), scale));
 
         for (NumberExpr.Var level : levels) {
-            String name = ((NumberText.Str) level.args().get(0)).text().replace("minecraft:", "");
+            String name = ((NumberText.Str) level.args().getFirst()).text().replace("minecraft:", "");
 
             for (int i = 1; i <= level.max(); i++) {
                 lines.add(name + " " + i + ": " + format(bindLevels(expr, levels, level, i), scale));
