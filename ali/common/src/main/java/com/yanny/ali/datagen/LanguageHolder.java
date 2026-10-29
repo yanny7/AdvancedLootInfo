@@ -55,6 +55,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.Multi.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Error.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.Utils.class);
 
         put(EquipmentSlotGroup.ANY, "Any");
         put(EquipmentSlotGroup.MAINHAND, "Main Hand");
@@ -228,10 +229,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.harvesting", "Harvesting");
         TRANSLATION_MAP.put("emi.category.ali.turtle_grow", "Turtle Grow");
         TRANSLATION_MAP.put("emi.category.ali.charged_creeper", "Charged Creeper");
-
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");
