@@ -3,9 +3,9 @@ package com.yanny.alicompat.test;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.bytebuddy.agent.ByteBuddyAgent;
-import net.fabricmc.accesswidener.AccessWidener;
-import net.fabricmc.accesswidener.AccessWidenerClassVisitor;
-import net.fabricmc.accesswidener.AccessWidenerReader;
+import net.fabricmc.classtweaker.api.ClassTweaker;
+import net.fabricmc.classtweaker.api.ClassTweakerReader;
+import net.fabricmc.classtweaker.classvisitor.AccessWidenerClassVisitor;
 import org.junit.platform.launcher.LauncherSession;
 import org.junit.platform.launcher.LauncherSessionListener;
 import org.objectweb.asm.ClassReader;
@@ -27,8 +27,8 @@ import java.util.List;
 public class AccessWidenerSessionListener implements LauncherSessionListener {
     @Override
     public void launcherSessionOpened(LauncherSession session) {
-        AccessWidener widener = new AccessWidener();
-        AccessWidenerReader reader = new AccessWidenerReader(widener);
+        ClassTweaker widener = ClassTweaker.newInstance();
+        ClassTweakerReader reader = ClassTweakerReader.create(widener);
 
         try {
             Enumeration<URL> modJsons = AccessWidenerSessionListener.class.getClassLoader().getResources("fabric.mod.json");
@@ -52,7 +52,7 @@ public class AccessWidenerSessionListener implements LauncherSessionListener {
         }
 
         Instrumentation instrumentation = ByteBuddyAgent.install();
-        List<String> loaded = Arrays.stream(instrumentation.getAllLoadedClasses()).map(Class::getName).filter(widener.getTargets()::contains).toList();
+        List<String> loaded = Arrays.stream(instrumentation.getAllLoadedClasses()).map(c -> c.getName().replace('.', '/')).filter(widener.getTargets()::contains).toList();
 
         if (!loaded.isEmpty()) {
             throw new IllegalStateException("Classes loaded before their access wideners were applied: " + loaded);
@@ -61,16 +61,16 @@ public class AccessWidenerSessionListener implements LauncherSessionListener {
         instrumentation.addTransformer(new Transformer(widener));
     }
 
-    private record Transformer(AccessWidener widener) implements ClassFileTransformer {
+    private record Transformer(ClassTweaker widener) implements ClassFileTransformer {
         @Override
         public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
-            if (className == null || !widener.getTargets().contains(className.replace('/', '.'))) {
+            if (className == null || !widener.getTargets().contains(className)) {
                 return null;
             }
 
             ClassWriter writer = new ClassWriter(0);
 
-            new ClassReader(classfileBuffer).accept(AccessWidenerClassVisitor.createClassVisitor(Opcodes.ASM9, writer, widener), 0);
+            new ClassReader(classfileBuffer).accept(new AccessWidenerClassVisitor(Opcodes.ASM9, writer, widener), 0);
             return writer.toByteArray();
         }
     }
