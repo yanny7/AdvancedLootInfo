@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
@@ -16,8 +17,8 @@ final class MapItemModel implements MethodModel {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
 
-        if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, insn)) {
-            return new Value.Unknown(false, Type.getReturnType(insn.desc).getInternalName(), args.get(1) instanceof Value.Known(Object value1) ? value1 : null,
+        if (RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE, insn) || RuntimeNames.is(RuntimeNames.FIND_MAP_STRUCTURE_SET, insn)) {
+            return new Value.Unknown(false, Type.getReturnType(insn.desc).getInternalName(), args.get(1) instanceof Value.Known(Object structures) ? target(structures) : null,
                     Origin.of(args.getFirst(), insn.name + insn.desc, args.subList(1, args.size())));
         }
         if (RuntimeNames.is(RuntimeNames.MAP_CREATE, insn)) {
@@ -37,5 +38,10 @@ final class MapItemModel implements MethodModel {
         }
 
         return NO_OPINION;
+    }
+
+    @Nullable
+    private static Object target(@Nullable Object structures) {
+        return structures instanceof HolderSet<?> set ? set.unwrapKey().<Object>map((tag) -> tag).orElse(set) : structures;
     }
 }

@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -68,6 +69,7 @@ final class RuntimeNames {
     static final Ref GET_OFFER;
     static final Ref LEVEL_IS_CLIENT_SIDE;
     static final Ref FIND_MAP_STRUCTURE;
+    static final Ref FIND_MAP_STRUCTURE_SET;
     static final Ref REGISTRY_ACCESS;
     static final Ref ENTITY_REGISTRY_ACCESS;
     static final Ref MAP_CREATE;
@@ -113,6 +115,7 @@ final class RuntimeNames {
         GET_OFFER = ref(refs, "getOffer", missing);
         LEVEL_IS_CLIENT_SIDE = ref(refs, "levelIsClientSide", missing);
         FIND_MAP_STRUCTURE = ref(refs, "findMapStructure", missing);
+        FIND_MAP_STRUCTURE_SET = ref(refs, "findMapStructureSet", missing);
         REGISTRY_ACCESS = ref(refs, "registryAccess", missing);
         ENTITY_REGISTRY_ACCESS = ref(refs, "entityRegistryAccess", missing);
         MAP_CREATE = ref(refs, "mapCreate", missing);
@@ -293,6 +296,10 @@ final class RuntimeNames {
 
         private static BlockPos findMapStructure(ServerLevel level) {
             return level.findNearestMapStructure((TagKey<Structure>) null, null, 0, false);
+        }
+
+        private static BlockPos findMapStructureSet(ServerLevel level) {
+            return level.findNearestMapStructure((HolderSet<Structure>) null, null, 0, false);
         }
 
         private static Object registryAccess(Level level) {

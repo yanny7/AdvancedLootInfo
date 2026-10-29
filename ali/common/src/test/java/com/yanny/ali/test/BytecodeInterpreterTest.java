@@ -21,6 +21,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
@@ -82,6 +83,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.jetbrains.annotations.NotNull;
@@ -284,6 +286,28 @@ public class BytecodeInterpreterTest {
                 "  -> Inverted:",
                 "    -> Structure: minecraft:on_ocean_monument_maps",
                 "  -> Structure: minecraft:on_woodland_mansion_maps"
+        ));
+    }
+
+    @Test
+    public void testMapWithStructureHolderSet() {
+        HolderOwner<Structure> owner = new HolderOwner<>() {};
+        HolderSet<Structure> mansion = HolderSet.direct(Holder.Reference.createStandAlone(owner, ResourceKey.create(Registries.STRUCTURE, Identifier.withDefaultNamespace("mansion"))));
+        List<IDataNode> trades = ((ListNode) interpret(new HolderSetMapListing(HolderSet.emptyNamed(owner, StructureTags.ON_OCEAN_MONUMENT_MAPS), mansion))).nodes();
+
+        Assertions.assertEquals(2, trades.size());
+        assertTooltip(trades.get(0).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Structure: minecraft:on_ocean_monument_maps"
+        ));
+        assertTooltip(trades.get(1).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "All Of:",
+                "  -> Inverted:",
+                "    -> Structure: minecraft:on_ocean_monument_maps",
+                "  -> Structure: minecraft:mansion"
         ));
     }
 
@@ -1691,6 +1715,39 @@ public class BytecodeInterpreterTest {
 
             if (pos == null) {
                 pos = level.findNearestMapStructure(StructureTags.ON_WOODLAND_MANSION_MAPS, trader.blockPosition(), 100, true);
+            }
+            if (pos == null) {
+                return null;
+            }
+
+            ItemStack map = MapItem.create(level, pos.getX(), pos.getZ(), (byte) 2, true, true);
+
+            MapItemSavedData.addTargetDecoration(map, pos, "+", MapDecorationTypes.OCEAN_MONUMENT);
+            return new MerchantOffer(new ItemCost(Items.EMERALD), Optional.of(new ItemCost(Items.COMPASS)), map, 12, 5, 0.2F);
+        }
+    }
+
+    private static final class HolderSetMapListing implements ItemListing {
+        private final HolderSet<Structure> first;
+        private final HolderSet<Structure> backup;
+
+        private HolderSetMapListing(HolderSet<Structure> first, HolderSet<Structure> backup) {
+            this.first = first;
+            this.backup = backup;
+        }
+
+        @SuppressWarnings("resource")
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(ServerLevel world, Entity trader, RandomSource random) {
+            if (!(trader.level() instanceof ServerLevel level)) {
+                return null;
+            }
+
+            BlockPos pos = level.findNearestMapStructure(first, trader.blockPosition(), 100, true);
+
+            if (pos == null) {
+                pos = level.findNearestMapStructure(backup, trader.blockPosition(), 100, true);
             }
             if (pos == null) {
                 return null;

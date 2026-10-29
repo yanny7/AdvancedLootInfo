@@ -200,6 +200,7 @@
   "ali.property.branch.base": "Base:",
   "ali.property.branch.bees": "Bees:",
   "ali.property.branch.biomes": "Biomes:",
+  "ali.property.branch.block_entity_types": "Block Entity Types:",
   "ali.property.branch.block_predicate": "Block Predicate:",
   "ali.property.branch.blocks": "Blocks:",
   "ali.property.branch.body": "Body:",

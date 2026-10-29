@@ -5,6 +5,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -191,19 +192,19 @@ sealed interface PathCondition {
     }
 
     record Is(Object value) implements PathCondition {
-        private static final Map<Identifier, Lang.Value> LABELS = Map.ofEntries(
-                Map.entry(Registries.ATTRIBUTE.identifier(), Lang.Value.ATTRIBUTE),
-                Map.entry(Registries.BANNER_PATTERN.identifier(), Lang.Value.BANNER_PATTERN),
-                Map.entry(Registries.BIOME.identifier(), Lang.Value.BIOME),
-                Map.entry(Registries.BLOCK.identifier(), Lang.Value.BLOCK),
-                Map.entry(Registries.BLOCK_ENTITY_TYPE.identifier(), Lang.Value.BLOCK_ENTITY_TYPE),
-                Map.entry(Registries.DIMENSION.identifier(), Lang.Value.DIMENSION),
-                Map.entry(Registries.ENCHANTMENT.identifier(), Lang.Value.ENCHANTMENT),
-                Map.entry(Registries.ENTITY_TYPE.identifier(), Lang.Value.ENTITY_TYPE),
-                Map.entry(Registries.FLUID.identifier(), Lang.Value.FLUID),
-                Map.entry(Registries.ITEM.identifier(), Lang.Value.ITEM),
-                Map.entry(Registries.POTION.identifier(), Lang.Value.POTION),
-                Map.entry(Registries.STRUCTURE.identifier(), Lang.Value.STRUCTURE)
+        private static final Map<Identifier, Lang.Branch> LABELS = Map.ofEntries(
+                Map.entry(Registries.ATTRIBUTE.identifier(), Lang.Branch.ATTRIBUTES),
+                Map.entry(Registries.BANNER_PATTERN.identifier(), Lang.Branch.BANNER_PATTERNS),
+                Map.entry(Registries.BIOME.identifier(), Lang.Branch.BIOMES),
+                Map.entry(Registries.BLOCK.identifier(), Lang.Branch.BLOCKS),
+                Map.entry(Registries.BLOCK_ENTITY_TYPE.identifier(), Lang.Branch.BLOCK_ENTITY_TYPES),
+                Map.entry(Registries.DIMENSION.identifier(), Lang.Branch.DIMENSIONS),
+                Map.entry(Registries.ENCHANTMENT.identifier(), Lang.Branch.ENCHANTMENTS),
+                Map.entry(Registries.ENTITY_TYPE.identifier(), Lang.Branch.ENTITY_TYPES),
+                Map.entry(Registries.FLUID.identifier(), Lang.Branch.FLUIDS),
+                Map.entry(Registries.ITEM.identifier(), Lang.Branch.ITEMS),
+                Map.entry(Registries.POTION.identifier(), Lang.Branch.POTIONS),
+                Map.entry(Registries.STRUCTURE.identifier(), Lang.Branch.STRUCTURES)
         );
 
         @Override
@@ -219,11 +220,17 @@ sealed interface PathCondition {
 
         @Nullable
         private static Identifier registry(Object value) {
-            if (value instanceof TagKey<?> tag) {
-                return tag.registry().identifier();
-            }
-            if (value instanceof Holder<?> holder) {
-                return holder.unwrapKey().map(ResourceKey::registry).orElse(null);
+            switch (value) {
+                case TagKey<?> tag -> {
+                    return tag.registry().identifier();
+                }
+                case HolderSet<?> set -> {
+                    return set.stream().findFirst().map(Is::registry).orElse(null);
+                }
+                case Holder<?> holder -> {
+                    return holder.unwrapKey().map(ResourceKey::registry).orElse(null);
+                }
+                default -> {}
             }
 
             ResourceKey<?> key = value instanceof ResourceKey<?> resourceKey ? resourceKey : builtInKey(value);
@@ -232,7 +239,7 @@ sealed interface PathCondition {
         }
 
         private static Object shown(Object value) {
-            if (value instanceof ResourceKey<?> || value instanceof TagKey<?> || value instanceof Holder<?>) {
+            if (value instanceof ResourceKey<?> || value instanceof TagKey<?> || value instanceof Holder<?> || value instanceof HolderSet<?>) {
                 return value;
             }
 
@@ -255,10 +262,10 @@ sealed interface PathCondition {
             return null;
         }
 
-        private static Lang.Value label(Object value) {
+        private static Lang.Branch label(Object value) {
             Identifier registry = registry(value);
 
-            return registry != null ? LABELS.getOrDefault(registry, Lang.Value.VALUE) : Lang.Value.VALUE;
+            return registry != null ? LABELS.getOrDefault(registry, Lang.Branch.VALUES) : Lang.Branch.VALUES;
         }
     }
 
