@@ -11,7 +11,6 @@ import com.telepathicgrunt.the_bumblezone.loot.functions.DropContainerLoot;
 import com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure;
 import com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals;
 import com.telepathicgrunt.the_bumblezone.loot.functions.UniquifyIfHasItems;
-import com.telepathicgrunt.the_bumblezone.modinit.BzEntities;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -22,6 +21,7 @@ import com.yanny.alicompat.accessor.PluginUtils;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -56,7 +56,7 @@ public class BumblezoneCompat implements IModCompat {
         registry.registerGlobalLootModifiers(BumblezoneCompat::getLootModifiers);
 
         registry.registerLootTableReference(NewLootInjectorApplier.STINGER_DROP_LOOT_TABLE_RL);
-        registry.registerEntityLootTable(BzEntities.COSMIC_CRYSTAL_ENTITY.get(), ResourceLocation.fromNamespaceAndPath(BumblezoneLang.MOD_ID, "entities/cosmic_crystal"));
+        EntityType.byString(BumblezoneLang.MOD_ID + ":cosmic_crystal").ifPresent((type) -> registry.registerEntityLootTable(type, ResourceLocation.fromNamespaceAndPath(BumblezoneLang.MOD_ID, "entities/cosmic_crystal")));
     }
 
     @Unmodifiable
