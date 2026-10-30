@@ -7,6 +7,8 @@ import com.yanny.ali.api.TradeLevelInfo;
 import com.yanny.alicompat.IModCompat;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.PluginUtils;
+import gaia.registry.GaiaLootTables;
+import gaia.registry.GaiaRegistry;
 import gaia.util.GaiaMerchantTrades;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,6 +41,11 @@ public class GrimoireOfGaiaCompat implements IModCompat {
         PluginUtils.registerItemListing(registry, ItemsToItemsAccessor.class);
         registerItemsToItems(registry, "ItemForMerchantToken");
         registerItemsToItems(registry, "MerchantTokenForItem");
+
+        registry.registerEntityLootTable(GaiaRegistry.MINOTAURUS.getEntityType(), GaiaLootTables.MINOTAURUS_RANGED);
+        registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_RANGED);
+        registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_MINER);
+        registry.registerEntityLootTable(GaiaRegistry.CHEST.getEntityType(), GaiaLootTables.CHEST_TABLES);
     }
 
     private static void registerTrades(IServerRegistry registry, String name, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {

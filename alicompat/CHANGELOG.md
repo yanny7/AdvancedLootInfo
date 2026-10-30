@@ -3,6 +3,9 @@
 - Iron's Spellbooks wandering trades with a random price show the price range instead of one random price
 - Ars Nouveau dungeon loot shows exact chances and count ranges instead of estimated ones
 - Fixed an Ars Nouveau error hiding a whole trade level of the Shards trader
+- Grimoire of Gaia dwarf and minotaurus variants, mimic chests, Twilight Forest Questing Ram and Death Tome, and Iron's Spellbooks bosses per-player and ominous loot show under their mob instead of gameplay loot
+- Faster server start with Grimoire of Gaia, Twilight Forest, Iron's Spellbooks and Bumblezone
+- Bumblezone on Fabric shows the stinger drops it adds to bees and the fishing loot of its dimension
 
 ## [1.3.0]
 

@@ -87,6 +87,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
+    // entity loot tables
+    private final ManagedRegistry<ResourceLocation, List<EntityType<?>>> entityLootTables = register("entity loot tables", false, LinkedHashMap::new, ResourceLocation::toString, null);
 
     private final Set<String> loggedOnce = new HashSet<>();
     private int computedItemListings;
@@ -100,6 +102,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
     private final List<IPageLootModifier> pageLootModifiers = new LinkedList<>();
     private final List<ILootContextPreparer> lootContextPreparers = new ArrayList<>();
+    private final Set<ResourceLocation> lootTableReferences = new HashSet<>();
 
     private final LootContext lootContext;
 
@@ -127,6 +130,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         pageLootModifierGetters.clear();
         pageLootModifiers.clear();
         lootContextPreparers.clear();
+        lootTableReferences.clear();
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -251,6 +255,27 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter) {
         pageLootModifierGetters.add(getter);
+    }
+
+    @Override
+    public void registerEntityLootTable(EntityType<?> entityType, ResourceLocation lootTable) {
+        List<EntityType<?>> types = entityLootTables.find(lootTable).orElseGet(ArrayList::new);
+
+        types.add(entityType);
+        entityLootTables.put(lootTable, types);
+    }
+
+    public Map<ResourceLocation, List<EntityType<?>>> getEntityLootTables() {
+        return entityLootTables.entries();
+    }
+
+    @Override
+    public void registerLootTableReference(ResourceLocation lootTable) {
+        lootTableReferences.add(lootTable);
+    }
+
+    public Set<ResourceLocation> getLootTableReferences() {
+        return lootTableReferences;
     }
 
     @Override

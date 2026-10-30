@@ -13,6 +13,8 @@
 - Auto-detected tooltips name the thing by its ID or short class name, the full class name shows with advanced tooltips
 - Server log warns only about what cannot be shown in full, things shown completely auto-detected are logged with `logMoreStatistics`
 - Fixed recipe viewer waiting a minute and a half and logging an error on servers without ALI
+- Added plugin API to assign loot tables to entities whose table ID names no entity
+- Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
 
 ## [2.5.0]
 

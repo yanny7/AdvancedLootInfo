@@ -26,6 +26,7 @@ import twilightforest.loot.conditions.GiantPickUsedCondition;
 import twilightforest.loot.conditions.IsMinionCondition;
 import twilightforest.loot.conditions.ModExistsCondition;
 import twilightforest.loot.conditions.UncraftingTableEnabledCondition;
+import twilightforest.loot.TFLootTables;
 import twilightforest.loot.functions.ModItemSwap;
 import twilightforest.loot.modifiers.FieryToolSmeltingModifier;
 import twilightforest.loot.modifiers.GiantToolGroupingModifier;
@@ -60,6 +61,9 @@ public class TwilightForestCompat implements IGlmModCompat {
         PluginUtils.registerFunctionTooltip(registry, ModItemSwap.class, ModItemSwapAccessor.class);
 
         PluginUtils.registerItemStackModifier(registry, ModItemSwap.class, ModItemSwapAccessor.class);
+
+        registry.registerEntityLootTable(TFEntities.QUEST_RAM.get(), TFLootTables.QUESTING_RAM_REWARDS);
+        registry.registerEntityLootTable(TFEntities.DEATH_TOME.get(), TFLootTables.DEATH_TOME_HURT);
     }
 
     @Override

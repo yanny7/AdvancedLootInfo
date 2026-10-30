@@ -70,6 +70,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter);
 
+    void registerEntityLootTable(EntityType<?> entityType, ResourceLocation lootTable);
+
+    void registerLootTableReference(ResourceLocation lootTable);
+
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
     void registerTrades(ResourceLocation traderId, EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo);

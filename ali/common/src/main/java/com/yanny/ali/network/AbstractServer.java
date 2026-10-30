@@ -323,7 +323,7 @@ public abstract class AbstractServer {
                                            Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
                                            List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
                                            boolean hasPageLootModifiers, Set<ResourceLocation> referencedLootTables, List<PendingPage> pages) {
-        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, referencedLootTables);
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, serverRegistry.getEntityLootTables(), referencedLootTables);
         Set<ResourceLocation> candidates = new HashSet<>(lootTables.keySet());
         Set<ResourceLocation> disabledLootTables = new HashSet<>();
 
@@ -404,7 +404,7 @@ public abstract class AbstractServer {
         List<Entity> entities = resolver.getEntities(type);
         List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && lootTable.equals(mob.getLootTable())).toList();
 
-        // a table claimed by the entityLootTables configuration has an id no instance of the type reports, so testing
+        // a table claimed by entityLootTables or a plugin can have an id no instance of the type reports, so testing
         // the modifier against nothing would silently drop it
         return variants.isEmpty() ? entities : variants;
     }
@@ -757,7 +757,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Set<ResourceLocation> collectReferencedLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
                                                                     Map<ResourceLocation, LootTable> fakeLootTables) {
-        Set<ResourceLocation> referenced = new HashSet<>();
+        Set<ResourceLocation> referenced = new HashSet<>(serverRegistry.getLootTableReferences());
 
         Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
                 .forEach((lootTable) -> serverRegistry.getLootPools(lootTable).forEach((pool) -> collectReferences(serverRegistry, Arrays.asList(pool.entries), referenced)));
