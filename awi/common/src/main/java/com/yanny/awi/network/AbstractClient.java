@@ -21,5 +21,7 @@ public abstract class AbstractClient {
         PluginManager.getInstance().clientRegistry.doneReceivingData();
     }
 
+    public abstract boolean canRequestData();
+
     public abstract void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message);
 }

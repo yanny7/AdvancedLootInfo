@@ -7,6 +7,7 @@ ali:loot_table
       | Count: 1
   ali:glm
     | Auto-detected: ali_gametest:unadapted
+    |   -> Class: com.yanny.ali.forge.gametest.GameTestLootModifiers$Unadapted
     |   -> conditions:
     |     -> condition:
     |       -> ali_gametest:glm/target

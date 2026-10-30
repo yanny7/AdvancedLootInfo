@@ -44,15 +44,15 @@ public class EntityLootTableResolver {
     private final ICommonUtils utils;
     private final Level level;
 
-    public EntityLootTableResolver(ICommonUtils utils, Level level, Collection<ResourceLocation> referencedLootTables) {
+    public EntityLootTableResolver(ICommonUtils utils, Level level, Map<ResourceLocation, List<EntityType<?>>> registeredLootTables,
+                                   Collection<ResourceLocation> referencedLootTables) {
         this.utils = utils;
         this.level = level;
 
         // a table another table pulls in is already explained by that reference, so it must not cost a namespace scan
         excludedLootTables.addAll(referencedLootTables);
 
-        // configured first, so a table claimed by the config is attributed to that entity even when it would resolve
-        // to a different one on its own
+        // config, then plugins, before anything derived: a claimed table keeps its entity even if it resolves elsewhere
         utils.getConfiguration().entityLootTables.forEach((entityId, lootTables) -> {
             Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(entityId);
 
@@ -62,6 +62,8 @@ public class EntityLootTableResolver {
                 LOGGER.warn("Unknown entity type {} in entityLootTables configuration", entityId);
             }
         });
+
+        registeredLootTables.forEach((lootTable, types) -> types.forEach((type) -> addMapping(lootTable, type)));
 
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
             if (type != EntityType.PLAYER) {

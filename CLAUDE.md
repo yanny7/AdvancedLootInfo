@@ -182,7 +182,7 @@ AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/
 ./gradlew :awi:neoforge:runGametest -Precipe_viewer=none
 ```
 
-The client side has no GameTest. `scripts/client_check.py` (IDE run configuration `Client Check ALL`) runs every enabled ALI/AWI `runClient` combination of loader and recipe viewer serially, joins the `New World` save each `<mod>/<loader>/run/saves` must hold, and passes a run on `Data registration finished successfully.`; an error logged by `GenericUtils.register`, a crash, an early exit or the timeout fails it. It echoes the `[ali]`/`[awi]`/`[aci]` log lines, writes each full log to `build/client_check/`, stops the game JVM found by its `/proc/<pid>/cwd`, and exits with the number of failed runs:
+The client side has no GameTest. `scripts/client_check.py` (IDE run configuration `Client Check ALL`) runs every enabled ALI/AWI `runClient` combination of loader and recipe viewer serially, joins the `New World` save each `<mod>/<loader>/run/saves` must hold, and passes a run on `Data registration finished successfully.`; an error logged by `CoreClientRegistry.registerData`, a crash, an early exit or the timeout fails it. It echoes the `[ali]`/`[awi]`/`[aci]` log lines, writes each full log to `build/client_check/`, stops the game JVM found by its `/proc/<pid>/cwd`, and exits with the number of failed runs:
 ```
 python3 scripts/client_check.py
 python3 scripts/client_check.py --mod ali --loader forge --viewer jei --timeout 300

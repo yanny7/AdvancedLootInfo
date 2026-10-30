@@ -24,10 +24,15 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
+    public boolean canRequestData() {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
-        if (listener != null && listener.hasChannel(RequestWorldgenDataMessage.TYPE)) {
+        return listener != null && listener.getConnection().isConnected() && listener.hasChannel(RequestWorldgenDataMessage.TYPE);
+    }
+
+    @Override
+    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
+        if (canRequestData()) {
             PacketDistributor.sendToServer(message);
         }
     }

@@ -107,10 +107,18 @@ public abstract class CoreServerRegistry<
     @Override
     public TooltipBuilder getEnumTranslation(TServerUtils utils, Enum<?> value) {
         Class<?> type = value.getDeclaringClass();
-        EnumTranslation translation = enumValues.get(type).orElseGet(() -> new EnumTranslation(getModId(), CoreTooltipUtils.enumOwnerPath(type)));
+        EnumTranslation translation = enumValues.find(type).orElseGet(() -> autoDetectedEnum(type));
         String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
 
         return TooltipBuilder.component(utils.lookupProvider(), Component.translatableWithFallback(key, value.name()));
+    }
+
+    @NotNull
+    private EnumTranslation autoDetectedEnum(Class<?> type) {
+        EnumTranslation translation = new EnumTranslation(getModId(), CoreTooltipUtils.enumOwnerPath(type));
+
+        enumValues.reportAutoDetected(type);
+        return translation;
     }
 
     public void clearCaches() {

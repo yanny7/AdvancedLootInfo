@@ -182,7 +182,7 @@ public abstract class AbstractServer {
 
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new LootDataChunkMessage(i, data)));
 
-        serverRegistry.printRuntimeInfo();
+        serverRegistry.printRuntimeInfo(config.logMoreStatistics);
     }
 
     public final void syncLootTables(Player player) {
@@ -330,7 +330,7 @@ public abstract class AbstractServer {
                                            Map<ResourceLocation, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
                                            List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
                                            boolean hasPageLootModifiers, Set<ResourceLocation> referencedLootTables, List<PendingPage> pages) {
-        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, referencedLootTables);
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, serverRegistry.getEntityLootTables(), referencedLootTables);
         Set<ResourceLocation> candidates = new HashSet<>(lootTables.keySet());
         Set<ResourceLocation> disabledLootTables = new HashSet<>();
 
@@ -412,7 +412,7 @@ public abstract class AbstractServer {
         //noinspection ConstantValue - some modded mobs does return null
         List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable() != null && lootTable.equals(mob.getLootTable().location())).toList();
 
-        // a table claimed by the entityLootTables configuration has an id no instance of the type reports, so testing
+        // a table claimed by entityLootTables or a plugin can have an id no instance of the type reports, so testing
         // the modifier against nothing would silently drop it
         return variants.isEmpty() ? entities : variants;
     }
@@ -620,7 +620,9 @@ public abstract class AbstractServer {
             computed.put(traderKey(type), new ComputedTrader(type, trades.levels(), trades.incomplete()));
 
             if (!trades.incomplete()) {
-                LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+                if (config.logMoreStatistics) {
+                    LOGGER.info("Computed trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
+                }
             } else if (!trades.levels().isEmpty()) {
                 LOGGER.warn("Computed only some trades of trading entity {} ({}) from its bytecode", id, entityClass.getName());
             } else {
@@ -763,7 +765,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Set<ResourceLocation> collectReferencedLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
                                                                     Map<ResourceLocation, LootTable> fakeLootTables) {
-        Set<ResourceLocation> referenced = new HashSet<>();
+        Set<ResourceLocation> referenced = new HashSet<>(serverRegistry.getLootTableReferences());
 
         Stream.concat(lootTables.values().stream(), fakeLootTables.values().stream())
                 .forEach((lootTable) -> collectReferences(serverRegistry, lootTable, referenced));
