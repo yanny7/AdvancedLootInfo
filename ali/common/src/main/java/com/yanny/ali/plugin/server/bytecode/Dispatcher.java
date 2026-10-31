@@ -692,6 +692,10 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
         if (args.stream().allMatch(interpreter::isConcrete)) {
+            if (interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
+                throw fail;
+            }
+
             return interpreter.concreteCall(call, args, loader, false);
         }
         if (isWorldCall(call, args, loader)) {

@@ -13,11 +13,13 @@ import org.objectweb.asm.tree.MethodNode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
 
 public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
+    private static final CallSites.Sink SINK = new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, LootDataResolver.class, 0);
 
     private LootTableAnalysis() {}
 
@@ -36,7 +38,46 @@ public final class LootTableAnalysis {
             }
         }
 
-        return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(events(registries, type, entityClass), typeDefault, false));
+        return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(rolled(registries, Profile.LOOT, entityClass,
+                () -> new EntitySubject(type, entityClass), self(entityClass)), typeDefault, false));
+    }
+
+    @NotNull
+    public static Set<ResourceLocation> getRolledLootTables(RegistryAccess registries, Object instance) {
+        if (!RuntimeNames.LOOT_AVAILABLE) {
+            return Set.of();
+        }
+
+        return tables(rolled(registries, Profile.ROLLED, instance.getClass(), () -> new InstanceSubject(instance), new Value.Known(instance)));
+    }
+
+    @NotNull
+    public static Set<ResourceLocation> getReferencedLootTables(Class<?> anyClassOfJar) {
+        ModJarIndex index = RuntimeNames.LOOT_AVAILABLE ? ModJarIndex.of(anyClassOfJar) : null;
+        Set<ResourceLocation> tables = new LinkedHashSet<>();
+
+        if (index == null) {
+            return tables;
+        }
+
+        try {
+            for (ModJarIndex.Caller caller : index.callers(SINK)) {
+                if (caller.entity()) {
+                    continue;
+                }
+                if (caller.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
+                    tables.add(table);
+                } else if (caller.source() instanceof CallSites.Param param) {
+                    for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param.index())) {
+                        if (!outer.entity() && outer.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
+                            tables.add(table);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        return tables;
     }
 
     static List<Outcome> defaults(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
@@ -63,16 +104,15 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    private static List<LootSubject.Observation> events(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
-        CallSites.Sink sink = new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, LootDataResolver.class, 0);
-        List<LootSubject.Observation> events = new ArrayList<>();
+    private static List<LootSubject.Observation> rolled(RegistryAccess registries, Profile profile, Class<?> type, Supplier<LootSubject> subject, Value self) {
+        List<LootSubject.Observation> observations = new ArrayList<>();
         Set<CallSites.Site> computed = new LinkedHashSet<>();
 
         try {
-            for (Declaration entry : entries(entityClass)) {
-                for (CallSites.Site site : CallSites.find(entityClass, entry.owner(), entry.method(), sink)) {
+            for (Declaration entry : entries(type)) {
+                for (CallSites.Site site : CallSites.find(type, entry.owner(), entry.method(), SINK)) {
                     if (site.source() instanceof CallSites.Constant constant && constant.value() != null) {
-                        events.add(new LootSubject.Observation(constant.value(), List.of(), 1));
+                        observations.add(new LootSubject.Observation(constant.value(), List.of(), 1));
                     } else if (site.source() == CallSites.Other.INSTANCE) {
                         computed.add(site);
                     }
@@ -82,26 +122,38 @@ public final class LootTableAnalysis {
 
         for (CallSites.Site site : computed) {
             try {
-                for (Outcome outcome : Explorer.explore(Profile.LOOT, registries, (interpreter) -> {
-                    interpreter.subject = new EntitySubject(type, entityClass);
-                    return interpreter.machine.execute(site.holder().owner(), site.holder().method(), arguments(site, entityClass), 0);
+                for (Outcome outcome : Explorer.explore(profile, registries, (interpreter) -> {
+                    interpreter.subject = subject.get();
+                    return interpreter.machine.execute(site.holder().owner(), site.holder().method(), arguments(site, self), 0);
                 })) {
-                    if (outcome.subject() instanceof LootSubject subject) {
-                        events.addAll(subject.observations());
+                    if (outcome.subject() instanceof LootSubject run) {
+                        observations.addAll(run.observations());
                     }
                 }
             } catch (Throwable ignored) {}
         }
 
-        return events;
+        return observations;
     }
 
     @NotNull
-    private static List<Declaration> entries(Class<?> entityClass) {
+    private static Set<ResourceLocation> tables(List<LootSubject.Observation> observations) {
+        Set<ResourceLocation> tables = new LinkedHashSet<>();
+
+        observations.forEach((o) -> {
+            if (o.value() instanceof ResourceLocation table) {
+                tables.add(table);
+            }
+        });
+        return tables;
+    }
+
+    @NotNull
+    private static List<Declaration> entries(Class<?> start) {
         List<Declaration> entries = new ArrayList<>();
         Set<String> seen = new HashSet<>();
 
-        for (Class<?> type = entityClass; type != null && !LambdaResolver.isPlatform(Type.getInternalName(type)); type = type.getSuperclass()) {
+        for (Class<?> type = start; type != null && !LambdaResolver.isPlatform(Type.getInternalName(type)); type = type.getSuperclass()) {
             ClassNode node = Resolution.classNode(type);
 
             if (node == null) {
@@ -120,17 +172,17 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    private static List<Value> arguments(CallSites.Site site, Class<?> entityClass) {
+    private static List<Value> arguments(CallSites.Site site, Value self) {
         MethodNode method = site.holder().method();
         Type[] params = Type.getArgumentTypes(method.desc);
         List<Value> args = new ArrayList<>();
 
         if ((method.access & Opcodes.ACC_STATIC) == 0) {
-            args.add(site.selfReceiver() ? self(entityClass) : Value.Unknown.of(Type.getType(site.holder().owner()), null));
+            args.add(site.selfReceiver() ? self : Value.Unknown.of(Type.getType(site.holder().owner()), null));
         }
 
         for (int i = 0; i < params.length; i++) {
-            args.add(site.selfParams().contains(i) ? self(entityClass) : Value.Unknown.of(params[i], null));
+            args.add(site.selfParams().contains(i) ? self : Value.Unknown.of(params[i], null));
         }
 
         return args;

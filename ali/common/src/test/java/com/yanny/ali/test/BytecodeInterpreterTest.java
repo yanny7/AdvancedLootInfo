@@ -72,6 +72,8 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootDataResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -856,6 +858,23 @@ public class BytecodeInterpreterTest {
 
         Assertions.assertTrue(tables.own().isEmpty());
         Assertions.assertTrue(tables.events().isEmpty());
+    }
+
+    @Test
+    public void testLootTablesRolledByInstance() {
+        TableModifier modifier = new TableModifier(RolledTables.MODIFIER);
+
+        Assertions.assertEquals(Set.of(RolledTables.MODIFIER, RolledTables.UPGRADED), LootTableAnalysis.getRolledLootTables(UTILS.getServerLevel().registryAccess(), modifier));
+        Assertions.assertSame(RolledTables.MODIFIER, modifier.table);
+    }
+
+    @Test
+    public void testLootTablesReferencedInJar() {
+        Set<ResourceLocation> tables = LootTableAnalysis.getReferencedLootTables(RolledTables.class);
+
+        Assertions.assertTrue(tables.containsAll(Set.of(RolledTables.CHEST, RolledTables.INJECTED)));
+        Assertions.assertFalse(tables.contains(LootMobs.REWARD));
+        Assertions.assertFalse(tables.contains(RolledTables.MODIFIER));
     }
 
     @Test
@@ -3279,6 +3298,42 @@ public class BytecodeInterpreterTest {
             if (server != null) {
                 server.getLootData().getLootTable(table);
             }
+        }
+    }
+
+    private static final class RolledTables {
+        private static final ResourceLocation MODIFIER = new ResourceLocation("ali", "gameplay/modifier");
+        private static final ResourceLocation UPGRADED = new ResourceLocation("ali", "gameplay/upgraded");
+        private static final ResourceLocation CHEST = new ResourceLocation("ali", "chests/rolled");
+        private static final ResourceLocation INJECTED = new ResourceLocation("ali", "entities/injected");
+
+        public static void chest(LootDataResolver resolver) {
+            resolver.getLootTable(CHEST);
+        }
+
+        public static void inject(LootDataResolver resolver) {
+            roll(resolver, INJECTED);
+        }
+
+        private static void roll(LootDataResolver resolver, ResourceLocation table) {
+            resolver.getLootTable(table);
+        }
+    }
+
+    private static final class TableModifier {
+        private ResourceLocation table;
+
+        private TableModifier(ResourceLocation table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getResolver().getLootTable(table);
+        }
+
+        public void upgrade(LootContext context) {
+            table = RolledTables.UPGRADED;
+            context.getResolver().getLootTable(table);
         }
     }
 }

@@ -1,24 +1,22 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
-import org.objectweb.asm.tree.analysis.Analyzer;
-import org.objectweb.asm.tree.analysis.AnalyzerException;
-import org.objectweb.asm.tree.analysis.Frame;
-import org.objectweb.asm.tree.analysis.SourceInterpreter;
-import org.objectweb.asm.tree.analysis.SourceValue;
+import org.objectweb.asm.tree.analysis.*;
 
 import java.util.*;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
-import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
-import static com.yanny.ali.plugin.server.bytecode.Resolution.declaration;
-import static com.yanny.ali.plugin.server.bytecode.Resolution.field;
-import static com.yanny.ali.plugin.server.bytecode.Resolution.load;
+import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class CallSites {
     static final int DEPTH = 3;
+    private static final int RECEIVER = -1;
+    private static final int NONE = -2;
 
     private final Class<?> self;
     private final Sink sink;
@@ -45,6 +43,31 @@ final class CallSites {
         return search.sites;
     }
 
+    static Source argument(String owner, MethodNode method, MethodInsnNode call, int argument, ClassLoader loader) {
+        Frame<SourceValue>[] analyzed = analyze(owner, method);
+        Frame<SourceValue> frame = analyzed != null ? analyzed[method.instructions.indexOf(call)] : null;
+
+        if (frame == null) {
+            return Other.INSTANCE;
+        }
+
+        int first = frame.getStackSize() - Type.getArgumentTypes(call.desc).length;
+        Arg arg = trace(method, analyzed, frame.getStack(first + argument), loader, (var) -> {
+            int index = parameterIndex(method, var);
+
+            return index >= 0 ? new EntryParam(index) : Untraced.INSTANCE;
+        }, () -> Untraced.INSTANCE);
+
+        if (arg instanceof Constant constant) {
+            return constant;
+        }
+        if (arg instanceof EntryParam param) {
+            return new Param(param.index());
+        }
+
+        return Other.INSTANCE;
+    }
+
     private void walk(Context context, int depth) {
         MethodNode method = context.holder().method();
         Class<?> owner = context.holder().owner();
@@ -68,7 +91,7 @@ final class CallSites {
             Type[] params = Type.getArgumentTypes(call.desc);
             int first = frame.getStackSize() - params.length;
 
-            if (isSink(call, owner.getClassLoader())) {
+            if (sink.matches(call, owner.getClassLoader())) {
                 sites.add(site(source(context, analyzed, frame.getStack(first + sink.argument())), context));
             } else if (depth < DEPTH) {
                 Arg receiver = call.getOpcode() == Opcodes.INVOKESTATIC ? null : source(context, analyzed, frame.getStack(first - 1));
@@ -102,7 +125,7 @@ final class CallSites {
 
         for (AbstractInsnNode insn : method.instructions) {
             if (insn instanceof MethodInsnNode call) {
-                if (isSink(call, owner.getClassLoader())) {
+                if (sink.matches(call, owner.getClassLoader())) {
                     found = true;
                     break;
                 }
@@ -118,18 +141,6 @@ final class CallSites {
 
         reaching.put(key, found);
         return found;
-    }
-
-    private boolean isSink(MethodInsnNode call, ClassLoader loader) {
-        if (!RuntimeNames.is(sink.method(), call)) {
-            return false;
-        }
-
-        try {
-            return sink.owner().isAssignableFrom(load(call.owner, loader));
-        } catch (Fail fail) {
-            return false;
-        }
     }
 
     @Nullable
@@ -152,60 +163,70 @@ final class CallSites {
     }
 
     private Arg source(Context context, Frame<SourceValue>[] analyzed, SourceValue value) {
-        MethodNode method = context.holder().method();
-        Class<?> owner = context.holder().owner();
+        return trace(context.holder().method(), analyzed, value, context.holder().owner().getClassLoader(), (var) -> parameter(context, var), () -> new Computed(context));
+    }
 
+    private static Arg trace(MethodNode method, Frame<SourceValue>[] analyzed, SourceValue value, ClassLoader loader, IntFunction<Arg> parameter, Supplier<Arg> computed) {
         if (value.insns.size() != 1) {
-            return new Computed(context);
+            return computed.get();
         }
 
         AbstractInsnNode insn = value.insns.iterator().next();
         Frame<SourceValue> at = analyzed[method.instructions.indexOf(insn)];
 
         if (at == null) {
-            return new Computed(context);
+            return computed.get();
         }
         if (insn.getOpcode() == Opcodes.DUP || insn.getOpcode() == Opcodes.CHECKCAST) {
-            return source(context, analyzed, at.getStack(at.getStackSize() - 1));
+            return trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed);
         }
         if (insn.getOpcode() == Opcodes.ALOAD) {
             int var = ((VarInsnNode) insn).var;
             SourceValue local = at.getLocal(var);
 
             if (local.insns.isEmpty()) {
-                return parameter(context, var);
+                return parameter.apply(var);
             }
             if (local.insns.size() == 1 && local.insns.iterator().next() instanceof VarInsnNode store && store.getOpcode() == Opcodes.ASTORE) {
                 Frame<SourceValue> stored = analyzed[method.instructions.indexOf(store)];
 
-                return stored != null ? source(context, analyzed, stored.getStack(stored.getStackSize() - 1)) : new Computed(context);
+                return stored != null ? trace(method, analyzed, stored.getStack(stored.getStackSize() - 1), loader, parameter, computed) : computed.get();
             }
 
-            return new Computed(context);
+            return computed.get();
         }
         if (insn instanceof FieldInsnNode field && field.getOpcode() == Opcodes.GETSTATIC && Type.getType(field.desc).getSort() == Type.OBJECT) {
             try {
-                return new Constant(field(load(field.owner, owner.getClassLoader()), field.name).get(null));
+                return new Constant(field(load(field.owner, loader), field.name).get(null));
             } catch (Throwable e) {
-                return new Computed(context);
+                return computed.get();
             }
         }
         if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC
                 && (RuntimeNames.is(RuntimeNames.GET_DEFAULT_LOOT_TABLE, call) || RuntimeNames.is(RuntimeNames.MOB_GET_LOOT_TABLE, call))
-                && source(context, analyzed, at.getStack(at.getStackSize() - 1)) instanceof Self) {
+                && trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed) instanceof Self) {
             return OwnDefault.INSTANCE;
         }
 
-        return new Computed(context);
+        return computed.get();
     }
 
     private static Arg parameter(Context context, int var) {
-        MethodNode method = context.holder().method();
+        int index = parameterIndex(context.holder().method(), var);
+
+        if (index == RECEIVER) {
+            return context.receiver() != null ? context.receiver() : new Computed(context);
+        }
+
+        return index >= 0 ? context.params()[index] : new Computed(context);
+    }
+
+    private static int parameterIndex(MethodNode method, int var) {
         int slot = 0;
 
         if ((method.access & Opcodes.ACC_STATIC) == 0) {
             if (var == 0) {
-                return context.receiver() != null ? context.receiver() : new Computed(context);
+                return RECEIVER;
             }
 
             slot = 1;
@@ -215,15 +236,16 @@ final class CallSites {
 
         for (int i = 0; i < params.length; i++) {
             if (slot == var) {
-                return context.params()[i];
+                return i;
             }
 
             slot += params[i].getSize();
         }
 
-        return new Computed(context);
+        return NONE;
     }
 
+    @NotNull
     private static Site site(Arg arg, Context context) {
         if (arg instanceof Constant constant) {
             return new Site(constant, context.holder(), false, Set.of());
@@ -249,16 +271,29 @@ final class CallSites {
 
     @Nullable
     private Frame<SourceValue>[] frames(Class<?> owner, MethodNode method) {
-        return frames.computeIfAbsent(method, (m) -> {
-            try {
-                return Optional.of(new Analyzer<>(new SourceInterpreter()).analyze(Type.getInternalName(owner), m));
-            } catch (AnalyzerException e) {
-                return Optional.empty();
-            }
-        }).orElse(null);
+        return frames.computeIfAbsent(method, (m) -> Optional.ofNullable(analyze(Type.getInternalName(owner), m))).orElse(null);
+    }
+
+    private static Frame<SourceValue>[] analyze(String owner, MethodNode method) {
+        try {
+            return new Analyzer<>(new SourceInterpreter()).analyze(owner, method);
+        } catch (AnalyzerException e) {
+            return null;
+        }
     }
 
     record Sink(RuntimeNames.Ref method, Class<?> owner, int argument) {
+        boolean matches(MethodInsnNode call, ClassLoader loader) {
+            if (!RuntimeNames.is(method, call)) {
+                return false;
+            }
+
+            try {
+                return owner.isAssignableFrom(load(call.owner, loader));
+            } catch (Fail fail) {
+                return false;
+            }
+        }
     }
 
     record Site(Source source, Declaration holder, boolean selfReceiver, Set<Integer> selfParams) {
@@ -281,10 +316,14 @@ final class CallSites {
         INSTANCE
     }
 
-    private sealed interface Arg permits Constant, OwnDefault, Self, EntryParam, Computed {
+    private sealed interface Arg permits Constant, OwnDefault, Self, Untraced, EntryParam, Computed {
     }
 
     private enum Self implements Arg {
+        INSTANCE
+    }
+
+    private enum Untraced implements Arg {
         INSTANCE
     }
 

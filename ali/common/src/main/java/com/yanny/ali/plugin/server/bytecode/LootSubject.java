@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import java.util.List;
 
-sealed interface LootSubject extends Subject permits EntitySubject {
+sealed interface LootSubject extends Subject permits EntitySubject, InstanceSubject {
     void observe(Observation observation);
 
     List<Observation> observations();

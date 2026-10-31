@@ -101,6 +101,7 @@ public final class BytecodeInterpreter {
         LambdaResolver.clearCaches();
         Renderer.clearCaches();
         LootTableAnalysis.clearCaches();
+        ModJarIndex.clearCaches();
     }
 
     public record Stacks(List<Option> options) {
