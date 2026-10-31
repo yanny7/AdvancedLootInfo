@@ -4,13 +4,11 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.ICommonUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -44,15 +42,15 @@ public class EntityLootTableResolver {
     private final ICommonUtils utils;
     private final Level level;
 
-    public EntityLootTableResolver(ICommonUtils utils, Level level, Collection<Identifier> referencedLootTables) {
+    public EntityLootTableResolver(ICommonUtils utils, Level level, Map<Identifier, List<EntityType<?>>> registeredLootTables,
+                                   Collection<Identifier> referencedLootTables) {
         this.utils = utils;
         this.level = level;
 
         // a table another table pulls in is already explained by that reference, so it must not cost a namespace scan
         excludedLootTables.addAll(referencedLootTables);
 
-        // configured first, so a table claimed by the config is attributed to that entity even when it would resolve
-        // to a different one on its own
+        // config, then plugins, before anything derived: a claimed table keeps its entity even if it resolves elsewhere
         utils.getConfiguration().entityLootTables.forEach((entityId, lootTables) -> {
             Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(entityId);
 
@@ -62,6 +60,8 @@ public class EntityLootTableResolver {
                 LOGGER.warn("Unknown entity type {} in entityLootTables configuration", entityId);
             }
         });
+
+        registeredLootTables.forEach((lootTable, types) -> types.forEach((type) -> addMapping(lootTable, type)));
 
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
             if (type != EntityType.PLAYER) {

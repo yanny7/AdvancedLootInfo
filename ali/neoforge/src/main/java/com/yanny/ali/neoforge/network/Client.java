@@ -20,10 +20,15 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendLootDataToPlayer(RequestLootDataMessage message) {
+    public boolean canRequestData() {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
-        if (listener != null && listener.hasChannel(StartMessage.TYPE)) {
+        return listener != null && listener.getConnection().isConnected() && listener.hasChannel(StartMessage.TYPE);
+    }
+
+    @Override
+    public void sendLootDataToPlayer(RequestLootDataMessage message) {
+        if (canRequestData()) {
             ClientPacketDistributor.sendToServer(message);
         }
     }

@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.glm;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IOperation;
@@ -100,7 +101,7 @@ public class GlobalLootModifierUtils {
                 }
 
                 TooltipBuilder tooltip = TooltipBuilder.array((b) -> {
-                    TooltipBuilder fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
+                    TooltipBuilder fieldsTooltip = utils.getValueTooltip(utils, modifier.getName()).add(CoreTooltipUtils.getClassTooltip(modifier.getLootModifier().getClass()));
 
                     TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier.getLootModifier(), modifier.getLootModifierClass());
                     b.add(fieldsTooltip.build(CoreLang.Utils.AUTO_DETECTED));
@@ -217,7 +218,7 @@ public class GlobalLootModifierUtils {
     @NotNull
     private static Optional<List<IOperation>> getSerializedOperations(IServerUtils utils, IGlobalLootModifierWrapper modifier) {
         try {
-            TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
+            TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName()).add(CoreTooltipUtils.getClassTooltip(modifier.getLootModifier().getClass()));
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
             return Optional.of(List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build(CoreLang.Utils.AUTO_DETECTED)))));
