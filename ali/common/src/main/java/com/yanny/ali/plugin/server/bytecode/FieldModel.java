@@ -21,17 +21,17 @@ final class FieldModel {
     private FieldModel() {}
 
     static Value get(CallContext context, FieldInsnNode insn, Value receiver, ClassLoader loader) {
-        TraderModel.TraderRun run = context.traderRun();
-        boolean self = run != null && run.isSelf(receiver);
-        Value written = self ? context.traderField(insn.owner + "." + insn.name) : null;
+        Subject subject = context.subject();
+        boolean self = subject != null && subject.isSelf(receiver);
+        Value written = self ? context.selfField(insn.owner + "." + insn.name) : null;
 
-        if (self && !run.ownGetOffers && isVillagerOffers(insn, loader)) {
-            return run.offers;
+        if (self && subject instanceof TraderSubject trader && !trader.ownGetOffers && isVillagerOffers(insn, loader)) {
+            return trader.offers;
         }
         if (written != null) {
             return written;
         }
-        if (self && insn.desc.equals(Type.getDescriptor(MerchantOffers.class))) {
+        if (self && subject instanceof TraderSubject && insn.desc.equals(Type.getDescriptor(MerchantOffers.class))) {
             return NULL;
         }
         switch (receiver) {
@@ -72,18 +72,18 @@ final class FieldModel {
     }
 
     static void put(CallContext context, FieldInsnNode insn, Value receiver, Value value, ClassLoader loader) {
-        TraderModel.TraderRun run = context.traderRun();
+        Subject subject = context.subject();
 
-        if (run != null && run.isSelf(receiver)) {
-            if (isVillagerOffers(insn, loader) && value instanceof Value.Offers offers) {
-                run.offers = offers;
+        if (subject != null && subject.isSelf(receiver)) {
+            if (subject instanceof TraderSubject trader && isVillagerOffers(insn, loader) && value instanceof Value.Offers offers) {
+                trader.offers = offers;
 
-                if (!run.ownGetOffers) {
+                if (!trader.ownGetOffers) {
                     return;
                 }
             }
 
-            context.putTraderField(insn.owner + "." + insn.name, value);
+            context.putSelfField(insn.owner + "." + insn.name, value);
             return;
         }
         if (!(receiver instanceof Value.Known(Object value1)) || !context.isOwned(value1) || !(value instanceof Value.Known known2)) {

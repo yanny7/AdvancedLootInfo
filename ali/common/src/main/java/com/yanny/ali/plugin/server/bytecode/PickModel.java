@@ -18,9 +18,9 @@ final class PickModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderModel.TraderRun run = context.traderRun();
+        TraderSubject subject = (TraderSubject) context.subject();
 
-        if (run == null) {
+        if (subject == null) {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
@@ -35,7 +35,7 @@ final class PickModel implements MethodModel {
         }
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Choice choice && isPick(context, choice)
                 && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(insn, call.loader())) {
-            List<Object> bound = bound(context, run, args.subList(1, args.size()));
+            List<Object> bound = bound(context, subject, args.subList(1, args.size()));
 
             if (bound != null) {
                 List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> context.boundOffer(element, insn, bound)).toList();
@@ -65,11 +65,11 @@ final class PickModel implements MethodModel {
     }
 
     @Nullable
-    private static List<Object> bound(CallContext context, TraderModel.TraderRun run, List<Value> args) {
+    private static List<Object> bound(CallContext context, TraderSubject subject, List<Value> args) {
         List<Object> bound = new ArrayList<>();
 
         for (Value arg : args) {
-            if (run.isSelf(arg)) {
+            if (subject.isSelf(arg)) {
                 bound.add(BoundOffer.Bound.TRADER);
             } else if (arg instanceof Value.Unknown unknown && Origin.WORLD.equals(unknown.origin())) {
                 bound.add(BoundOffer.Bound.WORLD);

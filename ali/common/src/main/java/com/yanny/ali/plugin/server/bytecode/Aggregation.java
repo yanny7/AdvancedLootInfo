@@ -70,7 +70,7 @@ final class Aggregation {
             List<Outcome.Success> productive = new ArrayList<>();
 
             for (Outcome outcome : outcomes) {
-                if (outcome instanceof Outcome.Failure(String reason1, List<Decision> decisions)) {
+                if (outcome instanceof Outcome.Failure(String reason1, List<Decision> decisions, Subject ignored)) {
                     Integer level = pathLevel(decisions);
 
                     reason = reason != null ? reason : reason1;
