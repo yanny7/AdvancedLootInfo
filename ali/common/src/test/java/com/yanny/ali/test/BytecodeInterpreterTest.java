@@ -18,6 +18,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -186,6 +187,26 @@ public class BytecodeInterpreterTest {
         IDataNode result = ((ListNode) interpret(new BlockTagValuesListing(BLOCK_TORCHES))).nodes().get(2);
 
         Assertions.assertEquals(BLOCK_TORCHES, ((ItemNode) result).getItem().right().orElseThrow());
+    }
+
+    @Test
+    public void testRandomPickFromTagPassedToOfferFactory() {
+        bindDoorTags();
+
+        IDataNode result = interpret(new TagOfferListing(false));
+
+        Assertions.assertEquals(DOORS, slot(result, 2).getItem().right().orElseThrow());
+        assertSlot(result, 0, Items.EMERALD, NumberExpr.constant(2));
+    }
+
+    @Test
+    public void testRandomPickFromTagPassedToOfferFactoryRunForReal() {
+        bindDoorTags();
+
+        IDataNode result = interpret(new TagOfferListing(true));
+
+        Assertions.assertEquals(DOORS, slot(result, 2).getItem().right().orElseThrow());
+        assertSlot(result, 0, Items.EMERALD, NumberExpr.constant(2));
     }
 
     @Test
@@ -674,6 +695,53 @@ public class BytecodeInterpreterTest {
         Assertions.assertEquals(List.of(Items.CARROT), listingItems(rare.listings()));
         Assertions.assertEquals(0.25F, rare.levelInfo().chance(), 1e-6);
         Assertions.assertEquals(new NumberInterval(1, 1, true, true), rare.levelInfo().offers().bounds());
+    }
+
+    @Test
+    public void testTraderWithTradesOfIndependentChances() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(IndependentChancesTrader.class);
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+        TradeGroupNode cookies = (TradeGroupNode) trades.stream().filter(TradeGroupNode.class::isInstance).findFirst().orElseThrow();
+        List<IDataNode> plain = trades.stream().filter((t) -> !(t instanceof TradeGroupNode)).toList();
+
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(new NumberInterval(2, 5, true, true), level.levelInfo().offers().bounds());
+        Assertions.assertEquals(3, plain.size());
+        assertTooltip(trade(plain, Items.APPLE).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertTooltip(trade(plain, Items.BREAD).getTooltip(), List.of(
+                "Chance: 25%",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertTooltip(trade(plain, Items.CARROT).getTooltip(), List.of(
+                "Chance: 50%",
+                "Uses: 12",
+                "XP: 5",
+                "Price Multiplier: 0.05"
+        ));
+        assertSlot(cookies.nodes().get(0), 2, Items.COOKIE, NumberExpr.constant(1));
+        Assertions.assertEquals(Map.of(NumberExpr.constant(1), 0.75, NumberExpr.constant(2), 0.25),
+                ((NumberExpr.Weighted) cookies.selectionCount).entries().stream().collect(Collectors.toMap(NumberExpr.WeightedEntry::value, NumberExpr.WeightedEntry::weight)));
+    }
+
+    @Test
+    public void testTraderWithChancesOfTheRemainderOfADraw() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RemainderChanceTrader.class);
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(4, trades.size());
+        Assertions.assertEquals(List.of("Chance: 20%"), chanceLines(trade(trades, Items.GOLD_INGOT)));
+        Assertions.assertEquals(List.of("Chance: 40%"), chanceLines(trade(trades, Items.IRON_INGOT)));
+        Assertions.assertEquals(List.of("Chance: 40%"), chanceLines(trade(trades, Items.COPPER_INGOT)));
+        Assertions.assertEquals(List.of(), chanceLines(trade(trades, Items.APPLE)));
     }
 
     @Test
@@ -1410,6 +1478,14 @@ public class BytecodeInterpreterTest {
                 .map((n) -> EnchantmentHelper.getEnchantments(((ItemNode) n).getItem().left().orElseThrow())).toList();
     }
 
+    @Unmodifiable
+    @NotNull
+    private static List<String> chanceLines(IDataNode trade) {
+        return CoreTooltipUtils.toLines(trade.getTooltip(), 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT).stream()
+                .filter(TooltipLine.Text.class::isInstance).map((l) -> componentToPlainString(((TooltipLine.Text) l).component()).trim())
+                .filter((l) -> l.startsWith("Chance: ")).toList();
+    }
+
     private static void assertSlot(IDataNode trade, int index, Item item, NumberExpr count) {
         ItemNode node = slot(trade, index);
 
@@ -1502,6 +1578,96 @@ public class BytecodeInterpreterTest {
             }
 
             return new MerchantOffer(new ItemStack(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class TagOffers {
+        @Nullable
+        static MerchantOffer randomTrade(RandomSource random, TagKey<Item> tag, int price) {
+            Optional<List<Holder<Item>>> items = BuiltInRegistries.ITEM.getTag(tag).map((HolderSet.Named<Item> set) -> set.stream().toList());
+
+            if (items.isPresent() && !items.get().isEmpty()) {
+                List<Holder<Item>> kept = items.get().stream().filter((h) -> h.value() != Items.BRICK).toList();
+
+                return offer(kept.get(random.nextInt(kept.size())).value(), price);
+            }
+
+            return null;
+        }
+
+        @Nullable
+        static MerchantOffer randomRealTrade(RandomSource random, TagKey<Item> tag, int price) {
+            List<Holder<Item>> items = BuiltInRegistries.ITEM.getTag(tag).map((HolderSet.Named<Item> set) -> set.stream().toList()).orElse(List.of());
+
+            return items.isEmpty() ? null : realOffer(items.get(random.nextInt(items.size())).value(), price);
+        }
+
+        static MerchantOffer offer(Item item, int price) {
+            return new MerchantOffer(new ItemStack(Items.EMERALD, price), new ItemStack(item), 12, 5, 0.05F);
+        }
+
+        static MerchantOffer realOffer(Item item, int price) {
+            if (System.identityHashCode(item) == 0) {
+                throw new IllegalStateException();
+            }
+
+            return new MerchantOffer(new ItemStack(Items.EMERALD, price), new ItemStack(item), 12, 5, 0.05F);
+        }
+    }
+
+    private record TagOfferListing(boolean real) implements VillagerTrades.ItemListing {
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity trader, RandomSource random) {
+            return real ? TagOffers.randomRealTrade(random, DOORS, 2) : TagOffers.randomTrade(random, DOORS, 2);
+        }
+    }
+
+    private abstract static class RemainderChanceTrader extends AbstractVillager {
+        private RemainderChanceTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            MerchantOffers offers = getOffers();
+            int pick = random.nextInt(5);
+
+            offers.add(offerFor(Items.APPLE));
+
+            if (pick == 0) {
+                offers.add(offerFor(Items.GOLD_INGOT));
+            } else {
+                offers.add(offerFor(pick % 2 == 0 ? Items.IRON_INGOT : Items.COPPER_INGOT));
+            }
+        }
+    }
+
+    private abstract static class IndependentChancesTrader extends AbstractVillager {
+        private IndependentChancesTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades() {
+            MerchantOffers offers = getOffers();
+            int cookies = 1;
+
+            offers.add(offerFor(Items.APPLE));
+
+            if (random.nextInt(4) == 0) {
+                offers.add(offerFor(Items.BREAD));
+            }
+            if (random.nextInt(2) == 0) {
+                offers.add(offerFor(Items.CARROT));
+            }
+            if (random.nextInt(4) == 0) {
+                cookies++;
+            }
+
+            for (int i = 0; i < cookies; i++) {
+                offers.add(offerFor(Items.COOKIE));
+            }
         }
     }
 
