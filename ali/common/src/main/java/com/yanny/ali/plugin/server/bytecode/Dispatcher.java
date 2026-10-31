@@ -19,62 +19,24 @@ import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class Dispatcher implements Opcodes, CallContext {
-    private static final Map<Phase, List<MethodModel>> MODELS = new EnumMap<>(Phase.class);
+    static final MethodModel NEW_PER_CHOICE = construction(Dispatcher::newPerChoice);
+    static final MethodModel NEW_UNKNOWN = construction(Dispatcher::newUnknown);
+    static final MethodModel EQUALS_UNKNOWN = branch(Dispatcher::equalsUnknown);
+    static final MethodModel INT_VALUE = branch(Dispatcher::intValue);
+    static final MethodModel CLOSURE = branch(Dispatcher::closure);
+    static final MethodModel DRAWS = branch(Dispatcher::draws);
+    static final MethodModel UNKNOWN = branch(Dispatcher::unknown);
+    static final MethodModel UNSUPPORTED = branch(Dispatcher::unsupported);
+    static final MethodModel NULL_RECEIVER = branch(Dispatcher::nullReceiver);
+    static final MethodModel LAMBDA = branch(Dispatcher::lambda);
+    static final MethodModel REQUIRE_NON_NULL = branch(Dispatcher::requireNonNull);
+    static final MethodModel IS_NULL = branch(Dispatcher::isNull);
+    static final MethodModel SELECTION_GUARD = branch(Dispatcher::selectionGuard);
+    static final MethodModel THREAD_LOCAL_RANDOM = branch(Dispatcher::threadLocalRandom);
+    static final MethodModel UNCERTAIN = branch(Dispatcher::uncertain);
+    static final MethodModel STATIC_UNKNOWN = branch(Dispatcher::staticUnknown);
 
     private final Interpreter interpreter;
-
-    static {
-        MethodModel stacks = new ItemStackModel();
-        MethodModel costs = new ItemCostModel();
-
-        MODELS.put(Phase.CONSTRUCTOR, List.of(
-                OffersModel.NEW,
-                stacks,
-                costs,
-                new MerchantOfferModel(),
-                construction(Dispatcher::newPerChoice),
-                construction(Dispatcher::newUnknown)
-        ));
-        MODELS.put(Phase.OWNER, List.of(
-                new LoggerModel(),
-                new MapItemModel(),
-                branch(Dispatcher::equalsUnknown)
-        ));
-        MODELS.put(Phase.UNDISTRIBUTED, List.of(
-                new PickModel(),
-                branch(Dispatcher::intValue),
-                new OptionalModel(),
-                CollectionsModel.REMOVE_CHOICE,
-                OffersModel.COLLECTED
-        ));
-        MODELS.put(Phase.RECEIVER, List.of(
-                new RandomModel(),
-                costs,
-                stacks,
-                new NumberModel(),
-                branch(Dispatcher::closure),
-                new TraderModel(),
-                new OffersModel(),
-                branch(Dispatcher::draws),
-                new WorldModel(),
-                branch(Dispatcher::unknown),
-                branch(Dispatcher::unsupported),
-                new MapModel(),
-                branch(Dispatcher::nullReceiver),
-                branch(Dispatcher::lambda)
-        ));
-        MODELS.put(Phase.JDK, List.of(
-                branch(Dispatcher::requireNonNull),
-                branch(Dispatcher::isNull),
-                branch(Dispatcher::selectionGuard),
-                branch(Dispatcher::threadLocalRandom),
-                NumberModel.STATICS,
-                OffersModel.ORDER,
-                new CollectionsModel(),
-                branch(Dispatcher::uncertain),
-                branch(Dispatcher::staticUnknown)
-        ));
-    }
 
     Dispatcher(Interpreter interpreter) {
         this.interpreter = interpreter;
@@ -269,19 +231,19 @@ final class Dispatcher implements Opcodes, CallContext {
 
     @Nullable
     @Override
-    public TraderModel.TraderRun traderRun() {
-        return interpreter.traderRun;
+    public Subject subject() {
+        return interpreter.subject;
     }
 
     @Nullable
     @Override
-    public Value traderField(String field) {
-        return interpreter.store.hasTraderField(field) ? interpreter.store.getTraderField(field) : null;
+    public Value selfField(String field) {
+        return interpreter.store.hasSelfField(field) ? interpreter.store.getSelfField(field) : null;
     }
 
     @Override
-    public void putTraderField(String field, Value value) {
-        interpreter.store.putTraderField(field, value);
+    public void putSelfField(String field, Value value) {
+        interpreter.store.putSelfField(field, value);
     }
 
     @Nullable
@@ -319,6 +281,11 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Override
+    public List<Decision> decisions() {
+        return List.copyOf(interpreter.decisions.taken());
+    }
+
+    @Override
     public boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason) {
         return interpreter.decisions.decide(kind, subject, value, reason);
     }
@@ -333,7 +300,7 @@ final class Dispatcher implements Opcodes, CallContext {
 
     @Nullable
     private Value apply(Phase phase, Call call) {
-        for (MethodModel model : MODELS.get(phase)) {
+        for (MethodModel model : interpreter.profile.models(phase)) {
             Value answer = model.apply(this, call);
 
             if (answer != NO_OPINION) {

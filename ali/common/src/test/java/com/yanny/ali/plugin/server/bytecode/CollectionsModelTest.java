@@ -65,7 +65,7 @@ public class CollectionsModelTest {
     public void testRemoveFromSingleListingOfTraderIsPick() {
         List<String> list = owned(new ArrayList<>(List.of("a")));
 
-        context.traderRun = new TraderModel.TraderRun(Object.class, false);
+        context.subject = new TraderSubject(Object.class, false);
         assertEquals(new Value.Choice(List.of("a"), list), model.apply(context, remove(list, new Value.Known(0))));
     }
 

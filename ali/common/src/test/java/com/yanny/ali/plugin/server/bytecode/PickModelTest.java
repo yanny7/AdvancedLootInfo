@@ -17,7 +17,7 @@ public class PickModelTest {
     private static final String LISTING = Type.getInternalName(VillagerTrades.ItemListing.class);
     private static final String CREATE = "(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/util/RandomSource;)Lnet/minecraft/world/item/trading/MerchantOffer;";
     private static final String NAME = "(Lnet/minecraft/world/entity/Entity;)Ljava/lang/String;";
-    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Object.class), Origin.TRADER);
+    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Object.class), Origin.SELF);
     private static final VillagerTrades.ItemListing FIRST = (trader, random) -> null;
     private static final VillagerTrades.ItemListing SECOND = (trader, random) -> null;
 
@@ -26,7 +26,7 @@ public class PickModelTest {
 
     @BeforeEach
     public void setUp() {
-        context.traderRun = new TraderModel.TraderRun(Object.class, false);
+        context.subject = new TraderSubject(Object.class, false);
     }
 
     @Test
@@ -94,8 +94,8 @@ public class PickModelTest {
     }
 
     @Test
-    public void testNoTraderRunHasNoOpinion() {
-        context.traderRun = null;
+    public void testNoSubjectHasNoOpinion() {
+        context.subject = null;
         assertSame(MethodModel.NO_OPINION, model.apply(context, getOffer(new Value.Known(FIRST))));
     }
 

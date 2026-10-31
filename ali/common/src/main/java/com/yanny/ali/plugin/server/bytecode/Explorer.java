@@ -11,17 +11,17 @@ final class Explorer {
 
     @NotNull
     static List<Outcome> trader(RegistryAccess registries, Class<?> merchant) {
-        List<Outcome> outcomes = explore(registries, (i) -> i.trades(merchant));
+        List<Outcome> outcomes = explore(Profile.TRADE, registries, (i) -> i.trades(merchant));
 
         if (outcomes.stream().noneMatch(Explorer::offers) && outcomes.stream().allMatch(Outcome.Success.class::isInstance) && TraderModel.writesOffers(merchant)) {
-            return explore(registries, (i) -> i.writtenTrades(merchant));
+            return explore(Profile.TRADE, registries, (i) -> i.writtenTrades(merchant));
         }
 
         return outcomes;
     }
 
     @NotNull
-    static List<Outcome> explore(RegistryAccess registries, Function<Interpreter, Value> run) {
+    static List<Outcome> explore(Profile profile, RegistryAccess registries, Function<Interpreter, Value> run) {
         Set<String> opaque = new HashSet<>();
         int restarts = 0;
         List<Outcome> results = new ArrayList<>();
@@ -31,12 +31,12 @@ final class Explorer {
 
         while (!scripts.isEmpty()) {
             if (results.size() >= Limits.PATHS) {
-                results.add(new Outcome.Failure("too many branches", List.of()));
+                results.add(new Outcome.Failure("too many branches", List.of(), null));
                 break;
             }
 
             List<Boolean> script = scripts.poll();
-            Interpreter interpreter = new Interpreter(Interpreter.Mode.SYMBOLIC, 0, script, registries, opaque);
+            Interpreter interpreter = new Interpreter(profile, Interpreter.Mode.SYMBOLIC, 0, script, registries, opaque);
             Value result = null;
             String failure = null;
 
@@ -54,7 +54,11 @@ final class Explorer {
 
             List<Boolean> taken = interpreter.decisions.taken().stream().map(Decision::holds).toList();
 
-            results.add(failure == null ? new Outcome.Success(result, interpreter.decisions.taken()) : new Outcome.Failure(failure, interpreter.decisions.taken()));
+            if (failure == null) {
+                results.add(new Outcome.Success(result, interpreter.decisions.taken(), interpreter.subject));
+            } else {
+                results.add(new Outcome.Failure(failure, interpreter.decisions.taken(), interpreter.subject));
+            }
 
             for (int i = script.size(); i < taken.size(); i++) {
                 List<Boolean> other = new ArrayList<>(taken.subList(0, i));

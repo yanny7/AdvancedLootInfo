@@ -228,11 +228,11 @@ public class AggregationTest {
     }
 
     private static Outcome success(Value result, Decision... decisions) {
-        return new Outcome.Success(result, List.of(decisions));
+        return new Outcome.Success(result, List.of(decisions), null);
     }
 
     private static Outcome failure(String reason, Decision... decisions) {
-        return new Outcome.Failure(reason, List.of(decisions));
+        return new Outcome.Failure(reason, List.of(decisions), null);
     }
 
     private static Decision random(double chance, boolean holds) {
