@@ -54,6 +54,7 @@ public class EntityLootTableResolver {
     private final Set<String> scannedNamespaces = new HashSet<>();
     private final Map<String, List<Class<?>>> entityClassesByNamespace = new HashMap<>();
     private final Map<ResourceLocation, RandomPage> randomPages = new LinkedHashMap<>();
+    private final Map<ResourceLocation, PageReason> reasons = new HashMap<>();
     private final EntityClasses entityClasses = new EntityClasses();
     private final ICommonUtils utils;
     private final Level level;
@@ -72,17 +73,17 @@ public class EntityLootTableResolver {
             Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(entityId);
 
             if (type.isPresent()) {
-                lootTables.forEach((lootTable) -> addMapping(lootTable, type.get()));
+                lootTables.forEach((lootTable) -> addMapping(lootTable, type.get(), PageReason.CONFIGURATION));
             } else {
                 LOGGER.warn("Unknown entity type {} in entityLootTables configuration", entityId);
             }
         });
 
-        registeredLootTables.forEach((lootTable, types) -> types.forEach((type) -> addMapping(lootTable, type)));
+        registeredLootTables.forEach((lootTable, types) -> types.forEach((type) -> addMapping(lootTable, type, PageReason.PLUGIN)));
 
         for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
             if (type != EntityType.PLAYER) {
-                addMapping(type.getDefaultLootTable(), type);
+                addMapping(type.getDefaultLootTable(), type, null);
             }
         }
 
@@ -120,9 +121,11 @@ public class EntityLootTableResolver {
                 RandomPage page = randomPages.get(lootTable);
 
                 if (page != null) {
-                    result.add(new EntityPage(lootTable, List.of(page.type()), page.lootTable(), page.absorbed()));
+                    result.add(new EntityPage(lootTable, List.of(page.type()), page.lootTable(), page.absorbed(), PageReason.RANDOM));
                 } else if (!absorbed.contains(lootTable)) {
-                    result.add(new EntityPage(lootTable, resolve(lootTable), null, Set.of()));
+                    List<EntityType<?>> types = resolve(lootTable);
+
+                    result.add(new EntityPage(lootTable, types, null, Set.of(), reason(lootTable, types)));
                 }
             }
         }
@@ -273,11 +276,11 @@ public class EntityLootTableResolver {
                 continue;
             }
 
-            tables.events().values().forEach((byTable) -> byTable.keySet().forEach((lootTable) -> addAnalyzedMapping(lootTable, type, log)));
+            tables.events().values().forEach((byTable) -> byTable.keySet().forEach((lootTable) -> addAnalyzedMapping(lootTable, type, PageReason.EVENT, log)));
 
             for (Map<ResourceLocation, Double> byTable : tables.own().values()) {
                 if (byTable.values().stream().allMatch(LootTableAnalysis.ComputedLootTables::isCertain) && byTable.keySet().stream().noneMatch((t) -> isForeign(t, type))) {
-                    byTable.keySet().forEach((lootTable) -> addAnalyzedMapping(lootTable, type, log));
+                    byTable.keySet().forEach((lootTable) -> addAnalyzedMapping(lootTable, type, PageReason.VARIANT, log));
                 } else {
                     addRandomPage(type, byTable, log);
                 }
@@ -308,12 +311,12 @@ public class EntityLootTableResolver {
         }
     }
 
-    private void addAnalyzedMapping(ResourceLocation lootTable, EntityType<?> type, boolean log) {
+    private void addAnalyzedMapping(ResourceLocation lootTable, EntityType<?> type, PageReason reason, boolean log) {
         if (log && !typesByLootTable.getOrDefault(lootTable, List.of()).contains(type)) {
             LOGGER.info("Loot table {} belongs to entity {} by its bytecode", lootTable, BuiltInRegistries.ENTITY_TYPE.getKey(type));
         }
 
-        addMapping(lootTable, type);
+        addMapping(lootTable, type, reason);
     }
 
     private void addRandomPage(EntityType<?> type, Map<ResourceLocation, Double> byTable, boolean log) {
@@ -333,7 +336,7 @@ public class EntityLootTableResolver {
             }
         }
 
-        addMapping(id, type);
+        addMapping(id, type, null);
         randomPages.put(id, new RandomPage(type, randomLootTable(byTable), absorbed));
 
         if (log) {
@@ -402,7 +405,7 @@ public class EntityLootTableResolver {
 
                             //noinspection ConstantValue - some modded mobs does return null
                             if (entityLootTable != null) {
-                                addMapping(entityLootTable, type);
+                                addMapping(entityLootTable, type, null);
                             }
                         }
                     }
@@ -437,15 +440,38 @@ public class EntityLootTableResolver {
         return types;
     }
 
-    private void addMapping(ResourceLocation lootTable, EntityType<?> type) {
+    private void addMapping(ResourceLocation lootTable, EntityType<?> type, @Nullable PageReason reason) {
         List<EntityType<?>> types = typesByLootTable.computeIfAbsent(lootTable, (k) -> new ArrayList<>());
+
+        if (reason != null) {
+            reasons.putIfAbsent(lootTable, reason);
+        }
 
         if (!types.contains(type)) {
             types.add(type);
         }
     }
 
-    public record EntityPage(ResourceLocation id, List<EntityType<?>> types, @Nullable LootTable synthesized, Set<ResourceLocation> absorbed) {
+    @Nullable
+    private PageReason reason(ResourceLocation lootTable, List<EntityType<?>> types) {
+        PageReason reason = reasons.get(lootTable);
+
+        if (reason != null || types.isEmpty() || types.get(0).getDefaultLootTable().equals(lootTable)) {
+            return reason;
+        }
+
+        return PageReason.VARIANT;
+    }
+
+    public enum PageReason {
+        VARIANT,
+        EVENT,
+        RANDOM,
+        CONFIGURATION,
+        PLUGIN,
+    }
+
+    public record EntityPage(ResourceLocation id, List<EntityType<?>> types, @Nullable LootTable synthesized, Set<ResourceLocation> absorbed, @Nullable PageReason reason) {
     }
 
     private record RandomPage(EntityType<?> type, LootTable lootTable, Set<ResourceLocation> absorbed) {

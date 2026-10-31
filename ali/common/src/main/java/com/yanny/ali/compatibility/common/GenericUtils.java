@@ -145,14 +145,14 @@ public class GenericUtils {
     @NotNull
     public static List<TooltipLine> getSpawnTooltip(IDataNode node) {
         if (node instanceof EntityLootTableNode entityNode) {
-            return CoreTooltipUtils.toLines(entityNode.getSpawnTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
+            return CoreTooltipUtils.toLines(entityNode.getInfoTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips, TooltipUtils.getStyle(), TooltipUtils.getNumberOptions());
         }
 
         return Collections.emptyList();
     }
 
     private static boolean hasSpawnInfo(IDataNode node) {
-        return node instanceof EntityLootTableNode entityNode && !entityNode.getSpawnTooltip().isBlank(false);
+        return node instanceof EntityLootTableNode entityNode && !entityNode.getInfoTooltip().isBlank(false);
     }
 
     @NotNull

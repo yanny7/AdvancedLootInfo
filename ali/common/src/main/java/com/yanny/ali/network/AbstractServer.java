@@ -5,11 +5,13 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.spawn.SpawnInfo;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
@@ -374,7 +376,7 @@ public abstract class AbstractServer {
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location))
                 ), unboundedLootModifiers.stream()).toList();
 
-                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers, resolver.getVariantData(entityTypes.get(0), location)));
+                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers, entityPage.reason(), resolver.getVariantData(entityTypes.get(0), location)));
             }
         }
 
@@ -425,15 +427,34 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo,
-                                          @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
+    private static IDataNode asEntityNode(IDataNode node, ResourceLocation location, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo,
+                                          @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
         if (node instanceof LootTableNode lootTableNode) {
             TooltipNode spawnTooltip = spawnInfo != null ? spawnInfo.getEntityTooltip(entityTypes.get(0)) : TooltipNode.empty();
 
-            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), spawnTooltip, variantData);
+            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), infoTooltip(location, reason, spawnTooltip), variantData);
         }
 
         return node;
+    }
+
+    @NotNull
+    private static TooltipNode infoTooltip(ResourceLocation location, @Nullable EntityLootTableResolver.PageReason reason, TooltipNode spawnTooltip) {
+        if (reason == null) {
+            return spawnTooltip;
+        }
+
+        return TooltipBuilder.branch((b) -> {
+            b.add(TooltipBuilder.keyOnly(switch (reason) {
+                case VARIANT -> Lang.Description.VARIANT_LOOT;
+                case EVENT -> Lang.Description.EVENT_LOOT;
+                case RANDOM -> Lang.Description.RANDOM_LOOT;
+                case CONFIGURATION -> Lang.Description.CONFIGURED_LOOT;
+                case PLUGIN -> Lang.Description.PLUGIN_LOOT;
+            }));
+            b.add(TooltipBuilder.value(location).key(Lang.Value.LOOT_TABLE));
+            b.add(spawnTooltip);
+        }).build();
     }
 
     private static void addEntitiesWithoutLoot(AliConfig config, SpawnInfo spawnInfo, Map<ResourceLocation, IDataNode> lootNodes) {
@@ -547,7 +568,7 @@ public abstract class AbstractServer {
                 IDataNode node = parseNode(serverRegistry, lootModifiers, table);
 
                 if (node != null) {
-                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, page.entityTypes(), spawnInfo, pending.variantData()) : node);
+                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, location, page.entityTypes(), spawnInfo, pending.reason(), pending.variantData()) : node);
                 } else if (pending.kind() == PageKind.BLOCK && page.blocks().stream().noneMatch((b) -> b.getLootTable().equals(BuiltInLootTables.EMPTY))) {
                     // noLootTable() blocks are keyed by themselves and have no table by definition
                     LOGGER.debug("Missing block loot table for {}", location);
@@ -812,15 +833,16 @@ public abstract class AbstractServer {
     }
 
     private record PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
-                               @Nullable List<SynchedEntityData.DataValue<?>> variantData, List<MatchedModifier> boundLootModifiers,
+                               @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData,
+                               List<MatchedModifier> boundLootModifiers,
                                List<MatchedModifier> unknownLootModifiers) {
         private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers) {
-            this(kind, page, lootTable, lootModifiers, null);
+            this(kind, page, lootTable, lootModifiers, null, null);
         }
 
         private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
-                            @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
-            this(kind, page, lootTable, lootModifiers, variantData, new ArrayList<>(), new ArrayList<>());
+                            @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
+            this(kind, page, lootTable, lootModifiers, reason, variantData, new ArrayList<>(), new ArrayList<>());
         }
     }
 
