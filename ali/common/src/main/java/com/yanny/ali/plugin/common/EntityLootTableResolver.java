@@ -66,7 +66,10 @@ public class EntityLootTableResolver {
 
         // a table another table pulls in is already explained by that reference, so it must not cost a namespace scan
         excludedLootTables.addAll(referencedLootTables);
-        excludeRolledLootTables(globalLootModifiers);
+
+        if (utils.getConfiguration().codeAnalysis.entityLootTables) {
+            excludeRolledLootTables(globalLootModifiers);
+        }
 
         // config, then plugins, before anything derived: a claimed table keeps its entity even if it resolves elsewhere
         utils.getConfiguration().entityLootTables.forEach((entityId, lootTables) -> {
@@ -147,6 +150,9 @@ public class EntityLootTableResolver {
 
         String namespace = lootTable.getNamespace();
 
+        if (!utils.getConfiguration().codeAnalysis.entityLootTables) {
+            return scanNamespace(lootTable);
+        }
         if (analyzedNamespaces.add(namespace)) {
             analyzeNamespace(namespace);
             types = explain(lootTable);
@@ -167,7 +173,7 @@ public class EntityLootTableResolver {
     public List<Entity> getEntities(EntityType<?> type) {
         return entities.computeIfAbsent(type, (t) -> {
             List<Entity> created = new ArrayList<>(utils.createEntities(t, level));
-            Class<?> entityClass = overridesDefaultLootTable(t) ? entityClasses.find(t) : null;
+            Class<?> entityClass = utils.getConfiguration().codeAnalysis.entityVariants && overridesDefaultLootTable(t) ? entityClasses.find(t) : null;
 
             if (entityClass != null) {
                 Set<ResourceLocation> known = new HashSet<>();

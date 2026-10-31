@@ -210,6 +210,33 @@
         }
       }
     },
+    "codeAnalysis": {
+      "type": "object",
+      "description": "What ALI works out from the code of mods when no plugin or configuration describes it. Turning a part off makes the server start faster but shows less.",
+      "additionalProperties": false,
+      "properties": {
+        "entityLootTables": {
+          "type": "boolean",
+          "description": "If true, the loot tables a mob drops on death, on special events or at random, and the loot tables global loot modifiers and mod code roll, are worked out from the mod's code. If false, a loot table whose id names no mob is attributed by creating the mobs of its namespace.",
+          "default": true
+        },
+        "entityVariants": {
+          "type": "boolean",
+          "description": "If true, mob variants dropping their own loot table are worked out from the mod's code, and their loot pages show the mob in that variant.",
+          "default": true
+        },
+        "traders": {
+          "type": "boolean",
+          "description": "If true, trading mobs no mod adds support for are found and their trades worked out from the mod's code. If false, they get no trade page.",
+          "default": true
+        },
+        "tradeListings": {
+          "type": "boolean",
+          "description": "If true, trades no mod adds support for are worked out from the mod's code. If false, they show one random offer.",
+          "default": true
+        }
+      }
+    },
     "tooltipColors": {
       "type": "object",
       "description": "Colors used when rendering tooltips. Changes take effect on restart.",

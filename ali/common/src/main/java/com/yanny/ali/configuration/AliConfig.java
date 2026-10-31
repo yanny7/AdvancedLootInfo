@@ -45,6 +45,7 @@ public class AliConfig implements ICoreConfig {
 
     public TooltipColors tooltipColors = new TooltipColors();
     public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
+    public CodeAnalysis codeAnalysis = new CodeAnalysis();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -139,6 +140,9 @@ public class AliConfig implements ICoreConfig {
         }
         if (spawnInfo == null) {
             spawnInfo = defaults.spawnInfo;
+        }
+        if (codeAnalysis == null) {
+            codeAnalysis = defaults.codeAnalysis;
         }
     }
 

@@ -620,6 +620,10 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<ResourceLocation, ComputedTrader> computeUnregisteredTraders(AliServerRegistry serverRegistry, AliConfig config) {
+        if (!config.codeAnalysis.traders) {
+            return Map.of();
+        }
+
         long startTime = System.currentTimeMillis();
         Set<EntityType<?>> registered = serverRegistry.getTrades().values().stream()
                 .map(AliServerRegistry.Trades::entityType)
