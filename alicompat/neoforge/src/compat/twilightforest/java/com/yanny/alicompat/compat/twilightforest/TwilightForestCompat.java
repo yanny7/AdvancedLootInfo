@@ -24,9 +24,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import twilightforest.advancements.predicate.ItemColorPredicate;
+import twilightforest.init.TFEntities;
 import twilightforest.loot.LootingEnchantNumberProvider;
 import twilightforest.loot.MultiplayerBasedAdditionLootFunction;
 import twilightforest.loot.MultiplayerBasedNumberProvider;
+import twilightforest.loot.TFLootTables;
 import twilightforest.loot.conditions.GiantPickUsedCondition;
 import twilightforest.loot.conditions.IsMinionCondition;
 import twilightforest.loot.conditions.ModExistsCondition;
@@ -71,6 +73,9 @@ public class TwilightForestCompat implements IGlmModCompat {
 
         registry.registerPageResolver(GiantPickUsedCondition.class, TwilightForestCompat::testGiantPickUsed);
         PluginUtils.registerPageResolver(registry, FieryToolSmeltingModifier.class, FieryToolSmeltingModifierAccessor.class);
+
+        registry.registerEntityLootTable(TFEntities.QUEST_RAM.get(), TFLootTables.QUESTING_RAM_REWARDS.location());
+        registry.registerEntityLootTable(TFEntities.DEATH_TOME.get(), TFLootTables.DEATH_TOME_HURT.location());
     }
 
     @Override

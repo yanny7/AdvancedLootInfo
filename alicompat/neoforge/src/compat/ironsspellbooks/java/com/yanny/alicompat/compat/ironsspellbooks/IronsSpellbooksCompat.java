@@ -9,10 +9,19 @@ import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.loot.*;
+import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class IronsSpellbooksCompat implements IGlmModCompat {
+    private static final List<String> BOSS_LOOT_SUFFIXES = List.of("_per_player", "_ominous", "_per_player_ominous");
+    private static final List<String> APPENDED_LOOT_TABLES = List.of("entities/additional_blaze_loot", "entities/additional_dragon_loot",
+            "entities/additional_evoker_loot", "entities/additional_hoglin_loot", "entities/additional_stray_loot");
+
     @NotNull
     @Override
     public String targetModId() {
@@ -34,12 +43,20 @@ public class IronsSpellbooksCompat implements IGlmModCompat {
         registry.registerTrades(WizardTrades.PYROMANCER, BuiltInRegistries.ENTITY_TYPE.get(WizardTrades.PYROMANCER), WizardTrades::pyromancer, WizardTrades::pyromancerLevel);
 
         PluginUtils.registerValueTooltip(registry, SpellFilter.class, SpellFilterAccessor.class);
+
+        registerBossLootTables(registry, EntityRegistry.DEAD_KING.get());
+        registerBossLootTables(registry, EntityRegistry.FIRE_BOSS.get());
+        APPENDED_LOOT_TABLES.forEach((path) -> registry.registerLootTableReference(ResourceLocation.fromNamespaceAndPath(IronsSpellbooksLang.MOD_ID, path)));
     }
 
     @Override
     public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry) {
         GlmAccessorUtils.registerGlobalLootModifier(registry, AppendLootModifier.class, AppendLootModifierAccessor.class);
         GlmAccessorUtils.registerGlobalLootModifier(registry, ReplaceLootModifier.class, ReplaceLootModifierAccessor.class);
+    }
+
+    private static void registerBossLootTables(IServerRegistry registry, EntityType<?> type) {
+        BOSS_LOOT_SUFFIXES.forEach((suffix) -> registry.registerEntityLootTable(type, type.getDefaultLootTable().location().withSuffix(suffix)));
     }
 
     @NotNull

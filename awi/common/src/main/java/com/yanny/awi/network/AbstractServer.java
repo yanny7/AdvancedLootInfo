@@ -141,7 +141,7 @@ public abstract class AbstractServer {
         NetworkUtils.writeMapData(Utils.MOD_ID, serverRegistry, buf, worldgenNodes);
         NetworkUtils.compressAndStoreData(Utils.MOD_ID, rawBuf, (i, data) -> chunks.add(new WorldgenDataChunkMessage(i, data)));
 
-        serverRegistry.printRuntimeInfo();
+        serverRegistry.printRuntimeInfo(serverRegistry.getConfiguration().logMoreStatistics);
     }
 
     public final void syncLootTables(Player player) {

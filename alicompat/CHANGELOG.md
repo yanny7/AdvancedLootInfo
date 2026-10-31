@@ -1,3 +1,8 @@
+## []
+
+- Grimoire of Gaia dwarf and minotaurus variants and mimic chests show their loot under their mob instead of gameplay loot
+- Faster server start with Grimoire of Gaia
+
 ## [1.3.0]
 
 - Added VillagerConfig support

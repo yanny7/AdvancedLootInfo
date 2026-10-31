@@ -1,4 +1,4 @@
-ali:loot_table
+ali:entity_loot_table
   | Selects all entries
   ali:loot_pool
     | Selects random entry

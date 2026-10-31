@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.bumblezone;
 
+import com.telepathicgrunt.the_bumblezone.loot.NewLootInjectorApplier;
 import com.telepathicgrunt.the_bumblezone.loot.conditions.EssenceOnlySpawn;
 import com.telepathicgrunt.the_bumblezone.loot.forge.BeeStingerLootApplier;
 import com.telepathicgrunt.the_bumblezone.loot.forge.DimensionFishingLootApplier;
@@ -7,6 +8,7 @@ import com.telepathicgrunt.the_bumblezone.loot.functions.DropContainerItems;
 import com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure;
 import com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals;
 import com.telepathicgrunt.the_bumblezone.loot.functions.UniquifyIfHasItems;
+import com.telepathicgrunt.the_bumblezone.modinit.BzEntities;
 import com.telepathicgrunt.the_bumblezone.utils.GeneralUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerRegistry;
@@ -15,6 +17,7 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.alicompat.IGlmModCompat;
 import com.yanny.alicompat.accessor.GlmAccessorUtils;
 import com.yanny.alicompat.accessor.PluginUtils;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class BumblezoneCompat implements IGlmModCompat {
@@ -36,6 +39,9 @@ public class BumblezoneCompat implements IGlmModCompat {
         PluginUtils.registerItemListing(registry, GeneralUtils.BasicItemTrade.class, BasicItemTradeAccessor.class);
 
         PluginUtils.registerPageResolver(registry, BeeStingerLootApplier.class, BeeStingerLootApplierAccessor.class);
+
+        registry.registerLootTableReference(NewLootInjectorApplier.STINGER_DROP_LOOT_TABLE_RL);
+        registry.registerEntityLootTable(BzEntities.COSMIC_CRYSTAL_ENTITY.get(), new ResourceLocation(BumblezoneLang.MOD_ID, "entities/cosmic_crystal"));
     }
 
     @Override
