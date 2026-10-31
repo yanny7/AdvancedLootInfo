@@ -42,6 +42,7 @@ public class ServerUtilsTest {
         ));
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$UnknownFunction",
                 "  -> item: minecraft:andesite",
                 "  -> value: 0 to 5  ~1 (36%)"
         ));
@@ -59,6 +60,7 @@ public class ServerUtilsTest {
                 EnchantRandomlyFunction.randomEnchantment().build())
         ).build(), List.of(
                 "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$UnknownCondition",
                 "  -> valid: True",
                 "  -> condition:",
                 "    -> Weather Check:",
@@ -84,7 +86,8 @@ public class ServerUtilsTest {
                 "      -> Material: minecraft:emerald"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(), List.of(
-                "Not implemented: [java.lang.StringBuilder]"
+                "Not implemented: [StringBuilder]",
+                "  -> Class: java.lang.StringBuilder"
         ));
     }
 
@@ -105,8 +108,10 @@ public class ServerUtilsTest {
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
         )).build(), List.of(
             "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$TestCondition",
                 "  -> builder:",
-                "    -> Not implemented: [java.lang.StringBuilder]",
+                "    -> Not implemented: [StringBuilder]",
+                "      -> Class: java.lang.StringBuilder",
                 "  -> primitiveArray:",
                 "    -> True",
                 "    -> False",
@@ -115,14 +120,17 @@ public class ServerUtilsTest {
                 "    -> True",
                 "  -> functions:",
                 "    -> Auto-detected: minecraft:unknown",
+                "      -> Class: com.yanny.ali.test.ServerUtilsTest$UnknownFunction",
                 "      -> item: minecraft:item_frame",
                 "      -> value: 1 to 4",
                 "    -> Set Damage:",
                 "      -> Damage: 50%",
                 "      -> Add: False",
                 "  -> builders:",
-                "    -> Not implemented: [java.lang.StringBuilder]",
-                "    -> Not implemented: [java.lang.StringBuilder]",
+                "    -> Not implemented: [StringBuilder]",
+                "      -> Class: java.lang.StringBuilder",
+                "    -> Not implemented: [StringBuilder]",
+                "      -> Class: java.lang.StringBuilder",
                 "  -> enumValue: attached",
                 "  -> primitive: True",
                 "  -> state: False",

@@ -26,6 +26,13 @@ public final class BytecodeInterpreter {
 
     @Nullable
     public static IDataNode getItemListing(IServerUtils utils, VillagerTrades.ItemListing listing, TooltipNode condition) {
+        ComputedListing computed = computeItemListing(utils, listing, condition);
+
+        return computed != null ? computed.node() : null;
+    }
+
+    @Nullable
+    public static ComputedListing computeItemListing(IServerUtils utils, VillagerTrades.ItemListing listing, TooltipNode condition) {
         if (!RuntimeNames.AVAILABLE) {
             return null;
         }
@@ -103,5 +110,8 @@ public final class BytecodeInterpreter {
     }
 
     public record ComputedTrades(Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
+    }
+
+    public record ComputedListing(IDataNode node, boolean incomplete) {
     }
 }

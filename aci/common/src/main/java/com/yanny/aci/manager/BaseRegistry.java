@@ -31,8 +31,8 @@ abstract class BaseRegistry {
         allRegistries.forEach(ManagedRegistry::logStatistics);
     }
 
-    public void printRuntimeInfo() {
-        allRegistries.forEach(ManagedRegistry::logMissing);
+    public void printRuntimeInfo(boolean logAutoDetected) {
+        allRegistries.forEach((r) -> r.logMissing(logAutoDetected));
     }
 
     @NotNull

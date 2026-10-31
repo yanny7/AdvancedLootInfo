@@ -21,6 +21,8 @@ public class ManagedRegistry<K, V> {
     private final String label;
     @Nullable
     private final Set<String> missing;
+    @Nullable
+    private final Set<String> autoDetected;
 
     public ManagedRegistry(String modId, String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
         this.logger = CommonLogUtils.getLogger(modId);
@@ -31,8 +33,10 @@ public class ManagedRegistry<K, V> {
 
         if (reportMissing) {
             missing = new HashSet<>();
+            autoDetected = new HashSet<>();
         } else {
             missing = null;
+            autoDetected = null;
         }
     }
 
@@ -41,6 +45,10 @@ public class ManagedRegistry<K, V> {
 
         if (missing != null) {
             missing.clear();
+        }
+
+        if (autoDetected != null) {
+            autoDetected.clear();
         }
     }
 
@@ -53,22 +61,38 @@ public class ManagedRegistry<K, V> {
     }
 
     public Optional<V> get(K key) {
-        V value = storage.get(key);
+        Optional<V> value = find(key);
 
-        if (value != null) {
-            return Optional.of(value);
+        if (value.isEmpty()) {
+            reportMissing(key);
         }
 
+        return value;
+    }
+
+    public Optional<V> find(K key) {
+        return Optional.ofNullable(storage.get(key));
+    }
+
+    public void reportMissing(K key) {
         if (missing != null) {
             missing.add(keyNameGetter.apply(key));
         }
-        
-        return Optional.empty();
     }
 
-    public void logMissing() {
+    public void reportAutoDetected(K key) {
+        if (autoDetected != null) {
+            autoDetected.add(keyNameGetter.apply(key));
+        }
+    }
+
+    public void logMissing(boolean logAutoDetected) {
         if (missing != null) {
             missing.forEach((t) -> logger.warn("Missing {} for {}", label, t));
+        }
+
+        if (logAutoDetected && autoDetected != null) {
+            autoDetected.stream().filter((t) -> missing == null || !missing.contains(t)).forEach((t) -> logger.info("No {} for {}, auto-detected", label, t));
         }
     }
 
@@ -90,5 +114,19 @@ public class ManagedRegistry<K, V> {
         }
 
         return name;
+    }
+
+    @NotNull
+    public static String shortClassName(Class<?> clazz) {
+        String name = clazz.getTypeName();
+        int index = name.indexOf(LAMBDA_MARKER);
+
+        if (index >= 0) {
+            name = name.substring(0, index);
+        } else if (!clazz.getSimpleName().isEmpty()) {
+            return clazz.getSimpleName();
+        }
+
+        return name.substring(name.lastIndexOf('.') + 1);
     }
 }

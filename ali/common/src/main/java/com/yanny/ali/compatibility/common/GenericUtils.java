@@ -54,7 +54,6 @@ import oshi.util.tuples.Triplet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -415,50 +414,9 @@ public class GenericUtils {
         return new TradeLootType(getJobSites(profession), getRequestedItems(profession), entityType, node, location, items.getA(), items.getB());
     }
 
-    public static <T> void register(T emiRegistry, BiConsumer<T, byte[]> registerData) {
-        LOGGER.info("Starting data registration...");
-        int maxRetries = 3;
-        int currentTry = 0;
-
-        while (currentTry < maxRetries) {
-            currentTry++;
-            CompletableFuture<byte[]> futureData = PluginManager.getInstance().clientRegistry.getCurrentDataFuture();
-
-            if (!futureData.isDone()) {
-                LOGGER.info("Data not ready. Requesting data from server (Attempt {}/{})", currentTry, maxRetries);
-                AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestLootDataMessage());
-            } else {
-                LOGGER.info("Data already received, processing instantly.");
-            }
-
-            try {
-                byte[] fullCompressedData = futureData.get(30, TimeUnit.SECONDS);
-
-                registerData.accept(emiRegistry, fullCompressedData);
-                LOGGER.info("Data registration finished successfully.");
-                return;
-            } catch (TimeoutException e) {
-                LOGGER.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.", e);
-                PluginManager.getInstance().clientRegistry.clearReceivedData();
-            } catch (CancellationException e) {
-                LOGGER.warn("Data reception was cancelled. Retrying with new data stream...", e);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ignored) {}
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                LOGGER.error("Registration thread interrupted!", e);
-                return;
-            } catch (ExecutionException e) {
-                LOGGER.error("Failed to finish registering data with error", e);
-                return;
-            } catch (Throwable e) {
-                LOGGER.error("Failed to finish registering data with unexpected error", e);
-                return;
-            }
-        }
-
-        LOGGER.error("CRITICAL: Could not fetch loot data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", maxRetries);
+    public static <T> void register(T registry, BiConsumer<T, byte[]> registerData) {
+        PluginManager.getInstance().clientRegistry.registerData(registry, registerData, AbstractClient.INSTANCE::canRequestData,
+                () -> AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestLootDataMessage()));
     }
 
     public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {

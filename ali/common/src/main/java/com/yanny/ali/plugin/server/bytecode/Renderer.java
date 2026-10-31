@@ -40,7 +40,7 @@ final class Renderer {
     private Renderer() {}
 
     @Nullable
-    static IDataNode listing(IServerUtils utils, String name, Aggregation.Listing listing, TooltipNode condition) {
+    static BytecodeInterpreter.ComputedListing listing(IServerUtils utils, String name, Aggregation.Listing listing, TooltipNode condition) {
         String reason = listing.reason();
 
         try {
@@ -64,7 +64,9 @@ final class Renderer {
                     LOGGER.info("Computed only some variants of trade item listing {} from its bytecode: {}", name, reason);
                 }
 
-                return nodes.size() == 1 ? nodes.getFirst() : new ConditionalTradesNode(utils, nodes, outer);
+                IDataNode node = nodes.size() == 1 ? nodes.getFirst() : new ConditionalTradesNode(utils, nodes, outer);
+
+                return new BytecodeInterpreter.ComputedListing(node, reason != null);
             }
         } catch (Fail fail) {
             reason = fail.describe();

@@ -168,7 +168,8 @@ public class LootJsGenericTooltipTest {
     @Test
     public void testUnknownIdFilterDoesNotThrow() {
         assertTooltip(LootJsGenericTooltipUtils.getIdFilterTooltip(UTILS, new UnknownIdFilter()).build(), List.of(
-                "Not implemented: [com.yanny.ali.lootjs.test.LootJsGenericTooltipTest$UnknownIdFilter]"
+                "Not implemented: [UnknownIdFilter]",
+                "  -> Class: com.yanny.ali.lootjs.test.LootJsGenericTooltipTest$UnknownIdFilter"
         ));
     }
 

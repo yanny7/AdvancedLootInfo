@@ -21,8 +21,8 @@ import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -95,6 +95,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 
     void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter);
+
+    void registerEntityLootTable(EntityType<?> entityType, Identifier lootTable);
+
+    void registerLootTableReference(Identifier lootTable);
 
     <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 

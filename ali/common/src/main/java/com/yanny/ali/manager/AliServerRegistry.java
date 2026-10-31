@@ -42,8 +42,8 @@ import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -102,6 +102,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<MapCodec<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = register("entity sub-predicate resolvers", false, HashMap::new, AliServerRegistry::mapCodecNameGetter, null);
+    // entity loot tables
+    private final ManagedRegistry<Identifier, List<EntityType<?>>> entityLootTables = register("entity loot tables", false, LinkedHashMap::new, Identifier::toString, null);
 
     private final Set<String> loggedOnce = new HashSet<>();
     private int computedItemListings;
@@ -115,6 +117,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
     private final List<IPageLootModifier> pageLootModifiers = new LinkedList<>();
     private final List<ILootContextPreparer> lootContextPreparers = new ArrayList<>();
+    private final Set<Identifier> lootTableReferences = new HashSet<>();
 
     private final LootContext lootContext;
 
@@ -137,6 +140,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         pageLootModifierGetters.clear();
         pageLootModifiers.clear();
         lootContextPreparers.clear();
+        lootTableReferences.clear();
     }
 
     public void addLootTable(Identifier Identifier, LootTable lootTable) {
@@ -297,6 +301,27 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
+    public void registerEntityLootTable(EntityType<?> entityType, Identifier lootTable) {
+        List<EntityType<?>> types = entityLootTables.find(lootTable).orElseGet(ArrayList::new);
+
+        types.add(entityType);
+        entityLootTables.put(lootTable, types);
+    }
+
+    public Map<Identifier, List<EntityType<?>>> getEntityLootTables() {
+        return entityLootTables.entries();
+    }
+
+    @Override
+    public void registerLootTableReference(Identifier lootTable) {
+        lootTableReferences.add(lootTable);
+    }
+
+    public Set<Identifier> getLootTableReferences() {
+        return lootTableReferences;
+    }
+
+    @Override
     public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> tradeFactory) {
         tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
     }
@@ -347,25 +372,25 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
-        return entryTooltips.get(entry.getClass())
+        return entryTooltips.find(entry.getClass())
                 .map((e) -> guarded("entry tooltip", entry, () -> e.apply(utils, entry), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(entryTooltips, entry.getClass(), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
-        return functionTooltips.get(function.getClass())
+        return functionTooltips.find(function.getClass())
                 .map((f) -> guarded("function tooltip", function, () -> f.apply(utils, function), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function));
+                .orElseGet(() -> autoDetected(functionTooltips, function.getClass(), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)));
     }
 
     @NotNull
     @Override
     public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
-        return conditionTooltips.get(condition.getClass())
+        return conditionTooltips.find(condition.getClass())
                 .map((c) -> guarded("condition tooltip", condition, () -> c.apply(utils, condition), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition));
+                .orElseGet(() -> autoDetected(conditionTooltips, condition.getClass(), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)));
     }
 
     @NotNull
@@ -381,9 +406,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             }
         }
 
-        return ingredientTooltips.get(ingredient.getClass())
+        return ingredientTooltips.find(ingredient.getClass())
                 .map((i) -> guarded("ingredient tooltip", ingredient, () -> i.apply(utils, ingredient), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
+                .orElseGet(() -> autoDetected(ingredientTooltips, ingredient.getClass(), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)));
     }
 
     @NotNull
@@ -411,17 +436,17 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends DataComponentPredicate> TooltipBuilder getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
-        return dataComponentPredicateTooltips.get(predicate.getClass())
+        return dataComponentPredicateTooltips.find(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> MissingTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate));
+                .orElseGet(() -> autoDetected(dataComponentPredicateTooltips, predicate.getClass(), () -> MissingTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate)));
     }
 
     @NotNull
     @Override
     public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
-        return entitySubPredicateTooltips.get(predicate.codec())
+        return entitySubPredicateTooltips.find(predicate.codec())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
+                .orElseGet(() -> autoDetected(entitySubPredicateTooltips, predicate.codec(), () -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate)));
     }
 
     @NotNull
@@ -546,29 +571,30 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
-        return tradeItemListings.get(entry.getClass())
+        return tradeItemListings.find(entry.getClass())
                 .map((e) -> guarded("item listing", entry, () -> e.apply(utils, entry, condition), () -> getFallbackItemListing(utils, entry, condition)))
                 .orElseGet(() -> getFallbackItemListing(utils, entry, condition));
     }
 
     @NotNull
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
-        IDataNode computed = BytecodeInterpreter.getItemListing(utils, entry, condition);
+        BytecodeInterpreter.ComputedListing computed = BytecodeInterpreter.computeItemListing(utils, entry, condition);
         String name = ManagedRegistry.classKeyName(BytecodeInterpreter.listingSource(entry).getClass());
 
         if (computed != null) {
-            String message = "Computed trade item listing " + name + " from its bytecode";
-
             computedItemListings++;
 
-            if (loggedOnce.add(message)) {
-                LOGGER.info(message);
+            if (computed.incomplete()) {
+                tradeItemListings.reportMissing(entry.getClass());
+            } else {
+                tradeItemListings.reportAutoDetected(entry.getClass());
             }
 
-            return computed;
+            return computed.node();
         }
 
         uncomputedItemListings++;
+        tradeItemListings.reportMissing(entry.getClass());
 
         try {
             // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
@@ -593,6 +619,19 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, entry).build());
         } catch (Throwable e) {
             return new MissingNode(TooltipNode.empty());
+        }
+    }
+
+    @NotNull
+    private static <K> TooltipBuilder autoDetected(ManagedRegistry<K, ?> registry, K key, Supplier<TooltipBuilder> fallback) {
+        try {
+            TooltipBuilder tooltip = fallback.get();
+
+            registry.reportAutoDetected(key);
+            return tooltip;
+        } catch (Throwable e) {
+            registry.reportMissing(key);
+            throw e;
         }
     }
 
@@ -777,8 +816,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void printRuntimeInfo() {
-        super.printRuntimeInfo();
+    public void printRuntimeInfo(boolean logAutoDetected) {
+        super.printRuntimeInfo(logAutoDetected);
 
         if (this.getConfiguration().logMoreStatistics) {
             getTooltipCache().logStatistics();
