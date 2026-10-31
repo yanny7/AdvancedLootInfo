@@ -29,7 +29,7 @@ public final class BytecodeInterpreter {
         Aggregation.Listing aggregated;
 
         try {
-            aggregated = Aggregation.listing(Explorer.explore(utils.getServerLevel().registryAccess(), listing::call));
+            aggregated = Aggregation.listing(Explorer.explore(Profile.TRADE, utils.getServerLevel().registryAccess(), listing::call));
         } catch (Fail fail) {
             aggregated = new Aggregation.Listing(List.of(), fail.describe());
         } catch (Throwable e) {
@@ -65,7 +65,7 @@ public final class BytecodeInterpreter {
         }
 
         try {
-            return Aggregation.stacks(new Interpreter(Interpreter.Mode.SYMBOLIC, 0).call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
+            return Aggregation.stacks(new Interpreter(Profile.TRADE, Interpreter.Mode.SYMBOLIC, 0).call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
         } catch (Throwable ignored) {}
 
         return null;

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 record Origin(@Nullable Object receiver, String member, List<Object> args) {
-    static final Origin TRADER = new Origin(null, "trader", List.of());
+    static final Origin SELF = new Origin(null, "self", List.of());
     static final Origin WORLD = new Origin(null, "world", List.of());
     private static final String EQUALS = "equals(Ljava/lang/Object;)Z";
     private static final Object NONE = new Object();

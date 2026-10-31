@@ -20,9 +20,9 @@ final class PickModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderModel.TraderRun run = context.traderRun();
+        TraderSubject subject = (TraderSubject) context.subject();
 
-        if (run == null) {
+        if (subject == null) {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
@@ -37,7 +37,7 @@ final class PickModel implements MethodModel {
         }
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Choice choice && isPick(context, choice)
                 && choice.options().stream().noneMatch(MerchantOffer.class::isInstance) && returnsOffer(insn, call.loader())) {
-            List<Object> bound = bound(context, run, insn, args.subList(1, args.size()), call.loader());
+            List<Object> bound = bound(context, subject, insn, args.subList(1, args.size()), call.loader());
 
             if (bound != null) {
                 List<Object> listings = choice.options().stream().<Object>map((element) -> context.boundOffer(element, insn, bound)).toList();
@@ -45,13 +45,13 @@ final class PickModel implements MethodModel {
                 return new Value.Pick(listings, choice.draw(), context.poolKey(choice.options()));
             }
         }
-        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known known && known.value() != null && TradeTypes.isModType(known.value().getClass())
+        if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known(Object value) && value != null && TradeTypes.isModType(value.getClass())
                 && returnsOffer(insn, call.loader())) {
-            Object source = context.listingSource(known.value());
-            List<Object> bound = source != null ? bound(context, run, insn, args.subList(1, args.size()), call.loader()) : null;
+            Object source = context.listingSource(value);
+            List<Object> bound = source != null ? bound(context, subject, insn, args.subList(1, args.size()), call.loader()) : null;
 
             if (bound != null) {
-                return new Value.Pick(List.of(context.boundOffer(known.value(), insn, bound)), source, context.levelKey(source));
+                return new Value.Pick(List.of(context.boundOffer(value, insn, bound)), source, context.levelKey(source));
             }
         }
 
@@ -76,7 +76,7 @@ final class PickModel implements MethodModel {
     }
 
     @Nullable
-    private static List<Object> bound(CallContext context, TraderModel.TraderRun run, MethodInsnNode insn, List<Value> args, ClassLoader loader) {
+    private static List<Object> bound(CallContext context, TraderSubject subject, MethodInsnNode insn, List<Value> args, ClassLoader loader) {
         List<Object> bound = new ArrayList<>();
         Type[] params = Type.getArgumentTypes(insn.desc);
 
@@ -84,7 +84,7 @@ final class PickModel implements MethodModel {
             Value arg = args.get(i);
             Class<?> param = params[i].getSort() == Type.OBJECT ? load(params[i].getInternalName(), loader) : null;
 
-            if (run.isSelf(arg)) {
+            if (subject.isSelf(arg)) {
                 bound.add(BoundOffer.Bound.TRADER);
             } else if (arg instanceof Value.Unknown unknown && Origin.WORLD.equals(unknown.origin())) {
                 bound.add(BoundOffer.Bound.WORLD);
