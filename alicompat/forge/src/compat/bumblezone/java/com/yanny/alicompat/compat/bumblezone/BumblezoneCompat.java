@@ -1,6 +1,5 @@
 package com.yanny.alicompat.compat.bumblezone;
 
-import com.telepathicgrunt.the_bumblezone.loot.NewLootInjectorApplier;
 import com.telepathicgrunt.the_bumblezone.loot.conditions.EssenceOnlySpawn;
 import com.telepathicgrunt.the_bumblezone.loot.forge.BeeStingerLootApplier;
 import com.telepathicgrunt.the_bumblezone.loot.forge.DimensionFishingLootApplier;
@@ -40,7 +39,6 @@ public class BumblezoneCompat implements IGlmModCompat {
 
         PluginUtils.registerPageResolver(registry, BeeStingerLootApplier.class, BeeStingerLootApplierAccessor.class);
 
-        registry.registerLootTableReference(NewLootInjectorApplier.STINGER_DROP_LOOT_TABLE_RL);
         registry.registerEntityLootTable(BzEntities.COSMIC_CRYSTAL_ENTITY.get(), new ResourceLocation(BumblezoneLang.MOD_ID, "entities/cosmic_crystal"));
     }
 
