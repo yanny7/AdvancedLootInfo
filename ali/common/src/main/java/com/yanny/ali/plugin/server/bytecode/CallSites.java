@@ -9,6 +9,7 @@ import org.objectweb.asm.tree.analysis.*;
 
 import java.util.*;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
@@ -20,18 +21,19 @@ final class CallSites {
 
     private final Class<?> self;
     private final Sink sink;
+    private final Predicate<Declaration> mayReach;
     private final Map<MethodNode, Optional<Frame<SourceValue>[]>> frames = new IdentityHashMap<>();
     private final Map<Reach, Boolean> reaching = new HashMap<>();
     private final Set<String> visited = new HashSet<>();
-    private final List<Site> sites = new ArrayList<>();
+    private List<Site> sites = new ArrayList<>();
 
-    private CallSites(Class<?> self, Sink sink) {
+    CallSites(Class<?> self, Sink sink, Predicate<Declaration> mayReach) {
         this.self = self;
         this.sink = sink;
+        this.mayReach = mayReach;
     }
 
-    static List<Site> find(Class<?> self, Class<?> owner, MethodNode method, Sink sink) {
-        CallSites search = new CallSites(self, sink);
+    List<Site> find(Class<?> owner, MethodNode method) {
         Type[] params = Type.getArgumentTypes(method.desc);
         Arg[] args = new Arg[params.length];
 
@@ -39,8 +41,10 @@ final class CallSites {
             args[i] = new EntryParam(i);
         }
 
-        search.walk(new Context(new Declaration(owner, method), (method.access & Opcodes.ACC_STATIC) == 0 ? Self.INSTANCE : null, args), 0);
-        return search.sites;
+        visited.clear();
+        sites = new ArrayList<>();
+        walk(new Context(new Declaration(owner, method), (method.access & Opcodes.ACC_STATIC) == 0 ? Self.INSTANCE : null, args), 0);
+        return sites;
     }
 
     static Source argument(String owner, MethodNode method, MethodInsnNode call, int argument, ClassLoader loader) {
@@ -92,7 +96,7 @@ final class CallSites {
             int first = frame.getStackSize() - params.length;
 
             if (sink.matches(call, owner.getClassLoader())) {
-                sites.add(site(source(context, analyzed, frame.getStack(first + sink.argument())), context));
+                sites.add(withLive(site(source(context, analyzed, frame.getStack(first + sink.argument())), context)));
             } else if (depth < DEPTH) {
                 Arg receiver = call.getOpcode() == Opcodes.INVOKESTATIC ? null : source(context, analyzed, frame.getStack(first - 1));
                 Declaration callee = callee(call, owner.getClassLoader(), receiver instanceof Self);
@@ -119,6 +123,10 @@ final class CallSites {
         }
 
         reaching.put(key, false);
+
+        if (!mayReach.test(new Declaration(owner, method))) {
+            return false;
+        }
 
         boolean onSelf = (method.access & Opcodes.ACC_STATIC) == 0 && owner.isAssignableFrom(self);
         boolean found = false;
@@ -246,15 +254,80 @@ final class CallSites {
     }
 
     @NotNull
+    private Site withLive(Site site) {
+        return site.source() == Other.INSTANCE ? new Site(site.source(), site.holder(), site.selfReceiver(), site.selfParams(), live(site.holder())) : site;
+    }
+
+    @Nullable
+    private BitSet live(Declaration holder) {
+        MethodNode method = holder.method();
+        Class<?> owner = holder.owner();
+        List<List<Integer>> predecessors = new ArrayList<>();
+
+        for (int i = 0; i < method.instructions.size(); i++) {
+            predecessors.add(new ArrayList<>());
+        }
+
+        try {
+            new Analyzer<>(new SourceInterpreter()) {
+                @Override
+                protected void newControlFlowEdge(int insn, int successor) {
+                    predecessors.get(successor).add(insn);
+                }
+
+                @Override
+                protected boolean newControlFlowExceptionEdge(int insn, int successor) {
+                    predecessors.get(successor).add(insn);
+                    return true;
+                }
+            }.analyze(Type.getInternalName(owner), method);
+        } catch (AnalyzerException e) {
+            return null;
+        }
+
+        boolean onSelf = (method.access & Opcodes.ACC_STATIC) == 0 && owner.isAssignableFrom(self);
+        BitSet live = new BitSet(method.instructions.size());
+        Deque<Integer> queue = new ArrayDeque<>();
+
+        for (int i = 0; i < method.instructions.size(); i++) {
+            if (method.instructions.get(i) instanceof MethodInsnNode call && leadsToSink(call, owner.getClassLoader(), onSelf)) {
+                live.set(i);
+                queue.add(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            for (int predecessor : predecessors.get(queue.poll())) {
+                if (!live.get(predecessor)) {
+                    live.set(predecessor);
+                    queue.add(predecessor);
+                }
+            }
+        }
+
+        return live;
+    }
+
+    private boolean leadsToSink(MethodInsnNode call, ClassLoader loader, boolean onSelf) {
+        if (sink.matches(call, loader)) {
+            return true;
+        }
+
+        Declaration callee = callee(call, loader, onSelf);
+
+        return callee != null && reaches(callee.owner(), callee.method(), 1);
+    }
+
+    @NotNull
     private static Site site(Arg arg, Context context) {
         if (arg instanceof Constant constant) {
-            return new Site(constant, context.holder(), false, Set.of());
+            return new Site(constant, context.holder(), false, Set.of(), null);
         }
         if (arg instanceof EntryParam param) {
-            return new Site(new Param(param.index()), context.holder(), false, Set.of());
+            return new Site(new Param(param.index()), context.holder(), false, Set.of(), null);
         }
         if (arg instanceof OwnDefault) {
-            return new Site(OwnDefault.INSTANCE, context.holder(), false, Set.of());
+            return new Site(OwnDefault.INSTANCE, context.holder(), false, Set.of(), null);
         }
 
         Context holder = arg instanceof Computed computed ? computed.context() : context;
@@ -266,7 +339,7 @@ final class CallSites {
             }
         }
 
-        return new Site(Other.INSTANCE, holder.holder(), holder.receiver() instanceof Self, selfParams);
+        return new Site(Other.INSTANCE, holder.holder(), holder.receiver() instanceof Self, selfParams, null);
     }
 
     @Nullable
@@ -296,7 +369,7 @@ final class CallSites {
         }
     }
 
-    record Site(Source source, Declaration holder, boolean selfReceiver, Set<Integer> selfParams) {
+    record Site(Source source, Declaration holder, boolean selfReceiver, Set<Integer> selfParams, @Nullable BitSet live) {
     }
 
     sealed interface Source permits Constant, Param, OwnDefault, Other {

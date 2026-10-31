@@ -87,6 +87,9 @@ final class Machine implements Opcodes {
                 insn = next;
                 continue;
             }
+            if (depth == 0 && interpreter.cutoff != null && interpreter.cutoff.ends(method, insn)) {
+                return null;
+            }
 
             switch (op) {
                 case NOP -> {}
@@ -675,6 +678,12 @@ final class Machine implements Opcodes {
             }
 
             stack.replaceAll((v) -> match.test(v) ? with.apply(v) : v);
+        }
+    }
+
+    record Cutoff(MethodNode method, BitSet live) {
+        boolean ends(MethodNode current, AbstractInsnNode insn) {
+            return current == method && !live.get(method.instructions.indexOf(insn));
         }
     }
 }

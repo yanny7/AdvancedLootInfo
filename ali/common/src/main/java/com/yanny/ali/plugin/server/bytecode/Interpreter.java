@@ -50,6 +50,8 @@ final class Interpreter implements Opcodes {
     final Heap heap = new Heap(store);
     @Nullable
     Subject subject;
+    @Nullable
+    Machine.Cutoff cutoff;
     final PickSources pickSources = new PickSources();
     @Nullable
     final RegistryAccess registries;

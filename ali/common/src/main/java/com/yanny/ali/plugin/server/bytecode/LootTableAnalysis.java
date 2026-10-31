@@ -19,6 +19,7 @@ import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
 
 public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Sites> SITES = new ConcurrentHashMap<>();
     private static final CallSites.Sink SINK = new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, LootDataResolver.class, 0);
 
     private LootTableAnalysis() {}
@@ -38,7 +39,7 @@ public final class LootTableAnalysis {
             }
         }
 
-        return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(rolled(registries, Profile.LOOT, entityClass,
+        return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(rolled(registries, Profile.LOOT, entityClass, true,
                 () -> new EntitySubject(type, entityClass), self(entityClass)), typeDefault, false));
     }
 
@@ -48,7 +49,7 @@ public final class LootTableAnalysis {
             return Set.of();
         }
 
-        return tables(rolled(registries, Profile.ROLLED, instance.getClass(), () -> new InstanceSubject(instance), new Value.Known(instance)));
+        return tables(rolled(registries, Profile.ROLLED, instance.getClass(), false, () -> new InstanceSubject(instance), new Value.Known(instance)));
     }
 
     @NotNull
@@ -100,31 +101,28 @@ public final class LootTableAnalysis {
         });
     }
 
+    public static void releaseJarIndexes() {
+        ModJarIndex.clearCaches();
+    }
+
     static void clearCaches() {
         DEFAULTS.clear();
+        SITES.clear();
     }
 
     @NotNull
-    private static List<LootSubject.Observation> rolled(RegistryAccess registries, Profile profile, Class<?> type, Supplier<LootSubject> subject, Value self) {
+    private static List<LootSubject.Observation> rolled(RegistryAccess registries, Profile profile, Class<?> type, boolean filterByCallers, Supplier<LootSubject> subject,
+                                                        Value self) {
+        Sites sites = SITES.computeIfAbsent(type, (t) -> sites(t, filterByCallers));
         List<LootSubject.Observation> observations = new ArrayList<>();
-        Set<CallSites.Site> computed = new LinkedHashSet<>();
 
-        try {
-            for (Declaration entry : entries(type)) {
-                for (CallSites.Site site : CallSites.find(type, entry.owner(), entry.method(), SINK)) {
-                    if (site.source() instanceof CallSites.Constant constant && constant.value() != null) {
-                        observations.add(new LootSubject.Observation(constant.value(), List.of(), 1));
-                    } else if (site.source() == CallSites.Other.INSTANCE) {
-                        computed.add(site);
-                    }
-                }
-            }
-        } catch (Throwable ignored) {}
+        sites.constants().forEach((constant) -> observations.add(new LootSubject.Observation(constant, List.of(), 1)));
 
-        for (CallSites.Site site : computed) {
+        for (CallSites.Site site : sites.computed()) {
             try {
                 for (Outcome outcome : Explorer.explore(profile, registries, (interpreter) -> {
                     interpreter.subject = subject.get();
+                    interpreter.cutoff = site.live() != null ? new Machine.Cutoff(site.holder().method(), site.live()) : null;
                     return interpreter.machine.execute(site.holder().owner(), site.holder().method(), arguments(site, self), 0);
                 })) {
                     if (outcome.subject() instanceof LootSubject run) {
@@ -135,6 +133,45 @@ public final class LootTableAnalysis {
         }
 
         return observations;
+    }
+
+    @NotNull
+    private static Sites sites(Class<?> type, boolean filterByCallers) {
+        List<Object> constants = new ArrayList<>();
+        Set<CallSites.Site> computed = new LinkedHashSet<>();
+
+        try {
+            Set<String> jars = new HashSet<>();
+
+            for (Class<?> c = type; c != null && !LambdaResolver.isPlatform(Type.getInternalName(c)); c = c.getSuperclass()) {
+                jars.add(String.valueOf(ModJarIndex.location(c)));
+            }
+
+            CallSites search = new CallSites(type, SINK, filterByCallers ? (d) -> mayReachSink(d, jars) : (d) -> true);
+
+            for (Declaration entry : entries(type)) {
+                for (CallSites.Site site : search.find(entry.owner(), entry.method())) {
+                    if (site.source() instanceof CallSites.Constant constant && constant.value() != null) {
+                        constants.add(constant.value());
+                    } else if (site.source() == CallSites.Other.INSTANCE) {
+                        computed.add(site);
+                    }
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        return new Sites(constants, computed);
+    }
+
+    private static boolean mayReachSink(Declaration declaration, Set<String> jars) {
+        if (!jars.contains(String.valueOf(ModJarIndex.location(declaration.owner())))) {
+            return true;
+        }
+
+        ModJarIndex index = ModJarIndex.of(declaration.owner());
+        Set<String> reaching = index != null ? index.reaching(SINK, CallSites.DEPTH) : null;
+
+        return reaching == null || reaching.contains(declaration.method().name + declaration.method().desc);
     }
 
     @NotNull
@@ -193,6 +230,9 @@ public final class LootTableAnalysis {
     @NotNull
     private static Value self(Class<?> entityClass) {
         return Value.Unknown.of(Type.getType(entityClass), Origin.SELF);
+    }
+
+    private record Sites(List<Object> constants, Set<CallSites.Site> computed) {
     }
 
     public record ComputedLootTables(Map<List<Decision>, Map<ResourceLocation, Double>> own, Map<List<Decision>, Map<ResourceLocation, Double>> events) {

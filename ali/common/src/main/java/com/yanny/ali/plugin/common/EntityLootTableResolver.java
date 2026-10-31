@@ -125,6 +125,7 @@ public class EntityLootTableResolver {
             }
         }
 
+        LootTableAnalysis.releaseJarIndexes();
         return result;
     }
 
