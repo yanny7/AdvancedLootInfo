@@ -18,10 +18,9 @@ final class TraderModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderSubject subject = (TraderSubject) context.subject();
         Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : args.get(0);
 
-        if (subject != null && subject.isSelf(receiver)) {
+        if (context.subject() instanceof TraderSubject subject && subject.isSelf(receiver)) {
             if (!subject.ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, insn)) {
                 return subject.offers;
             }
@@ -31,7 +30,7 @@ final class TraderModel implements MethodModel {
                     throw new Fail("offers from item listings");
                 }
 
-                offers.entries.add(new Value.Offers.Listings(listings, args.get(3), context.levelKey(listings)));
+                offers.entries.add(new Value.Offers.Listings(listings, args.get(3), subject.levelKey(listings)));
                 return null;
             }
         }

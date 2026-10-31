@@ -4,7 +4,6 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
@@ -474,8 +473,8 @@ final class Machine implements Opcodes {
 
             Object element = Array.get(arr, i);
 
-            if (element instanceof VillagerTrades.ItemListing) {
-                interpreter.pickSources.putSource(element, arr);
+            if (interpreter.subject != null) {
+                interpreter.subject.elementRead(element, arr);
             }
 
             return interpreter.wrap(element, arr.getClass().getComponentType());
@@ -487,7 +486,9 @@ final class Machine implements Opcodes {
                 return sameDraw(interpreter.combine(elements.stream().map((o) -> interpreter.wrap(o, arr.getClass().getComponentType())).toList()), choice);
             }
 
-            elements.stream().filter(VillagerTrades.ItemListing.class::isInstance).forEach((e) -> interpreter.pickSources.putSource(e, arr));
+            if (interpreter.subject != null) {
+                elements.forEach((e) -> interpreter.subject.elementRead(e, arr));
+            }
             return new Value.Choice(elements, choice.draw());
         }
         if (index instanceof Value.Num num) {

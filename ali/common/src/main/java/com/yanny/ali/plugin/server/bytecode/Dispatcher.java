@@ -15,16 +15,7 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 import java.util.stream.BaseStream;
 
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.CONSTRUCTOR;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.FRESH_RESULTS;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.READ_ONLY;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_RANDOM;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.STATIC_SAFE;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.choiceIndices;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isLegacyRandom;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isRandomType;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.isScalar;
-import static com.yanny.ali.plugin.server.bytecode.Interpreter.sameDraw;
+import static com.yanny.ali.plugin.server.bytecode.Interpreter.*;
 import static com.yanny.ali.plugin.server.bytecode.MethodModel.NO_OPINION;
 import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
@@ -60,13 +51,9 @@ final class Dispatcher implements Opcodes, CallContext {
             interpreter.heap.taint(known.value());
         }
 
-        if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map && map.value() instanceof Map<?, ?>
-                && args.get(1) instanceof Value.Known key && result instanceof Value.Known listings && isKeyedList(listings.value())) {
-            if (key.value() instanceof Integer level) {
-                interpreter.pickSources.putLevel(listings.value(), level);
-            } else if (key.value() instanceof Enum<?> constant) {
-                interpreter.pickSources.putLevel(listings.value(), constant.ordinal() + 1);
-            }
+        if (interpreter.subject != null && call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.get(0) instanceof Value.Known map
+                && map.value() instanceof Map<?, ?> && args.get(1) instanceof Value.Known key && result instanceof Value.Known value) {
+            interpreter.subject.keyedRead(key.value(), value.value());
         }
 
         return result;
@@ -217,9 +204,8 @@ final class Dispatcher implements Opcodes, CallContext {
         return interpreter.heap.shuffled(object);
     }
 
-    @Nullable
     @Override
-    public int[] randomIndexSet(Object object) {
+    public int @Nullable[] randomIndexSet(Object object) {
         return interpreter.heap.randomIndexSet(object);
     }
 
@@ -232,12 +218,6 @@ final class Dispatcher implements Opcodes, CallContext {
     @Override
     public NumberExpr drawCount(@Nullable Object draw) {
         return interpreter.heap.drawCount(draw);
-    }
-
-    @Nullable
-    @Override
-    public Value.Offers offers(Object collection) {
-        return interpreter.heap.offers(collection);
     }
 
     @Nullable
@@ -255,29 +235,6 @@ final class Dispatcher implements Opcodes, CallContext {
     @Override
     public void putSelfField(String field, Value value) {
         interpreter.store.putSelfField(field, value);
-    }
-
-    @Nullable
-    @Override
-    public Integer levelKey(Object listings) {
-        return interpreter.pickSources.levelKey(listings);
-    }
-
-    @Nullable
-    @Override
-    public Object listingSource(Object listing) {
-        return interpreter.pickSources.source(listing);
-    }
-
-    @Nullable
-    @Override
-    public Integer poolKey(List<Object> listings) {
-        return interpreter.pickSources.poolKey(listings);
-    }
-
-    @Override
-    public BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
-        return interpreter.pickSources.boundOffer(element, call, args);
     }
 
     @Nullable
@@ -755,10 +712,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private boolean holdsStack(Value value) {
         return value instanceof Value.Stack;
-    }
-
-    private static boolean isKeyedList(@Nullable Object value) {
-        return value instanceof Object[] array && array.length > 0 || value instanceof List<?> list && !list.isEmpty();
     }
 
     private static MethodModel branch(Branch branch) {

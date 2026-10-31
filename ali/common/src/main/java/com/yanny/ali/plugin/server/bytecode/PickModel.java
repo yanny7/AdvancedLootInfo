@@ -18,19 +18,17 @@ final class PickModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderSubject subject = (TraderSubject) context.subject();
-
-        if (subject == null) {
+        if (!(context.subject() instanceof TraderSubject subject)) {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
             if (args.get(0) instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrades.ItemListing.class::isInstance)) {
-                return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), context.poolKey(choice.options()));
+                return new Value.Pick(choice.options().stream().map(VillagerTrades.ItemListing.class::cast).toList(), choice.draw(), subject.poolKey(choice.options()));
             }
             if (args.get(0) instanceof Value.Known known && known.value() instanceof VillagerTrades.ItemListing listing) {
-                Object source = context.listingSource(listing);
+                Object source = subject.listingSource(listing);
 
-                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? context.levelKey(source) : null);
+                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? subject.levelKey(source) : null);
             }
         }
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.get(0) instanceof Value.Choice choice && isPick(context, choice)
@@ -38,9 +36,9 @@ final class PickModel implements MethodModel {
             List<Object> bound = bound(context, subject, args.subList(1, args.size()));
 
             if (bound != null) {
-                List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> context.boundOffer(element, insn, bound)).toList();
+                List<VillagerTrades.ItemListing> listings = choice.options().stream().<VillagerTrades.ItemListing>map((element) -> subject.boundOffer(element, insn, bound)).toList();
 
-                return new Value.Pick(listings, choice.draw(), context.poolKey(choice.options()));
+                return new Value.Pick(listings, choice.draw(), subject.poolKey(choice.options()));
             }
         }
 

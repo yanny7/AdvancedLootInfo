@@ -51,8 +51,8 @@ final class OffersModel implements MethodModel {
         if (collected != null) {
             return args.get(1) instanceof Value.Choice choice ? addPicked(context, collected, choice) : offersCall(context, call, collected);
         }
-        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && context.offers(known.value()) != null) {
-            return offersCall(context, call, context.offers(known.value()));
+        if (!isStatic && args.get(0) instanceof Value.Known known && known.value() != null && trade(context).offersOf(known.value()) != null) {
+            return offersCall(context, call, trade(context).offersOf(known.value()));
         }
 
         return NO_OPINION;
@@ -184,7 +184,7 @@ final class OffersModel implements MethodModel {
             return null;
         }
 
-        Value.Offers collected = context.offers(collection);
+        Value.Offers collected = trade(context).offersOf(collection);
 
         if (collected != null || !create) {
             return collected;
@@ -197,7 +197,7 @@ final class OffersModel implements MethodModel {
 
         collection.forEach((offer) -> offers.entries.add(new Value.Offers.Single(context.wrap(offer))));
         collection.clear();
-        context.coll(collection).offers = offers;
+        trade(context).putOffers(collection, offers);
         return offers;
     }
 
@@ -232,5 +232,9 @@ final class OffersModel implements MethodModel {
 
     private static boolean isPlainOffers(Class<?> type) {
         return MerchantOffers.class.isAssignableFrom(type) && declaration(type, "add", "(Ljava/lang/Object;)Z", false) instanceof JdkDeclaration;
+    }
+
+    private static TradeSubject trade(CallContext context) {
+        return (TradeSubject) context.subject();
     }
 }

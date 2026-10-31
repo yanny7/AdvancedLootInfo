@@ -29,12 +29,9 @@ class FakeCallContext implements CallContext {
     final List<Decision> decisions = new ArrayList<>();
     final Deque<Boolean> answers = new ArrayDeque<>();
     final List<Call> jdkCalls = new ArrayList<>();
-    final Map<Object, Integer> levelKeys = new IdentityHashMap<>();
     final Map<String, Value> selfFields = new HashMap<>();
     final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
     final Map<Object, NumberExpr> drawCounts = new IdentityHashMap<>();
-    final Map<Object, Object> listingSources = new IdentityHashMap<>();
-    final Map<List<Object>, Integer> poolKeys = new HashMap<>();
     @Nullable
     Subject subject;
     @Nullable
@@ -213,9 +210,8 @@ class FakeCallContext implements CallContext {
         return colls.containsKey(object) ? colls.get(object).shuffled : null;
     }
 
-    @Nullable
     @Override
-    public int[] randomIndexSet(Object object) {
+    public int @Nullable[] randomIndexSet(Object object) {
         return colls.containsKey(object) ? colls.get(object).randomIndexSet : null;
     }
 
@@ -228,12 +224,6 @@ class FakeCallContext implements CallContext {
     @Override
     public NumberExpr drawCount(@Nullable Object draw) {
         return drawCounts.get(draw);
-    }
-
-    @Nullable
-    @Override
-    public Value.Offers offers(Object collection) {
-        return colls.containsKey(collection) ? colls.get(collection).offers : null;
     }
 
     @Nullable
@@ -251,29 +241,6 @@ class FakeCallContext implements CallContext {
     @Override
     public void putSelfField(String field, Value value) {
         selfFields.put(field, value);
-    }
-
-    @Nullable
-    @Override
-    public Integer levelKey(Object listings) {
-        return levelKeys.get(listings);
-    }
-
-    @Nullable
-    @Override
-    public Object listingSource(Object listing) {
-        return listingSources.get(listing);
-    }
-
-    @Nullable
-    @Override
-    public Integer poolKey(List<Object> listings) {
-        return poolKeys.get(listings);
-    }
-
-    @Override
-    public BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
-        return new BoundOffer(element, call.owner, call.name, call.desc, call.itf, args);
     }
 
     @Nullable

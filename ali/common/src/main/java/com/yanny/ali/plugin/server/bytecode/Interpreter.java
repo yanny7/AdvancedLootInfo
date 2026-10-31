@@ -52,7 +52,6 @@ final class Interpreter implements Opcodes {
     Subject subject;
     @Nullable
     Machine.Cutoff cutoff;
-    final PickSources pickSources = new PickSources();
     @Nullable
     final RegistryAccess registries;
     final OpaqueCalls opaque;

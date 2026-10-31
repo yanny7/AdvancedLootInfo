@@ -37,8 +37,7 @@ public class TraderModelTest {
         Value.Offers offers = new Value.Offers();
         Value count = new Value.Known(2);
 
-        run(false);
-        context.levelKeys.put(listings, 3);
+        run(false).putLevel(listings, 3);
         assertNull(model.apply(context, addOffers(offers, new Value.Known(listings), count)));
         assertEquals(List.of(new Value.Offers.Listings(listings, count, 3)), offers.entries);
     }
@@ -58,7 +57,8 @@ public class TraderModelTest {
     }
 
     @Test
-    public void testNoSubjectHasNoOpinion() {
+    public void testListingRunHasNoOpinion() {
+        context.subject = new ListingSubject(Object.class);
         assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), SELF)));
     }
 
