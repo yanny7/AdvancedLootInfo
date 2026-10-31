@@ -17,6 +17,7 @@
 - Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
 - Loot of mob variants and of drops on special events shows under the mob without configuration
 - Mobs that drop one of several loot tables at random show all of them with their chances
+- Loot pages of mob variants show the mob in that variant, also for mods without ALI support
 
 ## [2.5.0]
 

@@ -5,6 +5,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.plugin.server.bytecode.LootTableAnalysis;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -46,6 +47,7 @@ public class EntityLootTableResolver {
 
     private final Map<ResourceLocation, List<EntityType<?>>> typesByLootTable = new HashMap<>();
     private final Map<EntityType<?>, List<Entity>> entities = new HashMap<>();
+    private final Map<EntityType<?>, Boolean> overridingTypes = new HashMap<>();
     private final Set<ResourceLocation> excludedLootTables = new HashSet<>();
     private final Set<String> analyzedNamespaces = new HashSet<>();
     private final Set<String> referencedNamespaces = new HashSet<>();
@@ -155,12 +157,51 @@ public class EntityLootTableResolver {
     }
 
     /**
-     * The sample entities of a type, created once and reused. Only the loot modifier path needs them - a modifier's
-     * predicate takes an {@code Entity}, not an {@link EntityType}.
+     * The sample entities of a type, created once and reused. Only the loot modifier path and variant pages need them -
+     * a modifier's predicate takes an {@code Entity}, not an {@link EntityType}.
      */
     @NotNull
     public List<Entity> getEntities(EntityType<?> type) {
-        return entities.computeIfAbsent(type, (t) -> utils.createEntities(t, level));
+        return entities.computeIfAbsent(type, (t) -> {
+            List<Entity> created = new ArrayList<>(utils.createEntities(t, level));
+            Class<?> entityClass = overridesDefaultLootTable(t) ? entityClasses.find(t) : null;
+
+            if (entityClass != null) {
+                Set<ResourceLocation> known = new HashSet<>();
+
+                created.forEach((e) -> {
+                    if (e instanceof Mob mob) {
+                        known.add(mob.getLootTable());
+                    }
+                });
+                created.addAll(EntityVariants.create(t, level, LootTableAnalysis.getVariantHints(level.registryAccess(), t, entityClass), known));
+            }
+
+            return created;
+        });
+    }
+
+    @Nullable
+    public List<SynchedEntityData.DataValue<?>> getVariantData(EntityType<?> type, ResourceLocation lootTable) {
+        if (!overridesDefaultLootTable(type)) {
+            return null;
+        }
+
+        for (Entity entity : getEntities(type)) {
+            if (entity instanceof Mob mob && lootTable.equals(mob.getLootTable())) {
+                return EntityVariants.data(type, level, entity, lootTable);
+            }
+        }
+
+        return null;
+    }
+
+    private boolean overridesDefaultLootTable(EntityType<?> type) {
+        return overridingTypes.computeIfAbsent(type, (t) -> {
+            Class<?> entityClass = t != EntityType.PLAYER ? entityClasses.find(t) : null;
+
+            return entityClass != null && LootTableAnalysis.overridesDefaultLootTable(entityClass);
+        });
     }
 
     @Nullable

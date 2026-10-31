@@ -3,8 +3,10 @@ package com.yanny.ali.plugin.server.bytecode;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.storage.loot.LootDataResolver;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
@@ -16,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
+import static com.yanny.ali.plugin.server.bytecode.Resolution.Declared;
 
 public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
@@ -41,6 +44,24 @@ public final class LootTableAnalysis {
 
         return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(rolled(registries, Profile.LOOT, entityClass, true,
                 () -> new EntitySubject(type, entityClass), self(entityClass)), typeDefault, false));
+    }
+
+    public static boolean overridesDefaultLootTable(Class<?> entityClass) {
+        return RuntimeNames.LOOT_AVAILABLE && ownDefaultLootTable(entityClass) != null;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<List<VariantHint>> getVariantHints(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
+        if (!RuntimeNames.LOOT_AVAILABLE) {
+            return List.of();
+        }
+
+        try {
+            return VariantHints.of(defaults(registries, type, entityClass), entityClass);
+        } catch (Throwable e) {
+            return List.of();
+        }
     }
 
     @NotNull
@@ -84,7 +105,7 @@ public final class LootTableAnalysis {
 
     static List<Outcome> defaults(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
         return DEFAULTS.computeIfAbsent(type, (t) -> {
-            Declaration own = SelfModel.ownDeclaration(entityClass, RuntimeNames.GET_DEFAULT_LOOT_TABLE.name(), RuntimeNames.GET_DEFAULT_LOOT_TABLE.desc(), false);
+            Declaration own = ownDefaultLootTable(entityClass);
 
             if (own == null) {
                 return List.of();
@@ -99,6 +120,13 @@ public final class LootTableAnalysis {
                 return List.of();
             }
         });
+    }
+
+    @Nullable
+    private static Declaration ownDefaultLootTable(Class<?> entityClass) {
+        Declared declared = Resolution.declaration(entityClass, RuntimeNames.GET_DEFAULT_LOOT_TABLE.name(), RuntimeNames.GET_DEFAULT_LOOT_TABLE.desc(), false);
+
+        return declared instanceof Declaration declaration && !declaration.owner().isAssignableFrom(Mob.class) ? declaration : null;
     }
 
     public static void releaseJarIndexes() {

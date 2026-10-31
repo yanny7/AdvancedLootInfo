@@ -72,6 +72,7 @@ final class RuntimeNames {
     static final Ref ENTITY_GET_TYPE;
     static final Ref LOOT_DATA_GET_LOOT_TABLE;
     static final Ref ENTITY_DATA_SET;
+    static final Ref ENTITY_DATA_GET;
 
     static {
         Map<String, Ref> refs = new HashMap<>();
@@ -118,6 +119,7 @@ final class RuntimeNames {
         ENTITY_GET_TYPE = ref(refs, "mobType", lootMissing);
         LOOT_DATA_GET_LOOT_TABLE = ref(refs, "lootDataGetLootTable", lootMissing);
         ENTITY_DATA_SET = ref(refs, "entityDataSet", lootMissing);
+        ENTITY_DATA_GET = ref(refs, "entityDataGet", lootMissing);
         AVAILABLE = missing.isEmpty();
         LOOT_AVAILABLE = AVAILABLE && lootMissing.isEmpty();
 
@@ -309,6 +311,11 @@ final class RuntimeNames {
 
         private static void entityDataSet(SynchedEntityData data) {
             data.set(null, null);
+        }
+
+        @NotNull
+        private static Object entityDataGet(SynchedEntityData data) {
+            return data.get(null);
         }
 
         private abstract static class VillagerNames extends AbstractVillager {

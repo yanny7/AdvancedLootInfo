@@ -32,6 +32,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -373,7 +374,7 @@ public abstract class AbstractServer {
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location))
                 ), unboundedLootModifiers.stream()).toList();
 
-                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers));
+                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers, resolver.getVariantData(entityTypes.get(0), location)));
             }
         }
 
@@ -424,11 +425,12 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo) {
+    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo,
+                                          @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
         if (node instanceof LootTableNode lootTableNode) {
             TooltipNode spawnTooltip = spawnInfo != null ? spawnInfo.getEntityTooltip(entityTypes.get(0)) : TooltipNode.empty();
 
-            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), spawnTooltip);
+            return new EntityLootTableNode(lootTableNode, entityTypes.get(0), spawnTooltip, variantData);
         }
 
         return node;
@@ -452,7 +454,7 @@ public abstract class AbstractServer {
 
                 LootTableNode emptyTable = new LootTableNode(Collections.emptyList(), TooltipNode.empty());
 
-                lootNodes.put(location, new EntityLootTableNode(emptyTable, entityType, spawnInfo.getEntityTooltip(entityType)));
+                lootNodes.put(location, new EntityLootTableNode(emptyTable, entityType, spawnInfo.getEntityTooltip(entityType), null));
                 addedEntities++;
             } catch (Throwable e) {
                 LOGGER.warn("Failed to add spawning entity {} without loot", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e);
@@ -545,7 +547,7 @@ public abstract class AbstractServer {
                 IDataNode node = parseNode(serverRegistry, lootModifiers, table);
 
                 if (node != null) {
-                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, page.entityTypes(), spawnInfo) : node);
+                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, page.entityTypes(), spawnInfo, pending.variantData()) : node);
                 } else if (pending.kind() == PageKind.BLOCK && page.blocks().stream().noneMatch((b) -> b.getLootTable().equals(BuiltInLootTables.EMPTY))) {
                     // noLootTable() blocks are keyed by themselves and have no table by definition
                     LOGGER.debug("Missing block loot table for {}", location);
@@ -810,9 +812,15 @@ public abstract class AbstractServer {
     }
 
     private record PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
-                               List<MatchedModifier> boundLootModifiers, List<MatchedModifier> unknownLootModifiers) {
+                               @Nullable List<SynchedEntityData.DataValue<?>> variantData, List<MatchedModifier> boundLootModifiers,
+                               List<MatchedModifier> unknownLootModifiers) {
         private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers) {
-            this(kind, page, lootTable, lootModifiers, new ArrayList<>(), new ArrayList<>());
+            this(kind, page, lootTable, lootModifiers, null);
+        }
+
+        private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
+                            @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
+            this(kind, page, lootTable, lootModifiers, variantData, new ArrayList<>(), new ArrayList<>());
         }
     }
 

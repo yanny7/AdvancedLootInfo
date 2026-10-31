@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -402,13 +403,13 @@ final class Dispatcher implements Opcodes, CallContext {
             try {
                 result = interpreter.machine.execute(declaration.owner(), declaration.method(), args, depth + 1);
             } catch (Fail fail) {
-                result = fallbackCall(call, args, loader, fail);
+                result = fallbackCall(call, args, loader, fail, !writesStatic(declaration.method()));
             }
             if (interpreter.decisions.taken().size() - before > 1 && isWorldCall(call, args, loader)) {
                 interpreter.opaque.count(call, interpreter.decisions.taken().size() - before);
             }
         } else {
-            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
+            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name), true);
         }
 
         return result;
@@ -690,9 +691,9 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Nullable
-    private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
+    private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail, boolean runnable) {
         if (args.stream().allMatch(interpreter::isConcrete)) {
-            if (interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
+            if (!runnable || interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
                 throw fail;
             }
 
@@ -713,6 +714,16 @@ final class Dispatcher implements Opcodes, CallContext {
         }
 
         throw fail;
+    }
+
+    private static boolean writesStatic(MethodNode method) {
+        for (AbstractInsnNode insn : method.instructions) {
+            if (insn.getOpcode() == PUTSTATIC) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isWorldCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {

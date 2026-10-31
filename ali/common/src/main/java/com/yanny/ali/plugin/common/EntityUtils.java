@@ -2,54 +2,41 @@ package com.yanny.ali.plugin.common;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
-    @NotNull
-    public static List<Entity> getSheepVariants(Level level) {
-        List<Entity> entities = new ArrayList<>();
-
-        for (DyeColor color : DyeColor.values()) {
-            Sheep sheep;
-
-            try {
-                sheep = EntityType.SHEEP.create(level);
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage(), e);
-                continue;
-            }
-
-            if (sheep != null) {
-                sheep.setColor(color);
-                entities.add(sheep);
-            }
-        }
-
-        Sheep sheep;
+    @Nullable
+    public static Entity createEntity(EntityType<?> type, Level level) {
+        Entity entity;
 
         try {
-            sheep = EntityType.SHEEP.create(level);
+            entity = type.create(level);
         } catch (Throwable e) {
-            LOGGER.warn("Failed to create sheep: {}", e.getMessage(), e);
-            return entities;
+            LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage());
+            return null;
         }
 
-        if (sheep != null) {
-            sheep.setSheared(true);
-            entities.add(sheep);
+        if (entity == null) {
+            LOGGER.warn("Failed to create entity: {} (NULL)", type);
+            return null;
         }
 
-        return entities;
+        // some renderers derive their state from position/rotation, make sure it is not left at NaN/uninitialized values
+        try {
+            entity.moveTo(0, 0, 0);
+            entity.setYRot(0);
+            entity.setXRot(0);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to initialize entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage(), e);
+        }
+
+        return entity;
     }
 }
