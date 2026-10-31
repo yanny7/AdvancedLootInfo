@@ -30,13 +30,13 @@ class FakeCallContext implements CallContext {
     final Deque<Boolean> answers = new ArrayDeque<>();
     final List<Call> jdkCalls = new ArrayList<>();
     final Map<Object, Integer> levelKeys = new IdentityHashMap<>();
-    final Map<String, Value> traderFields = new HashMap<>();
+    final Map<String, Value> selfFields = new HashMap<>();
     final Set<Object> pools = Collections.newSetFromMap(new IdentityHashMap<>());
     final Map<Object, NumberExpr> drawCounts = new IdentityHashMap<>();
     final Map<Object, Object> listingSources = new IdentityHashMap<>();
     final Map<List<Object>, Integer> poolKeys = new HashMap<>();
     @Nullable
-    TraderModel.TraderRun traderRun;
+    Subject subject;
     @Nullable
     RegistryAccess registries;
     Interpreter.Mode mode = Interpreter.Mode.SYMBOLIC;
@@ -238,19 +238,19 @@ class FakeCallContext implements CallContext {
 
     @Nullable
     @Override
-    public TraderModel.TraderRun traderRun() {
-        return traderRun;
+    public Subject subject() {
+        return subject;
     }
 
     @Nullable
     @Override
-    public Value traderField(String field) {
-        return traderFields.get(field);
+    public Value selfField(String field) {
+        return selfFields.get(field);
     }
 
     @Override
-    public void putTraderField(String field, Value value) {
-        traderFields.put(field, value);
+    public void putSelfField(String field, Value value) {
+        selfFields.put(field, value);
     }
 
     @Nullable
@@ -285,6 +285,11 @@ class FakeCallContext implements CallContext {
     @Override
     public Collection<TagKey<?>> tags() {
         return List.of();
+    }
+
+    @Override
+    public List<Decision> decisions() {
+        return List.copyOf(decisions);
     }
 
     @Override

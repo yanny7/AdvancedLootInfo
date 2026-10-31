@@ -25,7 +25,7 @@ record BoundOffer(Object receiver, String owner, String name, String desc, boole
 
         for (int i = 0; i < args.size(); i++) {
             if (args.get(i) == Bound.TRADER) {
-                values.add(Value.Unknown.of(params[i], Origin.TRADER));
+                values.add(Value.Unknown.of(params[i], Origin.SELF));
             } else if (args.get(i) == Bound.RANDOM || args.get(i) == Bound.LEGACY_RANDOM) {
                 values.add(new Value.Rng(args.get(i) == Bound.LEGACY_RANDOM));
             } else {

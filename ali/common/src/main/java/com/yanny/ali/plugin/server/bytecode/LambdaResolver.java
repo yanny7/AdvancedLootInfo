@@ -405,7 +405,7 @@ final class LambdaResolver {
     @NotNull
     private static StubResult interpretStub(Handle candidate, List<Object> captured, List<Value> stubValues, ClassLoader loader, int pick) {
         try {
-            Interpreter interpreter = new Interpreter(Interpreter.Mode.STUB, pick);
+            Interpreter interpreter = new Interpreter(Profile.TRADE, Interpreter.Mode.STUB, pick);
             List<Value> args = new ArrayList<>(captured.stream().map(interpreter.heap::wrap).toList());
 
             args.addAll(stubValues);

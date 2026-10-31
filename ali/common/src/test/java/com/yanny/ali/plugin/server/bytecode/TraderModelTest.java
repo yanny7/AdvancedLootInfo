@@ -8,19 +8,18 @@ import java.util.List;
 
 import static com.yanny.ali.plugin.server.bytecode.FakeCallContext.call;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 
 public class TraderModelTest {
     private static final String TRADER = Type.getInternalName(Trader.class);
-    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Trader.class), Origin.TRADER);
+    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Trader.class), Origin.SELF);
 
     private final TraderModel model = new TraderModel();
     private final FakeCallContext context = new FakeCallContext();
 
     @Test
     public void testGetOffersIsSymbolicOffers() {
-        TraderModel.TraderRun run = run(false);
+        TraderSubject run = run(false);
 
         assertSame(run.offers, model.apply(context, call(INVOKEVIRTUAL, TRADER, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), SELF)));
     }
@@ -52,48 +51,21 @@ public class TraderModelTest {
     }
 
     @Test
-    public void testOwnMethodIsInterpreted() {
-        run(false);
-
-        assertNull(model.apply(context, call(INVOKEVIRTUAL, TRADER, "level", "()I", SELF)));
-        assertEquals(1, context.executions.size());
-        assertEquals(Trader.class, context.executions.get(0).owner());
-        assertEquals("level", context.executions.get(0).method().name);
-        assertEquals(List.of(SELF), context.executions.get(0).args());
-    }
-
-    @Test
-    public void testSpecialCallStartsAtCalledOwner() {
-        run(false);
-
-        model.apply(context, call(INVOKESPECIAL, Type.getInternalName(BaseTrader.class), "level", "()I", SELF));
-        assertEquals(BaseTrader.class, context.executions.get(0).owner());
-    }
-
-    @Test
-    public void testJdkMethodHasNoOpinion() {
-        run(false);
-
-        assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, "hashCode", "()I", SELF)));
-        assertTrue(context.executions.isEmpty());
-    }
-
-    @Test
     public void testOtherReceiverHasNoOpinion() {
         run(false);
 
-        assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, "level", "()I", Value.UNKNOWN)));
+        assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), Value.UNKNOWN)));
     }
 
     @Test
-    public void testNoTraderRunHasNoOpinion() {
-        assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, "level", "()I", SELF)));
+    public void testNoSubjectHasNoOpinion() {
+        assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), SELF)));
     }
 
-    private TraderModel.TraderRun run(boolean ownGetOffers) {
-        TraderModel.TraderRun run = new TraderModel.TraderRun(Trader.class, ownGetOffers);
+    private TraderSubject run(boolean ownGetOffers) {
+        TraderSubject run = new TraderSubject(Trader.class, ownGetOffers);
 
-        context.traderRun = run;
+        context.subject = run;
         return run;
     }
 
@@ -103,16 +75,6 @@ public class TraderModelTest {
         return call(INVOKEVIRTUAL, TRADER, ref.name(), ref.desc(), SELF, offers, listings, count);
     }
 
-    public static class BaseTrader {
-        public int level() {
-            return 0;
-        }
-    }
-
-    public static class Trader extends BaseTrader {
-        @Override
-        public int level() {
-            return 1;
-        }
+    public static class Trader {
     }
 }

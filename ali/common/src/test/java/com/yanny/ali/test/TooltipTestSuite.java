@@ -32,6 +32,7 @@ import com.yanny.ali.plugin.server.bytecode.OffersModelTest;
 import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
 import com.yanny.ali.plugin.server.bytecode.PickModelTest;
 import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
+import com.yanny.ali.plugin.server.bytecode.SelfModelTest;
 import com.yanny.ali.plugin.server.bytecode.TraderModelTest;
 import com.yanny.ali.plugin.server.bytecode.WorldModelTest;
 import net.minecraft.DetectedVersion;
@@ -119,6 +120,7 @@ import static org.mockito.Mockito.mock;
         CollectionsModelTest.class,
         MapModelTest.class,
         TraderModelTest.class,
+        SelfModelTest.class,
         WorldModelTest.class,
         NumberModelTest.class,
         FieldModelTest.class,

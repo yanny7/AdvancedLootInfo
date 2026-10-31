@@ -15,7 +15,7 @@ import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
 
 public class MapItemModelTest {
-    private static final Value.Unknown LEVEL = new Value.Unknown(false, "net/minecraft/server/level/ServerLevel", null, Origin.TRADER);
+    private static final Value.Unknown LEVEL = new Value.Unknown(false, "net/minecraft/server/level/ServerLevel", null, Origin.SELF);
 
     private final MapItemModel model = new MapItemModel();
     private final FakeCallContext context = new FakeCallContext();
@@ -51,7 +51,7 @@ public class MapItemModelTest {
     public void testAddTargetDecorationWritesStack() {
         Value.Stack stack = new Value.Stack(List.of(new ItemStack(Items.FILLED_MAP)), NumberExpr.constant(1), false);
         BlockPos pos = BlockPos.ZERO;
-        Value.Unknown found = new Value.Unknown(false, "net/minecraft/core/BlockPos", pos, Origin.TRADER);
+        Value.Unknown found = new Value.Unknown(false, "net/minecraft/core/BlockPos", pos, Origin.SELF);
 
         assertNull(model.apply(context, mapCall(RuntimeNames.MAP_ADD_TARGET_DECORATION, INVOKESTATIC, stack, found, new Value.Known("+"),
                 new Value.Known(MapDecoration.Type.RED_X))));
