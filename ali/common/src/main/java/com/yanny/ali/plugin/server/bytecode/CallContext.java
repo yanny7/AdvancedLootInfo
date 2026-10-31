@@ -82,12 +82,12 @@ interface CallContext {
     Value.Offers offers(Object collection);
 
     @Nullable
-    TraderModel.TraderRun traderRun();
+    Subject subject();
 
     @Nullable
-    Value traderField(String field);
+    Value selfField(String field);
 
-    void putTraderField(String field, Value value);
+    void putSelfField(String field, Value value);
 
     @Nullable
     Integer levelKey(Object listings);
@@ -104,6 +104,8 @@ interface CallContext {
     RegistryAccess registries();
 
     Collection<TagKey<?>> tags();
+
+    List<Decision> decisions();
 
     boolean decide(Decision.Kind kind, @Nullable Object subject, @Nullable Object value, String reason);
 

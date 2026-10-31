@@ -10,7 +10,7 @@ import java.util.function.UnaryOperator;
 final class ValueStore {
     private final List<Machine.Frame> frames = new ArrayList<>();
     private final Map<String, Value> statics = new HashMap<>();
-    private final Map<String, Value> traderFields = new HashMap<>();
+    private final Map<String, Value> selfFields = new HashMap<>();
 
     void enter(Machine.Frame frame) {
         frames.add(frame);
@@ -32,22 +32,22 @@ final class ValueStore {
         statics.put(field, value);
     }
 
-    boolean hasTraderField(String field) {
-        return traderFields.containsKey(field);
+    boolean hasSelfField(String field) {
+        return selfFields.containsKey(field);
     }
 
-    Value getTraderField(String field) {
-        return traderFields.get(field);
+    Value getSelfField(String field) {
+        return selfFields.get(field);
     }
 
-    void putTraderField(String field, Value value) {
-        traderFields.put(field, value);
+    void putSelfField(String field, Value value) {
+        selfFields.put(field, value);
     }
 
     void replace(Predicate<Value> match, UnaryOperator<Value> with) {
         replaceInFrames(match, with);
         statics.replaceAll((k, v) -> match.test(v) ? with.apply(v) : v);
-        traderFields.replaceAll((k, v) -> match.test(v) ? with.apply(v) : v);
+        selfFields.replaceAll((k, v) -> match.test(v) ? with.apply(v) : v);
     }
 
     void replaceInFrames(Predicate<Value> match, UnaryOperator<Value> with) {
