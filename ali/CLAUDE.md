@@ -173,4 +173,4 @@ The integration test is one server-side GameTest per loader, in a `gametest` sou
 `MixinBushBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks). `MixinClientPlayNetworkHandler` (injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload). `MixinGuiGraphics` (client; feeds `ScrollableTooltip` the components of the tooltip being rendered — see `aci/CLAUDE.md`).
 
 ## `platform` / `platform/services`
-`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`.
+`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing, spawn eggs, a mod's display name) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`.

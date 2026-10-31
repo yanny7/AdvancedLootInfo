@@ -72,7 +72,11 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
             }
         }));
         innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(spawnTooltip))) : null));
+        Rect nameRect = GenericUtils.getCenteredTextRect(display.getEntityType().getDescription(), innerBounds.getCenterX(), 0);
+        Rectangle nameBounds = new Rectangle(nameRect.x(), nameRect.y(), nameRect.width(), nameRect.height());
+
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()).centered().noShadow().color(0));
+        innerWidgets.add(Widgets.createTooltip((point) -> nameBounds.contains(point) ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(GenericUtils.getEntityNameTooltip(display.getEntityType())))) : null));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(

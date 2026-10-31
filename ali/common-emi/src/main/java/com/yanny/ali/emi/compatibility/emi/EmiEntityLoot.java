@@ -89,7 +89,12 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     return spawnTooltip.isEmpty() ? List.of() : List.of(new ScrollableTooltip(spawnTooltip));
                 }
             });
-            widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false));
+            widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false) {
+                @Override
+                public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
+                    return List.of(new ScrollableTooltip(GenericUtils.getEntityNameTooltip(entityType)));
+                }
+            });
         }
 
         catalysts.forEach((catalyst) -> widgets.add(new SlotWidget(catalyst, 0, 0)));

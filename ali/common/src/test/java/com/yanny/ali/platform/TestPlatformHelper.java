@@ -41,4 +41,9 @@ public class TestPlatformHelper implements IPlatformHelper {
     public LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json) {
         return null;
     }
+
+    @Override
+    public String getModName(String modId) {
+        return modId;
+    }
 }

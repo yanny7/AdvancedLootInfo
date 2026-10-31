@@ -19,6 +19,7 @@
 - Mobs that drop one of several loot tables at random show all of them with their chances
 - Loot pages of mob variants show the mob in that variant, also for mods without ALI support
 - Info icon of a mob's extra loot pages says why the loot table belongs to the mob and names the table
+- Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
 
 ## [2.5.0]
 

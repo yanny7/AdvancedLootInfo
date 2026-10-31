@@ -10,7 +10,7 @@ Single `AliMod` (`@Mod`). Its constructor statically builds the `SimpleChannel` 
 
 ## Platform + networking implementation
 
-- `platform.ForgePlatformHelper implements IPlatformHelper` — discovers plugins via annotation scanning (`ModFileScanData`/`AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), gets loot pools via `MixinLootTableForge`, uses `ForgeHooks.loadLootTable`, `ForgeSpawnEggItem`.
+- `platform.ForgePlatformHelper implements IPlatformHelper` — discovers plugins via annotation scanning (`ModFileScanData`/`AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), gets loot pools via `MixinLootTableForge`, uses `ForgeHooks.loadLootTable`, `ForgeSpawnEggItem`, and `ModList` for mod display names.
 - `network.{Client,Server,NetworkUtils}` — wrap the same 4 messages as `ali/fabric` through `SimpleChannel.registerMessage`/`.send`/`.sendToServer`, using Forge's `Supplier<NetworkEvent.Context>` handler signature (extra `setPacketHandled(true)` boilerplate Fabric doesn't need).
 
 ## Mixins

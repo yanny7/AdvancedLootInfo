@@ -73,4 +73,9 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json) {
         return gson.fromJson(json, LootTable.class);
     }
+
+    @Override
+    public String getModName(String modId) {
+        return FabricLoader.getInstance().getModContainer(modId).map((mod) -> mod.getMetadata().getName()).orElse(modId);
+    }
 }

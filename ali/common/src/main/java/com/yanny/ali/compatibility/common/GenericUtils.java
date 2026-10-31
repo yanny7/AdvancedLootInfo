@@ -21,6 +21,7 @@ import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -149,6 +150,28 @@ public class GenericUtils {
         }
 
         return Collections.emptyList();
+    }
+
+    @NotNull
+    public static List<TooltipLine> getEntityNameTooltip(EntityType<?> type) {
+        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        List<TooltipLine> lines = new ArrayList<>();
+
+        lines.add(TooltipLine.text(type.getDescription()));
+
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
+            lines.add(TooltipLine.text(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY)));
+        }
+
+        lines.add(TooltipLine.text(Component.literal(Services.getPlatform().getModName(id.getNamespace())).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC)));
+        return lines;
+    }
+
+    @NotNull
+    public static Rect getCenteredTextRect(Component text, int centerX, int y) {
+        int width = Minecraft.getInstance().font.width(text);
+
+        return new Rect(centerX - width / 2, y, width, Minecraft.getInstance().font.lineHeight);
     }
 
     private static boolean hasSpawnInfo(IDataNode node) {

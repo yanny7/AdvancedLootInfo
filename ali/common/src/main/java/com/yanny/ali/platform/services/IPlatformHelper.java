@@ -18,4 +18,6 @@ public interface IPlatformHelper extends ICorePlatformHelper<IPlugin> {
         SpawnEggItem getSpawnEggItem(EntityType<?> entityType);
 
         LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json);
+
+        String getModName(String modId);
 }
