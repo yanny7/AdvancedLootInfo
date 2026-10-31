@@ -44,7 +44,8 @@ public class ServerUtilsTest {
                 "  -> Add: False"
         ));
         assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, ContextIntProviders.binomial(5, 0.3f))).build(), List.of(
-                "Auto-detected: minecraft:unknown"
+                "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$UnknownFunction"
         ));
     }
 
@@ -55,7 +56,8 @@ public class ServerUtilsTest {
                 "  -> Chance: 0.5"
         ));
         assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(true)).build(), List.of(
-                "Auto-detected: minecraft:unknown"
+                "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$UnknownCondition"
         ));
     }
 
@@ -74,7 +76,8 @@ public class ServerUtilsTest {
                 "      -> Value: minecraft:emerald"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(), List.of(
-                "Not implemented: [java.lang.StringBuilder]"
+                "Not implemented: [StringBuilder]",
+                "  -> Class: java.lang.StringBuilder"
         ));
     }
 
@@ -94,7 +97,8 @@ public class ServerUtilsTest {
                 SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ContextIntProviders.exactly(2)).build(),
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
         )).build(), List.of(
-            "Auto-detected: minecraft:unknown"
+            "Auto-detected: minecraft:unknown",
+                "  -> Class: com.yanny.ali.test.ServerUtilsTest$TestCondition"
         ));
     }
 

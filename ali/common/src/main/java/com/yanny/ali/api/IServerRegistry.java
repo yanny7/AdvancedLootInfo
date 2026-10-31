@@ -94,6 +94,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     void registerGlobalLootModifiers(Function<IServerUtils, List<IPageLootModifier>> getter);
 
+    void registerEntityLootTable(EntityType<?> entityType, Identifier lootTable);
+
+    void registerLootTableReference(Identifier lootTable);
+
     /**
      * Registers a trader, so that its trades are scanned and listed under their own entry. A {@link TradeLevel.OfSet} is
      * looked up in the {@code minecraft:trade_set} registry when the scan runs, so it may name a set that a datapack

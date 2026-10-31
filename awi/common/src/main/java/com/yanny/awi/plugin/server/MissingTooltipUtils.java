@@ -5,11 +5,13 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -33,269 +35,104 @@ public class MissingTooltipUtils {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     @NotNull
-    public static TooltipBuilder getMissingFeatureTooltip(IServerUtils utils, Feature feature) {
-        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_TYPE, feature.codec());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<Feature> codec = ((MapCodec<Feature>) feature.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, feature).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get feature from serialized data for {} in {}", BuiltInRegistries.FEATURE_TYPE.getKey(feature.codec()), TooltipContext.get(), e);
-            }
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingFeatureTooltip(IServerUtils utils, Feature feature) {
+        TooltipBuilder header = getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_TYPE, feature.codec());
+        return serialized(utils, header, BuiltInRegistries.FEATURE_TYPE, feature.codec(), feature.codec(), feature, "feature");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier placement) {
-        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, placement.codec());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<PlacementModifier> codec = ((MapCodec<PlacementModifier>) placement.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placement).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.codec()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier placement) {
+        TooltipBuilder header = getBuiltInRegistryTooltip(utils, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, placement.codec());
+        return serialized(utils, header, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, placement.codec(), placement.codec(), placement, "placement modifier");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingRuleTestTooltip(IServerUtils utils, RuleTest test) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, test.getType());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<RuleTest> codec = ((MapCodec<RuleTest>) test.getType().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, test).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get rule test from serialized data for {} in {}", BuiltInRegistries.RULE_TEST.getKey(test.getType()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingRuleTestTooltip(IServerUtils utils, RuleTest test) {
+        return serialized(utils, BuiltInRegistries.RULE_TEST, test.getType(), test.getType().codec(), test, "rule test");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingHeightProviderTooltip(IServerUtils utils, HeightProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.getType());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<HeightProvider> codec = ((MapCodec<HeightProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get height provider from serialized data for {} in {}", BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingHeightProviderTooltip(IServerUtils utils, HeightProvider provider) {
+        return serialized(utils, BuiltInRegistries.HEIGHT_PROVIDER_TYPE, provider.getType(), provider.getType().codec(), provider, "height provider");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingBlockPredicateTooltip(IServerUtils utils, BlockPredicate predicate) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, predicate.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<BlockPredicate> codec = ((MapCodec<BlockPredicate>) predicate.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get block predicate from serialized data for {} in {}", BuiltInRegistries.BLOCK_PREDICATE_TYPE.getKey(predicate.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingBlockPredicateTooltip(IServerUtils utils, BlockPredicate predicate) {
+        return serialized(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, predicate.type(), predicate.type().codec(), predicate, "block predicate");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingBlockStateProviderTooltip(IServerUtils utils, BlockStateProvider provider) {
-        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, provider.codec());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<BlockStateProvider> codec = ((MapCodec<BlockStateProvider>) provider.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get block state provider from serialized data for {} in {}", BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE.getKey(provider.codec()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingBlockStateProviderTooltip(IServerUtils utils, BlockStateProvider provider) {
+        TooltipBuilder header = getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, provider.codec());
+        return serialized(utils, header, BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, provider.codec(), provider.codec(), provider, "block state provider");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingTreeDecoratorTooltip(IServerUtils utils, TreeDecorator decorator) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, decorator.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<TreeDecorator> codec = ((MapCodec<TreeDecorator>) decorator.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, decorator).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get tree decorator from serialized data for {} in {}", BuiltInRegistries.TREE_DECORATOR_TYPE.getKey(decorator.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingTreeDecoratorTooltip(IServerUtils utils, TreeDecorator decorator) {
+        return serialized(utils, BuiltInRegistries.TREE_DECORATOR_TYPE, decorator.type(), decorator.type().codec(), decorator, "tree decorator");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingFeatureSizeTooltip(IServerUtils utils, FeatureSize size) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, size.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<FeatureSize> codec = ((MapCodec<FeatureSize>) size.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, size).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get feature size from serialized data for {} in {}", BuiltInRegistries.FEATURE_SIZE_TYPE.getKey(size.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingFeatureSizeTooltip(IServerUtils utils, FeatureSize size) {
+        return serialized(utils, BuiltInRegistries.FEATURE_SIZE_TYPE, size.type(), size.type().codec(), size, "feature size");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingRootPlacerTooltip(IServerUtils utils, RootPlacer placer) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, placer.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<RootPlacer> codec = ((MapCodec<RootPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get root placer from serialized data for {} in {}", BuiltInRegistries.ROOT_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingRootPlacerTooltip(IServerUtils utils, RootPlacer placer) {
+        return serialized(utils, BuiltInRegistries.ROOT_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "root placer");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingFoliagePlacerTooltip(IServerUtils utils, FoliagePlacer placer) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, placer.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<FoliagePlacer> codec = ((MapCodec<FoliagePlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get foliage placer from serialized data for {} in {}", BuiltInRegistries.FOLIAGE_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingFoliagePlacerTooltip(IServerUtils utils, FoliagePlacer placer) {
+        return serialized(utils, BuiltInRegistries.FOLIAGE_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "foliage placer");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingTrunkPlacerTooltip(IServerUtils utils, TrunkPlacer placer) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, placer.type());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<TrunkPlacer> codec = ((MapCodec<TrunkPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get trunk placer from serialized data for {} in {}", BuiltInRegistries.TRUNK_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingTrunkPlacerTooltip(IServerUtils utils, TrunkPlacer placer) {
+        return serialized(utils, BuiltInRegistries.TRUNK_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "trunk placer");
     }
 
     @NotNull
-    public static TooltipBuilder getMissingStructureProcessorTooltip(IServerUtils utils, StructureProcessor processor) {
-        TooltipBuilder tooltip = getBuiltInRegistryTooltip(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, processor.codec());
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
-            //noinspection unchecked
-            MapCodec<StructureProcessor> codec = ((MapCodec<StructureProcessor>) processor.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, processor).getOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.codec()), TooltipContext.get(), e);
-            }
-
-//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
-        }
-
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    public static AutoDetected getMissingStructureProcessorTooltip(IServerUtils utils, StructureProcessor processor) {
+        TooltipBuilder header = getBuiltInRegistryTooltip(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, processor.codec());
+        return serialized(utils, header, BuiltInRegistries.STRUCTURE_PROCESSOR, processor.codec(), processor.codec(), processor, "structure processor");
     }
 
     @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object value) {
-        return TooltipBuilder.error("[" + value.getClass().getTypeName() + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
+        return TooltipBuilder.error("[" + ManagedRegistry.shortClassName(value.getClass()) + "]")
+                .add(CoreTooltipUtils.getClassTooltip(value.getClass()))
+                .key(CoreLang.Utils.NOT_IMPLEMENTED);
+    }
+
+    @NotNull
+    private static <T> AutoDetected serialized(IServerUtils utils, Registry<T> registry, T type, MapCodec<?> codec, Object value, String label) {
+        return serialized(utils, utils.getValueTooltip(utils, type), registry, type, codec, value, label);
+    }
+
+    @NotNull
+    private static <T> AutoDetected serialized(IServerUtils utils, TooltipBuilder header, Registry<T> registry, T type, MapCodec<?> codec, Object value, String label) {
+        TooltipBuilder tooltip = header.add(CoreTooltipUtils.getClassTooltip(value.getClass()));
+        boolean serialized;
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
+            //noinspection unchecked
+            JsonElement jsonElement = ((MapCodec<Object>) codec).codec().encodeStart(registryOps, value).getOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+            serialized = true;
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get {} from serialized data for {} in {}", label, registry.getKey(type), TooltipContext.get(), e);
+            }
+
+            serialized = false;
+        }
+
+        return new AutoDetected(tooltip.key(CoreLang.Utils.AUTO_DETECTED), serialized);
+    }
+
+    public record AutoDetected(TooltipBuilder tooltip, boolean serialized) {
     }
 }

@@ -5,6 +5,8 @@ import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.alicompat.IModCompat;
 import gaia.item.edible.consume_effects.ClearNegativeStatusEffectsConsumeEffect;
+import gaia.registry.GaiaLootTables;
+import gaia.registry.GaiaRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class GrimoireOfGaiaCompat implements IModCompat {
@@ -17,6 +19,11 @@ public class GrimoireOfGaiaCompat implements IModCompat {
     @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerConsumeEffectTooltip(ClearNegativeStatusEffectsConsumeEffect.class, GrimoireOfGaiaCompat::getClearNegativeStatusEffectsTooltip);
+
+        registry.registerEntityLootTable(GaiaRegistry.MINOTAURUS.getEntityType(), GaiaLootTables.MINOTAURUS_RANGED.identifier());
+        registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_RANGED.identifier());
+        registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_MINER.identifier());
+        registry.registerEntityLootTable(GaiaRegistry.CHEST.getEntityType(), GaiaLootTables.CHEST_TABLES.identifier());
     }
 
     @NotNull

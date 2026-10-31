@@ -2,6 +2,8 @@ package com.yanny.awi.fabric.network;
 
 import com.yanny.awi.network.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public class Client extends AbstractClient {
     public void onWorldgenDataChunk(WorldgenDataChunkMessage message, ClientPlayNetworking.Context context) {
@@ -17,8 +19,15 @@ public class Client extends AbstractClient {
     }
 
     @Override
+    public boolean canRequestData() {
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+
+        return listener != null && listener.getConnection().isConnected() && ClientPlayNetworking.canSend(RequestWorldgenDataMessage.TYPE);
+    }
+
+    @Override
     public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
-        if (ClientPlayNetworking.canSend(RequestWorldgenDataMessage.TYPE)) {
+        if (canRequestData()) {
             ClientPlayNetworking.send(message);
         }
     }

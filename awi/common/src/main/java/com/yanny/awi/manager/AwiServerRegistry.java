@@ -227,54 +227,54 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @Override
     public @NotNull <T extends Feature> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
-        return featureTooltips.get(entry.codec())
+        return featureTooltips.find(entry.codec())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFeatureTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(featureTooltips, entry.codec(), MissingTooltipUtils.getMissingFeatureTooltip(utils, entry)));
     }
 
     @Override
     public @NotNull <T extends PlacementModifier> TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, T entry) {
-        return placementModifierTooltips.get(entry.getClass())
+        return placementModifierTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingPlacementModifierTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(placementModifierTooltips, entry.getClass(), MissingTooltipUtils.getMissingPlacementModifierTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends RuleTest> TooltipBuilder getRuleTestTooltip(IServerUtils utils, T entry) {
-        return ruleTestTooltips.get(entry.getClass())
+        return ruleTestTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingRuleTestTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(ruleTestTooltips, entry.getClass(), MissingTooltipUtils.getMissingRuleTestTooltip(utils, entry)));
     }
 
     @Override
     public @NotNull <T extends HeightProvider> TooltipBuilder getHeightProviderTooltip(IServerUtils utils, T entry) {
-        return heightProviderTooltips.get(entry.getClass())
+        return heightProviderTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingHeightProviderTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(heightProviderTooltips, entry.getClass(), MissingTooltipUtils.getMissingHeightProviderTooltip(utils, entry)));
     }
 
     @Override
     public @NotNull <T extends BlockPredicate> TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, T entry) {
-        return blockPredicateTooltips.get(entry.getClass())
+        return blockPredicateTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingBlockPredicateTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(blockPredicateTooltips, entry.getClass(), MissingTooltipUtils.getMissingBlockPredicateTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends BlockStateProvider> TooltipBuilder getBlockStateProviderTooltip(IServerUtils utils, T entry) {
-        return blockStateProviderTooltips.get(entry.getClass())
+        return blockStateProviderTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingBlockStateProviderTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(blockStateProviderTooltips, entry.getClass(), MissingTooltipUtils.getMissingBlockStateProviderTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends TreeDecorator> TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, T entry) {
-        return treeDecoratorTooltips.get(entry.getClass())
+        return treeDecoratorTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingTreeDecoratorTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(treeDecoratorTooltips, entry.getClass(), MissingTooltipUtils.getMissingTreeDecoratorTooltip(utils, entry)));
     }
 
     public Map<Identifier, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> getSurfaceRuleHandlers() {
@@ -284,41 +284,41 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     @NotNull
     @Override
     public <T extends FeatureSize> TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, T entry) {
-        return featureSizeTooltips.get(entry.getClass())
+        return featureSizeTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFeatureSizeTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(featureSizeTooltips, entry.getClass(), MissingTooltipUtils.getMissingFeatureSizeTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends RootPlacer> TooltipBuilder getRootPlacerTooltip(IServerUtils utils, T entry) {
-        return rootPlacerTooltips.get(entry.getClass())
+        return rootPlacerTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingRootPlacerTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(rootPlacerTooltips, entry.getClass(), MissingTooltipUtils.getMissingRootPlacerTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends FoliagePlacer> TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, T entry) {
-        return foliagePlacerTooltips.get(entry.getClass())
+        return foliagePlacerTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFoliagePlacerTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(foliagePlacerTooltips, entry.getClass(), MissingTooltipUtils.getMissingFoliagePlacerTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends TrunkPlacer> TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, T entry) {
-        return trunkPlacerTooltips.get(entry.getClass())
+        return trunkPlacerTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingTrunkPlacerTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(trunkPlacerTooltips, entry.getClass(), MissingTooltipUtils.getMissingTrunkPlacerTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry) {
-        return structureProcessorTooltips.get(entry.getClass())
+        return structureProcessorTooltips.find(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> MissingTooltipUtils.getMissingStructureProcessorTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(structureProcessorTooltips, entry.getClass(), MissingTooltipUtils.getMissingStructureProcessorTooltip(utils, entry)));
     }
 
     @NotNull
@@ -364,12 +364,23 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public void printRuntimeInfo() {
-        super.printRuntimeInfo();
+    public void printRuntimeInfo(boolean logAutoDetected) {
+        super.printRuntimeInfo(logAutoDetected);
 
         if (this.getConfiguration().logMoreStatistics) {
             getTooltipCache().logStatistics();
         }
+    }
+
+    @NotNull
+    private static <K> TooltipBuilder autoDetected(ManagedRegistry<K, ?> registry, K key, MissingTooltipUtils.AutoDetected result) {
+        if (result.serialized()) {
+            registry.reportAutoDetected(key);
+        } else {
+            registry.reportMissing(key);
+        }
+
+        return result.tooltip();
     }
 
     private record HeightArgs(IServerUtils utils, ColumnContext ctx) {

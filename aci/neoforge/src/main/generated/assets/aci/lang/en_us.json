@@ -64,6 +64,7 @@
   "aci.spawn.structure": "Structure: %s",
   "aci.spawn.weight": "Weight: %s",
   "aci.util.auto_detected": "Auto-detected: %s",
+  "aci.util.class": "Class: %s",
   "aci.util.entry": "Entry:",
   "aci.util.false": "False",
   "aci.util.missing": "Not implemented: %s",

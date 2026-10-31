@@ -1,6 +1,8 @@
 package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.manager.ManagedRegistry;
 import net.minecraft.core.Registry;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +45,11 @@ public class CoreTooltipUtils {
         }
 
         return getBuiltInRegistryTooltip(utils, registry, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getClassTooltip(Class<?> clazz) {
+        return TooltipBuilder.value(ManagedRegistry.classKeyName(clazz)).key(CoreLang.Utils.CLASS).isAdvancedTooltip();
     }
 
     @NotNull

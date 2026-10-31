@@ -6,6 +6,13 @@
 - Unsupported trading mods shows trades that can be auto-detected from the mod's code
 - Fixed missing trades and loot that other mods prepare only once the server has started
 - Fixed trade slots of a block tag showing nothing
+- Recipe viewer stops waiting for data from the server as soon as the connection to it is lost
+- Fixed recipe viewer waiting 30 seconds for data when the game reloads while it is loading
+- Auto-detected tooltips name the thing by its ID or short class name, the full class name shows with advanced tooltips
+- Server log warns only about what cannot be shown in full, things shown completely auto-detected are logged with `logMoreStatistics`
+- Fixed recipe viewer waiting a minute and a half and logging an error on servers without ALI
+- Added plugin API to assign loot tables to entities whose table ID names no entity
+- Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
 
 ## [2.5.0]
 

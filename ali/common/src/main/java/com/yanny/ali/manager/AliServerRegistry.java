@@ -97,6 +97,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     // global loot modifier pages
     private final ManagedRegistry<Class<?>, IPageResolver<Object>> pageResolvers = registerClassKeyed("global loot modifier page resolvers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, IEntitySubPredicateResolver<EntitySubPredicate>> entitySubPredicateResolvers = registerClassKeyed("entity sub-predicate resolvers", false, HashMap::new, null);
+    // entity loot tables
+    private final ManagedRegistry<Identifier, List<EntityType<?>>> entityLootTables = register("entity loot tables", false, LinkedHashMap::new, Identifier::toString, null);
 
     private final Set<String> loggedOnce = new HashSet<>();
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
@@ -108,6 +110,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<Function<IServerUtils, List<IPageLootModifier>>> pageLootModifierGetters = new LinkedList<>();
     private final List<IPageLootModifier> pageLootModifiers = new LinkedList<>();
     private final List<ILootContextPreparer> lootContextPreparers = new ArrayList<>();
+    private final Set<Identifier> lootTableReferences = new HashSet<>();
 
     private final LootContext lootContext;
 
@@ -128,6 +131,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         pageLootModifierGetters.clear();
         pageLootModifiers.clear();
         lootContextPreparers.clear();
+        lootTableReferences.clear();
     }
 
     public void addLootTable(Identifier identifier, LootTable lootTable) {
@@ -286,6 +290,27 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
+    public void registerEntityLootTable(EntityType<?> entityType, Identifier lootTable) {
+        List<EntityType<?>> types = entityLootTables.find(lootTable).orElseGet(ArrayList::new);
+
+        types.add(entityType);
+        entityLootTables.put(lootTable, types);
+    }
+
+    public Map<Identifier, List<EntityType<?>>> getEntityLootTables() {
+        return entityLootTables.entries();
+    }
+
+    @Override
+    public void registerLootTableReference(Identifier lootTable) {
+        lootTableReferences.add(lootTable);
+    }
+
+    public Set<Identifier> getLootTableReferences() {
+        return lootTableReferences;
+    }
+
+    @Override
     public void registerTrades(Identifier traderId, EntityType<?> entityType, Function<IServerUtils, Int2ObjectMap<TradeLevel>> levels) {
         trades.put(traderId, new Trades(entityType, levels));
     }
@@ -331,25 +356,25 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends LootPoolEntryContainer> TooltipBuilder getEntryTooltip(IServerUtils utils, T entry) {
-        return entryTooltips.get(entry.getClass())
+        return entryTooltips.find(entry.getClass())
                 .map((e) -> guarded("entry tooltip", entry, () -> e.apply(utils, entry), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry));
+                .orElseGet(() -> autoDetected(entryTooltips, entry.getClass(), () -> MissingTooltipUtils.getMissingEntryTooltip(utils, entry)));
     }
 
     @NotNull
     @Override
     public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
-        return functionTooltips.get(function.getClass())
+        return functionTooltips.find(function.getClass())
                 .map((f) -> guarded("function tooltip", function, () -> f.apply(utils, function), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function));
+                .orElseGet(() -> autoDetected(functionTooltips, function.getClass(), () -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function)));
     }
 
     @NotNull
     @Override
     public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
-        return conditionTooltips.get(condition.getClass())
+        return conditionTooltips.find(condition.getClass())
                 .map((c) -> guarded("condition tooltip", condition, () -> c.apply(utils, condition), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition));
+                .orElseGet(() -> autoDetected(conditionTooltips, condition.getClass(), () -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition)));
     }
 
     @NotNull
@@ -365,9 +390,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             }
         }
 
-        return ingredientTooltips.get(ingredient.getClass())
+        return ingredientTooltips.find(ingredient.getClass())
                 .map((i) -> guarded("ingredient tooltip", ingredient, () -> i.apply(utils, ingredient), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)))
-                .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
+                .orElseGet(() -> autoDetected(ingredientTooltips, ingredient.getClass(), () -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient)));
     }
 
     @NotNull
@@ -395,18 +420,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends DataComponentPredicate> TooltipBuilder getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
-        return dataComponentPredicateTooltips.get(predicate.getClass())
+        return dataComponentPredicateTooltips.find(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> MissingTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate));
+                .orElseGet(() -> autoDetected(dataComponentPredicateTooltips, predicate.getClass(), () -> MissingTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate)));
     }
 
     @NotNull
     @Override
     public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, Codec<T> codec, T predicate) {
         //noinspection unchecked
-        return entitySubPredicateTooltips.get(predicate.getClass())
+        return entitySubPredicateTooltips.find(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, (Codec<EntitySubPredicate>) codec, predicate));
+                .orElseGet(() -> autoDetected(entitySubPredicateTooltips, predicate.getClass(), () -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, (Codec<EntitySubPredicate>) codec, predicate)));
     }
 
     @NotNull
@@ -519,6 +544,19 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
         unwrap(utils, condition, conditionUnwrappers, Collections.newSetFromMap(new IdentityHashMap<>()), result);
         return result;
+    }
+
+    @NotNull
+    private static <K> TooltipBuilder autoDetected(ManagedRegistry<K, ?> registry, K key, Supplier<TooltipBuilder> fallback) {
+        try {
+            TooltipBuilder tooltip = fallback.get();
+
+            registry.reportAutoDetected(key);
+            return tooltip;
+        } catch (Throwable e) {
+            registry.reportMissing(key);
+            throw e;
+        }
     }
 
     private <R> R attempt(String kind, Object value, Supplier<R> call, Supplier<R> fallback) {
@@ -690,8 +728,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public void printRuntimeInfo() {
-        super.printRuntimeInfo();
+    public void printRuntimeInfo(boolean logAutoDetected) {
+        super.printRuntimeInfo(logAutoDetected);
 
         if (this.getConfiguration().logMoreStatistics) {
             getTooltipCache().logStatistics();
