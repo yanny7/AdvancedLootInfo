@@ -42,6 +42,7 @@ final class Interpreter implements Opcodes {
             "map", "filter", "subList", "first", "firstKey", "lastKey"), OptionalModel.READ_ONLY.stream()).collect(Collectors.toUnmodifiableSet());
     static final Set<String> FRESH_RESULTS = Set.of("stream", "iterator", "listIterator", "spliterator", "toArray");
 
+    final Profile profile;
     final Mode mode;
     final Dispatcher dispatcher = new Dispatcher(this);
     final Machine machine = new Machine(this);
@@ -49,7 +50,7 @@ final class Interpreter implements Opcodes {
     final ValueStore store = new ValueStore();
     final Heap heap = new Heap(store);
     @Nullable
-    TraderModel.TraderRun traderRun;
+    Subject subject;
     final PickSources pickSources = new PickSources();
     @Nullable
     final RegistryAccess registries;
@@ -57,11 +58,12 @@ final class Interpreter implements Opcodes {
     final NumberDomain numbers = new NumberDomain(store);
     final Decisions decisions;
 
-    Interpreter(Mode mode, int pick) {
-        this(mode, pick, null, null, new HashSet<>());
+    Interpreter(Profile profile, Mode mode, int pick) {
+        this(profile, mode, pick, null, null, new HashSet<>());
     }
 
-    Interpreter(Mode mode, int pick, @Nullable List<Boolean> script, @Nullable RegistryAccess registries, Set<String> opaque) {
+    Interpreter(Profile profile, Mode mode, int pick, @Nullable List<Boolean> script, @Nullable RegistryAccess registries, Set<String> opaque) {
+        this.profile = profile;
         this.mode = mode;
         this.pick = pick;
         this.registries = registries;
@@ -83,11 +85,11 @@ final class Interpreter implements Opcodes {
     }
 
     Value.Offers trades(Class<?> merchant) {
-        Value self = Value.Unknown.of(Type.getType(merchant), Origin.TRADER);
-        Declaration getOffers = TraderModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false);
-        TraderModel.TraderRun run = new TraderModel.TraderRun(merchant, getOffers != null);
+        Value self = Value.Unknown.of(Type.getType(merchant), Origin.SELF);
+        Declaration getOffers = SelfModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false);
+        TraderSubject run = new TraderSubject(merchant, getOffers != null);
 
-        traderRun = run;
+        subject = run;
 
         if (getOffers != null) {
             if (machine.execute(getOffers.owner(), getOffers.method(), List.of(self), 0) instanceof Value.Offers offers) {
@@ -97,7 +99,7 @@ final class Interpreter implements Opcodes {
             throw new Fail("offers of the trader");
         }
 
-        Declaration updateTrades = TraderModel.ownDeclaration(merchant, RuntimeNames.UPDATE_TRADES.name(), RuntimeNames.UPDATE_TRADES.desc(), false);
+        Declaration updateTrades = SelfModel.ownDeclaration(merchant, RuntimeNames.UPDATE_TRADES.name(), RuntimeNames.UPDATE_TRADES.desc(), false);
 
         if (updateTrades != null) {
             machine.execute(updateTrades.owner(), updateTrades.method(), List.of(self, Value.Unknown.of(Type.getArgumentTypes(updateTrades.method().desc)[0], Origin.WORLD)), 0);
@@ -115,11 +117,11 @@ final class Interpreter implements Opcodes {
 
         List<Value> args = new ArrayList<>();
 
-        args.add(Value.Unknown.of(Type.getType(merchant), Origin.TRADER));
+        args.add(Value.Unknown.of(Type.getType(merchant), Origin.SELF));
         Arrays.stream(Type.getArgumentTypes(writer.method().desc)).forEach((type) -> args.add(Value.Unknown.of(type, null)));
-        TraderModel.TraderRun run = new TraderModel.TraderRun(merchant, TraderModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false) != null);
+        TraderSubject run = new TraderSubject(merchant, SelfModel.ownDeclaration(merchant, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), false) != null);
 
-        traderRun = run;
+        subject = run;
         machine.execute(writer.owner(), writer.method(), args, 0);
         return run.offers;
     }

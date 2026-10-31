@@ -14,14 +14,14 @@ import static org.objectweb.asm.Opcodes.PUTFIELD;
 
 public class FieldModelTest {
     private static final String HOLDER = Type.getInternalName(Holder.class);
-    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Holder.class), Origin.TRADER);
+    private static final Value.Unknown SELF = Value.Unknown.of(Type.getType(Holder.class), Origin.SELF);
     private static final ClassLoader LOADER = FieldModelTest.class.getClassLoader();
 
     private final FakeCallContext context = new FakeCallContext();
 
     @Test
     public void testVillagerOffersOfTraderAreSymbolicOffers() {
-        TraderModel.TraderRun run = run(false);
+        TraderSubject run = run(false);
 
         assertSame(run.offers, get(offers(GETFIELD), SELF));
     }
@@ -38,7 +38,7 @@ public class FieldModelTest {
         Value written = new Value.Known(3);
 
         run(false);
-        context.traderFields.put(HOLDER + ".count", written);
+        context.selfFields.put(HOLDER + ".count", written);
         assertSame(written, get(field(GETFIELD, "count", "I"), SELF));
     }
 
@@ -82,12 +82,12 @@ public class FieldModelTest {
 
     @Test
     public void testOffersWrittenToTraderReplaceSymbolicOffers() {
-        TraderModel.TraderRun run = run(false);
+        TraderSubject run = run(false);
         Value.Offers offers = new Value.Offers();
 
         FieldModel.put(context, offers(PUTFIELD), SELF, offers, LOADER);
         assertSame(offers, run.offers);
-        assertTrue(context.traderFields.isEmpty());
+        assertTrue(context.selfFields.isEmpty());
     }
 
     @Test
@@ -96,8 +96,8 @@ public class FieldModelTest {
 
         run(true);
         FieldModel.put(context, offers(PUTFIELD), SELF, offers, LOADER);
-        assertEquals(1, context.traderFields.size());
-        assertSame(offers, context.traderFields.values().iterator().next());
+        assertEquals(1, context.selfFields.size());
+        assertSame(offers, context.selfFields.values().iterator().next());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class FieldModelTest {
 
         run(false);
         FieldModel.put(context, field(PUTFIELD, "count", "I"), SELF, value, LOADER);
-        assertSame(value, context.traderFields.get(HOLDER + ".count"));
+        assertSame(value, context.selfFields.get(HOLDER + ".count"));
     }
 
     @Test
@@ -141,15 +141,15 @@ public class FieldModelTest {
         return FieldModel.get(context, insn, receiver, LOADER);
     }
 
-    private TraderModel.TraderRun run(boolean ownGetOffers) {
-        TraderModel.TraderRun run = new TraderModel.TraderRun(Holder.class, ownGetOffers);
+    private TraderSubject run(boolean ownGetOffers) {
+        TraderSubject run = new TraderSubject(Holder.class, ownGetOffers);
 
-        context.traderRun = run;
+        context.subject = run;
         return run;
     }
 
     private static Value.Unknown unknown() {
-        return Value.Unknown.of(Type.getType(Holder.class), Origin.of(Value.Unknown.of(Type.getType(Holder.class), Origin.TRADER), "holder", List.of()));
+        return Value.Unknown.of(Type.getType(Holder.class), Origin.of(Value.Unknown.of(Type.getType(Holder.class), Origin.SELF), "holder", List.of()));
     }
 
     private static FieldInsnNode offers(int opcode) {

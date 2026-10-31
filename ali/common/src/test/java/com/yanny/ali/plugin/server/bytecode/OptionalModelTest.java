@@ -102,7 +102,7 @@ public class OptionalModelTest {
 
     @Test
     public void testConcreteOrElseWithSymbolicArgument() {
-        Value.Unknown other = new Value.Unknown(false, "java/lang/String", null, Origin.TRADER);
+        Value.Unknown other = new Value.Unknown(false, "java/lang/String", null, Origin.SELF);
 
         assertEquals(new Value.Known("a"), model.apply(context, call(INVOKEVIRTUAL, OPTIONAL, "orElse", "(Ljava/lang/Object;)Ljava/lang/Object;", new Value.Known(Optional.of("a")), other)));
         assertSame(other, model.apply(context, call(INVOKEVIRTUAL, OPTIONAL, "orElse", "(Ljava/lang/Object;)Ljava/lang/Object;", new Value.Known(Optional.empty()), other)));
