@@ -100,6 +100,7 @@ public final class BytecodeInterpreter {
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();
         Renderer.clearCaches();
+        LootTableAnalysis.clearCaches();
     }
 
     public record Stacks(List<Option> options) {

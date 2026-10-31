@@ -7,6 +7,14 @@ import static com.yanny.ali.plugin.server.bytecode.Dispatcher.*;
 
 record Profile(Map<Phase, List<MethodModel>> models) {
     private static final MethodModel STACKS = new ItemStackModel();
+    private static final MethodModel LOGGER = new LoggerModel();
+    private static final MethodModel OPTIONAL = new OptionalModel();
+    private static final MethodModel RANDOM = new RandomModel();
+    private static final MethodModel NUMBERS = new NumberModel();
+    private static final MethodModel SELF = new SelfModel();
+    private static final MethodModel WORLD = new WorldModel();
+    private static final MethodModel MAPS = new MapModel();
+    private static final MethodModel COLLECTIONS = new CollectionsModel();
 
     static final Profile TRADE = new Profile(Map.of(
             Phase.CONSTRUCTOR, List.of(
@@ -17,30 +25,30 @@ record Profile(Map<Phase, List<MethodModel>> models) {
                     NEW_UNKNOWN
             ),
             Phase.OWNER, List.of(
-                    new LoggerModel(),
+                    LOGGER,
                     new MapItemModel(),
                     EQUALS_UNKNOWN
             ),
             Phase.UNDISTRIBUTED, List.of(
                     new PickModel(),
                     INT_VALUE,
-                    new OptionalModel(),
+                    OPTIONAL,
                     CollectionsModel.REMOVE_CHOICE,
                     OffersModel.COLLECTED
             ),
             Phase.RECEIVER, List.of(
-                    new RandomModel(),
+                    RANDOM,
                     STACKS,
-                    new NumberModel(),
+                    NUMBERS,
                     CLOSURE,
                     new TraderModel(),
-                    new SelfModel(),
+                    SELF,
                     new OffersModel(),
                     DRAWS,
-                    new WorldModel(),
+                    WORLD,
                     UNKNOWN,
                     UNSUPPORTED,
-                    new MapModel(),
+                    MAPS,
                     NULL_RECEIVER,
                     LAMBDA
             ),
@@ -51,7 +59,49 @@ record Profile(Map<Phase, List<MethodModel>> models) {
                     THREAD_LOCAL_RANDOM,
                     NumberModel.STATICS,
                     OffersModel.ORDER,
-                    new CollectionsModel(),
+                    COLLECTIONS,
+                    UNCERTAIN,
+                    STATIC_UNKNOWN
+            )
+    ));
+
+    static final Profile LOOT = new Profile(Map.of(
+            Phase.CONSTRUCTOR, List.of(
+                    NEW_PER_CHOICE,
+                    NEW_UNKNOWN
+            ),
+            Phase.OWNER, List.of(
+                    LOGGER,
+                    EQUALS_UNKNOWN
+            ),
+            Phase.UNDISTRIBUTED, List.of(
+                    INT_VALUE,
+                    OPTIONAL,
+                    CollectionsModel.REMOVE_CHOICE
+            ),
+            Phase.RECEIVER, List.of(
+                    RANDOM,
+                    NUMBERS,
+                    CLOSURE,
+                    new EntityModel(),
+                    new LootTableModel(),
+                    new ForeignReceiverModel(),
+                    SELF,
+                    DRAWS,
+                    WORLD,
+                    UNKNOWN,
+                    UNSUPPORTED,
+                    MAPS,
+                    NULL_RECEIVER,
+                    LAMBDA
+            ),
+            Phase.JDK, List.of(
+                    REQUIRE_NON_NULL,
+                    IS_NULL,
+                    SELECTION_GUARD,
+                    THREAD_LOCAL_RANDOM,
+                    NumberModel.STATICS,
+                    COLLECTIONS,
                     UNCERTAIN,
                     STATIC_UNKNOWN
             )

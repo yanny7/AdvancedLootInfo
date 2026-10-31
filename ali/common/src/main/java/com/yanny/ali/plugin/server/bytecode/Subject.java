@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import org.jetbrains.annotations.Nullable;
 
-sealed interface Subject permits TraderSubject {
+sealed interface Subject permits TraderSubject, LootSubject {
     Class<?> type();
 
     default boolean isSelf(@Nullable Value value) {

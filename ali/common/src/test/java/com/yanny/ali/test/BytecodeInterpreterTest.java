@@ -13,6 +13,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
+import com.yanny.ali.plugin.server.bytecode.LootTableAnalysis;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -30,6 +31,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
@@ -42,6 +44,7 @@ import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -815,6 +818,44 @@ public class BytecodeInterpreterTest {
         Assertions.assertNotNull(trades);
         Assertions.assertTrue(trades.incomplete());
         Assertions.assertTrue(trades.levels().isEmpty());
+    }
+
+    @Test
+    public void testEntityVariantLootTables() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.HUSK, VariantMob.class);
+
+        Assertions.assertEquals(Set.of(Map.of(LootMobs.RED, 1.0), Map.of(LootMobs.BLUE, 1.0)), Set.copyOf(tables.own().values()));
+        Assertions.assertTrue(tables.events().isEmpty());
+    }
+
+    @Test
+    public void testEntityRandomDefaultLootTable() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.DROWNED, RandomDefaultMob.class);
+
+        Assertions.assertEquals(List.of(Map.of(LootMobs.WITCH, 0.5, EntityType.DROWNED.getDefaultLootTable(), 0.5)), List.copyOf(tables.own().values()));
+    }
+
+    @Test
+    public void testEntityConstantEventLootTable() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.ZOMBIE, EventMob.class);
+
+        Assertions.assertTrue(tables.own().isEmpty());
+        Assertions.assertEquals(List.of(Map.of(LootMobs.REWARD, 1.0)), List.copyOf(tables.events().values()));
+    }
+
+    @Test
+    public void testEntityLootTableComputedInHelper() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.ZOMBIE_VILLAGER, BossMob.class);
+
+        Assertions.assertEquals(List.of(Map.of(EntityType.ZOMBIE_VILLAGER.getDefaultLootTable().withSuffix("_boss"), 1.0)), List.copyOf(tables.events().values()));
+    }
+
+    @Test
+    public void testEntityOwnLootTablePassedToHelper() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.SKELETON, StoringMob.class);
+
+        Assertions.assertTrue(tables.own().isEmpty());
+        Assertions.assertTrue(tables.events().isEmpty());
     }
 
     @Test
@@ -1754,6 +1795,10 @@ public class BytecodeInterpreterTest {
         private static final VillagerTrades.ItemListing[] COMMON = {new OfferListing(Items.APPLE), new OfferListing(Items.BREAD)};
         private static final VillagerTrades.ItemListing[] RARE = {new OfferListing(Items.CARROT)};
         private static final Int2ObjectMap<VillagerTrades.ItemListing[]> BY_LEVEL = new Int2ObjectOpenHashMap<>(Map.of(1, COMMON, 2, RARE));
+    }
+
+    private static LootTableAnalysis.ComputedLootTables lootTables(EntityType<?> type, Class<?> entityClass) {
+        return LootTableAnalysis.getEntityLootTables(UTILS.getServerLevel().registryAccess(), type, entityClass);
     }
 
     private static Int2ObjectMap<TradeLevel> computedLevels(Class<?> trader) {
@@ -3142,5 +3187,98 @@ public class BytecodeInterpreterTest {
                 (trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.APPLE) : null,
                 (trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.BREAD) : null
         );
+    }
+
+    private static final class LootMobs {
+        private static final ResourceLocation RED = new ResourceLocation("ali", "entities/variant_red");
+        private static final ResourceLocation BLUE = new ResourceLocation("ali", "entities/variant_blue");
+        private static final ResourceLocation REWARD = new ResourceLocation("ali", "entities/reward");
+        private static final ResourceLocation WITCH = EntityType.WITCH.getDefaultLootTable();
+    }
+
+    private abstract static class VariantMob extends Mob {
+        private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(VariantMob.class, EntityDataSerializers.INT);
+
+        private VariantMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        protected ResourceLocation getDefaultLootTable() {
+            return switch (entityData.get(VARIANT)) {
+                case 0 -> LootMobs.RED;
+                case 1 -> LootMobs.BLUE;
+                default -> super.getDefaultLootTable();
+            };
+        }
+    }
+
+    private abstract static class RandomDefaultMob extends Mob {
+        private RandomDefaultMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        @NotNull
+        @Override
+        protected ResourceLocation getDefaultLootTable() {
+            return random.nextInt(2) == 0 ? LootMobs.WITCH : super.getDefaultLootTable();
+        }
+    }
+
+    private abstract static class EventMob extends Mob {
+        private EventMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void reward() {
+            MinecraftServer server = level().getServer();
+
+            if (server != null) {
+                server.getLootData().getLootTable(LootMobs.REWARD);
+            }
+        }
+    }
+
+    private abstract static class BossMob extends Mob {
+        private final BossDrops drops = new BossDrops();
+
+        private BossMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void dropBossLoot() {
+            drops.prepare(this);
+        }
+    }
+
+    private static final class BossDrops {
+        private void prepare(Mob boss) {
+            MinecraftServer server = boss.level().getServer();
+
+            if (server != null) {
+                server.getLootData().getLootTable(boss.getLootTable().withSuffix("_boss"));
+            }
+        }
+    }
+
+    private abstract static class StoringMob extends Mob {
+        private StoringMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void store() {
+            StoredDrops.store(this, getLootTable());
+        }
+    }
+
+    private static final class StoredDrops {
+        private static void store(Mob mob, ResourceLocation table) {
+            MinecraftServer server = mob.level().getServer();
+
+            if (server != null) {
+                server.getLootData().getLootTable(table);
+            }
+        }
     }
 }
