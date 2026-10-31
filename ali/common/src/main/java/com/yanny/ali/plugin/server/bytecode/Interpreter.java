@@ -9,13 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.tree.MethodInsnNode;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -152,6 +154,7 @@ final class Interpreter implements Opcodes {
         return invokeHandle(target.impl(), all, target.owner().getClassLoader(), depth + 1);
     }
 
+    @Unmodifiable
     @Nullable
     Value uncertainChange(MethodInsnNode call, @Nullable Object changed) {
         Type returnType = Type.getReturnType(call.desc);
@@ -212,9 +215,21 @@ final class Interpreter implements Opcodes {
             merge(original, branches);
         }
 
-        return sameDraw(combine(results), first);
+        return sameDraw(call.owner.startsWith("java/") ? combine(results) : combineCalls(results), first);
     }
 
+    @Nullable
+    private Value combineCalls(List<Value> results) {
+        boolean same = results.stream().allMatch((r) -> r instanceof Value.Known known && results.get(0) instanceof Value.Known k && known.value() == k.value());
+
+        if (!same && results.stream().allMatch((r) -> r instanceof Value.Offer || r instanceof Value.Known known && known.value() instanceof MerchantOffer)) {
+            return combineOffers(results.stream().map(Interpreter::asOffer).toList());
+        }
+
+        return combine(results);
+    }
+
+    @NotNull
     List<Value> select(List<Value> args, int[] choices, int option) {
         List<Value> copy = new ArrayList<>(args);
 
@@ -290,6 +305,42 @@ final class Interpreter implements Opcodes {
         throw new Fail("results cannot be combined");
     }
 
+    @NotNull
+    private static Value.Offer asOffer(Value value) {
+        if (value instanceof Value.Offer offer) {
+            return offer;
+        }
+
+        MerchantOffer offer = (MerchantOffer) ((Value.Known) value).value();
+
+        return new Value.Offer(new Value.Known(offer.getBaseCostA()), new Value.Known(offer.getCostB()), new Value.Known(offer.getResult()), offer.getMaxUses(),
+                offer.getXp(), offer.getPriceMultiplier());
+    }
+
+    @NotNull
+    private Value.Offer combineOffers(List<Value.Offer> offers) {
+        Value.Offer first = offers.get(0);
+
+        if (offers.stream().anyMatch((o) -> o.maxUses() != first.maxUses() || o.xp() != first.xp() || Float.compare(o.priceMultiplier(), first.priceMultiplier()) != 0)) {
+            throw new Fail("offers with different terms");
+        }
+
+        return new Value.Offer(combineSlot(offers, Value.Offer::costA), combineSlot(offers, Value.Offer::costB), combineSlot(offers, Value.Offer::result),
+                first.maxUses(), first.xp(), first.priceMultiplier());
+    }
+
+    @Nullable
+    private Value combineSlot(List<Value.Offer> offers, Function<Value.Offer, Value> slot) {
+        List<Value> values = offers.stream().map(slot).toList();
+        String text = Aggregation.describe(values.get(0));
+
+        if (!text.equals("?") && values.stream().allMatch((v) -> Aggregation.describe(v).equals(text))) {
+            return values.get(0);
+        }
+
+        return combine(values);
+    }
+
     static boolean isRandomType(Type type, ClassLoader loader) {
         try {
             Class<?> cls = load(type.getInternalName(), loader);
@@ -304,14 +355,18 @@ final class Interpreter implements Opcodes {
         return Random.class.isAssignableFrom(load(type.getInternalName(), loader));
     }
 
+    @Unmodifiable
+    @NotNull
     List<Value> shadowed(List<Value> args) {
         return args.stream().map((v) -> v instanceof Value.Known known && known.value() instanceof ItemStack real && !heap.isOwned(real) ? heap.shadow(real) : v).toList();
     }
 
+    @NotNull
     static Value.Stack stackOf(ItemStack real) {
         return new Value.Stack(List.of(real.copy()), NumberExpr.constant(real.getCount()), false);
     }
 
+    @NotNull
     static Value limit(Value.Stack stack) {
         if (stack.options.size() > Limits.OPTIONS) {
             throw new Fail("too many options");
@@ -389,6 +444,7 @@ final class Interpreter implements Opcodes {
         }
     }
 
+    @NotNull
     static Value pick(List<?> list, Value.Num index) {
         if (!(index.expr() instanceof NumberExpr.Fn fn) || !fn.id().equals(NumberFunctions.UNIFORM_INT)
                 || !(fn.args().get(0) instanceof NumberExpr.Const lo) || !(fn.args().get(1) instanceof NumberExpr.Const hi)) {

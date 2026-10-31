@@ -415,7 +415,7 @@ final class Aggregation {
     }
 
     @NotNull
-    private static String describe(Value value) {
+    static String describe(Value value) {
         if (value instanceof Value.Known known && known.value() instanceof ItemStack stack) {
             return stack.isEmpty() ? "-" : TradeTypes.stackText(stack) + " x" + stack.getCount();
         }
