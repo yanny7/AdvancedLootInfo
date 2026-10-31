@@ -870,7 +870,7 @@ public class BytecodeInterpreterTest {
 
     @Test
     public void testLootTablesReferencedInJar() {
-        Set<ResourceLocation> tables = LootTableAnalysis.getReferencedLootTables(RolledTables.class);
+        Set<ResourceLocation> tables = LootTableAnalysis.getReferencedLootTables(List.of(RolledTables.class));
 
         Assertions.assertTrue(tables.containsAll(Set.of(RolledTables.CHEST, RolledTables.INJECTED)));
         Assertions.assertFalse(tables.contains(LootMobs.REWARD));

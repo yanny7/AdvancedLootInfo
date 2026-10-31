@@ -52,30 +52,31 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    public static Set<ResourceLocation> getReferencedLootTables(Class<?> anyClassOfJar) {
-        ModJarIndex index = RuntimeNames.LOOT_AVAILABLE ? ModJarIndex.of(anyClassOfJar) : null;
+    public static Set<ResourceLocation> getReferencedLootTables(Collection<Class<?>> classesOfJars) {
         Set<ResourceLocation> tables = new LinkedHashSet<>();
 
-        if (index == null) {
+        if (!RuntimeNames.LOOT_AVAILABLE) {
             return tables;
         }
 
-        try {
-            for (ModJarIndex.Caller caller : index.callers(SINK)) {
-                if (caller.entity()) {
-                    continue;
-                }
-                if (caller.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
-                    tables.add(table);
-                } else if (caller.source() instanceof CallSites.Param param) {
-                    for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param.index())) {
-                        if (!outer.entity() && outer.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
-                            tables.add(table);
+        for (ModJarIndex index : classesOfJars.stream().map(ModJarIndex::of).filter(Objects::nonNull).distinct().toList()) {
+            try {
+                for (ModJarIndex.Caller caller : index.callers(SINK)) {
+                    if (caller.entity()) {
+                        continue;
+                    }
+                    if (caller.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
+                        tables.add(table);
+                    } else if (caller.source() instanceof CallSites.Param param) {
+                        for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param.index())) {
+                            if (!outer.entity() && outer.source() instanceof CallSites.Constant constant && constant.value() instanceof ResourceLocation table) {
+                                tables.add(table);
+                            }
                         }
                     }
                 }
-            }
-        } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {}
+        }
 
         return tables;
     }
@@ -195,5 +196,8 @@ public final class LootTableAnalysis {
     }
 
     public record ComputedLootTables(Map<List<Decision>, Map<ResourceLocation, Double>> own, Map<List<Decision>, Map<ResourceLocation, Double>> events) {
+        public static boolean isCertain(double probability) {
+            return probability >= LootAggregation.ALWAYS;
+        }
     }
 }

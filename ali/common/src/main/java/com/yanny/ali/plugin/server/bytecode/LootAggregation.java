@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 final class LootAggregation {
-    private static final double ALWAYS = 1 - 1e-9;
+    static final double ALWAYS = 1 - 1e-9;
 
     private LootAggregation() {}
 
