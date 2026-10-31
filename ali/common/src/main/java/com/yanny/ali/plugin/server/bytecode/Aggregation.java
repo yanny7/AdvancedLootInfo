@@ -166,7 +166,7 @@ final class Aggregation {
                 List<Group> groups = levelBuckets.stream().map((b) -> new Group(b.entry, b.times, PathCondition.of(List.copyOf(b.worlds.keySet())), count(b),
                         shared ? 1 : (float) Math.min(1, Objects.requireNonNull(chance(b))))).toList();
 
-                levels.put(level.getKey(), new Level(groups, shared ? (float) Math.min(1, first) : 1));
+                levels.put(level.getKey(), new Level(groups, shared ? (float) Math.min(1, first) : 1, offers(levelBuckets, groups)));
             }
 
             if (levels.isEmpty() && reason == null
@@ -321,6 +321,41 @@ final class Aggregation {
                 }
             }
         }
+    }
+
+    @NotNull
+    private static NumberExpr offers(List<Bucket> buckets, List<Group> groups) {
+        Set<List<Decision>> worlds = new LinkedHashSet<>();
+        List<NumberExpr> totals = new ArrayList<>();
+
+        buckets.forEach((b) -> worlds.addAll(b.worlds.keySet()));
+
+        for (List<Decision> world : worlds) {
+            NumberExpr total = NumberExpr.constant(0);
+
+            for (int i = 0; i < buckets.size(); i++) {
+                if (buckets.get(i).worlds.containsKey(world)) {
+                    total = NumberExpr.add(total, offers(groups.get(i)));
+                }
+            }
+
+            if (!totals.contains(total)) {
+                totals.add(total);
+            }
+        }
+
+        List<NumberExpr.Branch> branches = totals.subList(0, totals.size() - 1).stream().map((t) -> new NumberExpr.Branch(-1, t)).toList();
+
+        return NumberExpr.cond(branches, totals.get(totals.size() - 1));
+    }
+
+    @NotNull
+    private static NumberExpr offers(Group group) {
+        if (group.chance() >= 1) {
+            return group.count();
+        }
+
+        return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(group.chance(), group.count()), new NumberExpr.WeightedEntry(1 - group.chance(), NumberExpr.constant(0))));
     }
 
     @Nullable
@@ -491,7 +526,7 @@ final class Aggregation {
     record Trader(Map<Integer, Level> levels, Set<Integer> incomplete, boolean unknownLevel, @Nullable String reason) {
     }
 
-    record Level(List<Group> groups, float chance) {
+    record Level(List<Group> groups, float chance, NumberExpr offers) {
     }
 
     record Group(Value.Offers.Entry entry, int times, PathCondition condition, NumberExpr count, float chance) {

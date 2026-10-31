@@ -203,9 +203,7 @@ final class Renderer {
             return new TradeLevel.OfListings(listings.listings(), new TradeLevelInfo(groups.get(0).count(), level.chance()));
         }
 
-        NumberExpr total = groups.stream().map(Renderer::offers).reduce(NumberExpr.constant(0), NumberExpr::add);
-
-        return new TradeLevel.OfTrades(new TradeLevelInfo(total, level.chance()), (u) -> {
+        return new TradeLevel.OfTrades(new TradeLevelInfo(level.offers(), level.chance()), (u) -> {
             List<IDataNode> nodes = new ArrayList<>();
 
             for (Aggregation.Group group : groups) {
@@ -234,15 +232,6 @@ final class Renderer {
 
             return nodes;
         });
-    }
-
-    @NotNull
-    private static NumberExpr offers(Aggregation.Group group) {
-        if (group.chance() >= 1) {
-            return group.count();
-        }
-
-        return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(group.chance(), group.count()), new NumberExpr.WeightedEntry(1 - group.chance(), NumberExpr.constant(0))));
     }
 
     @NotNull

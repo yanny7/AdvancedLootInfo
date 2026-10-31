@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -157,6 +158,28 @@ public class AggregationTest {
 
         assertEquals(0.25F, level.chance());
         assertEquals(List.of(1F, 1F), level.groups().stream().map(Aggregation.Group::chance).toList());
+    }
+
+    @Test
+    public void testTraderTradesOfExclusiveConditionsCountOnce() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.BREAD))), UNKNOWN),
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.CARROT))), UNKNOWN.negated())));
+        Aggregation.Level level = trader.levels().get(1);
+
+        assertEquals(3, level.groups().size());
+        assertEquals(new NumberInterval(2, 2, true, true), level.offers().bounds());
+    }
+
+    @Test
+    public void testTraderOffersDifferingByConditionAreConditional() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.BREAD)), single(offer(Items.CARROT))), UNKNOWN),
+                success(offers(single(offer(Items.APPLE))), UNKNOWN.negated())));
+        NumberExpr offers = trader.levels().get(1).offers();
+
+        assertInstanceOf(NumberExpr.Cond.class, offers);
+        assertEquals(new NumberInterval(1, 3, true, true), offers.bounds());
     }
 
     @Test
