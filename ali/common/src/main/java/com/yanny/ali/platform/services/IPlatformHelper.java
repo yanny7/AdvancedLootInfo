@@ -13,4 +13,6 @@ public interface IPlatformHelper extends ICorePlatformHelper<IPlugin> {
         List<IPlugin> getPlugins();
 
         Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType);
+
+        String getModName(String modId);
 }

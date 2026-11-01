@@ -63,7 +63,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
             Level level = Minecraft.getInstance().level;
 
             if (level != null) {
-                Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, display.getEntityType(), level, display.getVariant());
+                Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, display.getEntityType(), level, display.getVariant(), display.getLootData());
 
                 graphics.pose().pushMatrix();
                 graphics.pose().translate(bounds1.getX(), bounds1.getY());
@@ -73,7 +73,11 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
             }
         }));
         innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(spawnTooltip))) : null));
+        Rect nameRect = GenericUtils.getCenteredTextRect(display.getEntityType().getDescription(), innerBounds.getCenterX(), 0);
+        Rectangle nameBounds = new Rectangle(nameRect.x(), nameRect.y(), nameRect.width(), nameRect.height());
+
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()).centered().noShadow().color(0xFF000000));
+        innerWidgets.add(Widgets.createTooltip((point) -> nameBounds.contains(point) ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(GenericUtils.getEntityNameTooltip(display.getEntityType())))) : null));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(

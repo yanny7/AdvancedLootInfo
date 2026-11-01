@@ -625,6 +625,11 @@ public final class Lang {
         RANDOM_PROPERTIES("random_properties", "Random properties"),
         RANDOM_CHANCE("random_chance", "Random chance"),
         UNKNOWN_PREDICATE("unknown_predicate", "Unknown additional predicate"),
+        VARIANT_LOOT("variant_loot", "Dropped by this variant of the mob"),
+        EVENT_LOOT("event_loot", "Rolled by the mob's own code on a special event"),
+        RANDOM_LOOT("random_loot", "Drops one of these loot tables at random"),
+        CONFIGURED_LOOT("configured_loot", "Assigned to the mob by configuration"),
+        PLUGIN_LOOT("plugin_loot", "Assigned to the mob by a mod"),
         ;
 
         private final Translation translation;

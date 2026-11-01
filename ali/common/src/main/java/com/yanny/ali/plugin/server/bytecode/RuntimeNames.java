@@ -3,11 +3,17 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MapItem;
@@ -19,13 +25,12 @@ import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
@@ -33,11 +38,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 final class RuntimeNames {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
     static final boolean AVAILABLE;
+    static final boolean LOOT_AVAILABLE;
     static final Ref NEXT_INT;
     static final Ref NEXT_INT_BOUND;
     static final Ref NEXT_INT_BETWEEN;
@@ -75,13 +85,29 @@ final class RuntimeNames {
     static final Ref UPDATE_TRADES;
     static final Ref ADD_OFFERS_FROM_TRADE_SET;
     static final Ref OFFERS;
+    static final Ref MOB_GET_LOOT_TABLE;
+    static final Ref LIVING_DROP_SELECTOR;
+    static final Ref LIVING_DROP_KEY;
+    static final Ref LIVING_DROP_KEY_CONSUMER;
+    static final Ref LIVING_DROP_PARAMS;
+    static final Ref LIVING_DROP_INTERACT;
+    static final Ref LIVING_DROP_GIFT;
+    static final Ref LIVING_DROP_SHEARING;
+    static final Ref ENTITY_GET_TYPE;
+    static final Ref LOOT_DATA_GET_LOOT_TABLE;
+    static final Ref HOLDER_GETTER_GET;
+    static final Ref RESOURCE_KEY_CREATE;
+    static final Ref ENTITY_DATA_SET;
+    static final Ref ENTITY_DATA_GET;
 
     static {
         Map<String, Ref> refs = new HashMap<>();
         List<String> missing = new ArrayList<>();
+        List<String> lootMissing = new ArrayList<>();
 
         read(Probes.class, refs);
         read(Probes.VillagerNames.class, refs);
+        read(Probes.MobNames.class, refs);
 
         NEXT_INT = ref(refs, "nextInt", missing);
         NEXT_INT_BOUND = ref(refs, "nextIntBound", missing);
@@ -120,10 +146,28 @@ final class RuntimeNames {
         UPDATE_TRADES = ref(refs, "villagerUpdateTrades", missing);
         ADD_OFFERS_FROM_TRADE_SET = ref(refs, "villagerAddOffers", missing);
         OFFERS = ref(refs, "villagerOffers", missing);
+        MOB_GET_LOOT_TABLE = ref(refs, "mobLootTable", lootMissing);
+        LIVING_DROP_SELECTOR = ref(refs, "livingDropSelector", lootMissing);
+        LIVING_DROP_KEY = ref(refs, "livingDropKey", lootMissing);
+        LIVING_DROP_KEY_CONSUMER = ref(refs, "livingDropKeyConsumer", lootMissing);
+        LIVING_DROP_PARAMS = ref(refs, "livingDropParams", lootMissing);
+        LIVING_DROP_INTERACT = ref(refs, "livingDropInteract", lootMissing);
+        LIVING_DROP_GIFT = ref(refs, "livingDropGift", lootMissing);
+        LIVING_DROP_SHEARING = ref(refs, "livingDropShearing", lootMissing);
+        ENTITY_GET_TYPE = ref(refs, "mobType", lootMissing);
+        LOOT_DATA_GET_LOOT_TABLE = ref(refs, "lootDataGetLootTable", lootMissing);
+        HOLDER_GETTER_GET = ref(refs, "holderGetterGet", lootMissing);
+        RESOURCE_KEY_CREATE = ref(refs, "resourceKeyCreate", lootMissing);
+        ENTITY_DATA_SET = ref(refs, "entityDataSet", lootMissing);
+        ENTITY_DATA_GET = ref(refs, "entityDataGet", lootMissing);
         AVAILABLE = missing.isEmpty();
+        LOOT_AVAILABLE = AVAILABLE && lootMissing.isEmpty();
 
         if (!AVAILABLE) {
             LOGGER.warn("Auto-detection of trades from bytecode is disabled, runtime names not found: {}", missing);
+        }
+        if (!lootMissing.isEmpty()) {
+            LOGGER.warn("Auto-detection of entity loot tables from bytecode is disabled, runtime names not found: {}", lootMissing);
         }
     }
 
@@ -217,6 +261,7 @@ final class RuntimeNames {
             return random.nextGaussian();
         }
 
+        @NotNull
         private static RandomSource fork(RandomSource random) {
             return random.fork();
         }
@@ -245,14 +290,17 @@ final class RuntimeNames {
             return stack.getCount();
         }
 
+        @NotNull
         private static Object stackGetItem(ItemStack stack) {
             return stack.getItem();
         }
 
+        @NotNull
         private static ItemStack stackCopy(ItemStack stack) {
             return stack.copy();
         }
 
+        @NotNull
         private static ItemStack stackCopyWithCount(ItemStack stack) {
             return stack.copyWithCount(0);
         }
@@ -293,6 +341,7 @@ final class RuntimeNames {
             return level.findNearestMapStructure(null, null, 0, false);
         }
 
+        @NotNull
         private static Object registryAccess(Level level) {
             return level.registryAccess();
         }
@@ -301,6 +350,7 @@ final class RuntimeNames {
             return entity.registryAccess();
         }
 
+        @NotNull
         private static ItemStack mapCreate() {
             return MapItem.create(null, 0, 0, (byte) 0, false, false);
         }
@@ -313,8 +363,33 @@ final class RuntimeNames {
             MapItemSavedData.addTargetDecoration(null, null, null, null);
         }
 
+        @NotNull
         private static MerchantOffers getOffers(Merchant merchant) {
             return merchant.getOffers();
+        }
+
+        @NotNull
+        private static LootTable lootDataGetLootTable(ReloadableServerRegistries.Holder registries) {
+            return registries.getLootTable(null);
+        }
+
+        @NotNull
+        private static Optional<?> holderGetterGet(HolderGetter.Provider provider) {
+            return provider.get((ResourceKey<?>) null);
+        }
+
+        @NotNull
+        private static ResourceKey<?> resourceKeyCreate() {
+            return ResourceKey.create(null, null);
+        }
+
+        private static void entityDataSet(SynchedEntityData data) {
+            data.set(null, null);
+        }
+
+        @NotNull
+        private static Object entityDataGet(SynchedEntityData data) {
+            return data.get(null);
         }
 
         private abstract static class VillagerNames extends AbstractVillager {
@@ -332,6 +407,50 @@ final class RuntimeNames {
 
             private MerchantOffers villagerOffers() {
                 return offers;
+            }
+        }
+
+        private abstract static class MobNames extends Mob {
+            private MobNames(EntityType<? extends Mob> type) {
+                super(type, null);
+            }
+
+            @NotNull
+            private Optional<ResourceKey<LootTable>> mobLootTable() {
+                return getLootTable();
+            }
+
+            @NotNull
+            private EntityType<?> mobType() {
+                return getType();
+            }
+
+            private void livingDropSelector() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false);
+            }
+
+            private void livingDropKey() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false, (ResourceKey<LootTable>) null);
+            }
+
+            private void livingDropKeyConsumer() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false, (ResourceKey<LootTable>) null, (Consumer<ItemStack>) null);
+            }
+
+            private boolean livingDropParams() {
+                return dropFromLootTable((ServerLevel) null, (ResourceKey<LootTable>) null, (Function<LootParams.Builder, LootParams>) null, (BiConsumer<ServerLevel, ItemStack>) null);
+            }
+
+            private boolean livingDropInteract() {
+                return dropFromEntityInteractLootTable(null, null, null, null, null);
+            }
+
+            private boolean livingDropGift() {
+                return dropFromGiftLootTable(null, null, null);
+            }
+
+            private void livingDropShearing() {
+                dropFromShearingLootTable(null, null, null, null);
             }
         }
     }

@@ -25,4 +25,9 @@ public class TestPlatformHelper implements IPlatformHelper {
     public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
         return Optional.empty();
     }
+
+    @Override
+    public String getModName(String modId) {
+        return modId;
+    }
 }

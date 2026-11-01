@@ -23,7 +23,6 @@ public class GrimoireOfGaiaCompat implements IModCompat {
         registry.registerEntityLootTable(GaiaRegistry.MINOTAURUS.getEntityType(), GaiaLootTables.MINOTAURUS_RANGED.identifier());
         registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_RANGED.identifier());
         registry.registerEntityLootTable(GaiaRegistry.DWARF.getEntityType(), GaiaLootTables.DWARF_MINER.identifier());
-        registry.registerEntityLootTable(GaiaRegistry.CHEST.getEntityType(), GaiaLootTables.CHEST_TABLES.identifier());
     }
 
     @NotNull

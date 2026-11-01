@@ -67,6 +67,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
         widgets.add(new IRecipeWidget() {
             private static final int WIDGET_SIZE = 36;
             final Rect rect = new Rect((CATEGORY_WIDTH - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
+            final Rect nameRect = GenericUtils.getCenteredTextRect(recipe.entityType().getDescription(), CATEGORY_WIDTH / 2, 0);
             final ScreenPosition position = new ScreenPosition(0, 0);
 
             @Override
@@ -74,7 +75,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
                 Level level = Minecraft.getInstance().level;
 
                 if (level != null) {
-                    Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, recipe.entityType(), level, recipe.variant());
+                    Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, recipe.entityType(), level, recipe.variant(), recipe.entry());
                     GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
                     GenericUtils.renderSpawnInfoIcon(recipe.entry(), rect, guiGraphics);
                 }
@@ -88,6 +89,8 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
                     if (!spawnTooltip.isEmpty()) {
                         tooltip.add(new ScrollableTooltip(spawnTooltip));
                     }
+                } else if (nameRect.contains((int) mouseX, (int) mouseY)) {
+                    tooltip.add(new ScrollableTooltip(GenericUtils.getEntityNameTooltip(recipe.entityType())));
                 }
             }
 

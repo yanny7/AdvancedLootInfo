@@ -29,7 +29,10 @@ public final class BytecodeInterpreter {
         Aggregation.Listing aggregated;
 
         try {
-            aggregated = Aggregation.listing(Explorer.explore(Profile.TRADE, utils.getServerLevel().registryAccess(), listing::call));
+            aggregated = Aggregation.listing(Explorer.explore(Profile.TRADE, utils.getServerLevel().registryAccess(), (i) -> {
+                i.subject = new ListingSubject(listing.receiver().getClass());
+                return listing.call(i);
+            }));
         } catch (Fail fail) {
             aggregated = new Aggregation.Listing(List.of(), fail.describe());
         } catch (Throwable e) {
@@ -65,7 +68,10 @@ public final class BytecodeInterpreter {
         }
 
         try {
-            return Aggregation.stacks(new Interpreter(Profile.TRADE, Interpreter.Mode.SYMBOLIC, 0).call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
+            Interpreter interpreter = new Interpreter(Profile.TRADE, Interpreter.Mode.SYMBOLIC, 0);
+
+            interpreter.subject = new ListingSubject(supplier.getClass());
+            return Aggregation.stacks(interpreter.call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
         } catch (Throwable ignored) {}
 
         return null;
@@ -76,6 +82,8 @@ public final class BytecodeInterpreter {
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();
         Renderer.clearCaches();
+        LootTableAnalysis.clearCaches();
+        ModJarIndex.clearCaches();
     }
 
     public record Stacks(List<Option> options) {
