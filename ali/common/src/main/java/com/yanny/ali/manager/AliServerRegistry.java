@@ -578,7 +578,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
-        BytecodeInterpreter.ComputedListing computed = BytecodeInterpreter.computeItemListing(utils, entry, condition);
+        BytecodeInterpreter.ComputedListing computed = getConfiguration().codeAnalysis.tradeListings ? BytecodeInterpreter.computeItemListing(utils, entry, condition) : null;
         String name = ManagedRegistry.classKeyName(BytecodeInterpreter.listingSource(entry).getClass());
 
         if (computed != null) {

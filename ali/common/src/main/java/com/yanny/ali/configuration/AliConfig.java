@@ -75,20 +75,22 @@ public class AliConfig implements ICoreConfig {
         })
     );
 
-    private static final MapCodec<Pair<SpawnInfoFilter, Boolean>> EXTRA_CODEC = RecordCodecBuilder.mapCodec((instance) ->
+    private static final MapCodec<Extra> EXTRA_CODEC = RecordCodecBuilder.mapCodec((instance) ->
         instance.group(
-                field(SpawnInfoFilter.codec(Utils.MOD_ID), "spawnInfo", SpawnInfoFilter::new).forGetter(Pair::getFirst),
-                field(Codec.BOOL, "showCharts", () -> true).forGetter(Pair::getSecond)
-        ).apply(instance, Pair::of)
+                field(SpawnInfoFilter.codec(Utils.MOD_ID), "spawnInfo", SpawnInfoFilter::new).forGetter(Extra::spawnInfo),
+                field(CodeAnalysis.CODEC, "codeAnalysis", CodeAnalysis::new).forGetter(Extra::codeAnalysis),
+                field(Codec.BOOL, "showCharts", () -> true).forGetter(Extra::showCharts)
+        ).apply(instance, Extra::new)
     );
 
     public static final Codec<AliConfig> CODEC = Codec.mapPair(BASE_CODEC, EXTRA_CODEC).xmap((pair) -> {
         AliConfig config = pair.getFirst();
 
-        config.spawnInfo = pair.getSecond().getFirst();
-        config.showCharts = pair.getSecond().getSecond();
+        config.spawnInfo = pair.getSecond().spawnInfo();
+        config.codeAnalysis = pair.getSecond().codeAnalysis();
+        config.showCharts = pair.getSecond().showCharts();
         return config;
-    }, (config) -> Pair.of(config, Pair.of(config.spawnInfo, config.showCharts))).codec();
+    }, (config) -> Pair.of(config, new Extra(config.spawnInfo, config.codeAnalysis, config.showCharts))).codec();
 
     public int configVersion = 0;
 
@@ -111,6 +113,7 @@ public class AliConfig implements ICoreConfig {
 
     public TooltipColors tooltipColors = new TooltipColors();
     public SpawnInfoFilter spawnInfo = new SpawnInfoFilter();
+    public CodeAnalysis codeAnalysis = new CodeAnalysis();
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -226,4 +229,6 @@ public class AliConfig implements ICoreConfig {
     private static List<Ingredient> of(Item... items) {
         return Arrays.stream(items).map(Ingredient::of).toList();
     }
+
+    private record Extra(SpawnInfoFilter spawnInfo, CodeAnalysis codeAnalysis, boolean showCharts) {}
 }

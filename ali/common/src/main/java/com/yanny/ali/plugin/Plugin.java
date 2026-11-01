@@ -16,7 +16,6 @@ import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
 import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
-import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.*;
@@ -108,7 +107,6 @@ public class Plugin implements IPlugin {
     @Override
     public void registerCommon(ICommonRegistry registry) {
         LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
-        registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
     }
 
     @Override

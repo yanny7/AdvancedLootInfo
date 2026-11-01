@@ -9,4 +9,6 @@ import org.jetbrains.annotations.Nullable;
 public interface IPlatformHelper extends ICorePlatformHelper<IPlugin> {
         @Nullable
         SpawnEggItem getSpawnEggItem(EntityType<?> entityType);
+
+        String getModName(String modId);
 }

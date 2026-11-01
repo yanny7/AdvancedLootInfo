@@ -76,7 +76,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     Level level = Minecraft.getInstance().level;
 
                     if (level != null) {
-                        Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, entityType, level, variant);
+                        Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, entityType, level, variant, lootTable);
                         GenericUtils.renderEntity(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
                         GenericUtils.renderSpawnInfoIcon(lootTable, rect, guiGraphics);
                     }
@@ -89,7 +89,12 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     return spawnTooltip.isEmpty() ? List.of() : List.of(new ScrollableTooltip(spawnTooltip));
                 }
             });
-            widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false));
+            widgets.add(new TextWidget(entityType.getDescription().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false) {
+                @Override
+                public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
+                    return List.of(new ScrollableTooltip(GenericUtils.getEntityNameTooltip(entityType)));
+                }
+            });
         }
 
         catalysts.forEach((catalyst) -> widgets.add(new SlotWidget(catalyst, 0, 0)));

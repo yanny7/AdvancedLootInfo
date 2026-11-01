@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberInterval;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -140,12 +141,72 @@ public class AggregationTest {
     }
 
     @Test
-    public void testTraderGroupsOfDifferentChancesAreIncomplete() {
+    public void testTraderGroupsOfDifferentChancesKeepTheirOwn() {
         Aggregation.Trader trader = Aggregation.trader(List.of(success(offers(listings(1, FIRST)), random(0.25, true)), success(offers(listings(1, SECOND)), random(0.25, false))));
+        Aggregation.Level level = trader.levels().get(1);
+
+        assertNull(trader.reason());
+        assertTrue(trader.incomplete().isEmpty());
+        assertEquals(1F, level.chance());
+        assertEquals(List.of(0.25F, 0.75F), level.groups().stream().map(Aggregation.Group::chance).toList());
+    }
+
+    @Test
+    public void testTraderGroupsOfOneSharedChanceKeepItOnTheLevel() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(success(offers(listings(1, FIRST), listings(1, SECOND)), random(0.25, true))));
+        Aggregation.Level level = trader.levels().get(1);
+
+        assertEquals(0.25F, level.chance());
+        assertEquals(List.of(1F, 1F), level.groups().stream().map(Aggregation.Group::chance).toList());
+    }
+
+    @Test
+    public void testTraderTradesOfExclusiveConditionsCountOnce() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.BREAD))), UNKNOWN),
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.CARROT))), UNKNOWN.negated())));
+        Aggregation.Level level = trader.levels().get(1);
+
+        assertEquals(3, level.groups().size());
+        assertEquals(new NumberInterval(2, 2, true, true), level.offers().bounds());
+    }
+
+    @Test
+    public void testTraderOffersDifferingByConditionAreConditional() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.BREAD)), single(offer(Items.CARROT))), UNKNOWN),
+                success(offers(single(offer(Items.APPLE))), UNKNOWN.negated())));
+        NumberExpr offers = trader.levels().get(1).offers();
+
+        assertInstanceOf(NumberExpr.Cond.class, offers);
+        assertEquals(new NumberInterval(1, 3, true, true), offers.bounds());
+    }
+
+    @Test
+    public void testTraderGroupWhoseChanceDependsOnTheWorldIsIncomplete() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(listings(1, FIRST)), UNKNOWN, random(0.25, true)),
+                success(offers(listings(1, SECOND)), UNKNOWN, random(0.25, false)),
+                success(offers(listings(1, FIRST)), UNKNOWN.negated())));
 
         assertEquals("several sets of trades of one level", trader.reason());
         assertEquals(Set.of(1), trader.incomplete());
         assertTrue(trader.levels().isEmpty());
+    }
+
+    @Test
+    public void testTraderSingleRepeatedARandomNumberOfTimesIsOneGroup() {
+        Aggregation.Trader trader = Aggregation.trader(List.of(
+                success(offers(single(offer(Items.APPLE)), single(offer(Items.APPLE))), random(0.25, true)),
+                success(offers(single(offer(Items.APPLE))), random(0.25, false))));
+        List<Aggregation.Group> groups = trader.levels().get(1).groups();
+
+        assertNull(trader.reason());
+        assertEquals(1, groups.size());
+        assertEquals(2, groups.get(0).times());
+        assertEquals(1F, groups.get(0).chance());
+        assertEquals(NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(0.25, NumberExpr.constant(2)), new NumberExpr.WeightedEntry(0.75, NumberExpr.constant(1)))),
+                groups.get(0).count());
     }
 
     @Test

@@ -60,6 +60,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return ForgeSpawnEggItem.fromEntityType(entityType);
     }
 
+    @Override
+    public String getModName(String modId) {
+        return ModList.get().getModContainerById(modId).map((mod) -> mod.getModInfo().getDisplayName()).orElse(modId);
+    }
+
     @NotNull
     private List<IPlugin> loadPlugins() {
         List<IPlugin> plugins = new LinkedList<>();

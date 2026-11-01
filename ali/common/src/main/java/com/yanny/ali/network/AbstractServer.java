@@ -5,11 +5,13 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.spawn.SpawnInfo;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
@@ -20,6 +22,7 @@ import com.yanny.ali.plugin.common.TraderDetector;
 import com.yanny.ali.plugin.common.nodes.EntityLootTableNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.glm.GlobalLootModifierCollector;
 import com.yanny.ali.plugin.glm.IPageLootModifier;
 import com.yanny.ali.plugin.glm.LootPage;
 import com.yanny.ali.plugin.glm.Match;
@@ -34,8 +37,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -137,8 +140,8 @@ public abstract class AbstractServer {
         long collectionStart = System.currentTimeMillis();
 
         collectBlockPages(config, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, unboundedLootModifiers, pages);
-        collectEntityPages(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers,
-                unboundedLootModifiers, !pageLootModifiers.isEmpty(), referencedLootTables, pages);
+        Set<Identifier> synthesizedLootTables = collectEntityPages(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables,
+                entityLootModifiers, lootTableLootModifiers, unboundedLootModifiers, pageLootModifiers, referencedLootTables, pages);
         collectGameplayPages(config, unprocessedLootTables, lootTableLootModifiers, unboundedLootModifiers, pages);
 
         LOGGER.info("Collecting {} pages took {}ms", pages.size(), System.currentTimeMillis() - collectionStart);
@@ -162,7 +165,7 @@ public abstract class AbstractServer {
             LOGGER.info("{} of {} loot modifiers ended up on no page", totalLootModifiers - attachedLootModifiers.size(), totalLootModifiers);
         }
 
-        lootNodes = removeEmptyLootTable(serverRegistry, lootNodes);
+        lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, synthesizedLootTables);
 
         if (config.showEntitiesWithoutLoot && spawnInfo != null) {
             addEntitiesWithoutLoot(config, spawnInfo, lootNodes);
@@ -220,7 +223,8 @@ public abstract class AbstractServer {
      * its own from the very same node tree ({@code GenericUtils.collectItems}), so nothing item-shaped is sent.
      */
     @NotNull
-    private static Map<Identifier, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<Identifier, IDataNode> lootNodes) {
+    private static Map<Identifier, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<Identifier, IDataNode> lootNodes,
+                                                                         Set<Identifier> synthesizedLootTables) {
         Map<Identifier, IDataNode> result = new HashMap<>();
         int emptyLootTables = 0;
         int injectedLootTables = 0;
@@ -235,7 +239,7 @@ public abstract class AbstractServer {
             }
 
             if (!collectItems(node).isEmpty()) {
-                if (!serverRegistry.isSubTable(entry.getKey())) {
+                if (synthesizedLootTables.contains(entry.getKey()) || !serverRegistry.isSubTable(entry.getKey())) {
                     result.put(entry.getKey(), node);
                 } else {
                     injectedLootTables++;
@@ -327,17 +331,20 @@ public abstract class AbstractServer {
         return expr instanceof NumberExpr.Const(double value1) && value1 == value;
     }
 
-    private static void collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,
-                                           Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
-                                           List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
-                                           boolean hasPageLootModifiers, Set<Identifier> referencedLootTables, List<PendingPage> pages) {
-        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, serverRegistry.getEntityLootTables(), referencedLootTables);
+    @NotNull
+    private static Set<Identifier> collectEntityPages(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,
+                                                            Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
+                                                            List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers,
+                                                            List<IPageLootModifier> pageLootModifiers, Set<Identifier> referencedLootTables, List<PendingPage> pages) {
+        EntityLootTableResolver resolver = new EntityLootTableResolver(serverRegistry, level, serverRegistry.getEntityLootTables(), referencedLootTables,
+                GlobalLootModifierCollector.getGlobalLootModifiers(pageLootModifiers));
         Set<Identifier> candidates = new HashSet<>(lootTables.keySet());
         Set<Identifier> disabledLootTables = new HashSet<>();
+        Set<Identifier> synthesizedLootTables = new HashSet<>();
 
         candidates.addAll(fakeLootTables.keySet());
 
-        if (!entityLootModifiers.isEmpty() || hasPageLootModifiers) {
+        if (!entityLootModifiers.isEmpty() || !pageLootModifiers.isEmpty()) {
             // a modifier can add drops to an entity whose own loot table does not exist, so those tables have to be
             // considered even though no data references them
             BuiltInRegistries.ENTITY_TYPE.stream()
@@ -346,18 +353,26 @@ public abstract class AbstractServer {
         }
 
         // same grouping as for blocks: all entities sharing a loot table contribute to the single node under its id
-        for (Map.Entry<Identifier, List<EntityType<?>>> entry : resolver.resolveAll(candidates).entrySet()) {
-            Identifier location = entry.getKey();
+        for (EntityLootTableResolver.EntityPage entityPage : resolver.resolveAll(candidates)) {
+            Identifier location = entityPage.id();
 
-            if (entry.getValue().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+            if (entityPage.types().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
                 disabledLootTables.add(location); // remove the table, otherwise it will end up in gameplay category
+                disabledLootTables.addAll(entityPage.absorbed());
                 continue;
             }
 
-            List<EntityType<?>> entityTypes = entry.getValue().stream()
+            List<EntityType<?>> entityTypes = entityPage.types().stream()
                     .filter((t) -> config.entityCategories.stream().filter((f) -> f.validate(t)).findFirst().map((f) -> !f.isHidden()).orElse(false))
                     .toList();
             LootTable lootTable = lootTables.remove(location);
+
+            entityPage.absorbed().forEach(lootTables::remove);
+
+            if (entityPage.synthesized() != null) {
+                lootTable = entityPage.synthesized();
+                synthesizedLootTables.add(location);
+            }
 
             if (!entityTypes.isEmpty()) {
                 // the only step that still needs an instance, and only when global loot modifiers exist at all
@@ -368,11 +383,12 @@ public abstract class AbstractServer {
                         lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location))
                 ), unboundedLootModifiers.stream()).toList();
 
-                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers));
+                pages.add(new PendingPage(PageKind.ENTITY, page, lootTable, lootModifiers, entityPage.reason(), resolver.getVariantData(entityTypes.getFirst(), location)));
             }
         }
 
         lootTables.keySet().removeAll(disabledLootTables);
+        return synthesizedLootTables;
     }
 
     private static void writeLootData(AliServerRegistry serverRegistry, RegistryFriendlyByteBuf buf, Map<Identifier, IDataNode> lootNodes) {
@@ -418,14 +434,34 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode asEntityNode(IDataNode node, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo) {
+    private static IDataNode asEntityNode(IDataNode node, Identifier location, List<EntityType<?>> entityTypes, @Nullable SpawnInfo spawnInfo,
+                                          @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
         if (node instanceof LootTableNode lootTableNode) {
             TooltipNode spawnTooltip = spawnInfo != null ? spawnInfo.getEntityTooltip(entityTypes.getFirst()) : TooltipNode.empty();
 
-            return new EntityLootTableNode(lootTableNode, entityTypes.getFirst(), spawnTooltip);
+            return new EntityLootTableNode(lootTableNode, entityTypes.getFirst(), infoTooltip(location, reason, spawnTooltip), variantData);
         }
 
         return node;
+    }
+
+    @NotNull
+    private static TooltipNode infoTooltip(Identifier location, @Nullable EntityLootTableResolver.PageReason reason, TooltipNode spawnTooltip) {
+        if (reason == null) {
+            return spawnTooltip;
+        }
+
+        return TooltipBuilder.branch((b) -> {
+            b.add(TooltipBuilder.keyOnly(switch (reason) {
+                case VARIANT -> Lang.Description.VARIANT_LOOT;
+                case EVENT -> Lang.Description.EVENT_LOOT;
+                case RANDOM -> Lang.Description.RANDOM_LOOT;
+                case CONFIGURATION -> Lang.Description.CONFIGURED_LOOT;
+                case PLUGIN -> Lang.Description.PLUGIN_LOOT;
+            }));
+            b.add(TooltipBuilder.value(location).key(Lang.Value.LOOT_TABLE));
+            b.add(spawnTooltip);
+        }).build();
     }
 
     private static void addEntitiesWithoutLoot(AliConfig config, SpawnInfo spawnInfo, Map<Identifier, IDataNode> lootNodes) {
@@ -446,7 +482,7 @@ public abstract class AbstractServer {
 
                 LootTableNode emptyTable = new LootTableNode(Collections.emptyList(), TooltipNode.empty());
 
-                lootNodes.put(location, new EntityLootTableNode(emptyTable, entityType, spawnInfo.getEntityTooltip(entityType)));
+                lootNodes.put(location, new EntityLootTableNode(emptyTable, entityType, spawnInfo.getEntityTooltip(entityType), null));
                 addedEntities++;
             } catch (Throwable e) {
                 LOGGER.warn("Failed to add spawning entity {} without loot", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e);
@@ -539,7 +575,7 @@ public abstract class AbstractServer {
                 IDataNode node = parseNode(serverRegistry, lootModifiers, table);
 
                 if (node != null) {
-                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, page.entityTypes(), spawnInfo) : node);
+                    lootNodes.put(location, pending.kind() == PageKind.ENTITY ? asEntityNode(node, location, page.entityTypes(), spawnInfo, pending.reason(), pending.variantData()) : node);
                 } else if (pending.kind() == PageKind.BLOCK && page.blocks().stream().noneMatch((b) -> b.getLootTable().isEmpty())) {
                     // noLootTable() blocks are keyed by themselves and have no table by definition
                     LOGGER.debug("Missing block loot table for {}", location);
@@ -591,6 +627,10 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<Identifier, ComputedTrader> computeUnregisteredTraders(AliServerRegistry serverRegistry, AliConfig config) {
+        if (!config.codeAnalysis.traders) {
+            return Map.of();
+        }
+
         long startTime = System.currentTimeMillis();
         Set<EntityType<?>> registered = serverRegistry.getTrades().values().stream()
                 .map(AliServerRegistry.Trades::entityType)
@@ -810,9 +850,16 @@ public abstract class AbstractServer {
     }
 
     private record PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
-                               List<MatchedModifier> boundLootModifiers, List<MatchedModifier> unknownLootModifiers) {
+                               @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData,
+                               List<MatchedModifier> boundLootModifiers,
+                               List<MatchedModifier> unknownLootModifiers) {
         private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers) {
-            this(kind, page, lootTable, lootModifiers, new ArrayList<>(), new ArrayList<>());
+            this(kind, page, lootTable, lootModifiers, null, null);
+        }
+
+        private PendingPage(PageKind kind, LootPage page, @Nullable LootTable lootTable, List<ILootModifier<?>> lootModifiers,
+                            @Nullable EntityLootTableResolver.PageReason reason, @Nullable List<SynchedEntityData.DataValue<?>> variantData) {
+            this(kind, page, lootTable, lootModifiers, reason, variantData, new ArrayList<>(), new ArrayList<>());
         }
     }
 

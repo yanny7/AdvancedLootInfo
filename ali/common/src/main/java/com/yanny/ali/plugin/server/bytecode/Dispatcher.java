@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -50,13 +51,9 @@ final class Dispatcher implements Opcodes, CallContext {
             interpreter.heap.taint(value1);
         }
 
-        if (call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.getFirst() instanceof Value.Known(Map<?, ?> ignored)
-                && args.get(1) instanceof Value.Known(Object key) && result instanceof Value.Known(Object listings) && isKeyedList(listings)) {
-            if (key instanceof Integer level) {
-                interpreter.pickSources.putLevel(listings, level);
-            } else if (key instanceof Enum<?> constant) {
-                interpreter.pickSources.putLevel(listings, constant.ordinal() + 1);
-            }
+        if (interpreter.subject != null && call.getOpcode() != INVOKESTATIC && call.name.equals("get") && args.size() == 2 && args.getFirst() instanceof Value.Known(Map<?, ?> ignored)
+                && args.get(1) instanceof Value.Known(Object key) && result instanceof Value.Known(Object value)) {
+            interpreter.subject.keyedRead(key, value);
         }
 
         return result;
@@ -208,7 +205,7 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Override
-    public int[] randomIndexSet(Object object) {
+    public int @Nullable[] randomIndexSet(Object object) {
         return interpreter.heap.randomIndexSet(object);
     }
 
@@ -221,12 +218,6 @@ final class Dispatcher implements Opcodes, CallContext {
     @Override
     public NumberExpr drawCount(@Nullable Object draw) {
         return interpreter.heap.drawCount(draw);
-    }
-
-    @Nullable
-    @Override
-    public Value.Offers offers(Object collection) {
-        return interpreter.heap.offers(collection);
     }
 
     @Nullable
@@ -244,29 +235,6 @@ final class Dispatcher implements Opcodes, CallContext {
     @Override
     public void putSelfField(String field, Value value) {
         interpreter.store.putSelfField(field, value);
-    }
-
-    @Nullable
-    @Override
-    public Integer levelKey(Object listings) {
-        return interpreter.pickSources.levelKey(listings);
-    }
-
-    @Nullable
-    @Override
-    public Object listingSource(Object listing) {
-        return interpreter.pickSources.source(listing);
-    }
-
-    @Nullable
-    @Override
-    public Integer poolKey(List<Object> listings) {
-        return interpreter.pickSources.poolKey(listings);
-    }
-
-    @Override
-    public BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args) {
-        return interpreter.pickSources.boundOffer(element, call, args);
     }
 
     @Nullable
@@ -392,13 +360,13 @@ final class Dispatcher implements Opcodes, CallContext {
             try {
                 result = interpreter.machine.execute(owner, method, args, depth + 1);
             } catch (Fail fail) {
-                result = fallbackCall(call, args, loader, fail);
+                result = fallbackCall(call, args, loader, fail, !writesStatic(method));
             }
             if (interpreter.decisions.taken().size() - before > 1 && isWorldCall(call, args, loader)) {
                 interpreter.opaque.count(call, interpreter.decisions.taken().size() - before);
             }
         } else {
-            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name));
+            result = fallbackCall(call, args, loader, new Fail("no bytecode for " + call.owner + "." + call.name), true);
         }
 
         return result;
@@ -680,8 +648,12 @@ final class Dispatcher implements Opcodes, CallContext {
     }
 
     @Nullable
-    private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail) {
+    private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail, boolean runnable) {
         if (args.stream().allMatch(interpreter::isConcrete)) {
+            if (!runnable || interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
+                throw fail;
+            }
+
             return interpreter.concreteCall(call, args, loader, false);
         }
         if (isWorldCall(call, args, loader)) {
@@ -699,6 +671,16 @@ final class Dispatcher implements Opcodes, CallContext {
         }
 
         throw fail;
+    }
+
+    private static boolean writesStatic(MethodNode method) {
+        for (AbstractInsnNode insn : method.instructions) {
+            if (insn.getOpcode() == PUTSTATIC) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isWorldCall(MethodInsnNode call, List<Value> args, ClassLoader loader) {
@@ -730,10 +712,6 @@ final class Dispatcher implements Opcodes, CallContext {
 
     private boolean holdsStack(Value value) {
         return value instanceof Value.Stack;
-    }
-
-    private static boolean isKeyedList(@Nullable Object value) {
-        return value instanceof Object[] array && array.length > 0 || value instanceof List<?> list && !list.isEmpty();
     }
 
     private static MethodModel branch(Branch branch) {
