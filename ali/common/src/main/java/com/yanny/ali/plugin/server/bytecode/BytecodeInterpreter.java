@@ -51,6 +51,8 @@ public final class BytecodeInterpreter {
 
     @Nullable
     private static Value getOffer(Interpreter interpreter, VillagerTrades.ItemListing listing) {
+        interpreter.subject = new ListingSubject(listingSource(listing).getClass());
+
         if (listing instanceof BoundOffer bound) {
             return bound.call(interpreter);
         }
@@ -89,7 +91,10 @@ public final class BytecodeInterpreter {
         }
 
         try {
-            return Aggregation.stacks(new Interpreter(Profile.TRADE, Interpreter.Mode.SYMBOLIC, 0).call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
+            Interpreter interpreter = new Interpreter(Profile.TRADE, Interpreter.Mode.SYMBOLIC, 0);
+
+            interpreter.subject = new ListingSubject(supplier.getClass());
+            return Aggregation.stacks(interpreter.call(supplier, Supplier.class, "get", "()Ljava/lang/Object;", List.of()));
         } catch (Throwable ignored) {}
 
         return null;
@@ -100,6 +105,8 @@ public final class BytecodeInterpreter {
         MixinChanges.clearCaches();
         LambdaResolver.clearCaches();
         Renderer.clearCaches();
+        LootTableAnalysis.clearCaches();
+        ModJarIndex.clearCaches();
     }
 
     public record Stacks(List<Option> options) {

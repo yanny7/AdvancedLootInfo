@@ -1,11 +1,14 @@
 package com.yanny.ali.plugin.server.bytecode;
 
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
 import java.util.*;
+import java.util.function.DoublePredicate;
 import java.util.stream.IntStream;
 
 final class Decisions implements Opcodes {
@@ -306,7 +309,10 @@ final class Decisions implements Opcodes {
     private Boolean drawnBranch(int op, NumberExpr left, NumberExpr right) {
         NumberDomain.Drawn source = numbers.drawn(left);
 
-        if (source == null || !(right instanceof NumberExpr.Const(double value))) {
+        if (source == null) {
+            return remainderBranch(op, left, right);
+        }
+        if (!(right instanceof NumberExpr.Const(double value))) {
             return null;
         }
 
@@ -324,6 +330,37 @@ final class Decisions implements Opcodes {
         boolean holds = decide(Decision.Kind.RANDOM, taken.size(), probability, "branch on a random value");
 
         draw.narrow(holds ? op : negation(op), bound);
+        numbers.narrowed(draw);
+        return holds;
+    }
+
+    @Nullable
+    private Boolean remainderBranch(int op, NumberExpr left, NumberExpr right) {
+        if (!(left instanceof NumberExpr.Fn(ResourceLocation id, List<NumberExpr> args)) || !id.equals(NumberFunctions.MOD) || args.size() != 2
+                || !(args.get(1) instanceof NumberExpr.Const(double divisor)) || divisor == 0 || !(right instanceof NumberExpr.Const(double constant))) {
+            return null;
+        }
+
+        NumberDomain.Drawn source = numbers.drawn(args.getFirst());
+
+        if (source == null || source.draw().values == null) {
+            return null;
+        }
+
+        NumberDomain.Draw draw = source.draw();
+        DoublePredicate test = (v) -> NumberDomain.Draw.compares(op, (v + source.offset()) % divisor, constant);
+        double probability = draw.share(test);
+
+        if (probability <= 0) {
+            return false;
+        }
+        if (probability >= 1) {
+            return true;
+        }
+
+        boolean holds = decide(Decision.Kind.RANDOM, taken.size(), probability, "branch on a random value");
+
+        draw.keep(holds ? test : test.negate());
         numbers.narrowed(draw);
         return holds;
     }

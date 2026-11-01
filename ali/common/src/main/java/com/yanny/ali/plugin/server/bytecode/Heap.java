@@ -153,17 +153,10 @@ final class Heap {
         return coll != null ? coll.shuffled : null;
     }
 
-    int[] randomIndexSet(@Nullable Object object) {
+    int @Nullable[] randomIndexSet(@Nullable Object object) {
         CollState coll = findColl(object);
 
         return coll != null ? coll.randomIndexSet : null;
-    }
-
-    @Nullable
-    Value.Offers offers(@Nullable Object object) {
-        CollState coll = findColl(object);
-
-        return coll != null ? coll.offers : null;
     }
 
     private ObjectInfo info(Object object) {

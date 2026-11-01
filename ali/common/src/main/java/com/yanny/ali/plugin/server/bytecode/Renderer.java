@@ -205,13 +205,11 @@ final class Renderer {
             return new TradeLevel.OfListings(listings.listings(), new TradeLevelInfo(groups.getFirst().count(), level.chance()));
         }
 
-        NumberExpr total = groups.stream().map(Aggregation.Group::count).reduce(NumberExpr.constant(0), NumberExpr::add);
-
-        return new TradeLevel.OfTrades(new TradeLevelInfo(total, level.chance()), (u) -> {
+        return new TradeLevel.OfTrades(new TradeLevelInfo(level.offers(), level.chance()), (u) -> {
             List<IDataNode> nodes = new ArrayList<>();
 
             for (Aggregation.Group group : groups) {
-                TooltipNode condition = group.condition().tooltip(u);
+                TooltipNode condition = groupCondition(group, u);
 
                 if (!(group.entry() instanceof Value.Offers.Single(Value offer))) {
                     List<IDataNode> trades;
@@ -236,6 +234,20 @@ final class Renderer {
 
             return nodes;
         });
+    }
+
+    @NotNull
+    private static TooltipNode groupCondition(Aggregation.Group group, IServerUtils utils) {
+        TooltipNode condition = group.condition().tooltip(utils);
+
+        if (group.chance() >= 1) {
+            return condition;
+        }
+
+        return TooltipBuilder.array((b) -> {
+            b.add(condition);
+            b.add(TooltipBuilder.percent(NumberExpr.constant(group.chance())).build(Lang.Description.CHANCE));
+        }).build();
     }
 
     private static boolean shownAsGroup(int entries, NumberExpr count, int trades) {
@@ -270,8 +282,9 @@ final class Renderer {
                 shown = group.times() > 1 ? "shown repeated" : "shown as a plain trade";
             }
 
-            LOGGER.info("Trades of trading entity {} level {} group {}: {}, {} offers, {}{}: {}", name, level, i, kind, count, shown,
-                    when == PathCondition.ALWAYS ? "" : " if " + when.text(), trades.stream().sorted().collect(Collectors.joining("; ")));
+            LOGGER.info("Trades of trading entity {} level {} group {}: {}, {} offers, {}{}{}: {}", name, level, i, kind, count, shown,
+                    group.chance() >= 1 ? "" : ", chance " + group.chance(), when == PathCondition.ALWAYS ? "" : " if " + when.text(),
+                    trades.stream().sorted().collect(Collectors.joining("; ")));
         }
     }
 

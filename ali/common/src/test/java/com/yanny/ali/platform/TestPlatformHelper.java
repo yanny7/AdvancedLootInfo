@@ -38,4 +38,9 @@ public class TestPlatformHelper implements IPlatformHelper {
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return null;
     }
+
+    @Override
+    public String getModName(String modId) {
+        return modId;
+    }
 }

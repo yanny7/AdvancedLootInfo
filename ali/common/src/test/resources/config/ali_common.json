@@ -206,6 +206,12 @@
     "entities": [],
     "whitelist": false
   },
+  "codeAnalysis": {
+    "entityLootTables": true,
+    "entityVariants": true,
+    "traders": true,
+    "tradeListings": true
+  },
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true,

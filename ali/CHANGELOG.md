@@ -15,6 +15,12 @@
 - Fixed recipe viewer waiting a minute and a half and logging an error on servers without ALI
 - Added plugin API to assign loot tables to entities whose table ID names no entity
 - Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
+- Loot of mob variants and of drops on special events shows under the mob without configuration
+- Mobs that drop one of several loot tables at random show all of them with their chances
+- Loot pages of mob variants show the mob in that variant, also for mods without ALI support
+- Info icon of a mob's extra loot pages says why the loot table belongs to the mob and names the table
+- Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
+- Added `codeAnalysis` configuration to turn off static code analysis of mob loot tables, mob variants, traders and trades from mod code
 
 ## [2.5.0]
 

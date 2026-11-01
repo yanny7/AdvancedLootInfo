@@ -10,7 +10,7 @@ Single `AliMod` (`@Mod`, constructor takes the mod `IEventBus`). Unlike Forge it
 
 ## Platform + networking implementation
 
-- `platform.NeoForgePlatformHelper implements IPlatformHelper` — `getPlugins` (annotation scanning: `ModFileScanData`/`@AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), `getConfiguration` (`FMLPaths.CONFIGDIR`), `getLookupProvider` (returns the mutable static `PROVIDER` set from `AddReloadListenerEvent` — note it is `null` until the first reload-listener event fires), `getSpawnEggItem` (vanilla `SpawnEggItem.byId`, no `ForgeSpawnEggItem` indirection needed).
+- `platform.NeoForgePlatformHelper implements IPlatformHelper` — `getPlugins` (annotation scanning: `ModFileScanData`/`@AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), `getConfiguration` (`FMLPaths.CONFIGDIR`), `getLookupProvider` (returns the mutable static `PROVIDER` set from `AddReloadListenerEvent` — note it is `null` until the first reload-listener event fires), `getSpawnEggItem` (vanilla `SpawnEggItem.byId`, no `ForgeSpawnEggItem` indirection needed), `getModName` (the display name from `ModList`).
 - `network.{Client,Server,NetworkUtils}` — the same 4 messages as the other loaders, registered as native `CustomPacketPayload`s: `registrar.executesOn(HandlerThread.NETWORK).playToClient/playToServer(TYPE, CODEC, handler)`. No codec casting (NeoForge accepts `awi`/`ali`-common's `StreamCodec<RegistryFriendlyByteBuf, ...>` directly) and no `setPacketHandled` boilerplate, which is why these classes are much shorter than `ali/forge`'s. Sends go through `PacketDistributor.sendToPlayer`/`sendToServer`, each guarded by `hasChannel(<payload>.TYPE)`.
 
 ## Mixins

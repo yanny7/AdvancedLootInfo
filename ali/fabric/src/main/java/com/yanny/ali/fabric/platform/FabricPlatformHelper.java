@@ -70,4 +70,9 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
     }
+
+    @Override
+    public String getModName(String modId) {
+        return FabricLoader.getInstance().getModContainer(modId).map((mod) -> mod.getMetadata().getName()).orElse(modId);
+    }
 }
