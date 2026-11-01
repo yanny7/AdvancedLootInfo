@@ -30,10 +30,11 @@ import java.util.*;
  * what it drops.
  * <p>
  * {@link EntityType#getDefaultLootTable()} is derived from the registry key alone, and {@code Mob#getLootTable} is
- * final and delegates to {@code getDefaultLootTable}, so the only entities that can drop a table other than their
- * type's default are the ones overriding that method. Vanilla has exactly one - {@code Sheep}, whose per-color tables
- * extend the type's own table by one path segment ({@code entities/sheep/white}) - so trimming trailing segments off an
- * unmatched {@code entities/} table finds the owning type without any variant registration.
+ * final and falls back to it, so the only entities that can drop a table other than their type's default are the ones
+ * overriding {@code dropFromLootTable(ServerLevel, DamageSource, boolean)}, or {@code getLootTable} outside {@code Mob}.
+ * Vanilla's {@code Sheep} per-color tables extend the type's own table by one path segment
+ * ({@code entities/sheep/white}), so trimming trailing segments off an unmatched {@code entities/} table finds the
+ * owning type without any variant registration.
  * <p>
  * A table that neither matches nor trims down to a known type gets the bytecode of the entities of its namespace
  * analysed ({@link LootTableAnalysis}), then the code of their mod jars, and only what is still unexplained falls back
@@ -175,19 +176,19 @@ public class EntityLootTableResolver {
     public List<Entity> getEntities(EntityType<?> type) {
         return entities.computeIfAbsent(type, (t) -> {
             List<Entity> created = new ArrayList<>(utils.createEntities(t, level));
-            Class<?> entityClass = utils.getConfiguration().codeAnalysis.entityVariants && overridesDefaultLootTable(t) ? entityClasses.find(t) : null;
+            Class<?> entityClass = utils.getConfiguration().codeAnalysis.entityVariants && overridesLootSelector(t) ? entityClasses.find(t) : null;
 
             if (entityClass != null) {
                 Set<Identifier> known = new HashSet<>();
 
                 created.forEach((e) -> {
-                    Identifier lootTable = EntityUtils.getLootTable(e);
+                    Identifier lootTable = getLootTable(e);
 
                     if (lootTable != null) {
                         known.add(lootTable);
                     }
                 });
-                created.addAll(EntityVariants.create(t, level, LootTableAnalysis.getVariantHints(level.registryAccess(), t, entityClass), known));
+                created.addAll(EntityVariants.create(t, level, LootTableAnalysis.getVariantHints(level.registryAccess(), t, entityClass), known, this::getLootTable));
             }
 
             return created;
@@ -196,24 +197,31 @@ public class EntityLootTableResolver {
 
     @Nullable
     public List<SynchedEntityData.DataValue<?>> getVariantData(EntityType<?> type, Identifier lootTable) {
-        if (!overridesDefaultLootTable(type)) {
+        if (!overridesLootSelector(type)) {
             return null;
         }
 
         for (Entity entity : getEntities(type)) {
-            if (lootTable.equals(EntityUtils.getLootTable(entity))) {
-                return EntityVariants.data(type, level, entity, lootTable);
+            if (lootTable.equals(getLootTable(entity))) {
+                return EntityVariants.data(type, level, entity, lootTable, this::getLootTable);
             }
         }
 
         return null;
     }
 
-    private boolean overridesDefaultLootTable(EntityType<?> type) {
+    @Nullable
+    public Identifier getLootTable(Entity entity) {
+        Identifier own = utils.getConfiguration().codeAnalysis.entityVariants ? LootTableAnalysis.getInstanceLootTable(level.registryAccess(), entity) : null;
+
+        return own != null ? own : EntityUtils.getLootTable(entity);
+    }
+
+    private boolean overridesLootSelector(EntityType<?> type) {
         return overridingTypes.computeIfAbsent(type, (t) -> {
             Class<?> entityClass = t != EntityType.PLAYER ? entityClasses.find(t) : null;
 
-            return entityClass != null && LootTableAnalysis.overridesDefaultLootTable(entityClass);
+            return entityClass != null && LootTableAnalysis.overridesLootSelector(entityClass);
         });
     }
 

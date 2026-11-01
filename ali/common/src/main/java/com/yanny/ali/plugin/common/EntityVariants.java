@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common;
 import com.yanny.ali.plugin.server.bytecode.VariantHint;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Function;
 
 public final class EntityVariants {
     private static final int MAX_INSTANCES = 64;
@@ -19,9 +20,9 @@ public final class EntityVariants {
     private EntityVariants() {}
 
     @NotNull
-    public static List<Entity> create(EntityType<?> type, Level level, List<List<VariantHint>> groups, Set<ResourceLocation> known) {
+    public static List<Entity> create(EntityType<?> type, Level level, List<List<VariantHint>> groups, Set<Identifier> known, Function<Entity, Identifier> lootTables) {
         List<Entity> variants = new ArrayList<>();
-        Set<ResourceLocation> tables = new HashSet<>(known);
+        Set<Identifier> tables = new HashSet<>(known);
         Entity base = groups.isEmpty() ? null : EntityUtils.createEntity(type, level);
 
         if (base == null) {
@@ -62,7 +63,7 @@ public final class EntityVariants {
                         }
                     }
 
-                    ResourceLocation table = EntityUtils.getLootTable(entity);
+                    Identifier table = lootTables.apply(entity);
 
                     if (table != null && tables.add(table)) {
                         variants.add(entity);
@@ -75,7 +76,7 @@ public final class EntityVariants {
     }
 
     @Nullable
-    public static List<SynchedEntityData.DataValue<?>> data(EntityType<?> type, Level level, Entity entity, ResourceLocation lootTable) {
+    public static List<SynchedEntityData.DataValue<?>> data(EntityType<?> type, Level level, Entity entity, Identifier lootTable, Function<Entity, Identifier> lootTables) {
         try {
             List<SynchedEntityData.DataValue<?>> values = Objects.requireNonNullElse(entity.getEntityData().getNonDefaultValues(), List.of());
             Entity fresh = EntityUtils.createEntity(type, level);
@@ -85,7 +86,7 @@ public final class EntityVariants {
             }
 
             fresh.getEntityData().assignValues(values);
-            return lootTable.equals(EntityUtils.getLootTable(fresh)) ? values : null;
+            return lootTable.equals(lootTables.apply(fresh)) ? values : null;
         } catch (Throwable e) {
             return null;
         }

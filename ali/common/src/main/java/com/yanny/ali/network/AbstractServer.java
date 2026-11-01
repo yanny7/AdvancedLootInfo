@@ -39,6 +39,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -426,7 +427,7 @@ public abstract class AbstractServer {
     @NotNull
     private static List<Entity> sampleEntities(EntityLootTableResolver resolver, EntityType<?> type, Identifier lootTable) {
         List<Entity> entities = resolver.getEntities(type);
-        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob mob && mob.getLootTable().isPresent() && lootTable.equals(mob.getLootTable().get().identifier())).toList();
+        List<Entity> variants = entities.stream().filter((e) -> e instanceof Mob && lootTable.equals(resolver.getLootTable(e))).toList();
 
         // a table claimed by entityLootTables or a plugin can have an id no instance of the type reports, so testing
         // the modifier against nothing would silently drop it

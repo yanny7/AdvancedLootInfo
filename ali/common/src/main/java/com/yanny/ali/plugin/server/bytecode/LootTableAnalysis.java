@@ -3,10 +3,12 @@ package com.yanny.ali.plugin.server.bytecode;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -20,14 +22,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.yanny.ali.plugin.server.bytecode.Resolution.Declaration;
-import static com.yanny.ali.plugin.server.bytecode.Resolution.Declared;
 
 public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Sites> SITES = new ConcurrentHashMap<>();
     static final List<CallSites.Sink> SINKS = List.of(
             new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class, 0, null),
-            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class, 1, Registries.LOOT_TABLE)
+            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class, 0, Registries.LOOT_TABLE),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY, LivingEntity.class, 3, null),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY_CONSUMER, LivingEntity.class, 3, null),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_PARAMS, LivingEntity.class, 1, null),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_INTERACT, LivingEntity.class, 1, null),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_GIFT, LivingEntity.class, 1, null),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_SHEARING, LivingEntity.class, 1, null)
     );
 
     private LootTableAnalysis() {}
@@ -38,21 +45,26 @@ public final class LootTableAnalysis {
             return new ComputedLootTables(Map.of(), Map.of());
         }
 
-        ResourceLocation typeDefault = type.getDefaultLootTable().location();
+        Identifier typeDefault = type.getDefaultLootTable().map(ResourceKey::identifier).orElse(null);
         List<LootSubject.Observation> own = new ArrayList<>();
 
         for (Outcome outcome : defaults(registries, type, entityClass)) {
-            if (outcome instanceof Outcome.Success success && success.result() != null) {
-                own.addAll(LootTableModel.observations(success.result(), success.decisions()));
+            if (outcome instanceof Outcome.Success success) {
+                if (success.result() != null) {
+                    own.addAll(LootTableModel.observations(success.result(), success.decisions()));
+                }
+                if (success.subject() instanceof LootSubject subject) {
+                    own.addAll(subject.observations());
+                }
             }
         }
 
         return new ComputedLootTables(LootAggregation.tables(own, typeDefault, true), LootAggregation.tables(rolled(registries, Profile.LOOT, entityClass, true,
-                () -> new EntitySubject(type, entityClass), self(entityClass)), typeDefault, false));
+                () -> new EntitySubject(type, entityClass, null), self(entityClass)), typeDefault, false));
     }
 
-    public static boolean overridesDefaultLootTable(Class<?> entityClass) {
-        return RuntimeNames.LOOT_AVAILABLE && ownDefaultLootTable(entityClass) != null;
+    public static boolean overridesLootSelector(Class<?> entityClass) {
+        return RuntimeNames.LOOT_AVAILABLE && ownLootSelector(entityClass) != null;
     }
 
     @Unmodifiable
@@ -70,7 +82,7 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    public static Set<ResourceLocation> getRolledLootTables(RegistryAccess registries, Object instance) {
+    public static Set<Identifier> getRolledLootTables(RegistryAccess registries, Object instance) {
         if (!RuntimeNames.LOOT_AVAILABLE) {
             return Set.of();
         }
@@ -79,8 +91,8 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    public static Set<ResourceLocation> getReferencedLootTables(Collection<Class<?>> classesOfJars) {
-        Set<ResourceLocation> tables = new LinkedHashSet<>();
+    public static Set<Identifier> getReferencedLootTables(Collection<Class<?>> classesOfJars) {
+        Set<Identifier> tables = new LinkedHashSet<>();
 
         if (!RuntimeNames.LOOT_AVAILABLE) {
             return tables;
@@ -93,11 +105,12 @@ public final class LootTableAnalysis {
                         if (caller.entity()) {
                             continue;
                         }
-                        if (caller.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
+                        if (caller.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof Identifier table) {
                             tables.add(table);
                         } else if (caller.source() instanceof CallSites.Param(int param)) {
                             for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param)) {
-                                if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
+                                if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && sink.isFor(value)
+                                        && LootTableModel.location(value) instanceof Identifier table) {
                                     tables.add(table);
                                 }
                             }
@@ -112,7 +125,7 @@ public final class LootTableAnalysis {
 
     static List<Outcome> defaults(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
         return DEFAULTS.computeIfAbsent(type, (t) -> {
-            Declaration own = ownDefaultLootTable(entityClass);
+            Declaration own = ownLootSelector(entityClass);
 
             if (own == null) {
                 return List.of();
@@ -120,8 +133,8 @@ public final class LootTableAnalysis {
 
             try {
                 return Explorer.explore(Profile.LOOT, registries, (interpreter) -> {
-                    interpreter.subject = new EntitySubject(type, entityClass);
-                    return interpreter.machine.execute(own.owner(), own.method(), List.of(self(entityClass)), 0);
+                    interpreter.subject = new EntitySubject(type, entityClass, null);
+                    return interpreter.machine.execute(own.owner(), own.method(), arguments(own.method(), self(entityClass)), 0);
                 });
             } catch (Throwable e) {
                 return List.of();
@@ -130,10 +143,46 @@ public final class LootTableAnalysis {
     }
 
     @Nullable
-    private static Declaration ownDefaultLootTable(Class<?> entityClass) {
-        Declared declared = Resolution.declaration(entityClass, RuntimeNames.GET_DEFAULT_LOOT_TABLE.name(), RuntimeNames.GET_DEFAULT_LOOT_TABLE.desc(), false);
+    static Declaration ownLootSelector(Class<?> entityClass) {
+        Declaration drop = SelfModel.ownDeclaration(entityClass, RuntimeNames.LIVING_DROP_SELECTOR.name(), RuntimeNames.LIVING_DROP_SELECTOR.desc(), false);
 
-        return declared instanceof Declaration declaration && !declaration.owner().isAssignableFrom(Mob.class) ? declaration : null;
+        if (drop != null) {
+            return drop;
+        }
+
+        return SelfModel.ownDeclaration(entityClass, RuntimeNames.MOB_GET_LOOT_TABLE.name(), RuntimeNames.MOB_GET_LOOT_TABLE.desc(), false);
+    }
+
+    @Nullable
+    public static Identifier getInstanceLootTable(RegistryAccess registries, Entity entity) {
+        Declaration own = RuntimeNames.LOOT_AVAILABLE ? ownLootSelector(entity.getClass()) : null;
+
+        if (own == null || !isLootSelector(RuntimeNames.LIVING_DROP_SELECTOR, own.method())) {
+            return null;
+        }
+
+        try {
+            Set<Object> tables = new HashSet<>();
+
+            for (Outcome outcome : Explorer.explore(Profile.LOOT, registries, (interpreter) -> {
+                interpreter.subject = new EntitySubject(entity.getType(), entity.getClass(), entity);
+                return interpreter.machine.execute(own.owner(), own.method(), arguments(own.method(), new Value.Known(entity)), 0);
+            })) {
+                if (!(outcome instanceof Outcome.Success success) || !(success.subject() instanceof LootSubject subject)) {
+                    return null;
+                }
+
+                subject.observations().forEach((o) -> tables.add(o.value()));
+            }
+
+            return tables.size() == 1 && tables.iterator().next() instanceof Identifier table ? table : null;
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    private static boolean isLootSelector(RuntimeNames.Ref ref, MethodNode method) {
+        return method.name.equals(ref.name()) && method.desc.equals(ref.desc());
     }
 
     public static void releaseJarIndexes() {
@@ -221,11 +270,11 @@ public final class LootTableAnalysis {
     }
 
     @NotNull
-    private static Set<ResourceLocation> tables(List<LootSubject.Observation> observations) {
-        Set<ResourceLocation> tables = new LinkedHashSet<>();
+    private static Set<Identifier> tables(List<LootSubject.Observation> observations) {
+        Set<Identifier> tables = new LinkedHashSet<>();
 
         observations.forEach((o) -> {
-            if (o.value() instanceof ResourceLocation table) {
+            if (o.value() instanceof Identifier table) {
                 tables.add(table);
             }
         });
@@ -246,7 +295,7 @@ public final class LootTableAnalysis {
 
             for (MethodNode method : node.methods) {
                 if ((method.access & (Opcodes.ACC_STATIC | Opcodes.ACC_ABSTRACT)) == 0 && !method.name.startsWith("<") && seen.add(method.name + method.desc)
-                        && !(method.name.equals(RuntimeNames.GET_DEFAULT_LOOT_TABLE.name()) && method.desc.equals(RuntimeNames.GET_DEFAULT_LOOT_TABLE.desc()))) {
+                        && !isLootSelector(RuntimeNames.LIVING_DROP_SELECTOR, method) && !isLootSelector(RuntimeNames.MOB_GET_LOOT_TABLE, method)) {
                     entries.add(new Declaration(type, method));
                 }
             }
@@ -272,6 +321,19 @@ public final class LootTableAnalysis {
         return args;
     }
 
+    @NotNull
+    private static List<Value> arguments(MethodNode method, Value self) {
+        List<Value> args = new ArrayList<>();
+
+        args.add(self);
+
+        for (Type param : Type.getArgumentTypes(method.desc)) {
+            args.add(Value.Unknown.of(param, null));
+        }
+
+        return args;
+    }
+
     @Unmodifiable
     @NotNull
     private static Value self(Class<?> entityClass) {
@@ -281,7 +343,7 @@ public final class LootTableAnalysis {
     private record Sites(List<Object> constants, Set<CallSites.Site> computed) {
     }
 
-    public record ComputedLootTables(Map<List<Decision>, Map<ResourceLocation, Double>> own, Map<List<Decision>, Map<ResourceLocation, Double>> events) {
+    public record ComputedLootTables(Map<List<Decision>, Map<Identifier, Double>> own, Map<List<Decision>, Map<Identifier, Double>> events) {
         public static boolean isCertain(double probability) {
             return probability >= LootAggregation.ALWAYS;
         }

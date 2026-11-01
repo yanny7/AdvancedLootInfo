@@ -1,6 +1,6 @@
 package com.yanny.ali.plugin.server.bytecode;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -11,12 +11,12 @@ final class LootAggregation {
     private LootAggregation() {}
 
     @NotNull
-    static Map<List<Decision>, Map<ResourceLocation, Double>> tables(List<LootSubject.Observation> observations, ResourceLocation typeDefault, boolean randomPage) {
-        Map<List<Decision>, Map<ResourceLocation, Double>> tables = new LinkedHashMap<>();
+    static Map<List<Decision>, Map<Identifier, Double>> tables(List<LootSubject.Observation> observations, Identifier typeDefault, boolean randomPage) {
+        Map<List<Decision>, Map<Identifier, Double>> tables = new LinkedHashMap<>();
         Set<List<Object>> seen = new HashSet<>();
 
         for (LootSubject.Observation observation : observations) {
-            if (!(observation.value() instanceof ResourceLocation table) || !seen.add(List.of(table, observation.decisions()))) {
+            if (!(observation.value() instanceof Identifier table) || !seen.add(List.of(table, observation.decisions()))) {
                 continue;
             }
 

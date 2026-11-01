@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberFunctions;
 import com.yanny.aci.api.NumberInterval;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
@@ -336,7 +336,7 @@ final class Decisions implements Opcodes {
 
     @Nullable
     private Boolean remainderBranch(int op, NumberExpr left, NumberExpr right) {
-        if (!(left instanceof NumberExpr.Fn(ResourceLocation id, List<NumberExpr> args)) || !id.equals(NumberFunctions.MOD) || args.size() != 2
+        if (!(left instanceof NumberExpr.Fn(Identifier id, List<NumberExpr> args)) || !id.equals(NumberFunctions.MOD) || args.size() != 2
                 || !(args.get(1) instanceof NumberExpr.Const(double divisor)) || divisor == 0 || !(right instanceof NumberExpr.Const(double constant))) {
             return null;
         }

@@ -135,7 +135,7 @@ public class GenericUtils {
 
     @NotNull
     public static List<TooltipLine> getEntityNameTooltip(EntityType<?> type) {
-        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
         List<TooltipLine> lines = new ArrayList<>();
 
         lines.add(TooltipLine.text(type.getDescription()));

@@ -8,10 +8,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -49,8 +47,6 @@ public class EntityUtils {
 
     @Nullable
     public static Identifier getLootTable(Entity entity) {
-        ResourceKey<LootTable> lootTable = entity instanceof Mob mob ? mob.getLootTable().orElse(null) : null;
-
-        return lootTable != null ? lootTable.identifier() : null;
+        return entity.getLootTable().map(ResourceKey::identifier).orElse(null);
     }
 }

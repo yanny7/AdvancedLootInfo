@@ -1,6 +1,6 @@
 package com.yanny.ali.plugin.server.bytecode;
 
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.MethodInsnNode;
 

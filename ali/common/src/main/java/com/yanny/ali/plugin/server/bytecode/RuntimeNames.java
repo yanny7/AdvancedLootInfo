@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 final class RuntimeNames {
@@ -80,8 +85,14 @@ final class RuntimeNames {
     static final Ref UPDATE_TRADES;
     static final Ref ADD_OFFERS_FROM_ITEM_LISTINGS;
     static final Ref OFFERS;
-    static final Ref GET_DEFAULT_LOOT_TABLE;
     static final Ref MOB_GET_LOOT_TABLE;
+    static final Ref LIVING_DROP_SELECTOR;
+    static final Ref LIVING_DROP_KEY;
+    static final Ref LIVING_DROP_KEY_CONSUMER;
+    static final Ref LIVING_DROP_PARAMS;
+    static final Ref LIVING_DROP_INTERACT;
+    static final Ref LIVING_DROP_GIFT;
+    static final Ref LIVING_DROP_SHEARING;
     static final Ref ENTITY_GET_TYPE;
     static final Ref LOOT_DATA_GET_LOOT_TABLE;
     static final Ref HOLDER_GETTER_GET;
@@ -135,8 +146,14 @@ final class RuntimeNames {
         UPDATE_TRADES = ref(refs, "villagerUpdateTrades", missing);
         ADD_OFFERS_FROM_ITEM_LISTINGS = ref(refs, "villagerAddOffers", missing);
         OFFERS = ref(refs, "villagerOffers", missing);
-        GET_DEFAULT_LOOT_TABLE = ref(refs, "mobDefaultLootTable", lootMissing);
         MOB_GET_LOOT_TABLE = ref(refs, "mobLootTable", lootMissing);
+        LIVING_DROP_SELECTOR = ref(refs, "livingDropSelector", lootMissing);
+        LIVING_DROP_KEY = ref(refs, "livingDropKey", lootMissing);
+        LIVING_DROP_KEY_CONSUMER = ref(refs, "livingDropKeyConsumer", lootMissing);
+        LIVING_DROP_PARAMS = ref(refs, "livingDropParams", lootMissing);
+        LIVING_DROP_INTERACT = ref(refs, "livingDropInteract", lootMissing);
+        LIVING_DROP_GIFT = ref(refs, "livingDropGift", lootMissing);
+        LIVING_DROP_SHEARING = ref(refs, "livingDropShearing", lootMissing);
         ENTITY_GET_TYPE = ref(refs, "mobType", lootMissing);
         LOOT_DATA_GET_LOOT_TABLE = ref(refs, "lootDataGetLootTable", lootMissing);
         HOLDER_GETTER_GET = ref(refs, "holderGetterGet", lootMissing);
@@ -358,7 +375,7 @@ final class RuntimeNames {
 
         @NotNull
         private static Optional<?> holderGetterGet(HolderGetter.Provider provider) {
-            return provider.get(null, null);
+            return provider.get(null);
         }
 
         @NotNull
@@ -399,18 +416,41 @@ final class RuntimeNames {
             }
 
             @NotNull
-            private ResourceKey<LootTable> mobDefaultLootTable() {
-                return getDefaultLootTable();
-            }
-
-            @NotNull
-            private ResourceKey<LootTable> mobLootTable() {
+            private Optional<ResourceKey<LootTable>> mobLootTable() {
                 return getLootTable();
             }
 
             @NotNull
             private EntityType<?> mobType() {
                 return getType();
+            }
+
+            private void livingDropSelector() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false);
+            }
+
+            private void livingDropKey() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false, (ResourceKey<LootTable>) null);
+            }
+
+            private void livingDropKeyConsumer() {
+                dropFromLootTable((ServerLevel) null, (DamageSource) null, false, (ResourceKey<LootTable>) null, (Consumer<ItemStack>) null);
+            }
+
+            private boolean livingDropParams() {
+                return dropFromLootTable((ServerLevel) null, (ResourceKey<LootTable>) null, (Function<LootParams.Builder, LootParams>) null, (BiConsumer<ServerLevel, ItemStack>) null);
+            }
+
+            private boolean livingDropInteract() {
+                return dropFromEntityInteractLootTable(null, null, null, null, null);
+            }
+
+            private boolean livingDropGift() {
+                return dropFromGiftLootTable(null, null, null);
+            }
+
+            private void livingDropShearing() {
+                dropFromShearingLootTable(null, null, null, null);
             }
         }
     }

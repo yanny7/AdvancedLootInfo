@@ -20,6 +20,8 @@ final class CallSites {
     private static final int RECEIVER = -1;
     private static final int NONE = -2;
     private static final String RESOURCE_KEY = Type.getInternalName(ResourceKey.class);
+    private static final String OPTIONAL = Type.getInternalName(Optional.class);
+    private static final Set<String> OPTIONAL_UNWRAP = Set.of("get", "orElseThrow", "orElse");
 
     private final Class<?> self;
     private final List<Sink> sinks;
@@ -227,8 +229,12 @@ final class CallSites {
             }
         }
         if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC
-                && (RuntimeNames.is(RuntimeNames.GET_DEFAULT_LOOT_TABLE, call) || RuntimeNames.is(RuntimeNames.MOB_GET_LOOT_TABLE, call))
+                && RuntimeNames.is(RuntimeNames.MOB_GET_LOOT_TABLE, call)
                 && trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed) instanceof Self) {
+            return OwnDefault.INSTANCE;
+        }
+        if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC && call.owner.equals(OPTIONAL) && OPTIONAL_UNWRAP.contains(call.name)
+                && trace(method, analyzed, at.getStack(at.getStackSize() - 1 - Type.getArgumentTypes(call.desc).length), loader, parameter, computed) == OwnDefault.INSTANCE) {
             return OwnDefault.INSTANCE;
         }
 
@@ -385,7 +391,12 @@ final class CallSites {
         }
 
         private boolean accepts(Object first) {
-            return registry == null || first instanceof Constant(Object value) && registry.equals(value);
+            return !(first instanceof Constant(Object value)) || isFor(value);
+        }
+
+        boolean isFor(@Nullable Object key) {
+            return registry == null || key instanceof ResourceKey<?> resourceKey && registry instanceof ResourceKey<?> registryKey
+                    && resourceKey.registry().equals(registryKey.identifier());
         }
 
         boolean matches(MethodInsnNode call, ClassLoader loader) {
