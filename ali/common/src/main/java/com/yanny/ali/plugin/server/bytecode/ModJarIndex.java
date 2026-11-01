@@ -65,7 +65,7 @@ final class ModJarIndex {
 
     @NotNull
     List<Caller> callers(CallSites.Sink sink) {
-        return sinkCallers.computeIfAbsent(sink, (s) -> find(s.method().name(), (call) -> s.matches(call, loader), s.argument()));
+        return sinkCallers.computeIfAbsent(sink, (s) -> find(s.method().name(), (call) -> s.matches(call, loader), (owner, method, call) -> s.source(owner, method, call, loader)));
     }
 
     @Nullable
@@ -75,11 +75,12 @@ final class ModJarIndex {
 
     @NotNull
     List<Caller> callersOf(String owner, String name, String desc, int param) {
-        return find(name, (call) -> call.owner.equals(owner) && call.name.equals(name) && call.desc.equals(desc), param);
+        return find(name, (call) -> call.owner.equals(owner) && call.name.equals(name) && call.desc.equals(desc),
+                (caller, method, call) -> CallSites.argument(caller, method, call, param, loader));
     }
 
     @NotNull
-    private List<Caller> find(String name, Predicate<MethodInsnNode> matches, int argument) {
+    private List<Caller> find(String name, Predicate<MethodInsnNode> matches, ArgumentSource argument) {
         byte[] pattern = name.getBytes(StandardCharsets.UTF_8);
         int[] shift = shift(pattern);
         List<Caller> callers = new ArrayList<>();
@@ -99,12 +100,18 @@ final class ModJarIndex {
 
             for (MethodNode method : node.methods) {
                 for (AbstractInsnNode insn : method.instructions) {
-                    if (insn instanceof MethodInsnNode call && matches.test(call)) {
+                    if (!(insn instanceof MethodInsnNode call) || !matches.test(call)) {
+                        continue;
+                    }
+
+                    CallSites.Source source = argument.of(node.name, method, call);
+
+                    if (source != null) {
                         if (entity == null) {
                             entity = isEntity(node);
                         }
 
-                        callers.add(new Caller(node.name, entity, method, CallSites.argument(node.name, method, call, argument, loader)));
+                        callers.add(new Caller(node.name, entity, method, source));
                     }
                 }
             }
@@ -297,5 +304,10 @@ final class ModJarIndex {
     }
 
     record Caller(String owner, boolean entity, MethodNode method, CallSites.Source source) {
+    }
+
+    private interface ArgumentSource {
+        @Nullable
+        CallSites.Source of(String owner, MethodNode method, MethodInsnNode call);
     }
 }

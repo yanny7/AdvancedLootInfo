@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -18,18 +19,19 @@ final class CallSites {
     static final int DEPTH = 3;
     private static final int RECEIVER = -1;
     private static final int NONE = -2;
+    private static final String RESOURCE_KEY = Type.getInternalName(ResourceKey.class);
 
     private final Class<?> self;
-    private final Sink sink;
+    private final List<Sink> sinks;
     private final Predicate<Declaration> mayReach;
     private final Map<MethodNode, Optional<Frame<SourceValue>[]>> frames = new IdentityHashMap<>();
     private final Map<Reach, Boolean> reaching = new HashMap<>();
     private final Set<String> visited = new HashSet<>();
     private List<Site> sites = new ArrayList<>();
 
-    CallSites(Class<?> self, Sink sink, Predicate<Declaration> mayReach) {
+    CallSites(Class<?> self, List<Sink> sinks, Predicate<Declaration> mayReach) {
         this.self = self;
-        this.sink = sink;
+        this.sinks = sinks;
         this.mayReach = mayReach;
     }
 
@@ -94,9 +96,12 @@ final class CallSites {
             Frame<SourceValue> frame = analyzed[i];
             Type[] params = Type.getArgumentTypes(call.desc);
             int first = frame.getStackSize() - params.length;
+            Sink sink = matching(call, owner.getClassLoader());
 
-            if (sink.matches(call, owner.getClassLoader())) {
-                sites.add(withLive(site(source(context, analyzed, frame.getStack(first + sink.argument())), context)));
+            if (sink != null) {
+                if (sink.accepts(source(context, analyzed, frame.getStack(first)))) {
+                    sites.add(withLive(site(source(context, analyzed, frame.getStack(first + sink.argument())), context)));
+                }
             } else if (depth < DEPTH) {
                 Arg receiver = call.getOpcode() == Opcodes.INVOKESTATIC ? null : source(context, analyzed, frame.getStack(first - 1));
                 Declaration callee = callee(call, owner.getClassLoader(), receiver instanceof Self);
@@ -133,7 +138,7 @@ final class CallSites {
 
         for (AbstractInsnNode insn : method.instructions) {
             if (insn instanceof MethodInsnNode call) {
-                if (sink.matches(call, owner.getClassLoader())) {
+                if (matching(call, owner.getClassLoader()) != null) {
                     found = true;
                     break;
                 }
@@ -149,6 +154,17 @@ final class CallSites {
 
         reaching.put(key, found);
         return found;
+    }
+
+    @Nullable
+    private Sink matching(MethodInsnNode call, ClassLoader loader) {
+        for (Sink sink : sinks) {
+            if (sink.matches(call, loader)) {
+                return sink;
+            }
+        }
+
+        return null;
     }
 
     @Nullable
@@ -185,7 +201,7 @@ final class CallSites {
         if (at == null) {
             return computed.get();
         }
-        if (insn.getOpcode() == Opcodes.DUP || insn.getOpcode() == Opcodes.CHECKCAST) {
+        if (insn.getOpcode() == Opcodes.DUP || insn.getOpcode() == Opcodes.CHECKCAST || isResourceKeyCreate(insn)) {
             return trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed);
         }
         if (insn.getOpcode() == Opcodes.ALOAD) {
@@ -217,6 +233,10 @@ final class CallSites {
         }
 
         return computed.get();
+    }
+
+    private static boolean isResourceKeyCreate(AbstractInsnNode insn) {
+        return insn instanceof MethodInsnNode call && call.owner.equals(RESOURCE_KEY) && RuntimeNames.is(RuntimeNames.RESOURCE_KEY_CREATE, call);
     }
 
     private static Arg parameter(Context context, int var) {
@@ -309,7 +329,7 @@ final class CallSites {
     }
 
     private boolean leadsToSink(MethodInsnNode call, ClassLoader loader, boolean onSelf) {
-        if (sink.matches(call, loader)) {
+        if (matching(call, loader) != null) {
             return true;
         }
 
@@ -358,7 +378,16 @@ final class CallSites {
         }
     }
 
-    record Sink(RuntimeNames.Ref method, Class<?> owner, int argument) {
+    record Sink(RuntimeNames.Ref method, Class<?> owner, int argument, @Nullable Object registry) {
+        @Nullable
+        Source source(String owner, MethodNode method, MethodInsnNode call, ClassLoader loader) {
+            return accepts(CallSites.argument(owner, method, call, 0, loader)) ? CallSites.argument(owner, method, call, argument, loader) : null;
+        }
+
+        private boolean accepts(Object first) {
+            return registry == null || first instanceof Constant(Object value) && registry.equals(value);
+        }
+
         boolean matches(MethodInsnNode call, ClassLoader loader) {
             if (!RuntimeNames.is(method, call)) {
                 return false;

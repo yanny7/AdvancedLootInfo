@@ -1,6 +1,8 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +25,10 @@ import static com.yanny.ali.plugin.server.bytecode.Resolution.Declared;
 public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Sites> SITES = new ConcurrentHashMap<>();
-    private static final CallSites.Sink SINK = new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class, 0);
+    static final List<CallSites.Sink> SINKS = List.of(
+            new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class, 0, null),
+            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class, 1, Registries.LOOT_TABLE)
+    );
 
     private LootTableAnalysis() {}
 
@@ -82,22 +87,24 @@ public final class LootTableAnalysis {
         }
 
         for (ModJarIndex index : classesOfJars.stream().map(ModJarIndex::of).filter(Objects::nonNull).distinct().toList()) {
-            try {
-                for (ModJarIndex.Caller caller : index.callers(SINK)) {
-                    if (caller.entity()) {
-                        continue;
-                    }
-                    if (caller.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
-                        tables.add(table);
-                    } else if (caller.source() instanceof CallSites.Param(int param)) {
-                        for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param)) {
-                            if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
-                                tables.add(table);
+            for (CallSites.Sink sink : SINKS) {
+                try {
+                    for (ModJarIndex.Caller caller : index.callers(sink)) {
+                        if (caller.entity()) {
+                            continue;
+                        }
+                        if (caller.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
+                            tables.add(table);
+                        } else if (caller.source() instanceof CallSites.Param(int param)) {
+                            for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param)) {
+                                if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && LootTableModel.location(value) instanceof ResourceLocation table) {
+                                    tables.add(table);
+                                }
                             }
                         }
                     }
-                }
-            } catch (Throwable ignored) {}
+                } catch (Throwable ignored) {}
+            }
         }
 
         return tables;
@@ -175,7 +182,7 @@ public final class LootTableAnalysis {
                 jars.add(String.valueOf(ModJarIndex.location(c)));
             }
 
-            CallSites search = new CallSites(type, SINK, filterByCallers ? (d) -> mayReachSink(d, jars) : (d) -> true);
+            CallSites search = new CallSites(type, SINKS, filterByCallers ? (d) -> mayReachSink(d, jars) : (d) -> true);
 
             for (Declaration entry : entries(type)) {
                 for (CallSites.Site site : search.find(entry.owner(), entry.method())) {
@@ -197,9 +204,20 @@ public final class LootTableAnalysis {
         }
 
         ModJarIndex index = ModJarIndex.of(declaration.owner());
-        Set<String> reaching = index != null ? index.reaching(SINK, CallSites.DEPTH) : null;
 
-        return reaching == null || reaching.contains(declaration.method().name + declaration.method().desc);
+        if (index == null) {
+            return true;
+        }
+
+        for (CallSites.Sink sink : SINKS) {
+            Set<String> reaching = index.reaching(sink, CallSites.DEPTH);
+
+            if (reaching == null || reaching.contains(declaration.method().name + declaration.method().desc)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @NotNull

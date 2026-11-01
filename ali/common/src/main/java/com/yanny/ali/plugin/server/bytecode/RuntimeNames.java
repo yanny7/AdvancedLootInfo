@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server.bytecode;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 final class RuntimeNames {
@@ -82,6 +84,8 @@ final class RuntimeNames {
     static final Ref MOB_GET_LOOT_TABLE;
     static final Ref ENTITY_GET_TYPE;
     static final Ref LOOT_DATA_GET_LOOT_TABLE;
+    static final Ref HOLDER_GETTER_GET;
+    static final Ref RESOURCE_KEY_CREATE;
     static final Ref ENTITY_DATA_SET;
     static final Ref ENTITY_DATA_GET;
 
@@ -135,6 +139,8 @@ final class RuntimeNames {
         MOB_GET_LOOT_TABLE = ref(refs, "mobLootTable", lootMissing);
         ENTITY_GET_TYPE = ref(refs, "mobType", lootMissing);
         LOOT_DATA_GET_LOOT_TABLE = ref(refs, "lootDataGetLootTable", lootMissing);
+        HOLDER_GETTER_GET = ref(refs, "holderGetterGet", lootMissing);
+        RESOURCE_KEY_CREATE = ref(refs, "resourceKeyCreate", lootMissing);
         ENTITY_DATA_SET = ref(refs, "entityDataSet", lootMissing);
         ENTITY_DATA_GET = ref(refs, "entityDataGet", lootMissing);
         AVAILABLE = missing.isEmpty();
@@ -348,6 +354,16 @@ final class RuntimeNames {
         @NotNull
         private static LootTable lootDataGetLootTable(ReloadableServerRegistries.Holder registries) {
             return registries.getLootTable(null);
+        }
+
+        @NotNull
+        private static Optional<?> holderGetterGet(HolderGetter.Provider provider) {
+            return provider.get(null, null);
+        }
+
+        @NotNull
+        private static ResourceKey<?> resourceKeyCreate() {
+            return ResourceKey.create(null, null);
         }
 
         private static void entityDataSet(SynchedEntityData data) {
