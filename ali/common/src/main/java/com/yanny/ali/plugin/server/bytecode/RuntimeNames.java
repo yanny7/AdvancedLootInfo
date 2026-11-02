@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
@@ -101,6 +102,7 @@ final class RuntimeNames {
     static final Ref LOOT_DATA_GET_LOOT_TABLE;
     static final Ref HOLDER_GETTER_GET;
     static final Ref RESOURCE_KEY_CREATE;
+    static final Ref LOOT_TABLE_REGISTRY;
     static final Ref ENTITY_DATA_SET;
     static final Ref ENTITY_DATA_GET;
 
@@ -163,6 +165,7 @@ final class RuntimeNames {
         LOOT_DATA_GET_LOOT_TABLE = ref(refs, "lootDataGetLootTable", lootMissing);
         HOLDER_GETTER_GET = ref(refs, "holderGetterGet", lootMissing);
         RESOURCE_KEY_CREATE = ref(refs, "resourceKeyCreate", lootMissing);
+        LOOT_TABLE_REGISTRY = ref(refs, "lootTableRegistry", lootMissing);
         ENTITY_DATA_SET = ref(refs, "entityDataSet", lootMissing);
         ENTITY_DATA_GET = ref(refs, "entityDataGet", lootMissing);
         AVAILABLE = missing.isEmpty();
@@ -390,6 +393,11 @@ final class RuntimeNames {
         @NotNull
         private static ResourceKey<?> resourceKeyCreate() {
             return ResourceKey.create(null, null);
+        }
+
+        @NotNull
+        private static ResourceKey<?> lootTableRegistry() {
+            return Registries.LOOT_TABLE;
         }
 
         private static void entityDataSet(SynchedEntityData data) {
