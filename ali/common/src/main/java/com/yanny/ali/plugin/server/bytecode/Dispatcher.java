@@ -650,7 +650,7 @@ final class Dispatcher implements Opcodes, CallContext {
     @Nullable
     private Value fallbackCall(MethodInsnNode call, List<Value> args, ClassLoader loader, Fail fail, boolean runnable) {
         if (args.stream().allMatch(interpreter::isConcrete)) {
-            if (!runnable || interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
+            if (!runnable || opensResource(call, loader) || interpreter.subject != null && args.stream().anyMatch(interpreter.subject::isSelf)) {
                 throw fail;
             }
 
@@ -671,6 +671,12 @@ final class Dispatcher implements Opcodes, CallContext {
         }
 
         throw fail;
+    }
+
+    private static boolean opensResource(MethodInsnNode call, ClassLoader loader) {
+        Type returnType = Type.getReturnType(call.desc);
+
+        return returnType.getSort() == Type.OBJECT && AutoCloseable.class.isAssignableFrom(load(returnType.getInternalName(), loader));
     }
 
     private static boolean writesStatic(MethodNode method) {
