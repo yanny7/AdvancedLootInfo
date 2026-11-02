@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
@@ -27,17 +26,22 @@ public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Sites> SITES = new ConcurrentHashMap<>();
     static final List<CallSites.Sink> SINKS = List.of(
-            new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class, 0, null),
-            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class, 0, Registries.LOOT_TABLE),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY, LivingEntity.class, 3, null),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY_CONSUMER, LivingEntity.class, 3, null),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_PARAMS, LivingEntity.class, 1, null),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_INTERACT, LivingEntity.class, 1, null),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_GIFT, LivingEntity.class, 1, null),
-            new CallSites.Sink(RuntimeNames.LIVING_DROP_SHEARING, LivingEntity.class, 1, null)
+            new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ownedBy(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class), 0, 0, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, ownedBy(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class), 0, 0, CallSites::isLootTableKey),
+            new CallSites.Sink(RuntimeNames.LOOT_TABLE_REGISTRY, CallSites::isRegistryRead, 0, CallSites.RECEIVER, CallSites.LootView.INSTANCE::equals),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY, ownedBy(RuntimeNames.LIVING_DROP_KEY, LivingEntity.class), 3, 3, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_KEY_CONSUMER, ownedBy(RuntimeNames.LIVING_DROP_KEY_CONSUMER, LivingEntity.class), 3, 3, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_PARAMS, ownedBy(RuntimeNames.LIVING_DROP_PARAMS, LivingEntity.class), 1, 1, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_INTERACT, ownedBy(RuntimeNames.LIVING_DROP_INTERACT, LivingEntity.class), 1, 1, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_GIFT, ownedBy(RuntimeNames.LIVING_DROP_GIFT, LivingEntity.class), 1, 1, CallSites.Sink.ANY),
+            new CallSites.Sink(RuntimeNames.LIVING_DROP_SHEARING, ownedBy(RuntimeNames.LIVING_DROP_SHEARING, LivingEntity.class), 1, 1, CallSites.Sink.ANY)
     );
 
     private LootTableAnalysis() {}
+
+    private static CallSites.Matcher ownedBy(RuntimeNames.Ref method, Class<?> owner) {
+        return (call, loader) -> RuntimeNames.is(method, call) && CallSites.isA(owner, call.owner, loader);
+    }
 
     @NotNull
     public static ComputedLootTables getEntityLootTables(RegistryAccess registries, EntityType<?> type, Class<?> entityClass) {
@@ -109,7 +113,7 @@ public final class LootTableAnalysis {
                             tables.add(table);
                         } else if (caller.source() instanceof CallSites.Param(int param)) {
                             for (ModJarIndex.Caller outer : index.callersOf(caller.owner(), caller.method().name, caller.method().desc, param)) {
-                                if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && sink.isFor(value)
+                                if (!outer.entity() && outer.source() instanceof CallSites.Constant(Object value) && sink.accepts(outer.source())
                                         && LootTableModel.location(value) instanceof Identifier table) {
                                     tables.add(table);
                                 }

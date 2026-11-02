@@ -993,6 +993,44 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testEntityEventLootTableThroughRegistryLookup() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityType.ZOMBIE, RegistryLookupMob.class);
+
+        Assertions.assertTrue(tables.own().isEmpty());
+        Assertions.assertEquals(List.of(Map.of(LootMobs.REWARD.identifier(), 1.0)), List.copyOf(tables.events().values()));
+    }
+
+    @Test
+    public void testLootTablesRolledByInstanceThroughResolver() {
+        Assertions.assertEquals(Set.of(RolledTables.RESOLVED.identifier()), rolledLootTables(new ResolverModifier(RolledTables.RESOLVED)));
+        Assertions.assertEquals(Set.of(RolledTables.NAMED), rolledLootTables(new NamedModifier(RolledTables.NAMED)));
+        Assertions.assertEquals(Set.of(), rolledLootTables(new OtherRegistryModifier()));
+    }
+
+    @Test
+    public void testLootTablesRolledByInstanceThroughRegistryLookup() {
+        Assertions.assertEquals(Set.of(RolledTables.RESOLVED.identifier()), rolledLootTables(new LookupModifier(RolledTables.RESOLVED)));
+        Assertions.assertEquals(Set.of(RolledTables.NAMED), rolledLootTables(new RegistryModifier(RolledTables.NAMED)));
+        Assertions.assertEquals(Set.of(), rolledLootTables(new OtherLookupModifier()));
+    }
+
+    @Test
+    public void testLootTablesReferencedInJarThroughResolver() {
+        Set<Identifier> tables = LootTableAnalysis.getReferencedLootTables(List.of(RolledTables.class));
+
+        Assertions.assertTrue(tables.containsAll(Set.of(RolledTables.RESOLVED.identifier(), RolledTables.NAMED, RolledTables.CREATED_INJECTED)));
+        Assertions.assertFalse(tables.contains(RolledTables.OTHER.identifier()));
+    }
+
+    @Test
+    public void testLootTablesReferencedInJarThroughRegistryLookup() {
+        Set<Identifier> tables = LootTableAnalysis.getReferencedLootTables(List.of(RolledTables.class));
+
+        Assertions.assertTrue(tables.containsAll(Set.of(RolledTables.LOOKED_UP.identifier(), RolledTables.ACCESSED.identifier(), RolledTables.REGISTERED)));
+        Assertions.assertFalse(tables.contains(RolledTables.OTHER_LOOKED_UP.identifier()));
+    }
+
+    @Test
     public void testDistinctListings() {
         ItemListing apple = new PlainListing(Items.APPLE);
         Object[] distinct = TradeUtils.distinctListings(new Object[]{apple, new PlainListing(Items.APPLE), new PlainListing(Items.BREAD)});
@@ -2067,6 +2105,10 @@ public class BytecodeInterpreterTest {
 
     private static LootTableAnalysis.ComputedLootTables lootTables(EntityType<?> type, Class<?> entityClass) {
         return LootTableAnalysis.getEntityLootTables(UTILS.getServerLevel().registryAccess(), type, entityClass);
+    }
+
+    private static Set<Identifier> rolledLootTables(Object instance) {
+        return LootTableAnalysis.getRolledLootTables(UTILS.getServerLevel().registryAccess(), instance);
     }
 
     private static Int2ObjectMap<TradeLevel> computedLevels(Class<?> trader) {
@@ -3612,6 +3654,22 @@ public class BytecodeInterpreterTest {
         }
     }
 
+    private abstract static class RegistryLookupMob extends Mob {
+        private RegistryLookupMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void reward() {
+            MinecraftServer server = level().getServer();
+
+            if (server != null) {
+                HolderGetter<LootTable> tables = server.reloadableRegistries().lookup().lookupOrThrow(Registries.LOOT_TABLE);
+
+                tables.getOrThrow(LootMobs.REWARD);
+            }
+        }
+    }
+
     private abstract static class BossMob extends Mob {
         private final BossDrops drops = new BossDrops();
 
@@ -3768,8 +3826,115 @@ public class BytecodeInterpreterTest {
             roll(registries, INJECTED);
         }
 
+        private static final ResourceKey<LootTable> RESOLVED = LootMobs.lootTable("chests/resolved");
+        private static final Identifier NAMED = Identifier.fromNamespaceAndPath("ali", "chests/named");
+        private static final Identifier CREATED_INJECTED = Identifier.fromNamespaceAndPath("ali", "entities/created_injected");
+        private static final ResourceKey<Enchantment> OTHER = ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath("ali", "chests/other"));
+        private static final ResourceKey<LootTable> LOOKED_UP = LootMobs.lootTable("chests/looked_up");
+        private static final ResourceKey<LootTable> ACCESSED = LootMobs.lootTable("chests/accessed");
+        private static final Identifier REGISTERED = Identifier.fromNamespaceAndPath("ali", "chests/registered");
+        private static final ResourceKey<Enchantment> OTHER_LOOKED_UP = ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath("ali", "chests/other_looked_up"));
+
         private static void roll(ReloadableServerRegistries.Holder registries, ResourceKey<LootTable> table) {
             registries.getLootTable(table);
+        }
+
+        public static void resolve(LootContext context) {
+            context.getResolver().get(RESOLVED);
+        }
+
+        public static void resolveNamed(LootContext context) {
+            context.getResolver().get(ResourceKey.create(Registries.LOOT_TABLE, NAMED));
+        }
+
+        public static void resolveOther(LootContext context) {
+            context.getResolver().get(OTHER);
+        }
+
+        public static void injectCreated(LootContext context) {
+            inject(context, CREATED_INJECTED);
+        }
+
+        private static void inject(LootContext context, Identifier table) {
+            context.getResolver().get(ResourceKey.create(Registries.LOOT_TABLE, table));
+        }
+
+        public static void lookUp(ReloadableServerRegistries.Holder registries) {
+            registries.lookup().lookupOrThrow(Registries.LOOT_TABLE).get(LOOKED_UP);
+        }
+
+        public static void access(RegistryAccess access) {
+            HolderGetter<LootTable> tables = access.lookupOrThrow(Registries.LOOT_TABLE);
+
+            tables.getOrThrow(ACCESSED);
+        }
+
+        public static void register(RegistryAccess access) {
+            access.lookupOrThrow(Registries.LOOT_TABLE).getValue(REGISTERED);
+        }
+
+        public static void lookUpOther(LootContext context) {
+            context.getResolver().lookupOrThrow(Registries.ENCHANTMENT).get(OTHER_LOOKED_UP);
+        }
+    }
+
+    private static final class ResolverModifier {
+        private final ResourceKey<LootTable> table;
+
+        private ResolverModifier(ResourceKey<LootTable> table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getResolver().get(table).ifPresent(Holder::value);
+        }
+    }
+
+    private static final class NamedModifier {
+        private final Identifier table;
+
+        private NamedModifier(Identifier table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getResolver().get(ResourceKey.create(Registries.LOOT_TABLE, table));
+        }
+    }
+
+    private static final class OtherRegistryModifier {
+        public void apply(LootContext context) {
+            context.getResolver().get(RolledTables.OTHER);
+        }
+    }
+
+    private static final class LookupModifier {
+        private final ResourceKey<LootTable> table;
+
+        private LookupModifier(ResourceKey<LootTable> table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getResolver().lookupOrThrow(Registries.LOOT_TABLE).get(table).ifPresent(Holder::value);
+        }
+    }
+
+    private static final class RegistryModifier {
+        private final Identifier table;
+
+        private RegistryModifier(Identifier table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getLevel().registryAccess().lookupOrThrow(Registries.LOOT_TABLE).getValue(table);
+        }
+    }
+
+    private static final class OtherLookupModifier {
+        public void apply(LootContext context) {
+            context.getResolver().lookupOrThrow(Registries.ENCHANTMENT).get(RolledTables.OTHER);
         }
     }
 

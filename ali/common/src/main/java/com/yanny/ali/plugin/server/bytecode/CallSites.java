@@ -1,5 +1,10 @@
 package com.yanny.ali.plugin.server.bytecode;
 
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,9 +22,11 @@ import static com.yanny.ali.plugin.server.bytecode.Resolution.*;
 
 final class CallSites {
     static final int DEPTH = 3;
-    private static final int RECEIVER = -1;
+    static final int RECEIVER = -1;
     private static final int NONE = -2;
+    static final Constant LOOT_TABLES = new Constant(Registries.LOOT_TABLE);
     private static final String RESOURCE_KEY = Type.getInternalName(ResourceKey.class);
+    private static final String IDENTIFIER = Type.getInternalName(Identifier.class);
     private static final String OPTIONAL = Type.getInternalName(Optional.class);
     private static final Set<String> OPTIONAL_UNWRAP = Set.of("get", "orElseThrow", "orElse");
 
@@ -72,6 +79,9 @@ final class CallSites {
         if (arg instanceof EntryParam(int index)) {
             return new Param(index);
         }
+        if (arg instanceof LootView view) {
+            return view;
+        }
 
         return Other.INSTANCE;
     }
@@ -101,7 +111,7 @@ final class CallSites {
             Sink sink = matching(call, owner.getClassLoader());
 
             if (sink != null) {
-                if (sink.accepts(source(context, analyzed, frame.getStack(first)))) {
+                if (sink.accepts(source(context, analyzed, frame.getStack(first + sink.qualifier())))) {
                     sites.add(withLive(site(source(context, analyzed, frame.getStack(first + sink.argument())), context)));
                 }
             } else if (depth < DEPTH) {
@@ -203,7 +213,17 @@ final class CallSites {
         if (at == null) {
             return computed.get();
         }
-        if (insn.getOpcode() == Opcodes.DUP || insn.getOpcode() == Opcodes.CHECKCAST || isResourceKeyCreate(insn)) {
+        if (isResourceKeyCreate(insn)) {
+            Arg registry = trace(method, analyzed, at.getStack(at.getStackSize() - 2), loader, parameter, computed);
+            Arg location = trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed);
+
+            if (registry instanceof Constant(Object key) && !Registries.LOOT_TABLE.equals(key)) {
+                return new Constant(null);
+            }
+
+            return location;
+        }
+        if (insn.getOpcode() == Opcodes.DUP || insn.getOpcode() == Opcodes.CHECKCAST) {
             return trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed);
         }
         if (insn.getOpcode() == Opcodes.ALOAD) {
@@ -228,10 +248,14 @@ final class CallSites {
                 return computed.get();
             }
         }
-        if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC
-                && RuntimeNames.is(RuntimeNames.MOB_GET_LOOT_TABLE, call)
-                && trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed) instanceof Self) {
-            return OwnDefault.INSTANCE;
+        if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC) {
+            if (isLootTableLookup(call, loader)) {
+                return LOOT_TABLES.equals(trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed)) ? LootView.INSTANCE : computed.get();
+            }
+            if (RuntimeNames.is(RuntimeNames.MOB_GET_LOOT_TABLE, call)
+                    && trace(method, analyzed, at.getStack(at.getStackSize() - 1), loader, parameter, computed) instanceof Self) {
+                return OwnDefault.INSTANCE;
+            }
         }
         if (insn instanceof MethodInsnNode call && call.getOpcode() != Opcodes.INVOKESTATIC && call.owner.equals(OPTIONAL) && OPTIONAL_UNWRAP.contains(call.name)
                 && trace(method, analyzed, at.getStack(at.getStackSize() - 1 - Type.getArgumentTypes(call.desc).length), loader, parameter, computed) == OwnDefault.INSTANCE) {
@@ -243,6 +267,39 @@ final class CallSites {
 
     private static boolean isResourceKeyCreate(AbstractInsnNode insn) {
         return insn instanceof MethodInsnNode call && call.owner.equals(RESOURCE_KEY) && RuntimeNames.is(RuntimeNames.RESOURCE_KEY_CREATE, call);
+    }
+
+    static boolean isLootTableLookup(MethodInsnNode call, ClassLoader loader) {
+        Type[] params = Type.getArgumentTypes(call.desc);
+        Type result = Type.getReturnType(call.desc);
+
+        return call.getOpcode() != Opcodes.INVOKESTATIC && params.length == 1 && params[0].getDescriptor().equals("L" + RESOURCE_KEY + ";")
+                && result.getSort() == Type.OBJECT && (isA(HolderGetter.class, result.getInternalName(), loader) || isA(Registry.class, result.getInternalName(), loader))
+                && (isA(HolderGetter.Provider.class, call.owner, loader) || isA(HolderLookup.Provider.class, call.owner, loader));
+    }
+
+    static boolean isRegistryRead(MethodInsnNode call, ClassLoader loader) {
+        Type[] params = Type.getArgumentTypes(call.desc);
+
+        return call.getOpcode() != Opcodes.INVOKESTATIC && params.length == 1 && params[0].getSort() == Type.OBJECT
+                && (params[0].getInternalName().equals(RESOURCE_KEY) || params[0].getInternalName().equals(IDENTIFIER))
+                && Type.getReturnType(call.desc).getSort() == Type.OBJECT && (isA(HolderGetter.class, call.owner, loader) || isA(Registry.class, call.owner, loader));
+    }
+
+    static boolean isLootTableKey(@Nullable Object traced) {
+        if (traced instanceof Constant(Object key)) {
+            return key instanceof Identifier || key instanceof ResourceKey<?> resourceKey && resourceKey.registry().equals(Registries.LOOT_TABLE.identifier());
+        }
+
+        return traced != null;
+    }
+
+    static boolean isA(Class<?> type, String internalName, ClassLoader loader) {
+        try {
+            return type.isAssignableFrom(load(internalName, loader));
+        } catch (Fail fail) {
+            return false;
+        }
     }
 
     private static Arg parameter(Context context, int var) {
@@ -384,38 +441,31 @@ final class CallSites {
         }
     }
 
-    record Sink(RuntimeNames.Ref method, Class<?> owner, int argument, @Nullable Object registry) {
-        @Nullable
-        Source source(String owner, MethodNode method, MethodInsnNode call, ClassLoader loader) {
-            return accepts(CallSites.argument(owner, method, call, 0, loader)) ? CallSites.argument(owner, method, call, argument, loader) : null;
-        }
-
-        private boolean accepts(Object first) {
-            return !(first instanceof Constant(Object value)) || isFor(value);
-        }
-
-        boolean isFor(@Nullable Object key) {
-            return registry == null || key instanceof ResourceKey<?> resourceKey && registry instanceof ResourceKey<?> registryKey
-                    && resourceKey.registry().equals(registryKey.identifier());
-        }
+    record Sink(RuntimeNames.Ref marker, Matcher matcher, int argument, int qualifier, Predicate<Object> qualified) {
+        static final Predicate<Object> ANY = (traced) -> true;
 
         boolean matches(MethodInsnNode call, ClassLoader loader) {
-            if (!RuntimeNames.is(method, call)) {
-                return false;
-            }
-
-            try {
-                return owner.isAssignableFrom(load(call.owner, loader));
-            } catch (Fail fail) {
-                return false;
-            }
+            return matcher.matches(call, loader);
         }
+
+        @Nullable
+        Source source(String owner, MethodNode method, MethodInsnNode call, ClassLoader loader) {
+            return accepts(CallSites.argument(owner, method, call, qualifier, loader)) ? CallSites.argument(owner, method, call, argument, loader) : null;
+        }
+
+        boolean accepts(@Nullable Object traced) {
+            return qualified.test(traced);
+        }
+    }
+
+    interface Matcher {
+        boolean matches(MethodInsnNode call, ClassLoader loader);
     }
 
     record Site(Source source, Declaration holder, boolean selfReceiver, Set<Integer> selfParams, @Nullable BitSet live) {
     }
 
-    sealed interface Source permits Constant, Param, OwnDefault, Other {
+    sealed interface Source permits Constant, Param, OwnDefault, Other, LootView {
     }
 
     record Constant(@Nullable Object value) implements Source, Arg {
@@ -432,7 +482,11 @@ final class CallSites {
         INSTANCE
     }
 
-    private sealed interface Arg permits Constant, OwnDefault, Self, Untraced, EntryParam, Computed {
+    enum LootView implements Source, Arg {
+        INSTANCE
+    }
+
+    private sealed interface Arg permits Constant, OwnDefault, LootView, Self, Untraced, EntryParam, Computed {
     }
 
     private enum Self implements Arg {

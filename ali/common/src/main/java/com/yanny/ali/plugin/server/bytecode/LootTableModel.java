@@ -13,10 +13,20 @@ import java.util.Objects;
 import java.util.Optional;
 
 final class LootTableModel implements MethodModel {
+    private static final Origin LOOT_TABLES = new Origin(null, "lootTables", List.of());
+
     @Override
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
-        Value table = insn.getOpcode() != Opcodes.INVOKESTATIC ? table(call) : null;
+
+        if (insn.getOpcode() == Opcodes.INVOKESTATIC) {
+            return NO_OPINION;
+        }
+        if (CallSites.isLootTableLookup(insn, call.loader()) && CallSites.LOOT_TABLES.equals(traced(call.args().get(1)))) {
+            return Value.Unknown.of(Type.getReturnType(insn.desc), LOOT_TABLES);
+        }
+
+        Value table = table(call);
 
         if (table == null) {
             return NO_OPINION;
@@ -60,14 +70,29 @@ final class LootTableModel implements MethodModel {
         List<Value> args = call.args();
 
         for (CallSites.Sink sink : LootTableAnalysis.SINKS) {
-            if (sink.matches(call.insn(), call.loader())) {
-                Value key = args.get(sink.argument() + 1);
-
-                if (sink.registry() == null || key instanceof Value.Known(Object value) && sink.isFor(value)
-                        || key instanceof Value.Choice choice && choice.options().stream().allMatch(sink::isFor)) {
-                    return key;
-                }
+            if (sink.matches(call.insn(), call.loader()) && accepts(sink, args.get(sink.qualifier() + 1))) {
+                return args.get(sink.argument() + 1);
             }
+        }
+
+        return null;
+    }
+
+    private static boolean accepts(CallSites.Sink sink, Value qualifier) {
+        if (qualifier instanceof Value.Choice choice) {
+            return choice.options().stream().allMatch((o) -> sink.accepts(new CallSites.Constant(o)));
+        }
+
+        return sink.accepts(traced(qualifier));
+    }
+
+    @Nullable
+    private static Object traced(Value value) {
+        if (value instanceof Value.Known(Object known)) {
+            return new CallSites.Constant(known);
+        }
+        if (value instanceof Value.Unknown unknown && unknown.origin() == LOOT_TABLES) {
+            return CallSites.LootView.INSTANCE;
         }
 
         return null;
