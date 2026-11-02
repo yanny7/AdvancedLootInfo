@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 
 import java.util.*;
+import java.util.function.DoublePredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -229,6 +230,16 @@ final class NumberDomain implements Opcodes {
             };
         }
 
+        double share(DoublePredicate test) {
+            return values == null || values.isEmpty() ? 0 : (double) values.stream().filter(test::test).count() / values.size();
+        }
+
+        void keep(DoublePredicate test) {
+            if (values != null) {
+                values.removeIf((v) -> !test.test(v));
+            }
+        }
+
         NumberExpr expr(double offset) {
             if (values == null) {
                 return NumberExpr.uniformFloat(lo + offset, hi + offset);
@@ -257,7 +268,7 @@ final class NumberDomain implements Opcodes {
             }
         }
 
-        private static boolean compares(int op, double value, double bound) {
+        static boolean compares(int op, double value, double bound) {
             return switch (op) {
                 case IFEQ -> value == bound;
                 case IFNE -> value != bound;

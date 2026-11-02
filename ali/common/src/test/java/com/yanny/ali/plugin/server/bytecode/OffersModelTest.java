@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.item.trading.VillagerTrade;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Type;
@@ -28,7 +29,13 @@ public class OffersModelTest {
 
     private final OffersModel model = new OffersModel();
     private final FakeCallContext context = new FakeCallContext();
+    private final ListingSubject subject = new ListingSubject(Object.class);
     private final Value.Offers offers = new Value.Offers();
+
+    @BeforeEach
+    public void setUp() {
+        context.subject = subject;
+    }
 
     @Test
     public void testNewPlainOffersAreSymbolic() {
@@ -140,7 +147,7 @@ public class OffersModelTest {
         context.owned.add(list);
         assertEquals(new Value.Known(1), OffersModel.COLLECTED.apply(context, call(INVOKEINTERFACE, "java/util/List", "add", ADD, new Value.Known(list),
                 new Value.Pick(List.of(FIRST), new Object(), null))));
-        assertEquals(1, context.offers(list).entries.size());
+        assertEquals(1, subject.offersOf(list).entries.size());
     }
 
     @Test
@@ -153,14 +160,14 @@ public class OffersModelTest {
         context.owned.add(list);
         context.pools.add(pool);
         OffersModel.COLLECTED.apply(context, call(INVOKEINTERFACE, "java/util/List", "add", ADD, new Value.Known(list), new Value.Choice(List.of(first, second), pool)));
-        assertEquals(List.of(new Value.Offers.Picked(List.of(first, second), new Value.Known(1))), context.offers(list).entries);
+        assertEquals(List.of(new Value.Offers.Picked(List.of(first, second), new Value.Known(1))), subject.offersOf(list).entries);
     }
 
     @Test
     public void testCallOnCollectedOffersActsOnThem() {
         List<Object> list = new ArrayList<>();
 
-        context.coll(list).offers = offers;
+        subject.putOffers(list, offers);
         assertEquals(new Value.Known(1), OffersModel.COLLECTED.apply(context, call(INVOKEINTERFACE, "java/util/List", "isEmpty", "()Z", new Value.Known(list))));
     }
 

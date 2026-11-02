@@ -15,11 +15,13 @@ import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.ali.plugin.server.bytecode.TestTrades;
+import com.yanny.ali.plugin.server.bytecode.LootTableAnalysis;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
@@ -38,6 +40,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.StructureTags;
@@ -47,11 +51,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.npc.villager.Villager;
@@ -86,6 +93,8 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -179,6 +188,26 @@ public class BytecodeInterpreterTest {
         IDataNode result = ((ListNode) interpret(new BlockTagValuesListing(BLOCK_TORCHES))).nodes().get(2);
 
         Assertions.assertEquals(BLOCK_TORCHES, ((ItemNode) result).getItem().right().orElseThrow());
+    }
+
+    @Test
+    public void testRandomPickFromTagPassedToOfferFactory() {
+        bindDoorTags();
+
+        IDataNode result = interpret(new TagOfferListing(false));
+
+        Assertions.assertEquals(DOORS, slot(result, 2).getItem().right().orElseThrow());
+        assertSlot(result, 0, Items.EMERALD, NumberExpr.constant(2));
+    }
+
+    @Test
+    public void testRandomPickFromTagPassedToOfferFactoryRunForReal() {
+        bindDoorTags();
+
+        IDataNode result = interpret(new TagOfferListing(true));
+
+        Assertions.assertEquals(DOORS, slot(result, 2).getItem().right().orElseThrow());
+        assertSlot(result, 0, Items.EMERALD, NumberExpr.constant(2));
     }
 
     @Test
@@ -711,6 +740,50 @@ public class BytecodeInterpreterTest {
     }
 
     @Test
+    public void testTraderWithTradesOfIndependentChances() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(IndependentChancesTrader.class);
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+        TradeGroupNode cookies = (TradeGroupNode) trades.stream().filter(TradeGroupNode.class::isInstance).findFirst().orElseThrow();
+        List<IDataNode> plain = trades.stream().filter((t) -> !(t instanceof TradeGroupNode)).toList();
+
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(new NumberInterval(2, 5, true, true), level.levelInfo().offers().bounds());
+        Assertions.assertEquals(3, plain.size());
+        assertTooltip(trade(plain, Items.APPLE).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5"
+        ));
+        assertTooltip(trade(plain, Items.BREAD).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Chance: 25%"
+        ));
+        assertTooltip(trade(plain, Items.CARROT).getTooltip(), List.of(
+                "Uses: 12",
+                "XP: 5",
+                "Chance: 50%"
+        ));
+        assertSlot(cookies.nodes().get(0), 2, Items.COOKIE, NumberExpr.constant(1));
+        Assertions.assertEquals(Map.of(NumberExpr.constant(1), 0.75, NumberExpr.constant(2), 0.25),
+                ((NumberExpr.Weighted) cookies.selectionCount).entries().stream().collect(Collectors.toMap(NumberExpr.WeightedEntry::value, NumberExpr.WeightedEntry::weight)));
+    }
+
+    @Test
+    public void testTraderWithChancesOfTheRemainderOfADraw() {
+        Int2ObjectMap<TradeLevel> levels = computedLevels(RemainderChanceTrader.class);
+        TradeLevel.OfTrades level = (TradeLevel.OfTrades) levels.get(1);
+        List<IDataNode> trades = level.trades().apply(UTILS);
+
+        Assertions.assertEquals(1F, level.levelInfo().chance());
+        Assertions.assertEquals(4, trades.size());
+        Assertions.assertEquals(List.of("Chance: 20%"), chanceLines(trade(trades, Items.GOLD_INGOT)));
+        Assertions.assertEquals(List.of("Chance: 40%"), chanceLines(trade(trades, Items.IRON_INGOT)));
+        Assertions.assertEquals(List.of("Chance: 40%"), chanceLines(trade(trades, Items.COPPER_INGOT)));
+        Assertions.assertEquals(List.of(), chanceLines(trade(trades, Items.APPLE)));
+    }
+
+    @Test
     public void testTraderWithGroupsFromOneRoll() {
         Int2ObjectMap<TradeLevel> levels = computedLevels(OneRollTrader.class);
 
@@ -853,6 +926,95 @@ public class BytecodeInterpreterTest {
         Assertions.assertNotNull(trades);
         Assertions.assertTrue(trades.incomplete());
         Assertions.assertTrue(trades.levels().isEmpty());
+    }
+
+    @Test
+    public void testEntityVariantLootTables() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.HUSK, VariantMob.class);
+
+        Assertions.assertEquals(Set.of(Map.of(LootMobs.RED.identifier(), 1.0), Map.of(LootMobs.BLUE.identifier(), 1.0)), Set.copyOf(tables.own().values()));
+        Assertions.assertTrue(tables.events().isEmpty());
+    }
+
+    @Test
+    public void testEntityRandomDefaultLootTable() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.DROWNED, RandomDefaultMob.class);
+
+        Assertions.assertEquals(List.of(Map.of(LootMobs.WITCH.identifier(), 0.5, EntityTypes.DROWNED.getDefaultLootTable().orElseThrow().identifier(), 0.5)), List.copyOf(tables.own().values()));
+    }
+
+    @Test
+    public void testEntityConstantEventLootTable() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.ZOMBIE, EventMob.class);
+
+        Assertions.assertTrue(tables.own().isEmpty());
+        Assertions.assertEquals(List.of(Map.of(LootMobs.REWARD.identifier(), 1.0)), List.copyOf(tables.events().values()));
+    }
+
+    @Test
+    public void testEntityLootTableComputedInHelper() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.ZOMBIE_VILLAGER, BossMob.class);
+
+        Assertions.assertEquals(List.of(Map.of(EntityTypes.ZOMBIE_VILLAGER.getDefaultLootTable().orElseThrow().identifier().withSuffix("_boss"), 1.0)), List.copyOf(tables.events().values()));
+    }
+
+    @Test
+    public void testEntityOwnLootTablePassedToHelper() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.SKELETON, StoringMob.class);
+
+        Assertions.assertTrue(tables.own().isEmpty());
+        Assertions.assertTrue(tables.events().isEmpty());
+    }
+
+    @Test
+    public void testLootTablesRolledByInstance() {
+        TableModifier modifier = new TableModifier(RolledTables.MODIFIER);
+
+        Assertions.assertEquals(Set.of(RolledTables.MODIFIER.identifier(), RolledTables.UPGRADED.identifier()), LootTableAnalysis.getRolledLootTables(UTILS.getServerLevel().registryAccess(), modifier));
+        Assertions.assertSame(RolledTables.MODIFIER, modifier.table);
+    }
+
+    @Test
+    public void testLootTablesReferencedInJar() {
+        Set<Identifier> tables = LootTableAnalysis.getReferencedLootTables(List.of(RolledTables.class));
+
+        Assertions.assertTrue(tables.containsAll(Set.of(RolledTables.CHEST.identifier(), RolledTables.INJECTED.identifier())));
+        Assertions.assertFalse(tables.contains(LootMobs.REWARD.identifier()));
+        Assertions.assertFalse(tables.contains(RolledTables.MODIFIER.identifier()));
+    }
+
+    @Test
+    public void testInstanceLootTableOfVariant() {
+        RegistryAccess registries = UTILS.getServerLevel().registryAccess();
+
+        Assertions.assertEquals(LootMobs.RED.identifier(), LootTableAnalysis.getInstanceLootTable(registries, new InstanceVariantMob(0)));
+        Assertions.assertEquals(LootMobs.BLUE.identifier(), LootTableAnalysis.getInstanceLootTable(registries, new InstanceVariantMob(1)));
+        Assertions.assertEquals(EntityTypes.HUSK.getDefaultLootTable().orElseThrow().identifier(), LootTableAnalysis.getInstanceLootTable(registries, new InstanceVariantMob(2)));
+    }
+
+    @Test
+    public void testInstanceLootTableUnknown() {
+        RegistryAccess registries = UTILS.getServerLevel().registryAccess();
+
+        Assertions.assertNull(LootTableAnalysis.getInstanceLootTable(registries, new InstanceRandomMob()));
+        Assertions.assertNull(LootTableAnalysis.getInstanceLootTable(registries, new InstancePlainMob()));
+    }
+
+    @Test
+    public void testEntityLootTablesLookedUpInRegistry() {
+        LootTableAnalysis.ComputedLootTables tables = lootTables(EntityTypes.ZOMBIE, LookupMob.class);
+        Identifier computed = EntityTypes.ZOMBIE.getDefaultLootTable().orElseThrow().identifier().withSuffix("_lookup");
+
+        Assertions.assertEquals(Set.of(LootMobs.LOOKED_UP.identifier(), computed), tables.events().values().stream().flatMap((m) -> m.keySet().stream()).collect(Collectors.toSet()));
+    }
+
+    @Test
+    public void testLootTablesLookedUpInJar() {
+        Set<Identifier> tables = LootTableAnalysis.getReferencedLootTables(List.of(LookupTables.class));
+
+        Assertions.assertTrue(tables.containsAll(Set.of(LookupTables.DIRECT.identifier(), LookupTables.PASSED.identifier())));
+        Assertions.assertFalse(tables.contains(Enchantments.SHARPNESS.identifier()));
+        Assertions.assertFalse(tables.contains(Enchantments.SMITE.identifier()));
     }
 
     @Test
@@ -1409,6 +1571,14 @@ public class BytecodeInterpreterTest {
         return LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key);
     }
 
+    @Unmodifiable
+    @NotNull
+    private static List<String> chanceLines(IDataNode trade) {
+        return CoreTooltipUtils.toLines(trade.getTooltip(), 0, true, TooltipStyle.DEFAULT, NumberOptions.DEFAULT).stream()
+                .filter(TooltipLine.Text.class::isInstance).map((l) -> componentToPlainString(((TooltipLine.Text) l).component()).trim())
+                .filter((l) -> l.startsWith("Chance: ")).toList();
+    }
+
     private static void assertSlot(IDataNode trade, int index, Item item, NumberExpr count) {
         ItemNode node = slot(trade, index);
 
@@ -1501,6 +1671,96 @@ public class BytecodeInterpreterTest {
             }
 
             return new MerchantOffer(new ItemCost(Items.EMERALD), new ItemStack(values.get(random.nextInt(values.size()))), 12, 5, 0.05F);
+        }
+    }
+
+    private static final class TagOffers {
+        @Nullable
+        static MerchantOffer randomTrade(RandomSource random, TagKey<Item> tag, int price) {
+            Optional<List<Holder<Item>>> items = BuiltInRegistries.ITEM.get(tag).map((HolderSet.Named<Item> set) -> set.stream().toList());
+
+            if (items.isPresent() && !items.get().isEmpty()) {
+                List<Holder<Item>> kept = items.get().stream().filter((h) -> h.value() != Items.BRICK).toList();
+
+                return offer(kept.get(random.nextInt(kept.size())).value(), price);
+            }
+
+            return null;
+        }
+
+        @Nullable
+        static MerchantOffer randomRealTrade(RandomSource random, TagKey<Item> tag, int price) {
+            List<Holder<Item>> items = BuiltInRegistries.ITEM.get(tag).map((HolderSet.Named<Item> set) -> set.stream().toList()).orElse(List.of());
+
+            return items.isEmpty() ? null : realOffer(items.get(random.nextInt(items.size())).value(), price);
+        }
+
+        static MerchantOffer offer(Item item, int price) {
+            return new MerchantOffer(new ItemCost(Items.EMERALD, price), new ItemStack(item), 12, 5, 0.05F);
+        }
+
+        static MerchantOffer realOffer(Item item, int price) {
+            if (System.identityHashCode(item) == 0) {
+                throw new IllegalStateException();
+            }
+
+            return new MerchantOffer(new ItemCost(Items.EMERALD, price), new ItemStack(item), 12, 5, 0.05F);
+        }
+    }
+
+    private record TagOfferListing(boolean real) implements ItemListing {
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(ServerLevel world, Entity trader, RandomSource random) {
+            return real ? TagOffers.randomRealTrade(random, DOORS, 2) : TagOffers.randomTrade(random, DOORS, 2);
+        }
+    }
+
+    private abstract static class RemainderChanceTrader extends AbstractVillager {
+        private RemainderChanceTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades(ServerLevel world) {
+            MerchantOffers offers = getOffers();
+            int pick = random.nextInt(5);
+
+            offers.add(offerFor(Items.APPLE));
+
+            if (pick == 0) {
+                offers.add(offerFor(Items.GOLD_INGOT));
+            } else {
+                offers.add(offerFor(pick % 2 == 0 ? Items.IRON_INGOT : Items.COPPER_INGOT));
+            }
+        }
+    }
+
+    private abstract static class IndependentChancesTrader extends AbstractVillager {
+        private IndependentChancesTrader(EntityType<? extends AbstractVillager> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void updateTrades(ServerLevel world) {
+            MerchantOffers offers = getOffers();
+            int cookies = 1;
+
+            offers.add(offerFor(Items.APPLE));
+
+            if (random.nextInt(4) == 0) {
+                offers.add(offerFor(Items.BREAD));
+            }
+            if (random.nextInt(2) == 0) {
+                offers.add(offerFor(Items.CARROT));
+            }
+            if (random.nextInt(4) == 0) {
+                cookies++;
+            }
+
+            for (int i = 0; i < cookies; i++) {
+                offers.add(offerFor(Items.COOKIE));
+            }
         }
     }
 
@@ -1861,6 +2121,10 @@ public class BytecodeInterpreterTest {
                 added++;
             }
         }
+    }
+
+    private static LootTableAnalysis.ComputedLootTables lootTables(EntityType<?> type, Class<?> entityClass) {
+        return LootTableAnalysis.getEntityLootTables(UTILS.getServerLevel().registryAccess(), type, entityClass);
     }
 
     private static Int2ObjectMap<TradeLevel> computedLevels(Class<?> trader) {
@@ -3345,5 +3609,240 @@ public class BytecodeInterpreterTest {
                 (world, trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.APPLE) : null,
                 (world, trader, random) -> random.nextInt(2) == 1 ? offerFor(Items.BREAD) : null
         );
+    }
+
+    private static final class LootMobs {
+        private static final ResourceKey<LootTable> RED = lootTable("entities/variant_red");
+        private static final ResourceKey<LootTable> BLUE = lootTable("entities/variant_blue");
+        private static final ResourceKey<LootTable> REWARD = lootTable("entities/reward");
+        private static final ResourceKey<LootTable> WITCH = EntityTypes.WITCH.getDefaultLootTable().orElseThrow();
+        private static final ResourceKey<LootTable> LOOKED_UP = lootTable("entities/looked_up");
+
+        @NotNull
+        private static ResourceKey<LootTable> lootTable(String path) {
+            return ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("ali", path));
+        }
+    }
+
+    private abstract static class VariantMob extends Mob {
+        private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(VariantMob.class, EntityDataSerializers.INT);
+
+        private VariantMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void dropFromLootTable(ServerLevel level, DamageSource source, boolean playerKill) {
+            switch (entityData.get(VARIANT)) {
+                case 0 -> dropFromLootTable(level, source, playerKill, LootMobs.RED);
+                case 1 -> dropFromLootTable(level, source, playerKill, LootMobs.BLUE);
+                default -> super.dropFromLootTable(level, source, playerKill);
+            }
+        }
+    }
+
+    private abstract static class RandomDefaultMob extends Mob {
+        private RandomDefaultMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        @Override
+        protected void dropFromLootTable(ServerLevel level, DamageSource source, boolean playerKill) {
+            if (random.nextInt(2) == 0) {
+                dropFromLootTable(level, source, playerKill, LootMobs.WITCH);
+            } else {
+                super.dropFromLootTable(level, source, playerKill);
+            }
+        }
+    }
+
+    private abstract static class EventMob extends Mob {
+        private EventMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void reward() {
+            MinecraftServer server = level().getServer();
+
+            if (server != null) {
+                server.reloadableRegistries().getLootTable(LootMobs.REWARD);
+            }
+        }
+    }
+
+    private abstract static class BossMob extends Mob {
+        private final BossDrops drops = new BossDrops();
+
+        private BossMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void dropBossLoot() {
+            drops.prepare(this);
+        }
+    }
+
+    private static final class BossDrops {
+        private void prepare(Mob boss) {
+            MinecraftServer server = boss.level().getServer();
+
+            if (server != null) {
+                server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, boss.getLootTable().orElseThrow().identifier().withSuffix("_boss")));
+            }
+        }
+    }
+
+    private abstract static class StoringMob extends Mob {
+        private StoringMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void store() {
+            StoredDrops.store(this, getLootTable().orElseThrow());
+        }
+    }
+
+    private static final class StoredDrops {
+        private static void store(Mob mob, ResourceKey<LootTable> table) {
+            MinecraftServer server = mob.level().getServer();
+
+            if (server != null) {
+                server.reloadableRegistries().getLootTable(table);
+            }
+        }
+    }
+
+    private static final class InstanceVariantMob extends Mob {
+        private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(InstanceVariantMob.class, EntityDataSerializers.INT);
+
+        private InstanceVariantMob(int variant) {
+            super(EntityTypes.HUSK, UTILS.getServerLevel());
+            entityData.set(VARIANT, variant);
+        }
+
+        @Override
+        protected void defineSynchedData(SynchedEntityData.Builder builder) {
+            super.defineSynchedData(builder);
+            builder.define(VARIANT, 0);
+        }
+
+        @Nullable
+        @Override
+        protected PathNavigation createNavigation(Level level) {
+            return null;
+        }
+
+        @Override
+        protected void dropFromLootTable(ServerLevel level, DamageSource source, boolean playerKill) {
+            switch (entityData.get(VARIANT)) {
+                case 0 -> dropFromLootTable(level, source, playerKill, LootMobs.RED);
+                case 1 -> dropFromLootTable(level, source, playerKill, LootMobs.BLUE);
+                default -> super.dropFromLootTable(level, source, playerKill);
+            }
+        }
+    }
+
+    private static final class InstanceRandomMob extends Mob {
+        private InstanceRandomMob() {
+            super(EntityTypes.HUSK, UTILS.getServerLevel());
+        }
+
+        @Override
+        protected PathNavigation createNavigation(Level level) {
+            return null;
+        }
+
+        @Override
+        protected void dropFromLootTable(ServerLevel level, DamageSource source, boolean playerKill) {
+            if (random.nextInt(2) == 0) {
+                dropFromLootTable(level, source, playerKill, LootMobs.WITCH);
+            } else {
+                super.dropFromLootTable(level, source, playerKill);
+            }
+        }
+    }
+
+    private static final class InstancePlainMob extends Mob {
+        private InstancePlainMob() {
+            super(EntityTypes.HUSK, UTILS.getServerLevel());
+        }
+
+        @Override
+        protected PathNavigation createNavigation(Level level) {
+            return null;
+        }
+    }
+
+    private abstract static class LookupMob extends Mob {
+        private LookupMob(EntityType<? extends Mob> type, Level level) {
+            super(type, level);
+        }
+
+        public void bonus() {
+            level().registryAccess().get(LootMobs.LOOKED_UP);
+            level().registryAccess().get(Enchantments.SHARPNESS);
+        }
+
+        public void computed() {
+            Identifier id = getLootTable().orElseThrow().identifier();
+
+            level().registryAccess().get(ResourceKey.create(Registries.LOOT_TABLE, id.withSuffix("_lookup")));
+            level().registryAccess().get(ResourceKey.create(Registries.ENCHANTMENT, id.withSuffix("_enchantment")));
+        }
+    }
+
+    private static final class LookupTables {
+        private static final ResourceKey<LootTable> DIRECT = LootMobs.lootTable("chests/looked_up");
+        private static final ResourceKey<LootTable> PASSED = LootMobs.lootTable("chests/passed");
+
+        public static void direct(HolderGetter.Provider provider) {
+            provider.get(DIRECT);
+            provider.get(Enchantments.SHARPNESS);
+        }
+
+        public static void passed(HolderGetter.Provider provider) {
+            lookUp(provider, PASSED);
+            lookUp(provider, Enchantments.SMITE);
+        }
+
+        private static void lookUp(HolderGetter.Provider provider, ResourceKey<?> key) {
+            provider.get(key);
+        }
+    }
+
+    private static final class RolledTables {
+        private static final ResourceKey<LootTable> MODIFIER = LootMobs.lootTable("gameplay/modifier");
+        private static final ResourceKey<LootTable> UPGRADED = LootMobs.lootTable("gameplay/upgraded");
+        private static final ResourceKey<LootTable> CHEST = LootMobs.lootTable("chests/rolled");
+        private static final ResourceKey<LootTable> INJECTED = LootMobs.lootTable("entities/injected");
+
+        public static void chest(ReloadableServerRegistries.Holder registries) {
+            registries.getLootTable(CHEST);
+        }
+
+        public static void inject(ReloadableServerRegistries.Holder registries) {
+            roll(registries, INJECTED);
+        }
+
+        private static void roll(ReloadableServerRegistries.Holder registries, ResourceKey<LootTable> table) {
+            registries.getLootTable(table);
+        }
+    }
+
+    private static final class TableModifier {
+        private ResourceKey<LootTable> table;
+
+        private TableModifier(ResourceKey<LootTable> table) {
+            this.table = table;
+        }
+
+        public void apply(LootContext context) {
+            context.getLevel().getServer().reloadableRegistries().getLootTable(table);
+        }
+
+        public void upgrade(LootContext context) {
+            table = RolledTables.UPGRADED;
+            context.getLevel().getServer().reloadableRegistries().getLootTable(table);
+        }
     }
 }
