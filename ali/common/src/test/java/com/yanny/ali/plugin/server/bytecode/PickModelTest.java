@@ -24,9 +24,11 @@ public class PickModelTest {
     private final PickModel model = new PickModel();
     private final FakeCallContext context = new FakeCallContext();
 
+    private final TraderSubject subject = new TraderSubject(Object.class, false);
+
     @BeforeEach
     public void setUp() {
-        context.subject = new TraderSubject(Object.class, false);
+        context.subject = subject;
     }
 
     @Test
@@ -35,7 +37,7 @@ public class PickModelTest {
         Value.Choice choice = new Value.Choice(List.of(FIRST, SECOND), pool);
 
         context.pools.add(pool);
-        context.poolKeys.put(List.of(FIRST, SECOND), 2);
+        subject.putLevel(List.of(FIRST, SECOND), 2);
         assertEquals(new Value.Pick(List.of(FIRST, SECOND), pool, 2), model.apply(context, getOffer(choice)));
     }
 
@@ -55,8 +57,8 @@ public class PickModelTest {
     public void testGetOfferOnKnownListingIsPickFromItsSource() {
         Object source = new VillagerTrade[]{FIRST, SECOND};
 
-        context.listingSources.put(FIRST, source);
-        context.levelKeys.put(source, 3);
+        subject.putSource(FIRST, source);
+        subject.putLevel(source, 3);
         assertEquals(new Value.Pick(List.of(FIRST), source, 3), model.apply(context, getOffer(new Value.Known(FIRST))));
     }
 
@@ -94,8 +96,8 @@ public class PickModelTest {
     }
 
     @Test
-    public void testNoSubjectHasNoOpinion() {
-        context.subject = null;
+    public void testListingRunHasNoOpinion() {
+        context.subject = new ListingSubject(Object.class);
         assertSame(MethodModel.NO_OPINION, model.apply(context, getOffer(new Value.Known(FIRST))));
     }
 

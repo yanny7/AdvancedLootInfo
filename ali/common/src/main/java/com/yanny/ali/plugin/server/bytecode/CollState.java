@@ -5,13 +5,10 @@ import org.jetbrains.annotations.Nullable;
 
 final class CollState {
     int removals;
-    @Nullable
-    int[] randomIndexSet;
+    int @Nullable[] randomIndexSet;
     @Nullable
     Value.Draws shuffled;
     @Nullable
     NumberExpr drawCount;
     boolean pool;
-    @Nullable
-    Value.Offers offers;
 }

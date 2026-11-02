@@ -20,19 +20,17 @@ final class PickModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderSubject subject = (TraderSubject) context.subject();
-
-        if (subject == null) {
+        if (!(context.subject() instanceof TraderSubject subject)) {
             return NO_OPINION;
         }
         if (RuntimeNames.is(RuntimeNames.GET_OFFER, insn)) {
             if (args.getFirst() instanceof Value.Choice choice && isPick(context, choice) && choice.options().stream().allMatch(VillagerTrade.class::isInstance)) {
-                return new Value.Pick(List.copyOf(choice.options()), choice.draw(), context.poolKey(choice.options()));
+                return new Value.Pick(List.copyOf(choice.options()), choice.draw(), subject.poolKey(choice.options()));
             }
             if (args.getFirst() instanceof Value.Known(VillagerTrade listing)) {
-                Object source = context.listingSource(listing);
+                Object source = subject.listingSource(listing);
 
-                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? context.levelKey(source) : null);
+                return new Value.Pick(List.of(listing), source != null ? source : listing, source != null ? subject.levelKey(source) : null);
             }
         }
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Choice choice && isPick(context, choice)
@@ -40,18 +38,18 @@ final class PickModel implements MethodModel {
             List<Object> bound = bound(context, subject, insn, args.subList(1, args.size()), call.loader());
 
             if (bound != null) {
-                List<Object> listings = choice.options().stream().<Object>map((element) -> context.boundOffer(element, insn, bound)).toList();
+                List<Object> listings = choice.options().stream().<Object>map((element) -> subject.boundOffer(element, insn, bound)).toList();
 
-                return new Value.Pick(listings, choice.draw(), context.poolKey(choice.options()));
+                return new Value.Pick(listings, choice.draw(), subject.poolKey(choice.options()));
             }
         }
         if (insn.getOpcode() != Opcodes.INVOKESTATIC && args.getFirst() instanceof Value.Known(Object value) && value != null && TradeTypes.isModType(value.getClass())
                 && returnsOffer(insn, call.loader())) {
-            Object source = context.listingSource(value);
+            Object source = subject.listingSource(value);
             List<Object> bound = source != null ? bound(context, subject, insn, args.subList(1, args.size()), call.loader()) : null;
 
             if (bound != null) {
-                return new Value.Pick(List.of(context.boundOffer(value, insn, bound)), source, context.levelKey(source));
+                return new Value.Pick(List.of(subject.boundOffer(value, insn, bound)), source, subject.levelKey(source));
             }
         }
 

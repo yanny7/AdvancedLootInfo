@@ -64,7 +64,8 @@ public class TraderModelTest {
     }
 
     @Test
-    public void testNoSubjectHasNoOpinion() {
+    public void testListingRunHasNoOpinion() {
+        context.subject = new ListingSubject(Object.class);
         assertSame(MethodModel.NO_OPINION, model.apply(context, call(INVOKEVIRTUAL, TRADER, RuntimeNames.GET_OFFERS.name(), RuntimeNames.GET_OFFERS.desc(), SELF)));
     }
 

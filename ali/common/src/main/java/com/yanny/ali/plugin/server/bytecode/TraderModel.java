@@ -18,10 +18,9 @@ final class TraderModel implements MethodModel {
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
         List<Value> args = call.args();
-        TraderSubject subject = (TraderSubject) context.subject();
         Value receiver = insn.getOpcode() == Opcodes.INVOKESTATIC ? null : args.getFirst();
 
-        if (subject != null && subject.isSelf(receiver)) {
+        if (context.subject() instanceof TraderSubject subject && subject.isSelf(receiver)) {
             if (!subject.ownGetOffers && RuntimeNames.is(RuntimeNames.GET_OFFERS, insn)) {
                 return subject.offers;
             }

@@ -5,7 +5,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Collection;
@@ -70,16 +69,12 @@ interface CallContext {
     @Nullable
     Value.Draws shuffled(Object object);
 
-    @Nullable
-    int[] randomIndexSet(Object object);
+    int @Nullable[] randomIndexSet(Object object);
 
     boolean isPool(@Nullable Object draw);
 
     @Nullable
     NumberExpr drawCount(@Nullable Object draw);
-
-    @Nullable
-    Value.Offers offers(Object collection);
 
     @Nullable
     Subject subject();
@@ -88,17 +83,6 @@ interface CallContext {
     Value selfField(String field);
 
     void putSelfField(String field, Value value);
-
-    @Nullable
-    Integer levelKey(Object listings);
-
-    @Nullable
-    Object listingSource(Object listing);
-
-    @Nullable
-    Integer poolKey(List<Object> listings);
-
-    BoundOffer boundOffer(Object element, MethodInsnNode call, List<Object> args);
 
     @Nullable
     RegistryAccess registries();

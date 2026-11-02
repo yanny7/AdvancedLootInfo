@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 final class Aggregation {
@@ -139,33 +140,34 @@ final class Aggregation {
                     List<Object> key = entry.getKey();
                     boolean single = entry.getValue() instanceof Value.Offers.Single;
                     List<Object> identity = List.of(single || !split.world().isEmpty() ? key : List.of(key.getFirst(), key.get(2)), repeated);
+                    List<Object> base = single ? key : List.of(key.getFirst(), key.get(2));
                     Bucket bucket = buckets.computeIfAbsent((Integer) key.getLast(), (l) -> new LinkedHashMap<>())
-                            .computeIfAbsent(identity, (i) -> new Bucket(entry.getValue(), repeated));
+                            .computeIfAbsent(identity, (i) -> new Bucket(entry.getValue(), base, repeated));
 
                     bucket.worlds.merge(split.world(), probability, Double::sum);
-
-                    if (!single) {
-                        bucket.counts.merge(count((Value) key.get(1)), probability, Double::sum);
-                    }
+                    bucket.counts.merge(single ? NumberExpr.constant(repeated) : count((Value) key.get(1)), probability, Double::sum);
                 }
             }
 
+            buckets.values().forEach(Aggregation::mergeRandomCounts);
             buckets.values().forEach(Aggregation::absorbRandomTrades);
 
             for (Map.Entry<Integer, Map<List<Object>, Bucket>> level : buckets.entrySet()) {
                 List<Bucket> levelBuckets = List.copyOf(level.getValue().values());
-                List<Double> chances = levelBuckets.stream().flatMap((b) -> b.worlds.values().stream()).toList();
-                double chance = chances.getFirst();
+                List<Double> chances = levelBuckets.stream().map(Aggregation::chance).toList();
 
-                if (chances.stream().anyMatch((c) -> Math.abs(c - chance) > 1e-6) || chance > 1 + 1e-6) {
+                if (chances.stream().anyMatch((c) -> c == null || c > 1 + 1e-6)) {
                     reason = reason != null ? reason : "several sets of trades of one level";
                     incomplete.add(level.getKey());
                     continue;
                 }
 
-                List<Group> groups = levelBuckets.stream().map((b) -> new Group(b.entry, b.times, PathCondition.of(List.copyOf(b.worlds.keySet())), count(b))).toList();
+                double first = chances.getFirst();
+                boolean shared = chances.stream().allMatch((c) -> Math.abs(c - first) <= 1e-6);
+                List<Group> groups = levelBuckets.stream().map((b) -> new Group(b.entry, b.times, PathCondition.of(List.copyOf(b.worlds.keySet())), count(b),
+                        shared ? 1 : (float) Math.min(1, Objects.requireNonNull(chance(b))))).toList();
 
-                levels.put(level.getKey(), new Level(groups, (float) Math.min(1, chance)));
+                levels.put(level.getKey(), new Level(groups, shared ? (float) Math.min(1, first) : 1, cases(levelBuckets, groups)));
             }
 
             if (levels.isEmpty() && reason == null
@@ -286,11 +288,8 @@ final class Aggregation {
         return probability;
     }
 
+    @NotNull
     private static NumberExpr count(Bucket bucket) {
-        if (bucket.counts.isEmpty()) {
-            return NumberExpr.constant(bucket.times);
-        }
-
         return NumberExpr.weighted(bucket.counts.entrySet().stream().map((e) -> new NumberExpr.WeightedEntry(e.getValue(), e.getKey())).toList());
     }
 
@@ -325,6 +324,59 @@ final class Aggregation {
         }
     }
 
+    @NotNull
+    private static List<List<Group>> cases(List<Bucket> buckets, List<Group> groups) {
+        Set<List<Decision>> worlds = new LinkedHashSet<>();
+        List<List<Group>> cases = new ArrayList<>();
+
+        buckets.forEach((b) -> worlds.addAll(b.worlds.keySet()));
+
+        for (List<Decision> world : worlds) {
+            List<Group> present = new ArrayList<>();
+
+            for (int i = 0; i < buckets.size(); i++) {
+                if (buckets.get(i).worlds.containsKey(world)) {
+                    present.add(groups.get(i));
+                }
+            }
+
+            cases.add(present);
+        }
+
+        return cases;
+    }
+
+    @Nullable
+    private static Double chance(Bucket bucket) {
+        double chance = bucket.worlds.values().iterator().next();
+
+        return bucket.worlds.values().stream().allMatch((c) -> Math.abs(c - chance) <= 1e-6) ? chance : null;
+    }
+
+    private static void mergeRandomCounts(Map<List<Object>, Bucket> buckets) {
+        Map<List<Object>, Bucket> merged = new LinkedHashMap<>();
+
+        for (Map.Entry<List<Object>, Bucket> entry : List.copyOf(buckets.entrySet())) {
+            Bucket bucket = entry.getValue();
+
+            if (chance(bucket) == null) {
+                continue;
+            }
+
+            Bucket target = merged.get(bucket.base);
+
+            if (target == null || !target.worlds.keySet().equals(bucket.worlds.keySet())) {
+                merged.putIfAbsent(bucket.base, bucket);
+                continue;
+            }
+
+            buckets.remove(entry.getKey());
+            bucket.worlds.forEach((world, probability) -> target.worlds.merge(world, probability, Double::sum));
+            bucket.counts.forEach((count, probability) -> target.counts.merge(count, probability, Double::sum));
+            target.times = Math.max(target.times, bucket.times);
+        }
+    }
+
     private static void absorbRandomTrades(Map<List<Object>, Bucket> buckets) {
         boolean merged = true;
 
@@ -342,7 +394,10 @@ final class Aggregation {
                         && known.equals(knownDecisions(e.getValue().worlds.keySet()))).map(Map.Entry::getKey).findFirst().orElse(null);
 
                 if (other != null) {
-                    buckets.remove(other).worlds.forEach((world, probability) -> random.worlds.merge(world, probability, Double::sum));
+                    Bucket absorbed = buckets.remove(other);
+
+                    absorbed.worlds.forEach((world, probability) -> random.worlds.merge(world, probability, Double::sum));
+                    absorbed.counts.forEach((count, probability) -> random.counts.merge(count, probability, Double::sum));
                     merged = true;
                     break;
                 }
@@ -415,7 +470,7 @@ final class Aggregation {
     }
 
     @NotNull
-    private static String describe(Value value) {
+    static String describe(Value value) {
         return switch (value) {
             case Value.Known(ItemStack stack) -> stack.isEmpty() ? "-" : TradeTypes.stackText(stack) + " x" + stack.getCount();
             case Value.Stack stack -> {
@@ -456,10 +511,41 @@ final class Aggregation {
     record Trader(Map<Integer, Level> levels, Set<Integer> incomplete, boolean unknownLevel, @Nullable String reason) {
     }
 
-    record Level(List<Group> groups, float chance) {
+    record Level(List<Group> groups, float chance, List<List<Group>> cases) {
+        NumberExpr offers() {
+            return offers(Group::count);
+        }
+
+        NumberExpr offers(Function<Group, NumberExpr> count) {
+            List<NumberExpr> totals = new ArrayList<>();
+
+            for (List<Group> present : cases) {
+                NumberExpr total = NumberExpr.constant(0);
+
+                for (Group group : present) {
+                    total = NumberExpr.add(total, offers(group, count.apply(group)));
+                }
+
+                if (!totals.contains(total)) {
+                    totals.add(total);
+                }
+            }
+
+            List<NumberExpr.Branch> branches = totals.subList(0, totals.size() - 1).stream().map((t) -> new NumberExpr.Branch(-1, t)).toList();
+
+            return NumberExpr.cond(branches, totals.getLast());
+        }
+
+        private static NumberExpr offers(Group group, NumberExpr count) {
+            if (group.chance() >= 1) {
+                return count;
+            }
+
+            return NumberExpr.weighted(List.of(new NumberExpr.WeightedEntry(group.chance(), count), new NumberExpr.WeightedEntry(1 - group.chance(), NumberExpr.constant(0))));
+        }
     }
 
-    record Group(Value.Offers.Entry entry, int times, PathCondition condition, NumberExpr count) {
+    record Group(Value.Offers.Entry entry, int times, PathCondition condition, NumberExpr count, float chance) {
     }
 
     private record Split(int level, List<Decision> world) {
@@ -467,12 +553,14 @@ final class Aggregation {
 
     private static final class Bucket {
         final Value.Offers.Entry entry;
-        final int times;
+        final List<Object> base;
+        int times;
         final Map<List<Decision>, Double> worlds = new LinkedHashMap<>();
         final Map<NumberExpr, Double> counts = new LinkedHashMap<>();
 
-        Bucket(Value.Offers.Entry entry, int times) {
+        Bucket(Value.Offers.Entry entry, List<Object> base, int times) {
             this.entry = entry;
+            this.base = base;
             this.times = times;
         }
     }

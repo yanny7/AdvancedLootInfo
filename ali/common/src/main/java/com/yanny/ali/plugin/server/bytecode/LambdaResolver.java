@@ -355,7 +355,7 @@ final class LambdaResolver {
                 StubResult result = key != null ? STUB_RESULTS.get(key) : null;
 
                 if (result == null) {
-                    result = interpretStub(candidate, captured, stubValues, owner.getClassLoader(), pick);
+                    result = interpretStub(owner, candidate, captured, stubValues, pick);
 
                     if (key != null) {
                         STUB_RESULTS.put(key, result);
@@ -403,13 +403,15 @@ final class LambdaResolver {
     }
 
     @NotNull
-    private static StubResult interpretStub(Handle candidate, List<Object> captured, List<Value> stubValues, ClassLoader loader, int pick) {
+    private static StubResult interpretStub(Class<?> owner, Handle candidate, List<Object> captured, List<Value> stubValues, int pick) {
         try {
             Interpreter interpreter = new Interpreter(Profile.TRADE, Interpreter.Mode.STUB, pick);
+
+            interpreter.subject = new ListingSubject(owner);
             List<Value> args = new ArrayList<>(captured.stream().map(interpreter.heap::wrap).toList());
 
             args.addAll(stubValues);
-            return new StubResult(interpreter.invokeHandle(candidate, args, loader, 0), null);
+            return new StubResult(interpreter.invokeHandle(candidate, args, owner.getClassLoader(), 0), null);
         } catch (Throwable e) {
             return new StubResult(null, e instanceof Fail fail ? fail.describe() : e.toString());
         }
