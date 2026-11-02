@@ -12,10 +12,20 @@ import java.util.Map;
 import java.util.Objects;
 
 final class LootTableModel implements MethodModel {
+    private static final Origin LOOT_TABLES = new Origin(null, "lootTables", List.of());
+
     @Override
     public Value apply(CallContext context, Call call) {
         MethodInsnNode insn = call.insn();
-        Value table = insn.getOpcode() != Opcodes.INVOKESTATIC ? table(call) : null;
+
+        if (insn.getOpcode() == Opcodes.INVOKESTATIC) {
+            return NO_OPINION;
+        }
+        if (CallSites.isLootTableLookup(insn, call.loader()) && CallSites.LOOT_TABLES.equals(traced(call.args().get(1)))) {
+            return Value.Unknown.of(Type.getReturnType(insn.desc), LOOT_TABLES);
+        }
+
+        Value table = table(call);
 
         if (table == null) {
             return NO_OPINION;
@@ -54,9 +64,21 @@ final class LootTableModel implements MethodModel {
         List<Value> args = call.args();
 
         for (CallSites.Sink sink : LootTableAnalysis.SINKS) {
-            if (sink.matches(call.insn(), call.loader()) && (sink.registry() == null || args.get(1) instanceof Value.Known(Object registry) && sink.registry().equals(registry))) {
+            if (sink.matches(call.insn(), call.loader()) && sink.accepts(traced(args.get(sink.qualifier() + 1)))) {
                 return args.get(sink.argument() + 1);
             }
+        }
+
+        return null;
+    }
+
+    @Nullable
+    private static Object traced(Value value) {
+        if (value instanceof Value.Known(Object known)) {
+            return new CallSites.Constant(known);
+        }
+        if (value instanceof Value.Unknown unknown && unknown.origin() == LOOT_TABLES) {
+            return CallSites.LootView.INSTANCE;
         }
 
         return null;

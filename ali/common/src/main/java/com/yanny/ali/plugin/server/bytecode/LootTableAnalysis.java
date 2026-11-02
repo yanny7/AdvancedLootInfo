@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server.bytecode;
 
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.entity.EntityType;
@@ -26,8 +25,11 @@ public final class LootTableAnalysis {
     private static final Map<EntityType<?>, List<Outcome>> DEFAULTS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Sites> SITES = new ConcurrentHashMap<>();
     static final List<CallSites.Sink> SINKS = List.of(
-            new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, ReloadableServerRegistries.Holder.class, 0, null),
-            new CallSites.Sink(RuntimeNames.HOLDER_GETTER_GET, HolderGetter.Provider.class, 1, Registries.LOOT_TABLE)
+            new CallSites.Sink(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, (call, loader) -> RuntimeNames.is(RuntimeNames.LOOT_DATA_GET_LOOT_TABLE, call)
+                    && CallSites.isA(ReloadableServerRegistries.Holder.class, call.owner, loader), 0, 0, null),
+            new CallSites.Sink(RuntimeNames.LOOT_TABLE_REGISTRY, (call, loader) -> RuntimeNames.is(RuntimeNames.HOLDER_GETTER_GET, call)
+                    && CallSites.isA(HolderGetter.Provider.class, call.owner, loader), 1, 0, CallSites.LOOT_TABLES),
+            new CallSites.Sink(RuntimeNames.LOOT_TABLE_REGISTRY, CallSites::isRegistryRead, 0, CallSites.RECEIVER, CallSites.LootView.INSTANCE)
     );
 
     private LootTableAnalysis() {}

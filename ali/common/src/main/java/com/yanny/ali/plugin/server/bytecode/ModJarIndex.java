@@ -65,7 +65,7 @@ final class ModJarIndex {
 
     @NotNull
     List<Caller> callers(CallSites.Sink sink) {
-        return sinkCallers.computeIfAbsent(sink, (s) -> find(s.method().name(), (call) -> s.matches(call, loader), (owner, method, call) -> s.source(owner, method, call, loader)));
+        return sinkCallers.computeIfAbsent(sink, (s) -> find(s.marker().name(), (call) -> s.matches(call, loader), (owner, method, call) -> s.source(owner, method, call, loader)));
     }
 
     @Nullable
