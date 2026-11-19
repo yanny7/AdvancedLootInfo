@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.bumblezone;
 
+import com.telepathicgrunt.the_bumblezone.loot.NewLootInjectorApplier;
 import com.telepathicgrunt.the_bumblezone.loot.conditions.EssenceOnlySpawn;
 import com.telepathicgrunt.the_bumblezone.loot.functions.DropContainerItems;
 import com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure;
@@ -41,6 +42,7 @@ public class BumblezoneCompat implements IModCompat {
         registry.registerPageResolver(DimensionFishingLootInjection.class, DimensionFishingLootInjection::test);
         registry.registerGlobalLootModifiers(BumblezoneCompat::getLootModifiers);
 
+        registry.registerLootTableReference(NewLootInjectorApplier.STINGER_DROP_LOOT_TABLE_RL);
         registry.registerEntityLootTable(BzEntities.COSMIC_CRYSTAL_ENTITY.get(), new ResourceLocation(BumblezoneLang.MOD_ID, "entities/cosmic_crystal"));
     }
 

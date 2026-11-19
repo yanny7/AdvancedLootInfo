@@ -14,7 +14,6 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
-import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
@@ -23,7 +22,6 @@ import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.glm.*;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
@@ -91,8 +89,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<ResourceLocation, List<EntityType<?>>> entityLootTables = register("entity loot tables", false, LinkedHashMap::new, ResourceLocation::toString, null);
 
     private final Set<String> loggedOnce = new HashSet<>();
-    private int computedItemListings;
-    private int uncomputedItemListings;
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -119,8 +115,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void clearData() {
         super.clearData();
         loggedOnce.clear();
-        computedItemListings = 0;
-        uncomputedItemListings = 0;
         NodeUtils.clearFailedOperations();
         lootTableMap.clear();
         ingredientUnwrappers.clear();
@@ -480,13 +474,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return result;
     }
 
-    public void logBytecodeStatistics() {
-        if (computedItemListings + uncomputedItemListings > 0) {
-            LOGGER.info("Auto-detected {} trade item listings from their bytecode, {} of them could not be auto-detected",
-                    computedItemListings + uncomputedItemListings, uncomputedItemListings);
-        }
-    }
-
     @NotNull
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
@@ -497,22 +484,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private IDataNode getFallbackItemListing(IServerUtils utils, VillagerTrades.ItemListing entry, TooltipNode condition) {
-        BytecodeInterpreter.ComputedListing computed = getConfiguration().codeAnalysis.tradeListings ? BytecodeInterpreter.computeItemListing(utils, entry, condition) : null;
-        String name = ManagedRegistry.classKeyName(BytecodeInterpreter.listingSource(entry).getClass());
-
-        if (computed != null) {
-            computedItemListings++;
-
-            if (computed.incomplete()) {
-                tradeItemListings.reportMissing(entry.getClass());
-            } else {
-                tradeItemListings.reportAutoDetected(entry.getClass());
-            }
-
-            return computed.node();
-        }
-
-        uncomputedItemListings++;
         tradeItemListings.reportMissing(entry.getClass());
 
         try {
@@ -521,16 +492,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             MerchantOffer offer = entry.getOffer(null, null);
 
             if (offer != null) {
-                String message = "Using MerchantOffer fallback for trade item listing " + name + ", reported values can be inaccurate";
+                String message = "Using MerchantOffer fallback for trade item listing " + ManagedRegistry.classKeyName(entry.getClass()) + ", reported values can be inaccurate";
 
                 if (loggedOnce.add(message)) {
                     LOGGER.info(message);
                 }
 
-                return TradeUtils.getNode(utils, offer, TooltipBuilder.array((b) -> {
-                    b.add(condition);
-                    b.add(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.ROLLED_TRADE.singular())).build());
-                }).build());
+                return TradeUtils.getNode(utils, offer, condition);
             }
         } catch (Throwable ignored) {}
 
@@ -643,16 +611,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public TradeNode parseTrade(ResourceLocation traderId, Trades trades) {
         return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
-    }
-
-    public TradeNode parseTrade(EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
-        TradeNode node = new TradeNode(this, entityType, guardedLevels(levels));
-
-        if (incomplete && node.nodes().isEmpty()) {
-            node.addChildren(new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.UNKNOWN_TRADES.singular())).build()));
-        }
-
-        return node;
     }
 
     @NotNull

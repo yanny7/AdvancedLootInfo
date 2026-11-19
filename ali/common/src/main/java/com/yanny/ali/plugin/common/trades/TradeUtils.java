@@ -42,18 +42,14 @@ public class TradeUtils {
     }
 
     public static Object listingKey(@Nullable VillagerTrades.ItemListing listing) {
-        return valueKey(listing);
-    }
-
-    public static Object valueKey(@Nullable Object value) {
         try {
-            Object key = structuralKey(value, new IdentityHashMap<>(), 0);
+            Object key = structuralKey(listing, new IdentityHashMap<>(), 0);
 
             // hashed here so a foreign hashCode that throws is caught, not inside the caller's HashSet
             Objects.hashCode(key);
             return key;
         } catch (Throwable e) {
-            return new Ref(value);
+            return new Ref(listing);
         }
     }
 
@@ -150,7 +146,6 @@ public class TradeUtils {
             return false;
         }
     }
-
     @NotNull
     public static IDataNode getSlotNode(IServerUtils utils, LootPoolEntryContainer entry) {
         List<TooltipNode> conditions = new ArrayList<>();

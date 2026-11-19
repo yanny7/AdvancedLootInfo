@@ -12,7 +12,6 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -125,10 +124,9 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
-        Object source = BytecodeInterpreter.listingSource(itemListing);
-        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.shortClassName(source.getClass())).add(CoreTooltipUtils.getClassTooltip(source.getClass()));
+        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.shortClassName(itemListing.getClass())).add(CoreTooltipUtils.getClassTooltip(itemListing.getClass()));
 
-        TooltipUtils.addObjectFields(utils, tooltip, source, source == itemListing ? VillagerTrades.ItemListing.class : Object.class);
+        TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
