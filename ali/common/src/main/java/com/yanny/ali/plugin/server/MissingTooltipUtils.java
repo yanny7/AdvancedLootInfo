@@ -22,7 +22,6 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.slot.SlotSource;
-import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -228,22 +227,6 @@ public class MissingTooltipUtils {
             TooltipUtils.addObjectFields(utils, tooltip, slotSource, SlotSource.class);
         }
 
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
-    }
-
-    @NotNull
-    public static TooltipBuilder getMissingVillagerTradeTooltip(IServerUtils utils, VillagerTrade villagerTrade) {
-        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.shortClassName(villagerTrade.getClass())).add(CoreTooltipUtils.getClassTooltip(villagerTrade.getClass()));
-
-        TooltipUtils.addObjectFields(utils, tooltip, villagerTrade, VillagerTrade.class);
-        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
-    }
-
-    @NotNull
-    public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, Object source) {
-        TooltipBuilder tooltip = TooltipBuilder.value(ManagedRegistry.shortClassName(source.getClass())).add(CoreTooltipUtils.getClassTooltip(source.getClass()));
-
-        TooltipUtils.addObjectFields(utils, tooltip, source, Object.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 

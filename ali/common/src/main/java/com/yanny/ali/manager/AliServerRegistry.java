@@ -16,7 +16,6 @@ import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
-import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
@@ -668,16 +667,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public TradeNode parseTrade(Identifier traderId, Trades trades) {
         return new TradeNode(this, trades.entityType(), getTradeLevels(traderId, trades));
-    }
-
-    public TradeNode parseTrade(EntityType<?> entityType, Int2ObjectMap<TradeLevel> levels, boolean incomplete) {
-        TradeNode node = new TradeNode(this, entityType, guardedLevels(levels));
-
-        if (incomplete && node.nodes().isEmpty()) {
-            node.addChildren(new MissingNode(TooltipBuilder.error(TooltipBuilder.translate(Lang.Description.UNKNOWN_TRADES.singular())).build()));
-        }
-
-        return node;
     }
 
     @NotNull
