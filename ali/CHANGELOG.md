@@ -2,9 +2,7 @@
 
 - Server log names trading mobs whose trades ALI cannot show
 - Fixed tooltips of unsupported trades showing a name that changes on every server start
-- Trades no mod adds support for show their random prices and amounts as ranges instead of being unsupported
 - Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
-- Unsupported trading mods shows trades that can be auto-detected from the mod's code
 - Fixed missing trades and loot that other mods prepare only once the server has started
 - Fixed trade slots of a block tag showing nothing, like Charm's trades with ALI Compat
 - Trade added several times to the same trader level shows once
@@ -15,12 +13,8 @@
 - Fixed recipe viewer waiting a minute and a half and logging an error on servers without ALI
 - Added plugin API to assign loot tables to entities whose table ID names no entity
 - Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
-- Loot of mob variants and of drops on special events shows under the mob without configuration
-- Mobs that drop one of several loot tables at random show all of them with their chances
-- Loot pages of mob variants show the mob in that variant, also for mods without ALI support
 - Info icon of a mob's extra loot pages says why the loot table belongs to the mob and names the table
 - Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
-- Added `codeAnalysis` configuration to turn off static code analysis of mob loot tables, mob variants, traders and trades from mod code
 
 ## [2.5.0]
 
