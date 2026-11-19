@@ -19,25 +19,6 @@ import com.yanny.ali.plugin.glm.ParamState;
 import com.yanny.ali.plugin.glm.Verdict;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
-import com.yanny.ali.plugin.server.bytecode.AggregationTest;
-import com.yanny.ali.plugin.server.bytecode.CollectionsModelTest;
-import com.yanny.ali.plugin.server.bytecode.ComponentModelTest;
-import com.yanny.ali.plugin.server.bytecode.FieldModelTest;
-import com.yanny.ali.plugin.server.bytecode.IndyTest;
-import com.yanny.ali.plugin.server.bytecode.LoggerModelTest;
-import com.yanny.ali.plugin.server.bytecode.ItemCostModelTest;
-import com.yanny.ali.plugin.server.bytecode.ItemStackModelTest;
-import com.yanny.ali.plugin.server.bytecode.MapItemModelTest;
-import com.yanny.ali.plugin.server.bytecode.MapModelTest;
-import com.yanny.ali.plugin.server.bytecode.MerchantOfferModelTest;
-import com.yanny.ali.plugin.server.bytecode.NumberModelTest;
-import com.yanny.ali.plugin.server.bytecode.OffersModelTest;
-import com.yanny.ali.plugin.server.bytecode.OptionalModelTest;
-import com.yanny.ali.plugin.server.bytecode.PickModelTest;
-import com.yanny.ali.plugin.server.bytecode.RandomModelTest;
-import com.yanny.ali.plugin.server.bytecode.SelfModelTest;
-import com.yanny.ali.plugin.server.bytecode.TraderModelTest;
-import com.yanny.ali.plugin.server.bytecode.WorldModelTest;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
@@ -121,29 +102,9 @@ import static org.mockito.Mockito.mock;
         ServerUtilsTest.class,
         SlotSourceTooltipTest.class,
         GlobalLootModifierTest.class,
-        BytecodeInterpreterTest.class,
         ConfigTest.class,
         ValueCharacterizationTest.class,
-        EntryWeightTest.class,
-        LoggerModelTest.class,
-        OptionalModelTest.class,
-        MapItemModelTest.class,
-        RandomModelTest.class,
-        ItemStackModelTest.class,
-        ItemCostModelTest.class,
-        MerchantOfferModelTest.class,
-        CollectionsModelTest.class,
-        MapModelTest.class,
-        TraderModelTest.class,
-        SelfModelTest.class,
-        WorldModelTest.class,
-        NumberModelTest.class,
-        ComponentModelTest.class,
-        FieldModelTest.class,
-        IndyTest.class,
-        PickModelTest.class,
-        OffersModelTest.class,
-        AggregationTest.class
+        EntryWeightTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

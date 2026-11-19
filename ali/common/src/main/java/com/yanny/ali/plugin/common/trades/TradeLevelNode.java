@@ -54,11 +54,10 @@ public class TradeLevelNode extends ListNode {
     }
 
     public TradeLevelNode(int level, TradeLevelInfo levelInfo, List<IDataNode> trades) {
-        NumberExpr tradeCount = trades.stream().map((t) -> t instanceof TradeGroupNode group ? group.capacity() : NumberExpr.constant(1))
-                .reduce(NumberExpr.constant(0), NumberExpr::add);
+        int tradeCount = trades.stream().mapToInt((t) -> t instanceof TradeGroupNode group ? group.nodes().size() : 1).sum();
 
         this.level = level;
-        this.selectionCount = NumberExpr.min(levelInfo.offers(), tradeCount);
+        this.selectionCount = NumberExpr.min(levelInfo.offers(), NumberExpr.constant(tradeCount));
         this.chance = levelInfo.chance();
         trades.forEach(this::addChildren);
         tooltip = getTooltip(level, selectionCount, chance);
