@@ -1,5 +1,7 @@
 package com.yanny.alicompat.compat.farlanders;
 
+import com.legacy.farlanders.registry.FLEntityTypes;
+import com.legacy.farlanders.registry.FLLootTables;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.TradeLevel;
 import com.yanny.alicompat.IModCompat;
@@ -26,6 +28,9 @@ public class FarlandersCompat implements IModCompat {
         registerTrader(registry, "farlander", "farlander", 5);
         registerTrader(registry, "elder_farlander", "elder", 5);
         registerTrader(registry, "wanderer", "wanderer", 1);
+
+        registry.registerEntityLootTable(FLEntityTypes.MYSTIC_ENDERMAN, FLLootTables.ENDERMAN_WANDS.identifier());
+        registry.registerEntityLootTable(FLEntityTypes.LOOTER, FLLootTables.ENDERMAN_WANDS.identifier());
     }
 
     private static void registerTrader(IServerRegistry registry, String name, String tradeSetPrefix, int levels) {

@@ -16,16 +16,15 @@ import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
 import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
+import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
-import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.common.trades.TradeGroupNode;
 import com.yanny.ali.plugin.common.trades.TradeLevelNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.*;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.predicates.*;
@@ -116,6 +115,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerCommon(ICommonRegistry registry) {
         LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
+        registry.registerEntityVariants(EntityTypes.SHEEP, EntityUtils::getSheepVariants);
     }
 
     @Override
@@ -137,7 +137,6 @@ public class Plugin implements IPlugin {
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
         registry.registerWidget(TradeLevelNode.ID, TradeLevelWidget::new);
-        registry.registerWidget(SubTradesNode.ID, SubTradesWidget::new);
         registry.registerWidget(TradeGroupNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
@@ -158,7 +157,6 @@ public class Plugin implements IPlugin {
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
-        registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
         registry.registerDataNode(TradeGroupNode.ID, TradeGroupNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
     }
@@ -171,7 +169,6 @@ public class Plugin implements IPlugin {
         EnumTypes.TRANSLATED_ENUMS.forEach((type, owner) -> registry.registerEnumTranslation(type, Utils.MOD_ID, owner));
 
         registry.registerCacheCleaner(GlobalLootModifierUtils::clearCaches);
-        registry.registerCacheCleaner(BytecodeInterpreter::clearCaches);
 
         registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
         registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform, Plugin::convertIntUniform);
