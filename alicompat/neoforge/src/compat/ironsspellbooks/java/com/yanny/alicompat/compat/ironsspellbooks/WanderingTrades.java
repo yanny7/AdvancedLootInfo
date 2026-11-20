@@ -12,7 +12,6 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
-import com.yanny.ali.plugin.server.bytecode.BytecodeInterpreter;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.accessor.PluginUtils;
 import io.redspace.ironsspellbooks.api.spells.SpellRarity;
@@ -26,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -67,9 +67,16 @@ public class WanderingTrades {
 
     @NotNull
     private static IDataNode offerNode(IServerUtils utils, AdditionalWanderingTrades.SimpleTrade listing, TooltipNode condition) {
-        IDataNode node = BytecodeInterpreter.getItemListing(utils, listing, condition);
+        try {
+            //noinspection DataFlowIssue
+            MerchantOffer offer = listing.getOffer(null, null);
 
-        return node != null ? node : new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, listing).build());
+            if (offer != null) {
+                return TradeUtils.getNode(utils, offer, condition);
+            }
+        } catch (Throwable ignored) {}
+
+        return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, listing).build());
     }
 
     @NotNull

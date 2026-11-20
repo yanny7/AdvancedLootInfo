@@ -263,7 +263,15 @@ class CurseForge:
         return [self.mod_cache[project_id] for project_id in project_ids if project_id in self.mod_cache]
 
     def pick_file(self, project_id: int):
-        return self.pick_tagged_file(project_id) or self.pick_untagged_file(project_id)
+        return self.pick_tagged_file(project_id) or self.pick_untagged_file(project_id) or self.pick_snapshot_file(project_id)
+
+    def pick_snapshot_file(self, project_id: int):
+        params = {
+            "gameVersion": f"{self.minecraft_version}-snapshot",
+            "modLoaderType": MOD_LOADER_TYPE[self.loader],
+            "pageSize": 50,
+        }
+        return self.newest(("snapshot", project_id), f"/mods/{project_id}/files", params)
 
     def pick_tagged_file(self, project_id: int):
         params = {

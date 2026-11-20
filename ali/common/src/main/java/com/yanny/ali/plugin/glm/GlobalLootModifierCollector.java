@@ -2,12 +2,10 @@ package com.yanny.ali.plugin.glm;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.platform.Services;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -39,7 +37,7 @@ public final class GlobalLootModifierCollector {
                     Optional<IPageLootModifier> lootModifier = getter.apply(utils, globalLootModifier);
 
                     if (lootModifier.isPresent()) {
-                        lootModifiers.add(new Collected(lootModifier.get(), globalLootModifier));
+                        lootModifiers.add(lootModifier.get());
                     } else {
                         LOGGER.warn("No loot modifier produced for GLM {}", wrapper.getName());
                     }
@@ -49,7 +47,7 @@ public final class GlobalLootModifierCollector {
                     missingGLM.add(globalLootModifier.getClass());
 
                     if (modifier.isPresent()) {
-                        lootModifiers.add(new Collected(modifier.get(), globalLootModifier));
+                        lootModifiers.add(modifier.get());
                     } else {
                         LOGGER.warn("No loot modifier produced for auto GLM {}", wrapper.getName());
                     }
@@ -64,12 +62,6 @@ public final class GlobalLootModifierCollector {
         return lootModifiers;
     }
 
-    @Unmodifiable
-    @NotNull
-    public static List<Object> getGlobalLootModifiers(Collection<IPageLootModifier> modifiers) {
-        return modifiers.stream().filter(Collected.class::isInstance).map((m) -> ((Collected) m).globalLootModifier()).toList();
-    }
-
     @NotNull
     private static IGlobalLootModifierPlugin.IRegistry getRegistry(Map<Class<?>, BiFunction<IServerUtils, Object, Optional<IPageLootModifier>>> glmMap) {
         return new IGlobalLootModifierPlugin.IRegistry() {
@@ -82,23 +74,4 @@ public final class GlobalLootModifierCollector {
     }
 
     private GlobalLootModifierCollector() {}
-
-    private record Collected(IPageLootModifier delegate, Object globalLootModifier) implements IPageLootModifier {
-        @NotNull
-        @Override
-        public PageMatch test(LootPage page) {
-            return delegate.test(page);
-        }
-
-        @NotNull
-        @Override
-        public List<IOperation> getOperations(LootPage page, PageMatch match) {
-            return delegate.getOperations(page, match);
-        }
-
-        @Override
-        public boolean isAutoDetected() {
-            return delegate.isAutoDetected();
-        }
-    }
 }
