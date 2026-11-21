@@ -1,6 +1,7 @@
 {
   "required": true,
   "package": "com.yanny.awi.emi.mixin",
+  "plugin": "com.yanny.awi.emi.EmiMixinPlugin",
   "mixins": [
     "MixinRecipeScreen"
   ],
