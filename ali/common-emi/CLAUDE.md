@@ -10,7 +10,7 @@ Every viewer integration, in both mods, renders through `com.yanny.aci.api.IWidg
 
 ## Package layout (same shape in all six modules)
 
-`<mod>.<viewer>.compatibility.<Viewer>Compatibility` (entry point) + `<mod>.<viewer>.compatibility.<viewer>.*` (viewer-specific adapters). EMI additionally has a `mixin` package.
+`<mod>.<viewer>.compatibility.<Viewer>Compatibility` (entry point) + `<mod>.<viewer>.compatibility.<viewer>.*` (viewer-specific adapters). EMI additionally has a `mixin` package, whose config (`<mod>.emi.mixins.json`) is registered on every loader that builds the module, whether EMI is installed or not; its `plugin`, `<mod>.emi.EmiMixinPlugin`, rejects every mixin when EMI's `dev.emi.emi.api.EmiPlugin` is not on the classpath, which Mixin asks before it looks up the target, so a game without EMI logs no `@Mixin target ... was not found` warning. The check names a class of the mod rather than each mixin's target, so a target that disappears from a newer EMI still warns.
 
 - **EMI** (this module): `EmiCompatibility` (entry point), `Emi{Base,Block,Entity,Gameplay,Trade}Loot` (extend `EmiRecipe`, one per ALI loot-category family — see `ali/CLAUDE.md`'s `compatibility/common` section for the underlying `IType` DTOs), `EmiWidgetWrapper extends Widget`, `EmiScrollWidget`, `Emi{Block,Loot}SlotWidget`, `IMouseEvents` (shared mixin hook interface), `mixin.MixinRecipeScreen`.
 - **JEI** (`ali/common-jei`): `Jei{Base,Block,Entity,Gameplay,Trade}Loot` implement `IRecipeCategory` directly (category and recipe rendering aren't split into separate classes), `JeiWidgetWrapper implements IRecipeWidget`, `JeiScrollWidget`, `Jei{Block,Loot}SlotWidget`, `RecipeHolder` (thin recipe-holder wrapper JEI's API requires, which EMI doesn't need).
