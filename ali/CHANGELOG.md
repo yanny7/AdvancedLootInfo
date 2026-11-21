@@ -15,6 +15,7 @@
 - Added plugin API to mark loot tables rolled by global loot modifiers or mod code, so they cost no entity lookup
 - Info icon of a mob's extra loot pages says why the loot table belongs to the mob and names the table
 - Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
+- Faster server start in modpacks with many global loot modifiers
 
 ## [2.5.0]
 

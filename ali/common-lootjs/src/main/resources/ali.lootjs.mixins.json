@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.yanny.ali.lootjs.mixin",
+  "plugin": "com.yanny.ali.lootjs.LootJsMixinPlugin",
   "mixins": [
     "MixinCustomParamPredicate",
     "MixinDropExperienceAction",
