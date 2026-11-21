@@ -219,7 +219,7 @@ public class TooltipBuilder {
     public TooltipBuilder add(TooltipBuilder builder) {
         TooltipNode node = builder.build();
 
-        if (node != TooltipNode.empty()) {
+        if (!node.is(TooltipNode.FLAG_EMPTY)) {
             this.children.add(node);
         }
 
@@ -227,7 +227,7 @@ public class TooltipBuilder {
     }
 
     public TooltipBuilder add(TooltipNode node) {
-        if (node != TooltipNode.empty()) {
+        if (!node.is(TooltipNode.FLAG_EMPTY)) {
             this.children.add(node);
         }
 

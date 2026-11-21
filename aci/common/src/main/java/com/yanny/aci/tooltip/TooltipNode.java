@@ -240,7 +240,7 @@ public class TooltipNode {
         }
     }
 
-    private boolean is(short flag) {
+    boolean is(short flag) {
         return (flags & flag) != 0;
     }
 
