@@ -1,11 +1,12 @@
 ## []
 
-- Iron's Spellbooks wandering trades with a random price show the price range instead of one random price
-- Ars Nouveau dungeon loot shows exact chances and count ranges instead of estimated ones
+- Iron's Spellbooks wandering trades with a random price show as unsupported instead of one random price
+- Ars Nouveau dungeon loot with a random count, and its random ritual tablet, shows as unsupported instead of estimated chances
 - Fixed an Ars Nouveau error hiding a whole trade level of the Shards trader
 - Fixed a stray colon after loot functions that carry no values on NeoForge (Aether, Applied Cooking, Bumblezone, ExtraStorage, Farmer's Delight, Immersive Engineering, Refined Storage, Sophisticated Backpacks and Sophisticated Storage)
+- Grimoire of Gaia dwarf and minotaurus variants, mimic chests, Twilight Forest Questing Ram and Death Tome, and Iron's Spellbooks bosses per-player and ominous loot show under their mob instead of gameplay loot
+- Faster server start with Grimoire of Gaia, Twilight Forest, Iron's Spellbooks and Bumblezone
 - Bumblezone on Fabric shows the stinger drops it adds to bees and the fishing loot of its dimension
-- Twilight Forest Questing Ram and Death Tome loot on Fabric shows under their mob instead of gameplay loot
 
 ## [1.3.0]
 

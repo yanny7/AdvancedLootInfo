@@ -8,7 +8,6 @@ import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.ConfigUtils;
-import com.yanny.ali.plugin.common.EntityUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -41,9 +40,23 @@ public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements 
 
         if (factory.isEmpty()) {
             factory = Optional.of((l) -> {
-                Entity entity = EntityUtils.createEntity(type, l);
+                Entity entity = type.create(l);
 
-                return entity != null ? Collections.singletonList(entity) : Collections.emptyList();
+                if (entity != null) {
+                    // some renderers derive their state from position/rotation, make sure it is not left at NaN/uninitialized values
+                    try {
+                        entity.moveTo(0, 0, 0);
+                        entity.setYRot(0);
+                        entity.setXRot(0);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to initialize entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage(), e);
+                    }
+
+                    return Collections.singletonList(entity);
+                } else {
+                    LOGGER.warn("Failed to create entity: {} (NULL)", type);
+                    return Collections.emptyList();
+                }
             });
         }
 
