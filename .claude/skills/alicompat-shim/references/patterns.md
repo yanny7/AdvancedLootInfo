@@ -59,22 +59,21 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 
 ## Villager trades
 
+The shims of this tree that are dormant here (`morejs`, `ribbits`, `charm`, `sawmill`, `ironsspellbooks`, `grimoireofgaia`, `farlanders`, `goblintraders`, `arsnouveau`) are written against a lower branch's listing API: their slot and number shapes still apply, their registrations do not.
+
 | Shape | Example |
 |---|---|
-| Target is an `ItemListing`, accessor reads its fields | `morejs` → `PluginUtils.registerItemListing(registry, SimpleTrade.class, SimpleTradeAccessor.class)`, five of them |
-| Package-private subclasses of one listing | `grimoireofgaia` → `ItemsToItemsAccessor` over the base, the subclasses registered via `Class.forName` in `registerItemsToItems` and listed in `scan_ignore.json` |
-| Accessor *is* the listing | `ribbits` → `PluginUtils.registerSelfItemListing(registry, ItemsForAmethystsAccessor.class)` — the accessor implements `VillagerTrades.ItemListing` and `IItemListing` |
-| Trader with a static `ItemListing[]` | `farlanders` → `registerTrades(id, () -> FarlanderTrades.FARLANDER_TRADES, (level) -> new TradeLevelInfo(NumberExpr.constant(2)))` |
-| Same, a different pick count per level | `grimoireofgaia` → `(level) -> new TradeLevelInfo(NumberExpr.constant(level == 1 ? 10 : 5))`, the counts taken from each entity's `updateTrades` |
-| Trader configured by the mod | `goblintraders` → `getLevelInfo` reads `getMinValue()`/`getMaxValue()`/`includeChance()` into `TradeLevelInfo(NumberExpr.uniformInt(min, max), chance)` — the entity rolls `min + nextInt(max - min + 1)` |
-| Trader with no `ItemListing[]` at all | `ironsspellbooks` → `WizardTrades` mirrors the target's `getOffers()` by hand with shim-owned listings; each RNG gate becomes its own level (`new TradeLevelInfo(NumberExpr.constant(1), 0.25f)`) |
-| Listing whose data is captured in a lambda | `ironsspellbooks` → `SimpleTradeAccessor` and the notes in `WanderingTrades`; uses `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances`, which matches **by type** |
-| Slot picked at runtime from a set — cycling options | `charm` → `SaplingsForEmeraldsAccessor`, `TallFlowerForEmeraldsAccessor`, `AnvilRepairAccessor` (`TradeUtils.getItemSlotNode(stacks, count, tooltip)`); `morejs` → `PotionTradeAccessor` (one option per allowed potion) |
-| Two slots varying together | `charm` → `BarkForLogsAccessor` (paired `LOGS`/`WOODS` lists); `sawmill` → `SawmillCompat.getLogStrippingListingNode` (log and stripped log from one filtered wood-type list, read from the mod's private `TYPE_MAP`) |
-| Options with different counts | `ironsspellbooks` → `WizardTrades.inkBuy` — `TradeUtils.getSlotNode(List.of(getItemSlotNode(…), getItemSlotNode(…)))` |
-| Slot from a loot table or loot entry | `ironsspellbooks` → `WanderingTrades.lootTableNode` (`TradeUtils.getSlotNode(utils, NestedLootTable.lootTableReference(id).build())`); `villagerconfig` → `BehaviorTradeAccessor` (entries as `cost_a`/`cost_b`/`result`) |
-| Mod replaces a trader's trades | `villagerconfig` → `VillagerConfigCompat.getTradeLevels` via `registerTradeOverride`, `null` for traders without data |
-| Profession trades added as hidden lambdas (no class to register) | `arsnouveau` → `ShardsTraderTrades`: `registerTradeOverride` re-renders the profession's own `VillagerTrades.TRADES` levels through `getItemListing`, replacing only the lambda whose rolled result comes from a random pool (`RARE_LOOT`) with a cycling result slot |
+| Trader outside the profession registry, part code and part trade sets | `occultism` → `OccultismCompat.getWonderingTraderLevels`: `registerTrades` with `TradeLevel.OfSet` for the vanilla sets it rolls beside `OfTrades` levels for its own pools |
+| Mod replaces a trader's trades with its data | `villagerconfig` → `VillagerConfigCompat.getTradeLevels` via `registerTradeOverride`, `null` for traders without data |
+| Mod draws offers from its own trade objects | `villagertradingplus` → `VillagerTradingPlusTrades`: `registerTradeOverride` answers only while the mod's pool or price config differs from vanilla, mixes the kept vanilla set's trades (`TradeUtils.getNode`) with its own, and dispatches each `TradeFactory` class to an accessor through a map filled from the accessors' `@ClassAccessor` strings |
+| Pick count derived from the vanilla set | `villagertradingplus` → `getVillagerOffers`: `max(0, add(convertContextInt(set.amount()), constant(configured - 2)))`, as the mod computes it |
+| One trade picked by weight | `villagertradingplus` → `WeightedPoolTradeOfferAccessor`: `TradeGroupNode(NumberExpr.constant(1), …)` with each entry's chance in its tooltip |
+| Listing whose data is captured in a lambda | `com.yanny.ali.plugin.common.ReflectionUtils.getCapturedInstances`, which matches **by type**; the notes in dormant `ironsspellbooks` → `WanderingTrades` |
+| Slot picked at runtime from a set — cycling options | `villagertradingplus` → `SellPotionTradeOfferAccessor` (one option per potion of the trade's tag, `TradeUtils.getItemSlotNode(stacks, count, tooltip)`) |
+| Two slots varying together | dormant `charm` → `BarkForLogsAccessor` (paired `LOGS`/`WOODS` lists); dormant `sawmill` → `SawmillCompat.getLogStrippingListingNode` |
+| Options with different counts | dormant `ironsspellbooks` → `WizardTrades.inkBuy` — `TradeUtils.getSlotNode(List.of(getItemSlotNode(…), getItemSlotNode(…)))` |
+| Slot from a loot entry | `villagerconfig` → `BehaviorTradeAccessor` (entries as `cost_a`/`cost_b`/`result`) |
+| Item function on the result | `villagertradingplus` → `SellDyedArmorTradeOfferAccessor`, `SellStructureMapTradeOfferAccessor`: `utils.getValueTooltip(utils, NodeUtils.unwrapFunctions(utils, Optional.of(holder)))` as the output modifier |
 | Separately picked pools within one level | `villagerconfig` → `TradeTierAccessor` — `TradeLevel.OfTrades` of `TradeGroupNode`s, level pick count summed over the groups, one pool listed flat |
 
 ## Numbers (Step 2b)
@@ -94,11 +93,10 @@ nothing at all, since conditions ALI can run decide themselves. See `alicompat/C
 
 ## Whole shims worth reading end to end
 
-- `farmersdelight` — two functions, five GLMs and one listing, in both loaders. The smallest shim
+- `farmersdelight` — two functions, a condition and three consume-effect tooltips on Fabric. The smallest shim
   that shows more than one hook kind.
-- `twilightforest` — conditions, a function, an item-stack modifier, GLMs, a page resolver and entity
-  variants in one file.
-- `ironsspellbooks` — the trade-heavy end: custom traders, lambda captures, a value tooltip, a GLM.
+- `villagertradingplus` — a mod that draws trades from its own trade objects: a trade override that answers only
+  while the mod changes something, the shim's own dispatch over the mod's classes, a weighted pool as a trade group.
 - `villagerconfig` — a mod that replaces whole traders from datapack data: trade override, trade groups,
   loot-entry slots, its own functions and number providers.
 
