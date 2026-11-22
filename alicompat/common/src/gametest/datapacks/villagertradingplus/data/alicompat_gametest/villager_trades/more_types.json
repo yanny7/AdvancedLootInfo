@@ -58,6 +58,22 @@
         "buy": { "item": "minecraft:compass", "count": 1 },
         "max_uses": 12,
         "villager_experience": 5
+      },
+      {
+        "type": "villagertradingplus:sell_potion",
+        "sell": { "item": "minecraft:splash_potion", "count": 1 },
+        "convertible": { "item": "minecraft:glass_bottle", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 2 },
+        "potions": "#minecraft:tradeable",
+        "max_uses": 12,
+        "villager_experience": 5
+      },
+      {
+        "type": "villagertradingplus:sell_dyed_armor",
+        "sell": { "item": "minecraft:leather_chestplate", "count": 1 },
+        "priceIn": { "item": "minecraft:emerald", "count": 7 },
+        "max_uses": 12,
+        "villager_experience": 10
       }
     ]
   }

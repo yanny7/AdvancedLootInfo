@@ -1,32 +1,25 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
+import com.lion.villagertradingplus.tradeoffers.TradeFactory;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
-import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IItemListing;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.chat.Component;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
-@ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellStructureMapTradeOffer$Factory")
-public class SellStructureMapTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
-    private static final int SEARCH_RADIUS = 100;
-    private static final int ZOOM = 2;
+import java.util.Optional;
 
+@ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellStructureMapTradeOffer$Factory")
+public class SellStructureMapTradeOfferAccessor extends BaseAccessor<TradeFactory> implements ITradeFactoryAccessor {
     @FieldAccessor
     private ItemStack currency;
 
@@ -34,10 +27,10 @@ public class SellStructureMapTradeOfferAccessor extends BaseAccessor<VillagerTra
     private ItemStack buy;
 
     @FieldAccessor
-    private String nameKey;
+    private ItemStackTemplate gives;
 
     @FieldAccessor
-    private TagKey<Structure> structure;
+    private Holder<LootItemFunction> modifier;
 
     @FieldAccessor
     private int maxUses;
@@ -48,14 +41,14 @@ public class SellStructureMapTradeOfferAccessor extends BaseAccessor<VillagerTra
     @FieldAccessor
     private float multiplier;
 
-    public SellStructureMapTradeOfferAccessor(VillagerTrades.ItemListing parent) {
+    public SellStructureMapTradeOfferAccessor(TradeFactory parent) {
         super(parent);
     }
 
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        return new ItemsToItemsNode(
+        return VillagerTradingPlusTrades.getTradeNode(
                 utils,
                 Either.left(currency),
                 NumberExpr.constant(currency.getCount()),
@@ -63,30 +56,13 @@ public class SellStructureMapTradeOfferAccessor extends BaseAccessor<VillagerTra
                 Either.left(buy),
                 NumberExpr.constant(Math.max(1, buy.getCount())),
                 TooltipNode.empty(),
-                Either.left(getMapStack()),
-                NumberExpr.constant(1),
-                TooltipBuilder.array((b) -> {
-                    b.add(utils.getValueTooltip(utils, structure).build(Lang.Value.DESTINATION));
-                    b.add(utils.getValueTooltip(utils, MapDecorationTypes.RED_X).build(Lang.Value.MAP_DECORATION));
-                    b.add(utils.getValueTooltip(utils, SEARCH_RADIUS).build(Lang.Value.SEARCH_RADIUS));
-                    b.add(utils.getValueTooltip(utils, true).build(Lang.Value.SKIP_KNOWN_STRUCTURES));
-                    b.add(utils.getValueTooltip(utils, ZOOM).build(Lang.Value.ZOOM));
-                }).build(),
+                Either.left(gives.create()),
+                NumberExpr.constant(gives.count()),
+                utils.getValueTooltip(utils, NodeUtils.unwrapFunctions(utils, Optional.of(modifier))).build(),
                 maxUses,
                 experience,
                 multiplier,
                 conditions
         );
-    }
-
-    @NotNull
-    private ItemStack getMapStack() {
-        ItemStack stack = Items.FILLED_MAP.getDefaultInstance();
-
-        if (!nameKey.isEmpty()) {
-            stack.set(DataComponents.CUSTOM_NAME, Component.translatable(nameKey));
-        }
-
-        return stack;
     }
 }

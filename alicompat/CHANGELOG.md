@@ -1,3 +1,8 @@
+## []
+
+- Added Snow! Real Magic! support on Fabric
+- Added VillagerTradingPlus support
+
 ## [1.3.0]
 
 - Added VillagerConfig support

@@ -1,27 +1,25 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
+import com.lion.villagertradingplus.tradeoffers.TradeFactory;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IItemListing;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import org.jetbrains.annotations.NotNull;
 
 @ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellSpecificEnchantedBookTradeOffer$Factory")
-public class SellSpecificEnchantedBookTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
+public class SellSpecificEnchantedBookTradeOfferAccessor extends BaseAccessor<TradeFactory> implements ITradeFactoryAccessor {
     @FieldAccessor
     private ItemStack currency;
 
@@ -40,14 +38,14 @@ public class SellSpecificEnchantedBookTradeOfferAccessor extends BaseAccessor<Vi
     @FieldAccessor
     private float multiplier;
 
-    public SellSpecificEnchantedBookTradeOfferAccessor(VillagerTrades.ItemListing parent) {
+    public SellSpecificEnchantedBookTradeOfferAccessor(TradeFactory parent) {
         super(parent);
     }
 
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, TooltipNode conditions) {
-        return new ItemsToItemsNode(
+        return VillagerTradingPlusTrades.getTradeNode(
                 utils,
                 Either.left(currency),
                 NumberExpr.constant(currency.getCount()),
@@ -63,7 +61,7 @@ public class SellSpecificEnchantedBookTradeOfferAccessor extends BaseAccessor<Vi
     @NotNull
     private ItemStack getBookStack(IServerUtils utils) {
         return utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT).get(enchantmentKey)
-                .map((holder) -> EnchantedBookItem.createForEnchantment(new EnchantmentInstance(holder, level)))
+                .map((holder) -> EnchantmentHelper.createBook(new EnchantmentInstance(holder, level)))
                 .orElseGet(Items.ENCHANTED_BOOK::getDefaultInstance);
     }
 }

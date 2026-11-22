@@ -15,10 +15,12 @@ import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.PackResources;
@@ -76,6 +78,7 @@ public class CompatTooltipSuite {
 
         Language.inject(loadedLanguage.language());
         TestUtils.bindVanillaTags();
+        BuiltInRegistries.DATA_COMPONENT_INITIALIZERS.build(VanillaRegistries.createReloadableLookup(VanillaRegistries.createWorldLookup())).forEach(DataComponentInitializers.PendingComponents::apply);
         // MappedRegistry.prepareTagReload throws on an unfrozen registry, so tags bind before unfreezing
         unfreezeRegistries();
         UNUSED = loadedLanguage.unusedKeys();

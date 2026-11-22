@@ -3,11 +3,11 @@ ali:loot_table
   ali:loot_pool
     | Selects random entry
     | Rolls: 1
-    ali:item occultism:polished_otherrock_slab x1-2
+    ali:item occultism:smooth_otherstone_slab x1-2
       | Count:
       |   -> 2
       |     -> Match Block:
-      |       -> Block: Polished Otherrock Slab
+      |       -> Block: Smooth Otherstone Slab
       |       -> Properties:
       |         -> type: double
       |   -> otherwise 1
@@ -17,7 +17,7 @@ ali:loot_table
       |   -> Add: False
       |   -> Predicates:
       |     -> Match Block:
-      |       -> Block: Polished Otherrock Slab
+      |       -> Block: Smooth Otherstone Slab
       |       -> Properties:
       |         -> type: double
       | Explosion Decay

@@ -35,8 +35,8 @@ public class SnowRealMagicCompat implements IModCompat {
     @NotNull
     private static IDataNode getNormalizeNode(IServerUtils utils, NormalizeLoot entry, NumberExpr rawChance, NumberExpr sumWeight, List<TooltipNode> chanceConditions,
                                               List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(entry, functions);
-        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = NodeUtils.getAllFunctions(utils, entry, functions);
+        List<LootItemCondition> allConditions = NodeUtils.getAllConditions(utils, entry, conditions);
         LootCount chance = NodeUtils.getChance(utils, entry, rawChance, sumWeight, chanceConditions);
 
         return new DynamicNode(NodeUtils.toFloat(chance.value()), TooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions).build());
@@ -47,8 +47,8 @@ public class SnowRealMagicCompat implements IModCompat {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipUtils.getWeightTooltip(entry.weight));
             b.add(TooltipUtils.getQualityTooltip(entry.quality));
-            b.add(utils.getValueTooltip(utils, entry.conditions).build(Lang.Branch.PREDICATES));
-            b.add(utils.getValueTooltip(utils, entry.functions).build(Lang.Branch.MODIFIERS));
+            b.add(utils.getValueTooltip(utils, entry.condition).build(Lang.Branch.PREDICATES));
+            b.add(utils.getValueTooltip(utils, entry.modifier).build(Lang.Branch.MODIFIERS));
             b.showEmpty();
         }, SnowRealMagicLang.Entry.NORMALIZE);
     }

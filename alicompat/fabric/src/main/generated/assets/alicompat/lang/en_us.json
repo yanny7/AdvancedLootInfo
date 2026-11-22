@@ -19,6 +19,7 @@
   "alicompat.farmersdelight.type.function.copy_skillet": "Copy Skillet",
   "alicompat.farmersdelight.type.function.smoker_cook": "Smoker Cook",
   "alicompat.repurposed_structures.property.value.modded_items_only": "Only items added by other mods",
+  "alicompat.snowrealmagic.type.entry.normalize": "Covered Block Drops:",
   "alicompat.spell_engine.property.value.extra_weight": "Class Affiliation Extra Weight: %s",
   "alicompat.spell_engine.property.value.include_team": "Include Team: %s",
   "alicompat.spell_engine.property.value.spell_pool": "Spell Pool: %s",
@@ -33,5 +34,9 @@
   "alicompat.villagerconfig.property.value.price_multiplier": "Price Multiplier: %s",
   "alicompat.villagerconfig.property.value.reward_experience": "Reward Experience: %s",
   "alicompat.villagerconfig.type.function.enchant_randomly": "Enchant Randomly:",
-  "alicompat.villagerconfig.type.function.set_dye": "Set Dye:"
+  "alicompat.villagerconfig.type.function.set_dye": "Set Dye:",
+  "alicompat.villagertradingplus.property.value.cost_scale": "Cost Scale: %s",
+  "alicompat.villagertradingplus.property.value.price_multiplier": "Price Multiplier: %s",
+  "alicompat.villagertradingplus.property.value.price_multiplier_scale": "Price Multiplier Scale: %s",
+  "alicompat.villagertradingplus.type.function.random_potion": "Random Potion"
 }

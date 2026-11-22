@@ -34,6 +34,8 @@ public class VillagerTradingPlusLang implements ICompatTranslations {
 
     public enum Value implements ITooltipKey {
         COST_SCALE("cost_scale", "Cost Scale: %s"),
+        PRICE_MULTIPLIER("price_multiplier", "Price Multiplier: %s"),
+        PRICE_MULTIPLIER_SCALE("price_multiplier_scale", "Price Multiplier Scale: %s"),
         ;
 
         private final Translation translation;

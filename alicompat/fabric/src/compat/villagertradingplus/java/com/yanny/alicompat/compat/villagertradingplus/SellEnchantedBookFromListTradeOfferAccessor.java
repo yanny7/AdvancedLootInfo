@@ -1,5 +1,6 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
+import com.lion.villagertradingplus.tradeoffers.TradeFactory;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -7,16 +8,13 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.alicompat.accessor.BaseAccessor;
 import com.yanny.alicompat.accessor.ClassAccessor;
 import com.yanny.alicompat.accessor.FieldAccessor;
-import com.yanny.alicompat.accessor.IItemListing;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -28,7 +26,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @ClassAccessor("com.lion.villagertradingplus.tradeoffers.trades.JsonSellEnchantedBookFromListTradeOffer$Factory")
-public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
+public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<TradeFactory> implements ITradeFactoryAccessor {
     private static final int MIN_COST = 1;
     private static final int MAX_COST = 64;
 
@@ -56,7 +54,7 @@ public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<Vi
     @FieldAccessor
     private float multiplier;
 
-    public SellEnchantedBookFromListTradeOfferAccessor(VillagerTrades.ItemListing parent) {
+    public SellEnchantedBookFromListTradeOfferAccessor(TradeFactory parent) {
         super(parent);
     }
 
@@ -72,7 +70,7 @@ public class SellEnchantedBookFromListTradeOfferAccessor extends BaseAccessor<Vi
             }).build());
         })).build(Lang.Functions.ENCHANT_RANDOMLY);
 
-        return new ItemsToItemsNode(
+        return VillagerTradingPlusTrades.getTradeNode(
                 utils,
                 Either.left(new ItemStack(currency.getItem())),
                 getCostRange(utils),

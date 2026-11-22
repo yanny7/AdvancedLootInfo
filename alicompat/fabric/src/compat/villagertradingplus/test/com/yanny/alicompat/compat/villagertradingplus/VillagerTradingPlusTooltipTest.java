@@ -1,11 +1,11 @@
 package com.yanny.alicompat.compat.villagertradingplus;
 
 import com.google.gson.JsonObject;
+import com.lion.villagertradingplus.tradeoffers.TradeFactory;
 import com.lion.villagertradingplus.tradeoffers.util.Ingredient;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ListNode;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
@@ -86,7 +86,7 @@ public class VillagerTradingPlusTooltipTest {
 
     @Test
     public void testSellPotionTradeOffer() {
-        assertTooltip(tooltip(factory("JsonSellPotionTradeOffer$Factory", new ItemStack(Items.EMERALD, 4), new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.POTION), 5, 8, 0.15F)), List.of(
+        assertTooltip(tooltip(factory("JsonSellPotionTradeOffer$Factory", new ItemStack(Items.GLASS_BOTTLE), new ItemStack(Items.POTION), new ItemStack(Items.EMERALD, 4), null, 5, 8, 0.15F, 0)), List.of(
                 "Uses: 5",
                 "XP: 8",
                 "Price Multiplier: 0.15"
@@ -96,23 +96,23 @@ public class VillagerTradingPlusTooltipTest {
 
     @Test
     public void testWeightedPoolTradeOffer() {
-        VillagerTrades.ItemListing listing = factory("JsonSellItemTradeOffer$Factory", new ItemStack(Items.BREAD, 3), new ItemStack(Items.EMERALD, 2), 7, 5, 0.15F, 2);
+        TradeFactory listing = factory("JsonSellItemTradeOffer$Factory", new ItemStack(Items.BREAD, 3), new ItemStack(Items.EMERALD, 2), 7, 5, 0.15F, 2);
         Object entry = construct(TRADES + "JsonWeightedPoolTradeOffer$Entry", 4, listing);
 
-        IDataNode node = UTILS.getItemListing(UTILS, factory("JsonWeightedPoolTradeOffer$Factory", List.of(entry), 4), TooltipNode.empty());
+        IDataNode node = VillagerTradingPlusTrades.getNode(UTILS, factory("JsonWeightedPoolTradeOffer$Factory", List.of(entry), 4), TooltipNode.empty());
 
         assertTooltip(((ListNode) node).nodes().getFirst().getTooltip(), List.of(
-                "Chance: 100%",
                 "Uses: 7",
                 "XP: 5",
-                "Price Multiplier: 0.15"
+                "Price Multiplier: 0.15",
+                "Chance: 100%"
         ));
     }
 
 
     @NotNull
-    private static TooltipNode tooltip(VillagerTrades.ItemListing listing) {
-        return UTILS.getItemListing(UTILS, listing, TooltipNode.empty()).getTooltip();
+    private static TooltipNode tooltip(TradeFactory listing) {
+        return VillagerTradingPlusTrades.getNode(UTILS, listing, TooltipNode.empty()).getTooltip();
     }
 
     @NotNull
@@ -124,8 +124,8 @@ public class VillagerTradingPlusTooltipTest {
     }
 
     @NotNull
-    private static VillagerTrades.ItemListing factory(String name, Object... args) {
-        return (VillagerTrades.ItemListing) construct(TRADES + name, args);
+    private static TradeFactory factory(String name, Object... args) {
+        return (TradeFactory) construct(TRADES + name, args);
     }
 
     @NotNull
