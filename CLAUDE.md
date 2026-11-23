@@ -164,6 +164,8 @@ ALI's integration test is a GameTest run per loader: a headless server with the 
 ./gradlew :ali:forge:runGametest -Precipe_viewer=none -Pali_golden_regenerate=true
 ```
 
+A Forge run that logs the EULA message has started a dedicated server instead of the GameTest server and never exits: kill the JVM whose `/proc/<pid>/cwd` is `ali/forge/build/gametest/run`.
+
 ALICompat's GameTest runs once per target mod and stores what that mod changes against a base run without target mods (see `alicompat/CLAUDE.md`'s gametest section); the base has to be regenerated before the mods whenever ALI's output changes, which `all` does in one Gradle invocation, base first:
 ```
 ./gradlew :alicompat:forge:runGametest -Precipe_viewer=none
