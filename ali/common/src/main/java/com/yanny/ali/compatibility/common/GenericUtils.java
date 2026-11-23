@@ -472,7 +472,12 @@ public class GenericUtils {
 
     @NotNull
     public static Triplet<Component, Component, Rect> prepareGameplayTitle(Identifier location, int maxWidth) {
-        String key = "ali/loot_table/" + location.getPath();
+        String key = "ali/loot_table/" + location.getNamespace() + "/" + location.getPath();
+
+        if (!Language.getInstance().has(key)) {
+            key = "ali/loot_table/" + location.getPath();
+        }
+
         Component text = GenericUtils.ellipsis(key, location.getPath(), maxWidth);
         Component fullText = Component.literal(location.toString());
         Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
