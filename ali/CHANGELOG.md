@@ -15,6 +15,7 @@
 - Info icon of a mob's extra loot pages says why the loot table belongs to the mob and names the table
 - Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
 - Faster server start in modpacks with many global loot modifiers
+- Fixed loot tables with the same path in different mods sharing one translated name
 
 ## [2.5.0]
 
