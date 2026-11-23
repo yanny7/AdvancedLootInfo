@@ -138,14 +138,16 @@ public abstract class AbstractServer {
 
         long evaluationStart = System.currentTimeMillis();
 
-        Set<IPageLootModifier> boundLootModifiers = evaluatePages(config, pages, pageLootModifiers);
+        List<IPageLootModifier> lazyLootModifiers = config.showUnboundedGlobalLootModifiers ? List.of() : pageLootModifiers.stream().filter(IPageLootModifier::isAutoDetected).toList();
+        List<IPageLootModifier> eagerLootModifiers = lazyLootModifiers.isEmpty() ? pageLootModifiers : pageLootModifiers.stream().filter((m) -> !m.isAutoDetected()).toList();
+        Set<IPageLootModifier> boundLootModifiers = evaluatePages(config, pages, eagerLootModifiers);
 
-        LOGGER.info("Evaluating {} global loot modifiers against {} pages took {}ms", pageLootModifiers.size(), pages.size(), System.currentTimeMillis() - evaluationStart);
+        LOGGER.info("Evaluating {} global loot modifiers against {} pages took {}ms", eagerLootModifiers.size(), pages.size(), System.currentTimeMillis() - evaluationStart);
 
         long buildStart = System.currentTimeMillis();
 
         // apply modifiers
-        lootNodes = buildPages(serverRegistry, config, spawnInfo, pages, fakeLootTables, boundLootModifiers, attachedLootModifiers);
+        lootNodes = buildPages(serverRegistry, config, spawnInfo, pages, fakeLootTables, pageLootModifiers, lazyLootModifiers, boundLootModifiers, attachedLootModifiers);
 
         LOGGER.info("Building {} pages took {}ms", pages.size(), System.currentTimeMillis() - buildStart);
 
@@ -520,11 +522,17 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<ResourceLocation, IDataNode> buildPages(AliServerRegistry serverRegistry, AliConfig config, @Nullable SpawnInfo spawnInfo, List<PendingPage> pages,
-                                                               Map<ResourceLocation, LootTable> fakeLootTables, Set<IPageLootModifier> boundLootModifiers,
+                                                               Map<ResourceLocation, LootTable> fakeLootTables, List<IPageLootModifier> pageLootModifiers,
+                                                               List<IPageLootModifier> lazyLootModifiers, Set<IPageLootModifier> boundLootModifiers,
                                                                Set<Object> attachedLootModifiers) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+        Map<IPageLootModifier, Integer> modifierOrder = new IdentityHashMap<>();
         int defaultDropLootTables = 0;
         int itemlessPages = 0;
+
+        for (int i = 0; i < pageLootModifiers.size(); i++) {
+            modifierOrder.put(pageLootModifiers.get(i), i);
+        }
 
         for (PendingPage pending : pages) {
             LootPage page = pending.page();
@@ -536,7 +544,7 @@ public abstract class AbstractServer {
                 PageTable table = new PageTable(serverRegistry, pending.lootTable(), location, fakeLootTables);
                 List<Candidate> lootModifiers = filterByItems(getCandidates(pending, boundLootModifiers), table, attachedLootModifiers);
 
-                if (pending.lootTable() == null && !lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
+                if (pending.lootTable() == null && (!lootModifiers.isEmpty() || !lazyLootModifiers.isEmpty()) && !fakeLootTables.containsKey(location)
                         && lootModifiers.stream().noneMatch(AbstractServer::addsItems)) {
                     itemlessPages++;
                     continue;
@@ -546,6 +554,10 @@ public abstract class AbstractServer {
                         && page.blocks().stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, pending.lootTable()))) {
                     defaultDropLootTables++;
                     continue;
+                }
+
+                if (!lazyLootModifiers.isEmpty()) {
+                    lootModifiers = addLazyCandidates(pending, lazyLootModifiers, modifierOrder, lootModifiers, table, attachedLootModifiers);
                 }
 
                 IDataNode node = parseNode(serverRegistry, lootModifiers, table);
@@ -574,6 +586,30 @@ public abstract class AbstractServer {
         }
 
         return lootNodes;
+    }
+
+    @NotNull
+    private static List<Candidate> addLazyCandidates(PendingPage pending, List<IPageLootModifier> lazyLootModifiers, Map<IPageLootModifier, Integer> modifierOrder,
+                                                     List<Candidate> candidates, PageTable table, Set<Object> attachedLootModifiers) {
+        List<Candidate> lazyCandidates = new ArrayList<>();
+
+        for (IPageLootModifier modifier : lazyLootModifiers) {
+            PageMatch match = testModifier(modifier, pending.page());
+
+            if (match.match() == Match.YES) {
+                addCandidate(lazyCandidates, modifier, () -> modifier.getOperations(pending.page(), match), false);
+            }
+        }
+
+        if (lazyCandidates.isEmpty()) {
+            return candidates;
+        }
+
+        List<Candidate> merged = new ArrayList<>(candidates);
+
+        merged.addAll(filterByItems(lazyCandidates, table, attachedLootModifiers));
+        merged.sort(Comparator.comparingInt((c) -> c.source() instanceof IPageLootModifier modifier ? 1 + modifierOrder.get(modifier) : 0));
+        return merged;
     }
 
     @Nullable

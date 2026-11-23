@@ -20,6 +20,7 @@ dependencies {
     compileOnly project(path: ":aci:common", configuration: "namedElements")
 
     modCompileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+    compileOnly 'org.ow2.asm:asm-tree:9.10.1'
 
     modCompileOnly "curse.maven:kubejs-238086:5810100"
     modCompileOnly "curse.maven:rhino-416294:6184623"
