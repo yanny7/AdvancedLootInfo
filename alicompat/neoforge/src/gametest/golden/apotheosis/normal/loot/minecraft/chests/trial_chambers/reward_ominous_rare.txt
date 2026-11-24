@@ -13,6 +13,8 @@ ali:loot_table
         |   -> Levels: 5 to 20
         |   -> Options:
         |     -> Tag: minecraft:on_random_loot
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 13.79%
         | Count: 1
@@ -31,6 +33,8 @@ ali:loot_table
         |   -> Levels: 10 to 20
         |   -> Options:
         |     -> Tag: minecraft:on_random_loot
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 10.34%
         | Count: 1
@@ -49,6 +53,8 @@ ali:loot_table
         |   -> Levels: 10 to 20
         |   -> Options:
         |     -> Tag: minecraft:on_random_loot
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 10.34%
         | Count: 1

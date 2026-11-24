@@ -8,16 +8,15 @@ ali:loot_table
       ali:item minecraft:diamond_shovel x1 {Damage:0}
         | Chance: 5.25%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Probability: 0.35
         | ----- Modifiers -----
         | Set Damage:
         |   -> Damage: U[15%; 80%)
         |   -> Add: False
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:diamond_shovel x1 {Damage:0}
         | Chance: 15%
         | Count: 1
@@ -31,9 +30,6 @@ ali:loot_table
       ali:item minecraft:diamond_pickaxe x1 {Damage:0}
         | Chance: 4.2%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Probability: 0.35
         | ----- Modifiers -----
         | Set Damage:
         |   -> Damage: U[15%; 95%)
@@ -42,8 +38,10 @@ ali:loot_table
         |   -> Count: 1
         |   -> Add: False
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:diamond_pickaxe x1 {Damage:0}
         | Chance: 12%
         | Count: 1
@@ -112,16 +110,15 @@ ali:loot_table
       ali:item minecraft:golden_axe x1 {Damage:0}
         | Chance: 2.5%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Probability: 0.35
         | ----- Modifiers -----
         | Set Count:
         |   -> Count: 1
         |   -> Add: False
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_axe x1 {Damage:0}
         | Chance: 7.14%
         | Count: 1

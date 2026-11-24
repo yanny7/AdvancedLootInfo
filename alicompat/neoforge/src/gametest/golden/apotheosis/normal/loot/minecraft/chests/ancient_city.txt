@@ -13,6 +13,8 @@ ali:loot_table
         |   -> Levels: 30 to 50
         |   -> Options:
         |     -> Tag: minecraft:on_random_loot
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 2.33%
         | Count: 1
@@ -31,6 +33,8 @@ ali:loot_table
         |   -> Levels: 20 to 39
         |   -> Options:
         |     -> Tag: minecraft:on_random_loot
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 3.49%
         | Count: 1

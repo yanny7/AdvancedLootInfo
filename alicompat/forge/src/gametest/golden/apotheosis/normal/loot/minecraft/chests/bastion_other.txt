@@ -10,8 +10,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:diamond_pickaxe x1 {Damage:0}
         | Chance: 6.74%
         | Count: 1
@@ -22,8 +24,10 @@ ali:loot_table
       ali:item minecraft:diamond_shovel x1 {Damage:0}
         | Chance: 2.36%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:diamond_shovel x1 {Damage:0}
         | Chance: 6.74%
         | Count: 1
@@ -37,8 +41,10 @@ ali:loot_table
         |   -> Damage: 10% to 90%
         |   -> Add: False
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:crossbow x1 {Damage:0}
         | Chance: 6.74%
         | Count: 1
@@ -87,8 +93,10 @@ ali:loot_table
         |   -> Damage: 10% to 90%
         |   -> Add: False
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_sword x1 {Damage:0}
         | Chance: 10%
         | Count: 1
@@ -105,8 +113,10 @@ ali:loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Soul Speed
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_boots x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -120,8 +130,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_axe x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -132,8 +144,10 @@ ali:loot_table
       ali:item minecraft:crossbow x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:crossbow x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -142,8 +156,10 @@ ali:loot_table
       ali:item minecraft:golden_sword x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_sword x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -152,8 +168,10 @@ ali:loot_table
       ali:item minecraft:golden_chestplate x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_chestplate x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -162,8 +180,10 @@ ali:loot_table
       ali:item minecraft:golden_helmet x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_helmet x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -172,8 +192,10 @@ ali:loot_table
       ali:item minecraft:golden_leggings x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_leggings x1 {Damage:0}
         | Chance: 5%
         | Count: 1
@@ -182,8 +204,10 @@ ali:loot_table
       ali:item minecraft:golden_boots x1 {Damage:0}
         | Chance: 1.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_boots x1 {Damage:0}
         | Chance: 5%
         | Count: 1

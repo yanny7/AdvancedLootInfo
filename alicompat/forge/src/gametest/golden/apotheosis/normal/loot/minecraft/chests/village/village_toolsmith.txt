@@ -8,8 +8,10 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1 {Damage:0}
         | Chance: 3.3%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_pickaxe x1 {Damage:0}
         | Chance: 9.43%
         | Count: 1
@@ -18,8 +20,10 @@ ali:loot_table
       ali:item minecraft:iron_shovel x1 {Damage:0}
         | Chance: 3.3%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_shovel x1 {Damage:0}
         | Chance: 9.43%
         | Count: 1

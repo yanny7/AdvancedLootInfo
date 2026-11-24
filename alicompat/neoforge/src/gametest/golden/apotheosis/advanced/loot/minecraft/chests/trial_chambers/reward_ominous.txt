@@ -16,14 +16,13 @@ ali:loot_table
             ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 3.86%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 5 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 11.03%
               | Count: 1
@@ -37,14 +36,13 @@ ali:loot_table
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 2.9%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 8.28%
               | Count: 1
@@ -58,14 +56,13 @@ ali:loot_table
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 2.9%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 10 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 8.28%
               | Count: 1

@@ -61,11 +61,10 @@ ali:loot_table
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Chance: 17.5%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Chance: 50%
         | Count: 1
@@ -74,11 +73,10 @@ ali:loot_table
       ali:item minecraft:iron_sword x1 {Damage:0}
         | Chance: 17.5%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_sword x1 {Damage:0}
         | Chance: 50%
         | Count: 1

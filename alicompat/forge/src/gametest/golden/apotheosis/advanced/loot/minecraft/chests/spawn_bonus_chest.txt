@@ -8,11 +8,10 @@ ali:loot_table
       ali:item minecraft:stone_axe x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:stone_axe x1 {Damage:0}
         | Chance: 25%
         | Count: 1
@@ -21,11 +20,10 @@ ali:loot_table
       ali:item minecraft:wooden_axe x1 {Damage:0}
         | Chance: 26.25%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:wooden_axe x1 {Damage:0}
         | Chance: 75%
         | Count: 1
@@ -37,11 +35,10 @@ ali:loot_table
       ali:item minecraft:stone_pickaxe x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:stone_pickaxe x1 {Damage:0}
         | Chance: 25%
         | Count: 1
@@ -50,11 +47,10 @@ ali:loot_table
       ali:item minecraft:wooden_pickaxe x1 {Damage:0}
         | Chance: 26.25%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:wooden_pickaxe x1 {Damage:0}
         | Chance: 75%
         | Count: 1

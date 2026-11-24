@@ -12,6 +12,8 @@ ali:loot_table
         | Set Damage:
         |   -> Damage: 10% to 50%
         |   -> Add: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_axe x1
         | Chance: 5.81%
         | Count: 1
@@ -28,6 +30,8 @@ ali:loot_table
         | Set Damage:
         |   -> Damage: 10% to 50%
         |   -> Add: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_pickaxe x1
         | Chance: 5.81%
         | Count: 1

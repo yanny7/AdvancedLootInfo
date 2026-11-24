@@ -11,8 +11,10 @@ ali:loot_table
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Soul Speed
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_boots x1 {Damage:0}
         | Chance: 1.74%
         | Count: 1

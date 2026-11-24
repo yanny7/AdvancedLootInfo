@@ -37,6 +37,8 @@ ali:loot_table
       ali:item minecraft:leather_chestplate x1
         | Chance: 17.5%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:leather_chestplate x1
         | Chance: 50%
         | Count: 1
@@ -45,6 +47,8 @@ ali:loot_table
       ali:item minecraft:iron_sword x1
         | Chance: 17.5%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_sword x1
         | Chance: 50%
         | Count: 1

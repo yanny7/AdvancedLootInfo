@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:golden_sword x1
         | Chance: 2.4%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:golden_sword x1
         | Chance: 6.85%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:golden_chestplate x1
         | Chance: 2.4%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:golden_chestplate x1
         | Chance: 6.85%
         | Count: 1

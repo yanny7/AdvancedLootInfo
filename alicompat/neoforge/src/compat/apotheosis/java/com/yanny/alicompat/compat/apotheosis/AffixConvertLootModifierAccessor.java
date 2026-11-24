@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
@@ -72,13 +73,16 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     @NotNull
     private static List<IDataNode> getNodes(IServerUtils utils, List<LootItemCondition> conditions, AffixConvertLootModifier.AffixConversionEntry entry, IDataNode src) {
         IItemNode node = (IItemNode) src;
-        LootItemCondition chance = LootItemRandomChanceCondition.randomChance(entry.chance()).build();
-        List<LootItemCondition> allConditions = Stream.concat(Stream.concat(conditions.stream(), node.getConditions().stream()), Stream.of(chance)).toList();
+        List<LootItemCondition> shownConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
+        List<LootItemCondition> allConditions = Stream.concat(shownConditions.stream(), Stream.of(LootItemRandomChanceCondition.randomChance(entry.chance()).build())).toList();
         LootCount itemChance = NodeUtils.getChance(utils, allConditions, node.getChance());
         NumberExpr count = node.getCount();
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), shownConditions);
 
-        tooltip.add(utils.getValueTooltip(utils, entry.rarities()).build(ApotheosisLang.Branch.RARITY));
+        tooltip.add(TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, entry.chance()).build(Lang.Value.PROBABILITY));
+            b.add(utils.getValueTooltip(utils, entry.rarities()).build(ApotheosisLang.Branch.RARITY));
+        }, ApotheosisLang.GlobalLootModifier.AFFIX_CONVERSION));
 
         ItemNode replacement = new ItemNode(node.getChance(), count, node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
 

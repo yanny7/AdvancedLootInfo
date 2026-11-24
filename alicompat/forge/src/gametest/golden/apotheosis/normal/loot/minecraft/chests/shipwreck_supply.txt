@@ -10,8 +10,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_helmet x1 {Damage:0}
         | Chance: 3.57%
         | Count: 1
@@ -24,8 +26,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Chance: 3.57%
         | Count: 1
@@ -38,8 +42,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_leggings x1 {Damage:0}
         | Chance: 3.57%
         | Count: 1
@@ -52,8 +58,10 @@ ali:loot_table
         | Count: 1
         | ----- Modifiers -----
         | Enchant Randomly:
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_boots x1 {Damage:0}
         | Chance: 3.57%
         | Count: 1
