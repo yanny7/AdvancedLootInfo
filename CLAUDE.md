@@ -34,10 +34,10 @@ Cross-cutting mechanisms are documented **once**, in whichever doc owns them, an
 
 ## Repo/branch layout
 
-This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.11`, `26.1.2`, `26.2`, `master` for the latest/in-development version, plus archived `archive/<version>` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is (this one, `ali_1_21_11/`, is the `1.21.11` branch).
+This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.19.2`, `1.20.1`, `1.21.1`, `1.21.11`, `26.1.2`, `26.2`, `master` for the latest/in-development version, plus archived `archive/<version>` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is (this one, `ali_1_21_11/`, is the `1.21.11` branch).
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.11` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`neoforge`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.19.2` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.11` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`neoforge`.
 - Which ALICompat target mods have a build for the branch's Minecraft version, hence `compat_mods` and the `<slug>_<loader>_dep` coordinates in `gradle.properties`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
@@ -135,7 +135,7 @@ Run the game (client) with a given loader/viewer combination — generated per-p
 ```
 (Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the eight above: Fabric and NeoForge both have JEI+REI (`<loader>_emi_enabled=false`); no `run*Forge*` or `run*Emi*` task exists.)
 
-A client started for a check runs in the background through the task the generated one wraps, which opens the `New World` save in `<mod>/<loader>/run/saves` by itself: `./gradlew :ali:fabric:runClient -Precipe_viewer=jei --args="--quickPlaySingleplayer 'New World'"`. The game never exits on its own, so stop it as soon as the log line the check needs appears: kill the JVM whose `/proc/<pid>/cwd` is `<mod>/<loader>/run`, never `pkill -f` (it matches the shell) or "the newest java" (it may be the IDE or the Gradle daemon).
+A client started for a check runs in the background through the task the generated one wraps, which opens the `New World` save in `<mod>/<loader>/run/saves` by itself on Minecraft 1.20 and later: `./gradlew :ali:fabric:runClient -Precipe_viewer=jei --args="--quickPlaySingleplayer 'New World'"`. The game never exits on its own, so stop it as soon as the log line the check needs appears: kill the JVM whose `/proc/<pid>/cwd` is `<mod>/<loader>/run`, never `pkill -f` (it matches the shell) or "the newest java" (it may be the IDE or the Gradle daemon).
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```

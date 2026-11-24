@@ -62,7 +62,7 @@ public class ReiCompatibility implements REIClientPlugin {
         AwiClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
         ClientLevel level = Minecraft.getInstance().level;
 
-        LOGGER.info("Adding loot information to REI");
+        LOGGER.info("Adding worldgen information to REI");
 
         if (level != null) {
             Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());

@@ -1,0 +1,5 @@
+{
+  "alicompat.repurposed_structures.property.branch.blacklisted_loot_tables": "黑名單戰利品表：",
+  "alicompat.repurposed_structures.property.value.modded_items_only": "僅限其他模組新增的物品",
+  "alicompat.repurposed_structures.type.condition.detect_rs_loot_tables": "偵測 Repurposed Structures 戰利品表："
+}
