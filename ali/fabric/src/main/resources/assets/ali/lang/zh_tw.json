@@ -1,11 +1,11 @@
 {
-  "ali.description.chance": "機率：%s%s",
+  "ali.description.chance": "機率：%s",
   "ali.description.configured_loot": "由設定檔指派給該生物",
   "ali.description.count": "數量：%s",
   "ali.description.plugin_loot": "由模組指派給該生物",
   "ali.description.quality": "品質：%s",
   "ali.description.random_trade_selection": "隨機選取其中 %s 個交易",
-  "ali.description.rolls": "抽取次數：%s%s",
+  "ali.description.rolls": "抽取次數：%s",
   "ali.description.variant_loot": "由此生物的變種掉落",
   "ali.enum.attribute_operation.addition": "相加",
   "ali.enum.attribute_operation.multiply_base": "乘以基礎值",

@@ -5,6 +5,7 @@
 - Added `find`, `reportMissing`, `reportAutoDetected` and `shortClassName` to the managed registry
 - Added `getClassTooltip` to the shared tooltip utils
 - `printRuntimeInfo` and `logMissing` take whether to log the types shown auto-detected
+- Added Traditional Chinese translation (Andy2088-TW)
 
 ## [1.5.0]
 

@@ -1,7 +1,7 @@
 {
   "alicompat.the_bumblezone.type.condition.essence_only_spawn": "玩家攜帶蜜蜂精華",
-  "alicompat.the_bumblezone.type.function.drop_container_items": "掉落容器內物品：",
+  "alicompat.the_bumblezone.type.function.drop_container_items": "掉落容器內物品",
   "alicompat.the_bumblezone.type.function.honey_compass_locate_structure": "蜂蜜指南針定位結構：",
   "alicompat.the_bumblezone.type.function.tag_item_removals": "標籤物品移除：",
-  "alicompat.the_bumblezone.type.function.uniquify_if_has_items": "若包含物品則去除重複："
+  "alicompat.the_bumblezone.type.function.uniquify_if_has_items": "若包含物品則去除重複"
 }

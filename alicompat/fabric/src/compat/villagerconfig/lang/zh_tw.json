@@ -2,7 +2,7 @@
   "alicompat.number.var.villagerconfig.enchantment_level": "附魔等級",
   "alicompat.number.var.villagerconfig.enchantment_level.desc": "附魔等級",
   "alicompat.number.var.villagerconfig.treasure_multiplier": "寶藏倍率",
-  "alicompat.number.var.villagerconfig.treasure_multiplier.desc": "寶藏倍率"
+  "alicompat.number.var.villagerconfig.treasure_multiplier.desc": "寶藏倍率",
   "alicompat.villagerconfig.property.branch.dye_colors": "染料顏色：",
   "alicompat.villagerconfig.property.branch.exclude": "排除：",
   "alicompat.villagerconfig.property.branch.include": "包含：",
