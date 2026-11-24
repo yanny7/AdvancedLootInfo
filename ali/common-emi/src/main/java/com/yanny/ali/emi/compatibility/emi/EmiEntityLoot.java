@@ -1,8 +1,10 @@
 package com.yanny.ali.emi.compatibility.emi;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
@@ -16,7 +18,6 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -72,7 +73,8 @@ public class EmiEntityLoot extends EmiBaseLoot {
                 }
 
                 @Override
-                public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+                public void render(PoseStack pose, int mouseX, int mouseY, float delta) {
+                    GuiGraphics guiGraphics = new GuiGraphics(pose);
                     Level level = Minecraft.getInstance().level;
 
                     if (level != null) {

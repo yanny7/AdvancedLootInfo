@@ -1,6 +1,7 @@
 package com.yanny.ali.gametest;
 
 import com.yanny.aci.gametest.GoldenFiles;
+import com.yanny.aci.gametest.GoldenLanguage;
 import com.yanny.ali.Utils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
@@ -42,6 +43,8 @@ public class LootDataGolden {
         if (PluginManager.getInstance().clientRegistry == null) {
             PluginManager.getInstance().registerClientEvent();
         }
+
+        GoldenLanguage.inject(List.of("minecraft", "aci", Utils.MOD_ID));
 
         MinecraftServer server = helper.getLevel().getServer();
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();

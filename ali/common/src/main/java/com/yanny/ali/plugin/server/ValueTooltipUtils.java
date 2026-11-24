@@ -8,7 +8,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.stats.Stat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -99,18 +99,20 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getDamageSourcePredicateTooltip(IServerUtils utils, DamageSourcePredicate damagePredicate) {
         if (damagePredicate != DamageSourcePredicate.ANY) {
             return TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, damagePredicate.tags).build(Lang.Branch.TAGS));
+                b.add(utils.getValueTooltip(utils, damagePredicate.isProjectile).build(Lang.Value.IS_PROJECTILE));
+                b.add(utils.getValueTooltip(utils, damagePredicate.isExplosion).build(Lang.Value.IS_EXPLOSION));
+                b.add(utils.getValueTooltip(utils, damagePredicate.bypassesArmor).build(Lang.Value.BYPASSES_ARMOR));
+                b.add(utils.getValueTooltip(utils, damagePredicate.bypassesInvulnerability).build(Lang.Value.BYPASSES_INVULNERABILITY));
+                b.add(utils.getValueTooltip(utils, damagePredicate.bypassesMagic).build(Lang.Value.BYPASSES_MAGIC));
+                b.add(utils.getValueTooltip(utils, damagePredicate.isFire).build(Lang.Value.IS_FIRE));
+                b.add(utils.getValueTooltip(utils, damagePredicate.isMagic).build(Lang.Value.IS_MAGIC));
+                b.add(utils.getValueTooltip(utils, damagePredicate.isLightning).build(Lang.Value.IS_LIGHTNING));
                 b.add(utils.getValueTooltip(utils, damagePredicate.directEntity).build(Lang.Branch.DIRECT_ENTITY));
                 b.add(utils.getValueTooltip(utils, damagePredicate.sourceEntity).build(Lang.Branch.SOURCE_ENTITY));
             });
         }
 
         return TooltipBuilder.empty();
-    }
-
-    @NotNull
-    public static <T> TooltipBuilder getTagPredicateTooltip(IServerUtils utils, TagPredicate<T> tagPredicate) {
-        return utils.getValueTooltip(utils, tagPredicate.tag).key(tagPredicate.expected ? Lang.Value.TAG_IS : Lang.Value.TAG_IS_NOT);
     }
 
     @NotNull
@@ -235,7 +237,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMobEffectPredicateTooltip(IServerUtils utils, MobEffectsPredicate mobEffectsPredicate) {
         if (mobEffectsPredicate != MobEffectsPredicate.ANY) {
-            return getMapTooltip(utils, mobEffectsPredicate.effects, Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
+            return getMapTooltip(utils, mobEffectsPredicate.effects, Comparator.comparing(Registry.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
         }
 
         return TooltipBuilder.empty();

@@ -28,7 +28,7 @@ import com.yanny.ali.plugin.glm.Match;
 import com.yanny.ali.plugin.glm.PageMatch;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -70,7 +70,7 @@ public abstract class AbstractServer {
         return Collections.unmodifiableList(chunks);
     }
 
-    public final void readLootTables(LootDataManager manager) {
+    public final void readLootTables(LootTables manager) {
         AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
 
         TooltipContext.setPalette(serverRegistry.getTooltipCache());
@@ -84,7 +84,7 @@ public abstract class AbstractServer {
         }
     }
 
-    private void readLootTables(LootDataManager manager, AliServerRegistry serverRegistry) {
+    private void readLootTables(LootTables manager, AliServerRegistry serverRegistry) {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
@@ -109,8 +109,10 @@ public abstract class AbstractServer {
 
         if (!config.spawnInfo.isDisabled()) {
             long spawnInfoStart = System.currentTimeMillis();
+            ServerLevel level = serverRegistry.getServerLevel();
 
-            spawnInfo = new SpawnInfo(Utils.MOD_ID, serverRegistry.getServerLevel().registryAccess(), Services.getPlatform()::getStructureSettings, config.spawnInfo, config.showInGameNames);
+            spawnInfo = new SpawnInfo(Utils.MOD_ID, level.registryAccess(), level.getServer().getWorldData().worldGenSettings().dimensions(),
+                    Services.getPlatform()::getStructureSettings, config.spawnInfo, config.showInGameNames);
 
             if (config.logMoreStatistics) {
                 LOGGER.info("Collecting mob spawns took {}ms", System.currentTimeMillis() - spawnInfoStart);
@@ -236,9 +238,9 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> collectLootTables(LootDataManager manager) {
+    private static Map<ResourceLocation, LootTable> collectLootTables(LootTables manager) {
         Map<ResourceLocation, LootTable> lootTables = new HashMap<>();
-        manager.getKeys(LootDataType.TABLE).forEach((location) -> lootTables.put(location, manager.getLootTable(location)));
+        manager.getIds().forEach((location) -> lootTables.put(location, manager.get(location)));
         return lootTables;
     }
 
@@ -246,7 +248,7 @@ public abstract class AbstractServer {
                                           List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> unboundedLootModifiers, List<PendingPage> pages) {
         Map<ResourceLocation, List<Block>> blocksByLootTable = new LinkedHashMap<>();
 
-        for (Block block : BuiltInRegistries.BLOCK) {
+        for (Block block : Registry.BLOCK) {
             ResourceLocation location = Utils.getLootTableKey(block);
 
             //noinspection ConstantValue
@@ -304,11 +306,11 @@ public abstract class AbstractServer {
     }
 
     private static boolean isIgnoredFunctions(AliConfig config, LootItemFunction[] functions) {
-        return Arrays.stream(functions).allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType())));
+        return Arrays.stream(functions).allMatch((f) -> config.defaultBlockLootFunctions.contains(Registry.LOOT_FUNCTION_TYPE.getKey(f.getType())));
     }
 
     private static boolean isIgnoredConditions(AliConfig config, LootItemCondition[] conditions) {
-        return Arrays.stream(conditions).allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+        return Arrays.stream(conditions).allMatch((c) -> config.defaultBlockLootConditions.contains(Registry.LOOT_CONDITION_TYPE.getKey(c.getType())));
     }
 
     private static boolean isConstant(NumberExpr expr, float value) {
@@ -328,7 +330,7 @@ public abstract class AbstractServer {
         if (!entityLootModifiers.isEmpty() || hasPageLootModifiers) {
             // a modifier can add drops to an entity whose own loot table does not exist, so those tables have to be
             // considered even though no data references them
-            BuiltInRegistries.ENTITY_TYPE.stream()
+            Registry.ENTITY_TYPE.stream()
                     .filter(DefaultAttributes::hasSupplier)
                     .forEach((entityType) -> candidates.add(entityType.getDefaultLootTable()));
         }
@@ -337,7 +339,7 @@ public abstract class AbstractServer {
         for (EntityLootTableResolver.EntityPage entityPage : resolver.resolveAll(candidates)) {
             ResourceLocation location = entityPage.id();
 
-            if (entityPage.types().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(t))))) {
+            if (entityPage.types().stream().allMatch((t) -> config.disabledEntities.stream().anyMatch((f) -> f.equals(Registry.ENTITY_TYPE.getKey(t))))) {
                 disabledLootTables.add(location); // remove the table, otherwise it will end up in gameplay category
                 continue;
             }
@@ -445,7 +447,7 @@ public abstract class AbstractServer {
             try {
                 ResourceLocation location = entityType.getDefaultLootTable();
 
-                if (shownEntities.contains(entityType) || lootNodes.containsKey(location) || config.disabledEntities.contains(BuiltInRegistries.ENTITY_TYPE.getKey(entityType))
+                if (shownEntities.contains(entityType) || lootNodes.containsKey(location) || config.disabledEntities.contains(Registry.ENTITY_TYPE.getKey(entityType))
                         || !config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                     continue;
                 }
@@ -455,7 +457,7 @@ public abstract class AbstractServer {
                 lootNodes.put(location, new EntityLootTableNode(emptyTable, entityType, spawnInfo.getEntityTooltip(entityType)));
                 addedEntities++;
             } catch (Throwable e) {
-                LOGGER.warn("Failed to add spawning entity {} without loot", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e);
+                LOGGER.warn("Failed to add spawning entity {} without loot", Registry.ENTITY_TYPE.getKey(entityType), e);
             }
         }
 
@@ -637,7 +639,7 @@ public abstract class AbstractServer {
         TraderDetector detector = new TraderDetector(serverRegistry, serverRegistry.getServerLevel());
 
         detector.findTraders((type) -> !registered.contains(type)).forEach((type, entityClass) ->
-                LOGGER.warn("Unregistered trading entity {} ({})", BuiltInRegistries.ENTITY_TYPE.getKey(type), entityClass.getName()));
+                LOGGER.warn("Unregistered trading entity {} ({})", Registry.ENTITY_TYPE.getKey(type), entityClass.getName()));
 
         if (config.logMoreStatistics) {
             LOGGER.info("Detecting unregistered trading entities took {}ms, {} entity types had to be created", System.currentTimeMillis() - startTime, detector.getCreatedTypes());

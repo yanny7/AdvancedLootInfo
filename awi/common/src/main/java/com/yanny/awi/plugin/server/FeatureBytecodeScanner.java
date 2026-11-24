@@ -2,8 +2,7 @@ package com.yanny.awi.plugin.server;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelWriter;
@@ -267,7 +266,7 @@ public final class FeatureBytecodeScanner {
 
     private static Set<Block> sortBlocks(Set<Block> blocks) {
         return blocks.stream()
-                .sorted(Comparator.comparing((block) -> BuiltInRegistries.BLOCK.getKey(block).toString()))
+                .sorted(Comparator.comparing((block) -> Registry.BLOCK.getKey(block).toString()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
@@ -928,7 +927,7 @@ public final class FeatureBytecodeScanner {
             out.blocks().add(block);
         } else if (staticValue instanceof BlockState state) {
             out.blocks().add(state.getBlock());
-        } else if (staticValue instanceof TagKey<?> tag && tag.registry().equals(Registries.BLOCK)) {
+        } else if (staticValue instanceof TagKey<?> tag && tag.registry().equals(Registry.BLOCK_REGISTRY)) {
             out.tags().add((TagKey<Block>) tag);
         }
     }
@@ -1375,7 +1374,7 @@ public final class FeatureBytecodeScanner {
     private static Set<String> implementors(Class<?> declaring) {
         Set<String> found = new HashSet<>();
 
-        for (Block block : BuiltInRegistries.BLOCK) {
+        for (Block block : Registry.BLOCK) {
             if (declaring.isAssignableFrom(block.getClass())) {
                 found.add(Type.getInternalName(block.getClass()));
 

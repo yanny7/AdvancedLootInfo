@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.StreamSupport;
 
 public class TradeLootCategory extends LootCategory<ResourceLocation> {
     private final List<Pattern> patterns;
@@ -21,7 +22,7 @@ public class TradeLootCategory extends LootCategory<ResourceLocation> {
 
     public TradeLootCategory(JsonObject object) {
         super(Type.TRADE, object);
-        patterns = GsonHelper.getAsJsonArray(object, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList();
+        patterns = StreamSupport.stream(GsonHelper.getAsJsonArray(object, "pattern").spliterator(), false).map(JsonElement::getAsString).map(Pattern::compile).toList();
     }
 
     @Override

@@ -24,7 +24,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -42,8 +42,9 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.ItemModifierManager;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
@@ -155,8 +156,8 @@ public class Plugin implements IPlugin {
         registry.registerPageResolver(LootItemEntityPropertyCondition.class, GlobalLootModifierUtils::testEntityProperty);
         registry.registerPageResolver(DamageSourceCondition.class, GlobalLootModifierUtils::testDamageSource);
 
-        registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
-        registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
+        registry.registerConditionTooltip(PredicateManager.CompositePredicate.class, ConditionTooltipUtils::getAllOfTooltip);
+        registry.registerConditionTooltip(AlternativeLootItemCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
         registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
         registry.registerConditionTooltip(DamageSourceCondition.class, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
         registry.registerConditionTooltip(LootItemEntityPropertyCondition.class, ConditionTooltipUtils::getEntityPropertiesTooltip);
@@ -186,7 +187,6 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SmeltItemFunction.class, FunctionTooltipUtils::getFurnaceSmeltTooltip);
         registry.registerFunctionTooltip(LimitCount.class, FunctionTooltipUtils::getLimitCountTooltip);
         registry.registerFunctionTooltip(LootingEnchantFunction.class, FunctionTooltipUtils::getLootingEnchantTooltip);
-        registry.registerFunctionTooltip(FunctionReference.class, FunctionTooltipUtils::getReferenceTooltip);
         registry.registerFunctionTooltip(SetAttributesFunction.class, FunctionTooltipUtils::getSetAttributesTooltip);
         registry.registerFunctionTooltip(SetBannerPatternFunction.class, FunctionTooltipUtils::getSetBannerPatternTooltip);
         registry.registerFunctionTooltip(SetContainerContents.class, FunctionTooltipUtils::getSetContentsTooltip);
@@ -227,7 +227,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
-        registry.registerValueTooltip(TagPredicate.class, ValueTooltipUtils::getTagPredicateTooltip);
         registry.registerValueTooltip(EntityPredicate.class, ValueTooltipUtils::getEntityPredicateTooltip);
         registry.registerValueTooltip(EntityTypePredicate.class, ValueTooltipUtils::getEntityTypePredicateTooltip);
         registry.registerValueTooltip(DistancePredicate.class, ValueTooltipUtils::getDistancePredicateTooltip);
@@ -273,12 +272,10 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(SetNbtFunction.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetPotionFunction.class, TooltipUtils::applyItemStackModifier);
 
-        registry.registerConditionUnwrapper(AllOfCondition.class, TooltipUtils::unwrapAllOf);
         registry.registerConditionUnwrapper(ConditionReference.class, TooltipUtils::unwrapConditionReference);
-        registry.registerConditionUnwrapper(LootDataManager.CompositePredicate.class, TooltipUtils::unwrapCompositePredicate);
+        registry.registerConditionUnwrapper(PredicateManager.CompositePredicate.class, TooltipUtils::unwrapCompositePredicate);
 
-        registry.registerFunctionUnwrapper(FunctionReference.class, TooltipUtils::unwrapFunctionReference);
-        registry.registerFunctionUnwrapper(LootDataManager.FunctionSequence.class, TooltipUtils::unwrapFunctionSequence);
+        registry.registerFunctionUnwrapper(ItemModifierManager.FunctionSequence.class, TooltipUtils::unwrapFunctionSequence);
 
         registry.registerItemListing(VillagerTrades.DyedArmorForEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.EmeraldForItems.class, TradeUtils::getNode);
@@ -296,7 +293,7 @@ public class Plugin implements IPlugin {
 
     // Villager#updateTrades picks 2 listings per level, WanderingTrader#updateTrades 5 from its first pool and 1 from its second
     private static void registerVanillaTrades(IServerRegistry registry) {
-        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : Registry.VILLAGER_PROFESSION.entrySet()) {
             registry.registerTrades(entry.getKey().location(), EntityType.VILLAGER, () -> VillagerTrades.TRADES.get(entry.getValue()), (level) -> new TradeLevelInfo(NumberExpr.constant(2)));
         }
 

@@ -3,7 +3,7 @@
   "package": "com.yanny.awi.mixin",
   "client": [
     "MixinClientPlayNetworkHandler",
-    "MixinGuiGraphics"
+    "MixinScreen"
   ],
   "injectors": {
     "defaultRequire": 1

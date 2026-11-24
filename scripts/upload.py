@@ -11,9 +11,8 @@ MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 MODRINTH_VIEWER_PROJECT_IDS = ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA"] # EMI JEI REI
 MODRINTH_LOOTJS_PROJECT_ID = "fJFETWDN"
 MODRINTH_ACI_PROJECT_ID = "BaR4ijFC"
-MODRINTH_ALI_PROJECT_ID = "PEPVViac"
 MODRINTH_ENVIRONMENT = "client_and_server"
-MOD_IDS = ["aci", "ali", "awi", "alicompat"]
+MOD_IDS = ["aci", "ali", "awi"]
 
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
@@ -327,12 +326,6 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
 def mod_dependencies(mod_id: str):
     if mod_id == "aci":
         return []
-
-    if mod_id == "alicompat":
-        return [
-            prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"),
-            prepare_dependency(MODRINTH_ALI_PROJECT_ID, "required"),
-        ]
 
     dependencies = list(map(prepare_dependency, MODRINTH_VIEWER_PROJECT_IDS))
     dependencies.append(prepare_dependency(MODRINTH_ACI_PROJECT_ID, "required"))

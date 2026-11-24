@@ -6,7 +6,7 @@
   ],
   "client": [
     "MixinClientPlayNetworkHandler",
-    "MixinGuiGraphics"
+    "MixinScreen"
   ],
   "injectors": {
     "defaultRequire": 1

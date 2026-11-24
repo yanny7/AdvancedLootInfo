@@ -5,7 +5,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
@@ -25,10 +25,10 @@ import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
-        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
-                TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
-                WeatherCheck.weather().setRaining(true)
-        ).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, new PredicateManager.CompositePredicate(new LootItemCondition[]{
+                TimeCheck.time(IntRange.range(1, 8)).setPeriod(10).build(),
+                WeatherCheck.weather().setRaining(true).build()
+        })).build(), List.of(
                 "All Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
@@ -36,9 +36,9 @@ public class ConditionTooltipTest {
                 "  -> Weather Check:",
                 "    -> Is Raining: True"
         ));
-        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
-                ExplosionCondition.survivesExplosion()
-        ).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, new PredicateManager.CompositePredicate(new LootItemCondition[]{
+                ExplosionCondition.survivesExplosion().build()
+        })).build(), List.of(
                 "All Of:",
                 "  -> Survives Explosion"
         ));
@@ -46,7 +46,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testAnyOfTooltip() {
-        assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, (AnyOfCondition) AnyOfCondition.anyOf(
+        assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, (AlternativeLootItemCondition) AlternativeLootItemCondition.alternative(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()).build(), List.of(
@@ -78,15 +78,14 @@ public class ConditionTooltipTest {
     public void testDamageSourceProperties() {
         assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(UTILS, (DamageSourceCondition) DamageSourceCondition.hasDamageSource(
                 DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
-                        .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                        .bypassesArmor(true)
+                        .isExplosion(false)
                         .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
         ).build()).build(), List.of(
                 "Damage Source Properties:",
-                "  -> Tags:",
-                "    -> Is: minecraft:bypasses_armor",
-                "    -> Is Not: minecraft:is_explosion",
+                "  -> Is Explosion: False",
+                "  -> Bypasses Armor: True",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:warden",
                 "  -> Source Entity:",

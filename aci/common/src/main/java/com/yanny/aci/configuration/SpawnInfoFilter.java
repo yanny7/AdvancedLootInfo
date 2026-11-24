@@ -1,6 +1,6 @@
 package com.yanny.aci.configuration;
 
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
@@ -22,6 +22,6 @@ public class SpawnInfoFilter implements Predicate<EntityType<?>> {
             return !whitelist;
         }
 
-        return entities.contains(BuiltInRegistries.ENTITY_TYPE.getKey(type)) == whitelist;
+        return entities.contains(Registry.ENTITY_TYPE.getKey(type)) == whitelist;
     }
 }

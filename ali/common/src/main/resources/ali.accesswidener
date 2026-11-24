@@ -22,7 +22,7 @@ accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lne
 
 accessible field net/minecraft/world/level/storage/loot/predicates/LootItemBlockStatePropertyCondition block Lnet/minecraft/world/level/block/Block;
 accessible field net/minecraft/world/level/storage/loot/predicates/LootItemBlockStatePropertyCondition properties Lnet/minecraft/advancements/critereon/StatePropertiesPredicate;
-accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/predicates/AlternativeLootItemCondition terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
 accessible field net/minecraft/world/level/storage/loot/predicates/DamageSourceCondition predicate Lnet/minecraft/advancements/critereon/DamageSourcePredicate;
 accessible field net/minecraft/world/level/storage/loot/predicates/LootItemEntityPropertyCondition predicate Lnet/minecraft/advancements/critereon/EntityPredicate;
 accessible field net/minecraft/world/level/storage/loot/predicates/LootItemEntityPropertyCondition entityTarget Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
@@ -97,7 +97,6 @@ accessible field net/minecraft/world/level/storage/loot/functions/SetNameFunctio
 accessible field net/minecraft/world/level/storage/loot/functions/SetNbtFunction tag Lnet/minecraft/nbt/CompoundTag;
 accessible field net/minecraft/world/level/storage/loot/functions/SetPotionFunction potion Lnet/minecraft/world/item/alchemy/Potion;
 accessible field net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction effectDurationMap Ljava/util/Map;
-accessible field net/minecraft/world/level/storage/loot/functions/FunctionReference name Lnet/minecraft/resources/ResourceLocation;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction operations Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction source Lnet/minecraft/world/level/storage/loot/providers/nbt/NbtProvider;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation op Lnet/minecraft/world/level/storage/loot/functions/CopyNbtFunction$MergeStrategy;
@@ -120,11 +119,16 @@ accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$R
 accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactPropertyMatcher value Ljava/lang/String;
 accessible field net/minecraft/advancements/critereon/EntityTypePredicate$TagPredicate tag Lnet/minecraft/tags/TagKey;
 accessible field net/minecraft/advancements/critereon/EntityTypePredicate$TypePredicate type Lnet/minecraft/world/entity/EntityType;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate isProjectile Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate isExplosion Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate bypassesArmor Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate bypassesInvulnerability Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate bypassesMagic Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate isFire Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate isMagic Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate isLightning Ljava/lang/Boolean;
 accessible field net/minecraft/advancements/critereon/DamageSourcePredicate directEntity Lnet/minecraft/advancements/critereon/EntityPredicate;
 accessible field net/minecraft/advancements/critereon/DamageSourcePredicate sourceEntity Lnet/minecraft/advancements/critereon/EntityPredicate;
-accessible field net/minecraft/advancements/critereon/DamageSourcePredicate tags Ljava/util/List;
-accessible field net/minecraft/advancements/critereon/TagPredicate expected Z
-accessible field net/minecraft/advancements/critereon/TagPredicate tag Lnet/minecraft/tags/TagKey;
 accessible field net/minecraft/advancements/critereon/EntityPredicate distanceToPlayer Lnet/minecraft/advancements/critereon/DistancePredicate;
 accessible field net/minecraft/advancements/critereon/EntityPredicate effects Lnet/minecraft/advancements/critereon/MobEffectsPredicate;
 accessible field net/minecraft/advancements/critereon/EntityPredicate entityType Lnet/minecraft/advancements/critereon/EntityTypePredicate;
@@ -208,14 +212,15 @@ accessible field net/minecraft/world/item/crafting/Ingredient$ItemValue item Lne
 accessible class net/minecraft/world/item/crafting/Ingredient$TagValue
 accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/minecraft/tags/TagKey;
 
-accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
-accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
-accessible class net/minecraft/world/level/storage/loot/LootDataManager$CompositePredicate
-accessible field net/minecraft/world/level/storage/loot/LootDataManager$CompositePredicate terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
-accessible class net/minecraft/world/level/storage/loot/LootDataManager$FunctionSequence
-accessible field net/minecraft/world/level/storage/loot/LootDataManager$FunctionSequence functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/util/RandomSource;FLnet/minecraft/server/level/ServerLevel;Ljava/util/function/Function;Ljava/util/function/Function;Ljava/util/Map;Ljava/util/Map;)V
+accessible field net/minecraft/world/level/storage/loot/LootContext params Ljava/util/Map;
+mutable field net/minecraft/world/level/storage/loot/LootContext params Ljava/util/Map;
+accessible class net/minecraft/world/level/storage/loot/PredicateManager$CompositePredicate
+accessible field net/minecraft/world/level/storage/loot/PredicateManager$CompositePredicate terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible class net/minecraft/world/level/storage/loot/ItemModifierManager$FunctionSequence
+accessible field net/minecraft/world/level/storage/loot/ItemModifierManager$FunctionSequence functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
 accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
-accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> ([Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
+accessible method net/minecraft/world/level/storage/loot/PredicateManager$CompositePredicate <init> ([Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

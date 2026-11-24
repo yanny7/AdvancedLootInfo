@@ -17,7 +17,7 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -50,8 +50,8 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocat
     private record TooltipWidget(Component component, Rect rect) implements IRecipeWidget {
         @NotNull
         @Override
-        public ScreenPosition getPosition() {
-            return new ScreenPosition(rect().x(), rect.y());
+        public Rect2i getArea() {
+            return new Rect2i(rect.x(), rect.y(), rect.width(), rect.height());
         }
 
         @Override

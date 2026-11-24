@@ -8,7 +8,6 @@ import com.yanny.ali.lootjs.server.LootJsConditionTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -271,14 +270,13 @@ public class LootJsConditionTooltipTest {
         WrappedDamageSourceCondition condition = mock(WrappedDamageSourceCondition.class, MixinWrappedDamageSourceCondition.class);
 
         Mockito.when(((MixinWrappedDamageSourceCondition) condition).getPredicate()).thenReturn(DamageSourcePredicate.Builder.damageType()
-                .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
+                .bypassesArmor(true)
                 .build());
         Mockito.when(((MixinWrappedDamageSourceCondition) condition).getSourceNames()).thenReturn(new String[]{"minecraft:on_fire", "minecraft:lava"});
         assertTooltip(LootJsConditionTooltipUtils.wrapperDamageSourceConditionTooltip(UTILS, condition).build(), List.of(
                 "Match Damage Source:",
                 "  -> Predicate:",
-                "    -> Tags:",
-                "      -> Is: minecraft:bypasses_armor",
+                "    -> Bypasses Armor: True",
                 "  -> Source Names:",
                 "    -> minecraft:on_fire",
                 "    -> minecraft:lava"

@@ -2,6 +2,7 @@ package com.yanny.ali.emi.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -15,9 +16,8 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,8 +52,9 @@ public class EmiLootSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void drawBackground(GuiGraphics draw, int mouseX, int mouseY, float delta) {
-        super.drawBackground(draw, mouseX, mouseY, delta);
+    public void drawBackground(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics draw = new GuiGraphics(pose);
+        super.drawBackground(pose, mouseX, mouseY, delta);
 
         if (hasPredicates) {
             draw.fill(x + 1, y + 1, x + WidgetUtils.SLOT_SIZE - 1, y + WidgetUtils.SLOT_SIZE - 1, WidgetUtils.PREDICATES_COLOR);
@@ -61,7 +62,8 @@ public class EmiLootSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void drawOverlay(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+    public void drawOverlay(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics draw = new GuiGraphics(pose);
         Option option = getOption();
 
         if (option.count != null) {
@@ -84,7 +86,7 @@ public class EmiLootSlotWidget extends SlotWidget {
             stack.popPose();
         }
 
-        super.drawOverlay(draw, mouseX, mouseY, delta);
+        super.drawOverlay(pose, mouseX, mouseY, delta);
     }
 
     private Option getOption() {
@@ -98,7 +100,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     private static EmiIngredient getIngredient(IDataNode entry) {
         IItemNode node = (IItemNode) entry;
 
-        return node.getItem().map(EmiStack::of, (t) -> t.isFor(Registries.ITEM) ? EmiIngredient.of(t) : EmiIngredient.of(node.getItems().stream().map(EmiStack::of).toList()));
+        return node.getItem().map(EmiStack::of, (t) -> t.isFor(Registry.ITEM_REGISTRY) ? EmiIngredient.of(t) : EmiIngredient.of(node.getItems().stream().map(EmiStack::of).toList()));
     }
 
     private record Option(IDataNode entry, EmiIngredient ingredient, @Nullable Component count, boolean isRange) {

@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.common;
 
 import com.yanny.ali.api.ICommonUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.trading.Merchant;
@@ -27,7 +27,7 @@ public class TraderDetector {
     public Map<EntityType<?>, Class<?>> findTraders(Predicate<EntityType<?>> wanted) {
         Map<EntityType<?>, Class<?>> traders = new LinkedHashMap<>();
 
-        for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+        for (EntityType<?> type : Registry.ENTITY_TYPE) {
             if (type != EntityType.PLAYER && wanted.test(type)) {
                 Class<?> merchantClass = getMerchantClass(type);
 

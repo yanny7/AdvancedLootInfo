@@ -18,7 +18,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -65,7 +64,7 @@ public abstract class AbstractServer {
 
         long startTime = System.currentTimeMillis();
         RegistryAccess registryAccess = level.registryAccess();
-        Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
+        Registry<LevelStem> levelStemRegistry = level.getServer().getWorldData().worldGenSettings().dimensions();
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
         DimensionFilter dimensionFilter = new DimensionFilter(serverRegistry.getConfiguration().dimensions);
         Predicate<ResourceLocation> isDimensionVisible = (dimension) -> dimensionFilter.isVisible(levelStemRegistry, dimension);
@@ -80,7 +79,7 @@ public abstract class AbstractServer {
         if (!serverRegistry.getConfiguration().spawnInfo.isDisabled()) {
             long spawnInfoStart = System.currentTimeMillis();
 
-            spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, Services.getPlatform()::getStructureSettings, serverRegistry.getConfiguration().spawnInfo,
+            spawnInfo = new SpawnInfo(Utils.MOD_ID, registryAccess, levelStemRegistry, Services.getPlatform()::getStructureSettings, serverRegistry.getConfiguration().spawnInfo,
                     serverRegistry.getConfiguration().showInGameNames);
 
             if (serverRegistry.getConfiguration().logMoreStatistics) {

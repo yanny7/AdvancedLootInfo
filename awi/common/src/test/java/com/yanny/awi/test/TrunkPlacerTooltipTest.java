@@ -4,7 +4,6 @@ import com.yanny.awi.plugin.server.TrunkPlacerTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.*;
 import org.junit.jupiter.api.Test;
@@ -109,32 +108,6 @@ public class TrunkPlacerTooltipTest {
                 "  -> Can Grow Through:",
                 "    -> Oak Log",
                 "    -> Spruce Log"
-        ));
-    }
-
-    @Test
-    public void testCherryTrunkPlacerTooltip() {
-        assertTooltip(TrunkPlacerTooltipUtils.getCherryTrunkPlacerTooltip(UTILS, new CherryTrunkPlacer(
-                5, 2, 1,
-                ConstantInt.of(4),
-                ConstantInt.of(2),
-                UniformInt.of(2, 4),
-                ConstantInt.of(1)
-        )).build(), List.of(
-                "Cherry:",
-                "  -> Base Height: 5",
-                "  -> Height Rand A: 2",
-                "  -> Height Rand B: 1",
-                "  -> Branch Count:",
-                "    -> 4",
-                "  -> Branch Horizontal Length:",
-                "    -> 2",
-                "  -> Branch Start Offset From Top:",
-                "    -> 2 to 4",
-                "  -> Second Branch Start Offset From Top:",
-                "    -> 2 to 3",
-                "  -> Branch End Offset From Top:",
-                "    -> 1"
         ));
     }
 }

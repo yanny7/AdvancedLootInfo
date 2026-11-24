@@ -122,27 +122,4 @@ public class FoliagePlacerTooltipTest {
                 "  -> Leaf Placement Attempts: 32"
         ));
     }
-
-    @Test
-    public void testCherryFoliagePlacerTooltip() {
-        assertTooltip(FoliagePlacerTooltipUtils.getCherryFoliagePlacerTooltip(UTILS, new CherryFoliagePlacer(
-                ConstantInt.of(2),
-                ConstantInt.of(0),
-                ConstantInt.of(5),
-                0.2f,
-                0.3f,
-                0.1f,
-                0.05f
-        )).build(), List.of(
-                "Cherry:",
-                "  -> Radius: 2",
-                "  -> Offset:",
-                "    -> 0",
-                "  -> Height: 5",
-                "  -> Wide Bottom Layer Hole Chance: 0.2",
-                "  -> Corner Hole Chance: 0.3",
-                "  -> Hanging Leaves Chance: 0.1",
-                "  -> Hanging Leaves Extension Chance: 0.05"
-        ));
-    }
 }

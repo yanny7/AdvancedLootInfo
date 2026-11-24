@@ -22,14 +22,12 @@ import net.minecraft.DetectedVersion;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.client.resources.AssetIndex;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -119,7 +117,7 @@ public class TooltipTestSuite {
         PluginManager.getInstance().registerClientEvent();
         ServerLevel level = mock(ServerLevel.class);
 
-        doReturn(RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)).when(level).registryAccess();
+        doReturn(RegistryAccess.fromRegistryOfRegistries(Registry.REGISTRY)).when(level).registryAccess();
         PluginManager.getInstance().registerServerEvent(level);
         TooltipContext.setPalette(PluginManager.getInstance().serverRegistry.getTooltipCache());
         UTILS = new IServerUtils() {
@@ -287,7 +285,7 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public HolderLookup.Provider lookupProvider() {
+            public RegistryAccess lookupProvider() {
                 return PluginManager.getInstance().serverRegistry.lookupProvider();
             }
 
@@ -332,8 +330,8 @@ public class TooltipTestSuite {
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
-        PackRepository resourcePackRepository = new PackRepository(clientpacksource);
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.toFile(), new AssetIndex(resourcePackDirectory.resolve("assets").toFile(), ""));
+        PackRepository resourcePackRepository = new PackRepository(PackType.CLIENT_RESOURCES, clientpacksource);
 
         resourcePackRepository.reload();
         resourcePackRepository.setSelected(List.of("vanilla"));
@@ -356,9 +354,9 @@ public class TooltipTestSuite {
         try {
             Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
             frozenField.setAccessible(true);
-            frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, false);
-            Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ResourceKey.create(Registries.LOOT_FUNCTION_TYPE, new ResourceLocation("unknown")), LootFunctionTypes.UNUSED);
-            frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, true);
+            frozenField.set(Registry.LOOT_FUNCTION_TYPE, false);
+            Registry.register(Registry.LOOT_FUNCTION_TYPE, ResourceKey.create(Registry.LOOT_FUNCTION_REGISTRY, new ResourceLocation("unknown")), LootFunctionTypes.UNUSED);
+            frozenField.set(Registry.LOOT_FUNCTION_TYPE, true);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -368,9 +366,9 @@ public class TooltipTestSuite {
         try {
             Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
             frozenField.setAccessible(true);
-            frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, false);
-            Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, ResourceKey.create(Registries.LOOT_CONDITION_TYPE, new ResourceLocation("unknown")), LootConditionTypes.UNUSED);
-            frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, true);
+            frozenField.set(Registry.LOOT_CONDITION_TYPE, false);
+            Registry.register(Registry.LOOT_CONDITION_TYPE, ResourceKey.create(Registry.LOOT_ITEM_REGISTRY, new ResourceLocation("unknown")), LootConditionTypes.UNUSED);
+            frozenField.set(Registry.LOOT_CONDITION_TYPE, true);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

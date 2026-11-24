@@ -9,8 +9,8 @@ import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class CoreServerRegistry<
         TConfig,
@@ -36,8 +37,8 @@ public abstract class CoreServerRegistry<
     private final ServerLevel serverLevel;
     private final TooltipNodePalette tooltipNodeCache;
     private final List<Runnable> cacheCleaners = new ArrayList<>();
-    private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, IntProvider>> intProviders = registerClassKeyed("int providers", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, FloatProvider>> floatProviders = registerClassKeyed("float providers", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, IntProvider>> intProviders = registerClassKeyed("int providers", true, HashMap::new, Registry.INT_PROVIDER_TYPES);
+    private final ManagedRegistry<Class<?>, NumberConverter<TServerUtils, FloatProvider>> floatProviders = registerClassKeyed("float providers", true, HashMap::new, Registry.FLOAT_PROVIDER_TYPES);
     private final ManagedRegistry<Class<?>, EnumTranslation> enumValues = registerClassKeyed("enum values", true, HashMap::new, null);
     protected final TCommonUtils commonUtils;
 
@@ -57,7 +58,7 @@ public abstract class CoreServerRegistry<
 
     @NotNull
     @Override
-    public HolderLookup.Provider lookupProvider() {
+    public RegistryAccess lookupProvider() {
         return serverLevel.registryAccess();
     }
 
@@ -94,31 +95,28 @@ public abstract class CoreServerRegistry<
     @NotNull
     @Override
     public NumberExpr convertIntProvider(TServerUtils utils, IntProvider provider, List<TooltipNode> conditions) {
-        return NumberConverters.convert(getModId(), intProviders, utils, provider, conditions, (p) -> String.valueOf(BuiltInRegistries.INT_PROVIDER_TYPE.getKey(p.getType())));
+        return NumberConverters.convert(getModId(), intProviders, utils, provider, conditions, (p) -> String.valueOf(Registry.INT_PROVIDER_TYPES.getKey(p.getType())));
     }
 
     @NotNull
     @Override
     public NumberExpr convertFloatProvider(TServerUtils utils, FloatProvider provider, List<TooltipNode> conditions) {
-        return NumberConverters.convert(getModId(), floatProviders, utils, provider, conditions, (p) -> String.valueOf(BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(p.getType())));
+        return NumberConverters.convert(getModId(), floatProviders, utils, provider, conditions, (p) -> String.valueOf(Registry.FLOAT_PROVIDER_TYPES.getKey(p.getType())));
     }
 
     @NotNull
     @Override
     public TooltipBuilder getEnumTranslation(TServerUtils utils, Enum<?> value) {
         Class<?> type = value.getDeclaringClass();
-        EnumTranslation translation = enumValues.find(type).orElseGet(() -> autoDetectedEnum(type));
-        String key = CoreTooltipUtils.enumKey(translation.modId(), translation.owner(), value.name());
+        Optional<EnumTranslation> translation = enumValues.find(type);
 
-        return TooltipBuilder.component(Component.translatableWithFallback(key, value.name()));
-    }
+        if (translation.isEmpty()) {
+            enumValues.reportAutoDetected(type);
+            return TooltipBuilder.component(Component.literal(value.name()));
+        }
 
-    @NotNull
-    private EnumTranslation autoDetectedEnum(Class<?> type) {
-        EnumTranslation translation = new EnumTranslation(getModId(), CoreTooltipUtils.enumOwnerPath(type));
-
-        enumValues.reportAutoDetected(type);
-        return translation;
+        String key = CoreTooltipUtils.enumKey(translation.get().modId(), translation.get().owner(), value.name());
+        return TooltipBuilder.component(Component.translatable(key));
     }
 
     public void clearCaches() {

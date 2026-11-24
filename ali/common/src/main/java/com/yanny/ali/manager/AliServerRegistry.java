@@ -25,7 +25,7 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -59,20 +59,20 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     // factories
-    private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
+    private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, Registry.LOOT_POOL_ENTRY_TYPE);
     // converters
     private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, LootPoolEntryContainer>> entryWeights = registerClassKeyed("entry weights", true, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<LootPoolEntryContainer>>> entryChildren = registerClassKeyed("entry children", false, ClassKeyedMap::new, null);
-    private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, Registry.LOOT_NUMBER_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, NumberConverter<IServerUtils, NumberProvider>> intNumberConverters = registerClassKeyed("int number converters", false, HashMap::new, null);
     // listings
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, TooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
     // traders
     private final ManagedRegistry<ResourceLocation, Trades> trades = register("trades", false, HashMap::new, ResourceLocation::toString, null);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, TooltipBuilder>> entryTooltips = registerClassKeyed("entry tooltips", true, HashMap::new, Registry.LOOT_POOL_ENTRY_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, Registry.LOOT_FUNCTION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, Registry.LOOT_CONDITION_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     // modifiers
@@ -104,12 +104,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public AliServerRegistry(AliCommonRegistry utils, ServerLevel level) {
         super(utils, level);
-        this.lootContext = new LootContext(new LootParams(level, Map.of(), Map.of(), 0F), RandomSource.create(), new LootDataResolver() {
-            @Override
-            public @Nullable <T> T getElement(LootDataId<T> lootDataId) {
-                return null;
-            }
-        });
+        this.lootContext = new LootContext(RandomSource.create(), 0F, level, (id) -> LootTable.EMPTY, (id) -> null, Map.of(), Map.of());
     }
 
     public void clearData() {
@@ -309,7 +304,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
             return NumberExpr.constant(0);
         }
 
-        return NumberConverters.convert(getModId(), entryWeights, utils, entry, conditions, (e) -> String.valueOf(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(e.getType())));
+        return NumberConverters.convert(getModId(), entryWeights, utils, entry, conditions, (e) -> String.valueOf(Registry.LOOT_POOL_ENTRY_TYPE.getKey(e.getType())));
     }
 
     @NotNull
@@ -402,7 +397,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                         result = modified;
                     }
                 } catch (Throwable e) {
-                    String id = String.valueOf(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType()));
+                    String id = String.valueOf(Registry.LOOT_FUNCTION_TYPE.getKey(f.getType()));
 
                     LOGGER.warn("Failed to apply count modifier {}: {}", id, e.getMessage(), e);
                     result = NumberExpr.opaque(id);
@@ -425,7 +420,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                 try {
                     result = modifier.get().apply(utils, c, result, conditions);
                 } catch (Throwable e) {
-                    String id = String.valueOf(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType()));
+                    String id = String.valueOf(Registry.LOOT_CONDITION_TYPE.getKey(c.getType()));
 
                     LOGGER.warn("Failed to apply chance modifier {}: {}", id, e.getMessage(), e);
                     result = NumberExpr.opaque(id);
@@ -449,7 +444,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                         .map((m) -> m.apply(utils, f, stack))
                         .orElse(stack);
             } catch (Throwable e) {
-                LOGGER.warn("Failed to apply item stack modifier {}: {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType()), e.getMessage(), e);
+                LOGGER.warn("Failed to apply item stack modifier {}: {}", Registry.LOOT_FUNCTION_TYPE.getKey(f.getType()), e.getMessage(), e);
             }
         }
 
@@ -582,9 +577,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public Verdict testPage(IServerUtils utils, Object value, LootPage page) {
-        LootDataResolver lootData = utils.getServerLevel().getServer().getLootData();
+        PredicateManager predicates = utils.getServerLevel().getServer().getPredicateManager();
 
-        return GlobalLootModifierUtils.testPage(utils, value, page, pageResolvers.get(value.getClass()).orElse(null), lootContextPreparers, lootData);
+        return GlobalLootModifierUtils.testPage(utils, value, page, pageResolvers.get(value.getClass()).orElse(null), lootContextPreparers, predicates::get);
     }
 
     @NotNull
@@ -701,7 +696,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     private static String numberProviderTypeId(NumberProvider numberProvider) {
-        return String.valueOf(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType()));
+        return String.valueOf(Registry.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType()));
     }
 
     public record Trades(EntityType<?> entityType, Supplier<Int2ObjectMap<VillagerTrades.ItemListing[]>> itemListings, IntFunction<TradeLevelInfo> levelInfo) {}

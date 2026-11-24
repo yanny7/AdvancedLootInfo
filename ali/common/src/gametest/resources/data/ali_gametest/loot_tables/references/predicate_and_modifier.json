@@ -12,12 +12,6 @@
               "condition": "minecraft:reference",
               "name": "ali_gametest:is_raining"
             }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:reference",
-              "name": "ali_gametest:named"
-            }
           ]
         },
         {
@@ -26,12 +20,6 @@
           "conditions": [
             {
               "condition": "minecraft:reference",
-              "name": "ali_gametest:array"
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:reference",
               "name": "ali_gametest:array"
             }
           ]

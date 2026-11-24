@@ -39,7 +39,7 @@ public class SmeltingUtils {
         return recipes.stream()
                 .filter((recipe) -> recipe.matches(container, level))
                 .findFirst()
-                .map((recipe) -> recipe.getResultItem(level.registryAccess()))
+                .map(SmeltingRecipe::getResultItem)
                 .filter((stack) -> !stack.isEmpty());
     }
 

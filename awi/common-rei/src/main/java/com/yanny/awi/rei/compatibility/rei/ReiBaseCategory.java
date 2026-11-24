@@ -4,9 +4,10 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
@@ -25,7 +26,7 @@ import com.yanny.awi.plugin.client.widget.BiomeWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.config.ConfigObject;
-import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.AbstractRenderer;
 import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -35,7 +36,6 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -46,7 +46,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -185,7 +184,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
     private record Holder(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {}
 
-    private static class SlotCountRenderer implements Renderer {
+    private static class SlotCountRenderer extends AbstractRenderer {
         @Nullable
         private Component count;
         private boolean isRange = false;
@@ -200,7 +199,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(PoseStack pose, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
                 PoseStack stack = guiGraphics.pose();
@@ -229,7 +229,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
     protected record PreparedWidgets(Rectangle innerBounds, Rectangle fullBounds, int contentWidth, List<Widget> widgets){}
 
-    private static class BlockSlotRenderer implements Renderer {
+    private static class BlockSlotRenderer extends AbstractRenderer {
         private final BlockState blockState;
 
         public BlockSlotRenderer(Block block) {
@@ -237,22 +237,26 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(PoseStack pose, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
             BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
             PoseStack poseStack = guiGraphics.pose();
 
             RenderSystem.enableDepthTest();
 
-            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
-            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
+            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F);
+            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F);
+
+            light0.normalize();
+            light1.normalize();
             RenderSystem.setShaderLights(light0, light1);
 
             poseStack.pushPose();
             poseStack.translate(bounds.getX(), bounds.getY(), 100);
             poseStack.translate(15.5, 13.5, 0);
             poseStack.scale(9, -9, 9);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(30f));
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(225f));
             blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
             guiGraphics.bufferSource().endBatch();
             poseStack.popPose();

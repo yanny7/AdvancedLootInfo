@@ -38,8 +38,8 @@ public class GoldenLanguage {
         Language.inject(new Language() {
             @NotNull
             @Override
-            public String getOrDefault(String key, String fallback) {
-                return previous.has(key) ? previous.getOrDefault(key, fallback) : translations.getOrDefault(key, fallback);
+            public String getOrDefault(String key) {
+                return previous.has(key) ? previous.getOrDefault(key) : translations.getOrDefault(key, key);
             }
 
             @Override

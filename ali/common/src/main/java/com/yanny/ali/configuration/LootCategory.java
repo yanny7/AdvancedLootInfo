@@ -3,7 +3,7 @@ package com.yanny.ali.configuration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -32,7 +32,7 @@ public abstract class LootCategory<T> {
     public LootCategory(LootCategory.Type type, JsonObject jsonObject) {
         this.type = type;
         key = ResourceLocation.tryParse(GsonHelper.getAsString(jsonObject, "key"));
-        icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
+        icon = Registry.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
         hide = GsonHelper.getAsBoolean(jsonObject, "hide");
         catalysts = new ArrayList<>();
 
@@ -88,7 +88,7 @@ public abstract class LootCategory<T> {
 
         object.addProperty("key", key.toString());
         object.addProperty("type", type.name());
-        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon).toString());
+        object.addProperty("icon", Registry.ITEM.getKey(icon).toString());
         object.addProperty("hide", hide);
 
         if (!catalysts.isEmpty()) {

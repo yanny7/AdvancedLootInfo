@@ -2,8 +2,8 @@ package com.yanny.ali.datagen;
 
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -12,9 +12,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -27,33 +27,22 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWit
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class FakeLootProvider implements DataProvider {
-    private final PackOutput.PathProvider pathProvider;
+    private final DataGenerator.PathProvider pathProvider;
 
-    public FakeLootProvider(PackOutput output) {
-        pathProvider = output.createPathProvider(PackOutput.Target.DATA_PACK, "fake_loot");
+    public FakeLootProvider(DataGenerator generator) {
+        pathProvider = generator.createPathProvider(DataGenerator.Target.DATA_PACK, "fake_loot");
     }
 
-    @NotNull
     @Override
-    public CompletableFuture<?> run(CachedOutput cachedOutput) {
-        Map<ResourceLocation, LootTable.Builder> tables = collectLootTables();
-        List<CompletableFuture<?>> futures = new ArrayList<>();
-
-        tables.forEach((location, builder) -> {
-            Path path = pathProvider.json(location);
-
-            futures.add(DataProvider.saveStable(cachedOutput, LootDataType.TABLE.parser().toJsonTree(builder.build()), path));
-        });
-
-        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
+    public void run(CachedOutput cachedOutput) throws IOException {
+        for (Map.Entry<ResourceLocation, LootTable.Builder> entry : collectLootTables().entrySet()) {
+            DataProvider.saveStable(cachedOutput, LootTables.serialize(entry.getValue().build()), pathProvider.json(entry.getKey()));
+        }
     }
 
     @NotNull
@@ -104,7 +93,6 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/piglin",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addChargedCreeperDropItem(Items.PIGLIN_HEAD),
                                 addEquippedEnchantedAndDamagedItem(Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(Items.CROSSBOW, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),

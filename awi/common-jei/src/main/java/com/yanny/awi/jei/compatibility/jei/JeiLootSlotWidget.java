@@ -3,6 +3,7 @@ package com.yanny.awi.jei.compatibility.jei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.Rect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -11,8 +12,7 @@ import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,16 +44,17 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
 
     @NotNull
     @Override
-    public ScreenPosition getPosition() {
-        return new ScreenPosition(rect.x(), rect.y());
+    public Rect2i getArea() {
+        return new Rect2i(rect.x(), rect.y(), rect.width(), rect.height());
     }
 
     @Override
-    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void drawWidget(PoseStack pose, double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(pose);
         PoseStack stack = guiGraphics.pose();
 
         stack.translate(1, 1, 0);
-        slotDrawable.draw(guiGraphics);
+        slotDrawable.draw(guiGraphics.pose());
         stack.translate(-1, -1, 0);
 
         if (count != null) {

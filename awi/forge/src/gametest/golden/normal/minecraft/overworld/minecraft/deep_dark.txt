@@ -162,7 +162,7 @@ awi:biome minecraft:deep_dark
       | Height: −64 to 64
       awi:block minecraft:lapis_ore
       awi:block minecraft:deepslate_lapis_ore
-    awi:placed_feature minecraft:ore_copper
+    awi:placed_feature minecraft:ore_copper_large
       | Attempts Per Chunk: 16
       | Height: −16 to 112  ~48 (2%)
       |   [chart 0..42 −16-112 base=true modes=[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false] heights=0.0311,0.0777,0.1244,0.1710,0.2176,0.2642,0.3109,0.3575,0.4041,0.4508,0.4974,0.5440,0.5907,0.6373,0.6839,0.7306,0.7772,0.8238,0.8705,0.9171,0.9637,1.0000,0.9637,0.9171,0.8705,0.8238,0.7772,0.7306,0.6839,0.6373,0.5907,0.5440,0.4974,0.4508,0.4041,0.3575,0.3109,0.2642,0.2176,0.1710,0.1244,0.0777,0.0311]

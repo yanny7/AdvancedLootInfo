@@ -4,7 +4,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -24,14 +24,14 @@ public class EntityLootTableNode extends LootTableNode {
 
     public EntityLootTableNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        entityType = BuiltInRegistries.ENTITY_TYPE.get(buf.readResourceLocation());
+        entityType = Registry.ENTITY_TYPE.get(buf.readResourceLocation());
         infoTooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         super.encodeNode(utils, buf);
-        buf.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+        buf.writeResourceLocation(Registry.ENTITY_TYPE.getKey(entityType));
         buf.writeVarInt(utils.getTooltipCache().getNodeId(infoTooltip));
     }
 

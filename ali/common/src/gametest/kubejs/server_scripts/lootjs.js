@@ -80,5 +80,5 @@ LootJS.modifiers((event) => {
 });
 
 LootJS.modifiers((event) => {
-    event.addLootTableModifier("ali_gametest:lootjs/actions").triggerExplosion(1, "keep", false).addLoot("minecraft:gunpowder");
+    event.addLootTableModifier("ali_gametest:lootjs/actions").triggerExplosion(1, false, false).addLoot("minecraft:gunpowder");
 });

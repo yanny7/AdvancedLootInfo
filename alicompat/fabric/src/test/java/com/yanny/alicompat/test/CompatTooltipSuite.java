@@ -13,12 +13,12 @@ import net.fabricmc.loader.impl.launch.FabricLauncher;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.resources.AssetIndex;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.Registry;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.PackResources;
@@ -100,18 +100,18 @@ public class CompatTooltipSuite {
     private static void unfreezeRegistries() {
         try {
             Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-            Field intrusiveHolders = MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
+            Field intrusiveHolders = MappedRegistry.class.getDeclaredField("intrusiveHolderCache");
 
             frozen.setAccessible(true);
             intrusiveHolders.setAccessible(true);
 
-            for (Registry<?> registry : BuiltInRegistries.REGISTRY) {
+            for (Registry<?> registry : Registry.REGISTRY) {
                 if (registry instanceof MappedRegistry<?> mappedRegistry) {
                     frozen.set(mappedRegistry, false);
                 }
             }
 
-            for (Registry<?> registry : List.of(BuiltInRegistries.BLOCK, BuiltInRegistries.ITEM, BuiltInRegistries.ENTITY_TYPE, BuiltInRegistries.FLUID, BuiltInRegistries.GAME_EVENT)) {
+            for (Registry<?> registry : List.of(Registry.BLOCK, Registry.ITEM, Registry.ENTITY_TYPE, Registry.FLUID, Registry.GAME_EVENT)) {
                 intrusiveHolders.set(registry, new IdentityHashMap<>());
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -134,8 +134,8 @@ public class CompatTooltipSuite {
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
-        PackRepository resourcePackRepository = new PackRepository(clientpacksource);
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.toFile(), new AssetIndex(resourcePackDirectory.resolve("assets").toFile(), ""));
+        PackRepository resourcePackRepository = new PackRepository(PackType.CLIENT_RESOURCES, clientpacksource);
 
         resourcePackRepository.reload();
         resourcePackRepository.setSelected(List.of("vanilla"));

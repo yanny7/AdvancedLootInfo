@@ -1,6 +1,6 @@
 package com.yanny.ali;
 
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -25,6 +25,6 @@ public class Utils {
     public static ResourceLocation getLootTableKey(Block block) {
         ResourceLocation location = block.getLootTable();
 
-        return location.equals(BuiltInLootTables.EMPTY) ? BuiltInRegistries.BLOCK.getKey(block) : location;
+        return location.equals(BuiltInLootTables.EMPTY) ? Registry.BLOCK.getKey(block) : location;
     }
 }

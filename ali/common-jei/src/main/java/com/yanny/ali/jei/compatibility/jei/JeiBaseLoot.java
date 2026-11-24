@@ -1,9 +1,11 @@
 package com.yanny.ali.jei.compatibility.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipLine;
@@ -29,8 +31,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -117,7 +118,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
                 item.left().ifPresent(slotBuilder::addItemStack);
                 item.right().ifPresent((t) -> {
-                    if (t.isFor(Registries.ITEM)) {
+                    if (t.isFor(Registry.ITEM_REGISTRY)) {
                         //noinspection unchecked
                         slotBuilder.addIngredients(Ingredient.of((TagKey<Item>) t));
                     } else {
@@ -189,7 +190,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             }
 
             @Override
-            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+            public void draw(PoseStack pose, int xOffset, int yOffset) {
+                GuiGraphics guiGraphics = new GuiGraphics(pose);
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
                     guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0, false);
@@ -260,8 +262,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         }
 
         @Override
-        public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
-            slot.draw(guiGraphics, xOffset, yOffset);
+        public void draw(PoseStack pose, int xOffset, int yOffset) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
+            slot.draw(guiGraphics.pose(), xOffset, yOffset);
             guiGraphics.fill(xOffset + 1, yOffset + 1, xOffset + getWidth() - 1, yOffset + getHeight() - 1, WidgetUtils.PREDICATES_COLOR);
         }
     }

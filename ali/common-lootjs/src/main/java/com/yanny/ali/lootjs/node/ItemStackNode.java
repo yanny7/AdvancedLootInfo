@@ -47,7 +47,11 @@ public class ItemStackNode implements IDataNode, IItemNode {
     public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, @Nullable NumberExpr preservedCount) {
         this.conditions = conditions;
         this.functions = functions;
-        this.itemStack = TooltipUtils.getItemStack(utils, itemStack.copyWithCount(1), this.functions);
+
+        ItemStack single = itemStack.copy();
+
+        single.setCount(1);
+        this.itemStack = TooltipUtils.getItemStack(utils, single, this.functions);
         this.items = NodeUtils.resolveItems(Either.left(this.itemStack));
         this.chance = chance;
         this.modified = modified;

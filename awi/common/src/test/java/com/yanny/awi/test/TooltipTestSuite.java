@@ -17,10 +17,10 @@ import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.client.resources.AssetIndex;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
@@ -90,7 +90,7 @@ import java.util.concurrent.ExecutionException;
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
-    public static HolderLookup.Provider LOOKUP;
+    public static RegistryAccess LOOKUP;
 
     private static Set<String> UNUSED;
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -105,7 +105,7 @@ public class TooltipTestSuite {
 
         Language.inject(loadedLanguage.language());
         TestUtils.bindVanillaTags();
-        LOOKUP = VanillaRegistries.createLookup();
+        LOOKUP = RegistryAccess.BUILTIN.get();
         UNUSED = loadedLanguage.unusedKeys();
 
         PluginManager.getInstance().registerCommonEvent();
@@ -142,7 +142,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull HolderLookup.Provider lookupProvider() {
+            public @NotNull RegistryAccess lookupProvider() {
                 return LOOKUP;
             }
 
@@ -277,8 +277,8 @@ public class TooltipTestSuite {
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
-        PackRepository resourcePackRepository = new PackRepository(clientpacksource);
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.toFile(), new AssetIndex(resourcePackDirectory.resolve("assets").toFile(), ""));
+        PackRepository resourcePackRepository = new PackRepository(PackType.CLIENT_RESOURCES, clientpacksource);
 
         resourcePackRepository.reload();
         resourcePackRepository.setSelected(List.of("vanilla"));

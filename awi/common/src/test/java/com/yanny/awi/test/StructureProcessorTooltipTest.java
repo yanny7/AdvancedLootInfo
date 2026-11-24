@@ -1,11 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.StructureProcessorTooltipUtils;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
@@ -13,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 
@@ -37,15 +32,7 @@ public class StructureProcessorTooltipTest {
     @Test
     public void testBlockRotProcessorTooltip() {
         assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
-                HolderSet.direct(Holder.direct(Blocks.STONE)),
-                0.5f
-        )).build(), List.of(
-                "Block Rot:",
-                "  -> Rottable Block: Stone",
-                "  -> Integrity: 0.5"
-        ));
-        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
-                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.LOGS),
+                BlockTags.LOGS,
                 0.5f
         )).build(), List.of(
                 "Block Rot:",
@@ -84,8 +71,7 @@ public class StructureProcessorTooltipTest {
                 "      -> Always True",
                 "    -> Position Predicate: minecraft:always_true",
                 "    -> Output State:",
-                "      -> Block: Stone",
-                "    -> Block Entity Modifier: minecraft:passthrough"
+                "      -> Block: Stone"
         ));
     }
 
@@ -123,16 +109,6 @@ public class StructureProcessorTooltipTest {
         assertTooltip(StructureProcessorTooltipUtils.getProtectedBlockProcessorTooltip(UTILS, new ProtectedBlockProcessor(BlockTags.WOOL)).build(), List.of(
                 "Protected Blocks:",
                 "  -> Cannot Replace: minecraft:wool"
-        ));
-    }
-
-    @Test
-    public void testCappedProcessorTooltip() {
-        assertTooltip(StructureProcessorTooltipUtils.getCappedProcessorTooltip(UTILS, new CappedProcessor(NopProcessor.INSTANCE, ConstantInt.of(5))).build(), List.of(
-                "Capped:",
-                "  -> Delegate:",
-                "    -> Nop",
-                "  -> Limit: 5"
         ));
     }
 }

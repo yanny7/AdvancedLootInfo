@@ -4,18 +4,16 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import com.yanny.aci.api.Rect;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
-import org.joml.Vector3f;
 
 public abstract class AbstractScrollWidget {
     protected static final int SCROLLBAR_PADDING = 2;
@@ -222,7 +220,7 @@ public abstract class AbstractScrollWidget {
 
         poseStack.pushPose();
         poseStack.translate(markerArea.x(), markerArea.y(), 0);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(90));
+        poseStack.mulPose(Vector3f.ZP.rotationDegrees(90));
         // The mirror keeps the lit bevel top-left, but it reverses the winding order the GUI quads rely on.
         poseStack.scale(1.0F, -1.0F, 1.0F);
         RenderSystem.disableCull();
@@ -264,13 +262,13 @@ public abstract class AbstractScrollWidget {
         PoseStack poseStack = guiGraphics.pose();
         PoseStack.Pose last = poseStack.last();
         Matrix4f pose = last.pose();
-        ScreenRectangle scissorArea = transform(new Rect(rect.x(), rect.y(), getViewportWidth(), getViewportHeight()), pose);
+        Rect scissorArea = transform(new Rect(rect.x(), rect.y(), getViewportWidth(), getViewportHeight()), pose);
         float scrollAmountX = getScrollAmountX();
         float scrollAmountY = getScrollAmountY();
         boolean scissor = isOnMainRenderTarget();
 
         if (scissor) {
-            guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
+            guiGraphics.enableScissor(scissorArea.x(), scissorArea.y(), scissorArea.right(), scissorArea.bottom());
         }
 
         poseStack.pushPose();
@@ -308,15 +306,15 @@ public abstract class AbstractScrollWidget {
     }
 
     @NotNull
-    private static ScreenRectangle transform(Rect rect, Matrix4f pose) {
-        Vector3f topLeft = new Vector3f(rect.x(), rect.y(), 1.0f);
-        Vector3f bottomRight = new Vector3f(rect.x() + rect.width(), rect.y() + rect.height(), 1.0f);
+    private static Rect transform(Rect rect, Matrix4f pose) {
+        Vector4f topLeft = new Vector4f(rect.x(), rect.y(), 1.0f, 1.0f);
+        Vector4f bottomRight = new Vector4f(rect.x() + rect.width(), rect.y() + rect.height(), 1.0f, 1.0f);
 
-        topLeft = pose.transformPosition(topLeft);
-        bottomRight = pose.transformPosition(bottomRight);
+        topLeft.transform(pose);
+        bottomRight.transform(pose);
 
-        int x = Math.round(topLeft.x);
-        int y = Math.round(topLeft.y);
-        return new ScreenRectangle(x, y, Math.round(bottomRight.x) - x, Math.round(bottomRight.y) - y);
+        int x = Math.round(topLeft.x());
+        int y = Math.round(topLeft.y());
+        return new Rect(x, y, Math.round(bottomRight.x()) - x, Math.round(bottomRight.y()) - y);
     }
 }

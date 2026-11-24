@@ -10,8 +10,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.EmeraldsForVillagerTypeItemNode;
 import io.netty.buffer.Unpooled;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -279,15 +278,15 @@ public class NodeTest {
     public void testVillagerTypeTradesSkipForeignKeys() {
         Map<VillagerType, Item> trades = new HashMap<>();
 
-        BuiltInRegistries.VILLAGER_TYPE.forEach((type) -> trades.put(type, Items.OAK_BOAT));
+        Registry.VILLAGER_TYPE.forEach((type) -> trades.put(type, Items.OAK_BOAT));
 
         VillagerTrades.EmeraldsForVillagerTypeItem listing = new VillagerTrades.EmeraldsForVillagerTypeItem(1, 12, 5, trades);
 
-        ((Map<Object, Item>) (Map<?, ?>) trades).put(ResourceKey.create(Registries.VILLAGER_TYPE, new ResourceLocation("ali", "foreign")), Items.APPLE);
+        ((Map<Object, Item>) (Map<?, ?>) trades).put(ResourceKey.create(Registry.VILLAGER_TYPE_REGISTRY, new ResourceLocation("ali", "foreign")), Items.APPLE);
 
         EmeraldsForVillagerTypeItemNode node = new EmeraldsForVillagerTypeItemNode(UTILS, listing, TooltipNode.empty());
 
-        Assertions.assertEquals(BuiltInRegistries.VILLAGER_TYPE.size(), node.nodes().size());
+        Assertions.assertEquals(Registry.VILLAGER_TYPE.size(), node.nodes().size());
     }
 
     private static List<ResourceLocation> ids(ListNode node) {

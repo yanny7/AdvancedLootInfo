@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -40,7 +40,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testBannerPatternTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getBannerPatternTooltip(UTILS, Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))).build(Lang.Value.BANNER_PATTERN), List.of("Banner Pattern: minecraft:creeper"));
+        assertTooltip(RegistriesTooltipUtils.getBannerPatternTooltip(UTILS, Objects.requireNonNull(Registry.BANNER_PATTERN.get(BannerPatterns.CREEPER))).build(Lang.Value.BANNER_PATTERN), List.of("Banner Pattern: minecraft:creeper"));
     }
 
     @Test

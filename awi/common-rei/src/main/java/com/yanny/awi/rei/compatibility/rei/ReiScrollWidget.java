@@ -1,12 +1,13 @@
 package com.yanny.awi.rei.compatibility.rei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.awi.plugin.client.WidgetUtils;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -39,14 +40,15 @@ public class ReiScrollWidget extends Widget {
                         }
                     }
 
-                    widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
+                    widget.render(guiGraphics.pose(), (int) mouseX, (int) mouseY, 0);
                 }
             }
         };
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics guiGraphics = new GuiGraphics(pose);
         // REI queues tooltips from render's mouse args, so off-screen coords are the only way to mute one we still draw.
         if (scrollWidget.isMouseOverContent(mouseX, mouseY)) {
             scrollWidget.render(guiGraphics, mouseX, mouseY);

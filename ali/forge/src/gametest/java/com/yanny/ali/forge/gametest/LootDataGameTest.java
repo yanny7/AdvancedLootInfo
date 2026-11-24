@@ -29,6 +29,6 @@ public class LootDataGameTest {
     }
 
     private static List<String> scriptErrors() {
-        return ScriptType.SERVER.console.errors.stream().map((line) -> "KubeJS: " + line.getText()).toList();
+        return ScriptType.SERVER.errors.stream().map((line) -> "KubeJS: " + line).toList();
     }
 }

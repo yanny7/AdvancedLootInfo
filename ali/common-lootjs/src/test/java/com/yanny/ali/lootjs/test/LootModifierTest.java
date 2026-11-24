@@ -26,8 +26,6 @@ import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -271,27 +269,6 @@ public class LootModifierTest {
     }
 
     @Test
-    public void testReplaceActionWithVanillaEntryKeepsReplacedChance() {
-        IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
-                replaceLootAction(vanillaEntry(LootItem.lootTableItem(Items.EMERALD).setWeight(5).build()), false)
-        ).get(0);
-        IItemNode result = (IItemNode) operation.factory().apply(itemNode(0.5F, 3)).get(0);
-
-        Assertions.assertEquals(0.5F, result.getChance(), 1e-6F);
-    }
-
-    @Test
-    public void testReplaceActionWithVanillaEntryPreservingCountKeepsReplacedChance() {
-        IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
-                replaceLootAction(vanillaEntry(LootItem.lootTableItem(Items.EMERALD).setWeight(5).build()), true)
-        ).get(0);
-        IItemNode result = (IItemNode) operation.factory().apply(itemNode(0.5F, 3)).get(0);
-
-        Assertions.assertEquals(0.5F, result.getChance(), 1e-6F);
-        Assertions.assertEquals("3", slot(result));
-    }
-
-    @Test
     public void testReplaceActionWithConditionsWrapsInModifiedNode() {
         IOperation.ReplaceOperation operation = (IOperation.ReplaceOperation) operations(
                 wrap(LootItemRandomChanceCondition.randomChance(0.25F).build()),
@@ -352,17 +329,6 @@ public class LootModifierTest {
         return new ItemNode(chance, NumberExpr.constant(count), new ItemStack(Items.DIAMOND), TooltipBuilder.empty().build(), List.of(functions), List.of());
     }
 
-    private static LootEntry vanillaEntry(LootPoolEntryContainer container) {
-        LootEntry entry = mock(LootEntry.class, MixinLootEntry.class);
-
-        Mockito.when(((MixinLootEntry) entry).getGenerator()).thenReturn(new LootEntry.VanillaWrappedLootEntry(container));
-        Mockito.when(((MixinLootEntry) entry).getPostModifications()).thenReturn(List.of());
-        Mockito.when(((MixinLootEntry) entry).getConditions()).thenReturn(List.of());
-        Mockito.when(((MixinLootEntry) entry).getWeight()).thenReturn(1);
-        Mockito.when(entry.getWeight()).thenReturn(1);
-        return entry;
-    }
-
     private static ItemStackNode itemStackNode() {
         return new ItemStackNode(UTILS, new ItemStack(Items.DIAMOND), 1.0F, List.of(), List.of(), null);
     }
@@ -370,7 +336,7 @@ public class LootModifierTest {
     private static LootEntry itemEntry(ItemStack itemStack) {
         LootEntry entry = mock(LootEntry.class, MixinLootEntry.class);
 
-        Mockito.when(((MixinLootEntry) entry).getGenerator()).thenReturn(new LootEntry.ItemGenerator(itemStack));
+        Mockito.when(((MixinLootEntry) entry).getItemStack()).thenReturn(itemStack);
         Mockito.when(((MixinLootEntry) entry).getPostModifications()).thenReturn(List.of());
         Mockito.when(((MixinLootEntry) entry).getConditions()).thenReturn(List.of());
         Mockito.when(((MixinLootEntry) entry).getWeight()).thenReturn(1);

@@ -8,9 +8,7 @@ import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
@@ -42,7 +40,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.yanny.aci.test.utils.TestUtils.assertTooltip;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -169,26 +166,19 @@ public class GenericTooltipTest {
     void testDamageSourcePredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getDamageSourcePredicateTooltip(UTILS, DamageSourcePredicate.ANY).build(Lang.Branch.PREDICATE), List.of());
         assertTooltip(ValueTooltipUtils.getDamageSourcePredicateTooltip(UTILS, DamageSourcePredicate.Builder.damageType()
-                .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
-                .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                .bypassesArmor(true)
+                .isExplosion(false)
                 .source(EntityPredicate.Builder.entity().of(EntityType.BAT))
                 .direct(EntityPredicate.Builder.entity().of(EntityType.ARROW))
                 .build()).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
-                "  -> Tags:",
-                "    -> Is: minecraft:bypasses_armor",
-                "    -> Is Not: minecraft:is_explosion",
+                "  -> Is Explosion: False",
+                "  -> Bypasses Armor: True",
                 "  -> Direct Entity:",
                 "    -> Entity Type: minecraft:arrow",
                 "  -> Source Entity:",
                 "    -> Entity Type: minecraft:bat"
         ));
-    }
-
-    @Test
-    public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is: minecraft:bypasses_armor"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("Is Not: minecraft:bypasses_armor"));
     }
 
     @Test
@@ -208,7 +198,7 @@ public class GenericTooltipTest {
                 .nbt(new NbtPredicate(compoundTag))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true).build())
                 .equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE).build()).build())
-                .subPredicate(EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO))))
+                .subPredicate(EntitySubPredicate.variant(CatVariant.CALICO))
                 .vehicle(EntityPredicate.Builder.entity().team("blue").build())
                 .passenger(EntityPredicate.Builder.entity().team("white").build())
                 .targetedEntity(EntityPredicate.Builder.entity().team("red").build())
@@ -439,9 +429,9 @@ public class GenericTooltipTest {
 
         compoundTag.putBoolean("healing", true);
 
-        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item().of(ItemTags.AXES).build()).build(Lang.Conditions.MATCH_TOOL), List.of(
+        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item().of(ItemTags.LOGS).build()).build(Lang.Conditions.MATCH_TOOL), List.of(
                 "Match Tool:",
-                "  -> Tag: minecraft:axes"
+                "  -> Tag: minecraft:logs"
         ));
         assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(Items.CAKE, Items.NETHERITE_AXE)
@@ -504,7 +494,7 @@ public class GenericTooltipTest {
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:cold"
         ));
-        assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))).build(Lang.Branch.ENTITY_SUB_PREDICATE), List.of(
+        assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, EntitySubPredicate.variant(CatVariant.PERSIAN)).build(Lang.Branch.ENTITY_SUB_PREDICATE), List.of(
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:persian"
         ));
@@ -537,7 +527,7 @@ public class GenericTooltipTest {
                 "    -> Id: minecraft:leave_game",
                 "      -> Games Quit: 1 to 10",
                 "    -> Entity Type: minecraft:bat",
-                "      -> You killed %s %s: ≥ 5", //FIXME this should be fixed
+                "      -> You killed  : ≥ 5", //FIXME this should be fixed
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥ 4",
                 "    -> Item: minecraft:salmon",

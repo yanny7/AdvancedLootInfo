@@ -3,19 +3,20 @@ package com.yanny.ali.rei.compatibility.rei;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinBushBlock;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.gui.AbstractRenderer;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Vector3f;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         return EntryStacks.of(icon);
     }
 
-    private static class BlockSlotRenderer implements Renderer {
+    private static class BlockSlotRenderer extends AbstractRenderer {
         private final BlockState blockState;
         private final Block block;
         private final boolean isPlant;
@@ -103,14 +103,18 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(PoseStack pose, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
             BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
             PoseStack poseStack = guiGraphics.pose();
 
             RenderSystem.enableDepthTest();
 
-            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
-            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
+            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F);
+            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F);
+
+            light0.normalize();
+            light1.normalize();
             RenderSystem.setShaderLights(light0, light1);
 
             poseStack.pushPose();
@@ -119,8 +123,8 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
             if (isPlant) {
                 poseStack.translate(14, 12, 100);
                 poseStack.scale(9, -9, 9);
-                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+                poseStack.mulPose(Vector3f.XP.rotationDegrees(30f));
+                poseStack.mulPose(Vector3f.YP.rotationDegrees(225f));
                 blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 
                 BlockState base;
@@ -137,8 +141,8 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
             } else {
                 poseStack.translate(21, 21, 100);
                 poseStack.scale(18, -18, 18);
-                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+                poseStack.mulPose(Vector3f.XP.rotationDegrees(30f));
+                poseStack.mulPose(Vector3f.YP.rotationDegrees(225f));
                 blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
                 poseStack.translate(0, -1, 0);
             }

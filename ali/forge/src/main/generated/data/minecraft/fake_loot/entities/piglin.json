@@ -10,20 +10,6 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:entity_properties",
-                  "entity": "killer",
-                  "predicate": {
-                    "type": "minecraft:creeper",
-                    "nbt": "{powered:1b}"
-                  }
-                }
-              ],
-              "name": "minecraft:piglin_head"
-            },
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
                   "chance": 0.085,
                   "condition": "minecraft:random_chance_with_looting",
                   "looting_multiplier": 0.01

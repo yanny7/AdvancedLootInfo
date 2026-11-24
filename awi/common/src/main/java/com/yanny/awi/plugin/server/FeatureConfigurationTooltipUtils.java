@@ -370,7 +370,6 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.stemState).build(Lang.Branch.STEM_STATE));
             b.add(utils.getValueTooltip(utils, configuration.hatState).build(Lang.Branch.HAT_STATE));
             b.add(utils.getValueTooltip(utils, configuration.decorState).build(Lang.Branch.DECOR_STATE));
-            b.add(utils.getValueTooltip(utils, configuration.replaceableBlocks).build(Lang.Branch.REPLACEABLE_BLOCKS));
             b.add(utils.getValueTooltip(utils, configuration.planted).build(Lang.Value.PLANTED));
         }, Lang.FeatureConfiguration.HUGE_FUNGUS);
     }

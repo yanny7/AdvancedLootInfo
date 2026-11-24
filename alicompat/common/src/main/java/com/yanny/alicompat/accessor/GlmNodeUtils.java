@@ -15,8 +15,8 @@ import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +69,7 @@ public class GlmNodeUtils {
 
         List<LootItemCondition> allConditions = new ArrayList<>(node.getConditions());
 
-        allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
+        allConditions.add(new InvertedLootItemCondition(new PredicateManager.CompositePredicate(conditions.toArray(LootItemCondition[]::new))));
 
         LootCount chance = NodeUtils.getChance(utils, allConditions, node.getChance());
         LootCount count;

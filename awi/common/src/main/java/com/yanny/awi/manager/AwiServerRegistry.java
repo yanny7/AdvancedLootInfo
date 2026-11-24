@@ -19,7 +19,7 @@ import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.HeightConverter;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import com.yanny.awi.plugin.server.summary.PlacementPropagator;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
@@ -49,28 +49,28 @@ import java.util.function.Function;
 public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Either<Block, TagKey<Block>>>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, Registry.BLOCKSTATE_PROVIDER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, Registry.ROOT_PLACER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, Registry.TREE_DECORATOR_TYPES);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", true, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, Registry.PLACEMENT_MODIFIERS);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, Registry.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockPredicate, TooltipBuilder>> blockPredicateTooltips = registerClassKeyed("block predicate tooltips", true, HashMap::new, BuiltInRegistries.BLOCK_PREDICATE_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, TooltipBuilder>> blockStateProviderTooltips = registerClassKeyed("block state provider tooltips", true, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, TooltipBuilder>> treeDecoratorTooltips = registerClassKeyed("tree decorator tooltips", true, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureSize, TooltipBuilder>> featureSizeTooltips = registerClassKeyed("feature size tooltips", true, HashMap::new, BuiltInRegistries.FEATURE_SIZE_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, TooltipBuilder>> rootPlacerTooltips = registerClassKeyed("root placer tooltips", true, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FoliagePlacer, TooltipBuilder>> foliagePlacerTooltips = registerClassKeyed("foliage placer tooltips", true, HashMap::new, BuiltInRegistries.FOLIAGE_PLACER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, BuiltInRegistries.STRUCTURE_PROCESSOR);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, Registry.HEIGHT_PROVIDER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockPredicate, TooltipBuilder>> blockPredicateTooltips = registerClassKeyed("block predicate tooltips", true, HashMap::new, Registry.BLOCK_PREDICATE_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, TooltipBuilder>> blockStateProviderTooltips = registerClassKeyed("block state provider tooltips", true, HashMap::new, Registry.BLOCKSTATE_PROVIDER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, TooltipBuilder>> treeDecoratorTooltips = registerClassKeyed("tree decorator tooltips", true, HashMap::new, Registry.TREE_DECORATOR_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureSize, TooltipBuilder>> featureSizeTooltips = registerClassKeyed("feature size tooltips", true, HashMap::new, Registry.FEATURE_SIZE_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, TooltipBuilder>> rootPlacerTooltips = registerClassKeyed("root placer tooltips", true, HashMap::new, Registry.ROOT_PLACER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FoliagePlacer, TooltipBuilder>> foliagePlacerTooltips = registerClassKeyed("foliage placer tooltips", true, HashMap::new, Registry.FOLIAGE_PLACER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, Registry.TRUNK_PLACER_TYPES);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, Registry.STRUCTURE_PROCESSOR);
     // propagators
-    private final ManagedRegistry<Class<?>, NumberConverter<HeightArgs, HeightProvider>> heightProviders = registerClassKeyed("height providers", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
-    private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
+    private final ManagedRegistry<Class<?>, NumberConverter<HeightArgs, HeightProvider>> heightProviders = registerClassKeyed("height providers", true, HashMap::new, Registry.HEIGHT_PROVIDER_TYPES);
+    private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, Registry.PLACEMENT_MODIFIERS);
     // surface rules
-    private final ManagedRegistry<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, ResourceLocation::toString, BuiltInRegistries.MATERIAL_RULE);
+    private final ManagedRegistry<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> surfaceRuleHandlers = register("surface rule handlers", false, HashMap::new, ResourceLocation::toString, Registry.RULE);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -323,7 +323,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     @NotNull
     @Override
     public NumberExpr convertHeightProvider(IServerUtils utils, HeightProvider provider, ColumnContext ctx, List<TooltipNode> conditions) {
-        return NumberConverters.convert(getModId(), heightProviders, new HeightArgs(utils, ctx), provider, conditions, (p) -> String.valueOf(BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(p.getType())));
+        return NumberConverters.convert(getModId(), heightProviders, new HeightArgs(utils, ctx), provider, conditions, (p) -> String.valueOf(Registry.HEIGHT_PROVIDER_TYPES.getKey(p.getType())));
     }
 
     @NotNull

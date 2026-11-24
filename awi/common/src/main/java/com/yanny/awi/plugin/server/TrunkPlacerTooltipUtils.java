@@ -59,18 +59,6 @@ public class TrunkPlacerTooltipUtils {
         }, Lang.TrunkPlacer.UPWARD_BRANCHING_TRUNK);
     }
 
-    @NotNull
-    public static TooltipBuilder getCherryTrunkPlacerTooltip(IServerUtils utils, CherryTrunkPlacer value) {
-        return TooltipBuilder.array((b) -> {
-            addBaseTrunkPlacerTooltip(utils, b, value);
-            b.add(utils.getValueTooltip(utils, value.branchCount).build(Lang.Branch.BRANCH_COUNT));
-            b.add(utils.getValueTooltip(utils, value.branchHorizontalLength).build(Lang.Branch.BRANCH_HORIZONTAL_LENGTH));
-            b.add(utils.getValueTooltip(utils, value.branchStartOffsetFromTop).build(Lang.Branch.BRANCH_START_OFFSET_FROM_TOP));
-            b.add(utils.getValueTooltip(utils, value.secondBranchStartOffsetFromTop).build(Lang.Branch.SECOND_BRANCH_START_OFFSET_FROM_TOP));
-            b.add(utils.getValueTooltip(utils, value.branchEndOffsetFromTop).build(Lang.Branch.BRANCH_END_OFFSET_FROM_TOP));
-        }, Lang.TrunkPlacer.CHERRY);
-    }
-
     private static void addBaseTrunkPlacerTooltip(IServerUtils utils, TooltipBuilder builder, TrunkPlacer placer) {
         builder.add(utils.getValueTooltip(utils, placer.baseHeight).build(Lang.Value.BASE_HEIGHT));
         builder.add(utils.getValueTooltip(utils, placer.heightRandA).build(Lang.Value.HEIGHT_RAND_A));

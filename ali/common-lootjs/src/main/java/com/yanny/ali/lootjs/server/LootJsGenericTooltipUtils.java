@@ -7,7 +7,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.ReflectionUtils;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -79,7 +79,7 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, ResourceKey.create(Registries.ENCHANTMENT, byLocation.get(0).location())).build(Lang.Value.ENCHANTMENT));
+                    tooltip.add(utils.getValueTooltip(utils, ResourceKey.create(Registry.ENCHANTMENT_REGISTRY, byLocation.get(0).location())).build(Lang.Value.ENCHANTMENT));
 
                     if (min != 1 || max != 255) {
                         tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));

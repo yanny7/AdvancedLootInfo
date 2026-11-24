@@ -11,7 +11,6 @@ import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -127,7 +126,7 @@ public class ItemNode implements IDataNode, IItemNode {
         } catch (Throwable e) {
             buf.writerIndex(index);
             buf.writeEither(Either.left(ItemStack.EMPTY), FriendlyByteBuf::writeItem, (b, t) -> {});
-            LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
+            LOGGER.warn("Failed to encode {}/{}", Registry.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
         }
 
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));

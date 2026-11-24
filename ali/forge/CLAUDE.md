@@ -10,7 +10,7 @@ Single `AliMod` (`@Mod`). Its constructor statically builds the `SimpleChannel` 
 
 ## Platform + networking implementation
 
-- `platform.ForgePlatformHelper implements IPlatformHelper` — discovers plugins via annotation scanning (`ModFileScanData`/`AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), gets loot pools via `MixinLootTableForge`, uses `ForgeHooks.loadLootTable`, `ForgeSpawnEggItem`, and `ModList` for mod display names.
+- `platform.ForgePlatformHelper implements IPlatformHelper` — discovers plugins via annotation scanning (`ModFileScanData`/`AliEntrypoint` ASM type match, memoized with `Suppliers.memoize`), gets loot pools via `MixinLootTableForge`, parses `fake_loot` tables with `ForgeHooks.loadLootTable` as `custom` (no `LootTableLoadEvent`, which would hand a mod's additions to the real table a second time, and no pool `name` required outside `minecraft`), uses `ForgeSpawnEggItem`, and `ModList` for mod display names.
 - `network.{Client,Server,NetworkUtils}` — wrap the same 4 messages as `ali/fabric` through `SimpleChannel.registerMessage`/`.send`/`.sendToServer`, using Forge's `Supplier<NetworkEvent.Context>` handler signature (extra `setPacketHandled(true)` boilerplate Fabric doesn't need).
 
 ## Mixins
@@ -30,6 +30,7 @@ The `AliMod` entrypoint shape, `NetworkUtils` registration, and `ForgePlatformHe
 The `gametest` source set (see `ali/CLAUDE.md`'s gametest section) is wired into the `gametest` loom run differently from Fabric:
 
 - The run sets `environment "gametestserver"` together with `forgeTemplate "gameTestServer"`. Loom takes the launch target from `launch.cfg` by environment, so `server()` would start the dedicated server (`forgeserveruserdev`), which stops at the EULA and never exits.
+- The run sets the system property `production`, which makes `FMLEnvironment.production` true. Outside production, `DistExecutor.safeRunWhenOn` calls its supplier on every dist to validate it, and KubeJS's `Dist.CLIENT` supplier then links client classes on the server and fails mod construction.
 - A per-run `mods { main { … } }` puts the gametest source set into the `ali` mod, so Forge scans its annotations; outside this run the classes do not exist. The plugin in it, `GameTestPlugin`, therefore reports `ali` as its mod id — plugins of a mod that is not loaded are skipped.
 - `forge.enabledGameTestNamespaces=ali` enables the test, which is `@GameTestHolder("ali")` with `@PrefixGameTestTemplate(false)` and uses the structure `ali:empty` (`data/ali/structures/empty.nbt`); Forge ships no empty structure.
 - The Forge-only fixtures are the global loot modifiers: `GameTestLootModifiers` registers three codecs (`ali:gametest_add_item`, `ali:gametest_remove_item`, `ali:gametest_unadapted`), `GameTestPlugin` adapts the first two and leaves the third to auto-detection, and the datapack under `src/gametest/resources/data/` binds them to test tables, a block page, an entity page and no page at all. The wrapper adds the `show_unbounded_global_loot_modifiers` variant, which has nothing to show on Fabric.

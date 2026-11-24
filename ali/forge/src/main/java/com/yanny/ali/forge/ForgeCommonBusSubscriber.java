@@ -13,7 +13,7 @@ public class ForgeCommonBusSubscriber {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onServerStarted(ServerStartedEvent event) {
         PluginManager.getInstance().registerServerEvent(event.getServer().overworld());
-        AliMod.SERVER.readLootTables(event.getServer().getLootData());
+        AliMod.SERVER.readLootTables(event.getServer().getLootTables());
     }
 
     @SubscribeEvent

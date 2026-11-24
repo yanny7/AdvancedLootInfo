@@ -21,7 +21,7 @@ public class MixinMinecraftServer {
 
                 if (server != null) {
                     PluginManager.getInstance().reloadServer();
-                    AliMod.SERVER.readLootTables(server.getLootData());
+                    AliMod.SERVER.readLootTables(server.getLootTables());
                 }
             }
 

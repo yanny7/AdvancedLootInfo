@@ -4,7 +4,6 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -33,7 +32,7 @@ public class DimensionFilter {
             if (id == null) {
                 LOGGER.warn("Ignoring invalid dimension filter entry '{}'", entry);
             } else if (tag) {
-                (negated ? hiddenTags : shownTags).add(TagKey.create(Registries.LEVEL_STEM, id));
+                (negated ? hiddenTags : shownTags).add(TagKey.create(Registry.LEVEL_STEM_REGISTRY, id));
             } else {
                 (negated ? hidden : shown).add(id);
             }
@@ -41,7 +40,7 @@ public class DimensionFilter {
     }
 
     public boolean isVisible(Registry<LevelStem> registry, ResourceLocation dimension) {
-        Optional<Holder.Reference<LevelStem>> holder = registry.getHolder(ResourceKey.create(Registries.LEVEL_STEM, dimension));
+        Optional<Holder<LevelStem>> holder = registry.getHolder(ResourceKey.create(Registry.LEVEL_STEM_REGISTRY, dimension));
         return isVisible(dimension, (tag) -> holder.map((h) -> h.is(tag)).orElse(false));
     }
 

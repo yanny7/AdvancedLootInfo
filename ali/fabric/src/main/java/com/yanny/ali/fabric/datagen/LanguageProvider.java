@@ -1,11 +1,11 @@
 package com.yanny.ali.fabric.datagen;
 
 import com.yanny.ali.datagen.LanguageHolder;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
 class LanguageProvider extends FabricLanguageProvider {
-    public LanguageProvider(FabricDataOutput dataGenerator, String locale) {
+    public LanguageProvider(FabricDataGenerator dataGenerator, String locale) {
         super(dataGenerator, locale);
     }
 

@@ -3,11 +3,11 @@ package com.yanny.ali.lootjs.widget;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemTagWidget implements IWidget {

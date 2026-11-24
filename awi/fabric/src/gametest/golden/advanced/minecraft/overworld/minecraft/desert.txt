@@ -321,7 +321,6 @@ awi:biome minecraft:desert
       |           -> Position Predicate: minecraft:always_true
       |           -> Output State:
       |             -> Block: Deepslate Diamond Ore
-      |           -> Block Entity Modifier: minecraft:passthrough
       |       -> Protected Blocks:
       |         -> Cannot Replace: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4
@@ -389,10 +388,8 @@ awi:biome minecraft:desert
       |     -> Chance: 1000
       |   -> Heightmap Placement:
       |     -> Heightmap: Ground or Water Surface
-      awi:block minecraft:sand
       awi:block minecraft:sandstone
       awi:block minecraft:sandstone_slab
-      awi:block minecraft:suspicious_sand
       awi:block minecraft:water
   awi:generation_step 6
     | Generation Step: Underground Ores

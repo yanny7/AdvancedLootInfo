@@ -59,6 +59,7 @@ loom {
             property "ali.golden.dir", project.file("src/gametest/golden").absolutePath
             property "ali.golden.actual", project.file("build/gametest/golden").absolutePath
             property "ali.golden.regenerate", (project.findProperty("ali_golden_regenerate") ?: "false").toString()
+            property "production", "true"
             programArgs "--mixin.config", "aci.gametest.mixins.json"
 
             runDir "build/gametest/run"
@@ -105,10 +106,10 @@ dependencies {
 
     // LootJS
     [
-            "curse.maven:kubejs-238086:5853326",
-            "curse.maven:rhino-416294:6186971",
+            "curse.maven:kubejs-238086:5408722",
+            "curse.maven:rhino-416294:4953345",
             "dev.architectury:architectury-forge:${architectury_version}",
-            "curse.maven:lootjs-570630:7551186",
+            "curse.maven:lootjs-570630:4709099",
     ].each {
         modCompileOnly it
         modGametestRuntimeOnly it

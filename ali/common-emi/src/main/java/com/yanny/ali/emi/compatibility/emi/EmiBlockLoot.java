@@ -10,7 +10,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -53,7 +53,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     }
 
     private static ResourceLocation getRecipeId(Block block) {
-        ResourceLocation location = BuiltInRegistries.BLOCK.getKey(block);
+        ResourceLocation location = Registry.BLOCK.getKey(block);
 
         return new ResourceLocation(location.getNamespace(), "blocks/" + location.getPath());
     }

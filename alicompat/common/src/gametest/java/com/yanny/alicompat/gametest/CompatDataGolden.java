@@ -8,7 +8,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.alicompat.Utils;
 import com.yanny.alicompat.platform.Services;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +67,7 @@ public class CompatDataGolden {
     private static Set<String> namespaces() {
         Set<String> namespaces = new TreeSet<>(List.of("minecraft", "aci", "ali", Utils.MOD_ID));
 
-        Stream.of(BuiltInRegistries.ITEM, BuiltInRegistries.BLOCK, BuiltInRegistries.ENTITY_TYPE)
+        Stream.of(Registry.ITEM, Registry.BLOCK, Registry.ENTITY_TYPE)
                 .flatMap((registry) -> registry.keySet().stream())
                 .forEach((location) -> namespaces.add(location.getNamespace()));
         return namespaces;

@@ -1,11 +1,11 @@
 package com.yanny.ali.plugin.glm;
 
 import com.yanny.ali.api.IServerUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataResolver;
-import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -14,15 +14,18 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 final class LootContextProbe {
     private static final Trap TRAP = new Trap();
 
     @NotNull
-    static Verdict probe(IServerUtils utils, LootItemCondition condition, LootPage page, List<ILootContextPreparer> preparers, LootDataResolver lootData) {
+    static Verdict probe(IServerUtils utils, LootItemCondition condition, LootPage page, List<ILootContextPreparer> preparers, Function<ResourceLocation, LootItemCondition> predicates) {
         try {
             //noinspection DataFlowIssue
-            LootContext context = new LootContext(new LootParams(null, new ParamMap(page), Map.of(), 0F), TrapRandom.INSTANCE, lootData);
+            LootContext context = new LootContext(TrapRandom.INSTANCE, 0F, null, (id) -> LootTable.EMPTY, predicates, Map.of(), Map.of());
+
+            context.params = new ParamMap(page);
 
             for (ILootContextPreparer preparer : preparers) {
                 preparer.prepare(utils, context, page);

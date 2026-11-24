@@ -127,10 +127,8 @@ awi:biome minecraft:desert
     awi:placed_feature minecraft:desert_well
       | Chance: 0.1%
       | Height: Ground or Water Surface
-      awi:block minecraft:sand
       awi:block minecraft:sandstone
       awi:block minecraft:sandstone_slab
-      awi:block minecraft:suspicious_sand
       awi:block minecraft:water
   awi:generation_step 6
     | Generation Step: Underground Ores

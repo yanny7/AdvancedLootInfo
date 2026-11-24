@@ -1,9 +1,11 @@
 package com.yanny.awi.jei.compatibility.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.api.IDataNode;
@@ -20,8 +22,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
@@ -76,11 +77,12 @@ public class JeiBiomeLoot extends JeiBaseLoot {
             } else {
                 widgets.add(new IRecipeWidget() {
                     final Rect rect = new Rect(slot.x(), slot.y(), 18, 18);
-                    final ScreenPosition position = new ScreenPosition(0, 0);
+                    final Rect2i position = new Rect2i(0, 0, 0, 0);
 
                     @Override
-                    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-                        guiHelper.getSlotDrawable().draw(guiGraphics, rect.x(), rect.y());
+                    public void drawWidget(PoseStack pose, double mouseX, double mouseY) {
+                        GuiGraphics guiGraphics = new GuiGraphics(pose);
+                        guiHelper.getSlotDrawable().draw(pose, rect.x(), rect.y());
                         GenericUtils.renderUnknownSpawnEgg(guiGraphics, rect.x(), rect.y());
                     }
 
@@ -93,7 +95,7 @@ public class JeiBiomeLoot extends JeiBaseLoot {
 
                     @NotNull
                     @Override
-                    public ScreenPosition getPosition() {
+                    public Rect2i getArea() {
                         return position;
                     }
                 });

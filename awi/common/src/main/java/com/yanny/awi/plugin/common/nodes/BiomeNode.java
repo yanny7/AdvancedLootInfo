@@ -9,8 +9,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -48,7 +47,7 @@ public class BiomeNode extends ListNode {
         }
 
         this.tooltip = tooltip;
-        biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
+        biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
         spawns = spawnInfo != null ? spawnInfo.getBiomeSpawns(biomeId) : Collections.emptyMap();
     }
 
@@ -61,7 +60,7 @@ public class BiomeNode extends ListNode {
         spawns = new LinkedHashMap<>();
 
         for (int i = 0; i < spawnCount; i++) {
-            Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(buf.readResourceLocation());
+            Optional<EntityType<?>> type = Registry.ENTITY_TYPE.getOptional(buf.readResourceLocation());
             TooltipNode conditions = utils.getTooltipCache().getNodeById(buf.readVarInt());
 
             type.ifPresent((t) -> spawns.put(t, conditions));
@@ -74,7 +73,7 @@ public class BiomeNode extends ListNode {
         buf.writeResourceLocation(biomeId);
         buf.writeVarInt(spawns.size());
         spawns.forEach((type, conditions) -> {
-            buf.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(type));
+            buf.writeResourceLocation(Registry.ENTITY_TYPE.getKey(type));
             buf.writeVarInt(utils.getTooltipCache().getNodeId(conditions));
         });
     }

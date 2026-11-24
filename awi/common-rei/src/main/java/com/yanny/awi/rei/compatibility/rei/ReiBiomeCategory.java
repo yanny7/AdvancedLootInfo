@@ -1,11 +1,14 @@
 package com.yanny.awi.rei.compatibility.rei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.awi.compatibility.GenericUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.gui.AbstractRenderer;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -56,7 +59,12 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
                 Rectangle slotBounds = new Rectangle(slot.x(), slot.y(), 18, 18);
 
                 innerWidgets.add(Widgets.createSlotBase(slotBounds));
-                innerWidgets.add(Widgets.wrapRenderer(slotBounds, (graphics, b, mouseX, mouseY, delta) -> GenericUtils.renderUnknownSpawnEgg(graphics, b.x, b.y)));
+                innerWidgets.add(Widgets.wrapRenderer(slotBounds, new AbstractRenderer() {
+                    @Override
+                    public void render(PoseStack pose, Rectangle b, int mouseX, int mouseY, float delta) {
+                        GenericUtils.renderUnknownSpawnEgg(new GuiGraphics(pose), b.x, b.y);
+                    }
+                }));
                 innerWidgets.add(Widgets.createTooltip((point) -> slotBounds.contains(point) ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(slot.getTooltip()))) : null));
             }
         }

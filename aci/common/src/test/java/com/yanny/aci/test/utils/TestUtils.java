@@ -11,7 +11,6 @@ import com.yanny.aci.tooltip.TooltipStyle;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -119,7 +118,7 @@ public class TestUtils {
      * {@link net.minecraft.server.Bootstrap#bootStrap()} only fills the built-in registries with their elements - tags are
      * datapack-driven and stay empty until {@link net.minecraft.tags.TagManager} runs, which never happens in tests. Since
      * {@code VanillaRegistries.createLookup()} exposes built-in registries through {@code MappedRegistry#asLookup()} (a live
-     * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registries.BLOCK).getOrThrow(someTag)} fails.
+     * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registry.BLOCK_REGISTRY).getOrThrow(someTag)} fails.
      * This loads the vanilla datapack and binds its tags into the built-in registries, mirroring what {@code TagManager} does.
      */
     public static synchronized void bindVanillaTags() {
@@ -129,13 +128,13 @@ public class TestUtils {
 
         tagsBound = true;
 
-        PackRepository packRepository = new PackRepository(new ServerPacksSource());
+        PackRepository packRepository = new PackRepository(PackType.SERVER_DATA, new ServerPacksSource());
 
         packRepository.reload();
         packRepository.setSelected(List.of("vanilla"));
 
         try (CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packRepository.openAllSelected())) {
-            RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY).registries().forEach((entry) -> bindTags(resourceManager, entry));
+            RegistryAccess.fromRegistryOfRegistries(Registry.REGISTRY).registries().forEach((entry) -> bindTags(resourceManager, entry));
         }
     }
 
@@ -187,9 +186,9 @@ public class TestUtils {
 
         Language language = new Language() {
             @NotNull
-            public String getOrDefault(String key, String value) {
+            public String getOrDefault(String key) {
                 notUsed.remove(key);
-                return Objects.requireNonNull(languageMap.getOrDefault(key, value));
+                return languageMap.getOrDefault(key, key);
             }
 
             public boolean has(String key) {

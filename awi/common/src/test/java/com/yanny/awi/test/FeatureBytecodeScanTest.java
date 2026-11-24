@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -63,7 +63,7 @@ public class FeatureBytecodeScanTest {
         List<String> truncated = new ArrayList<>();
         List<String> conditional = new ArrayList<>();
 
-        for (Map.Entry<net.minecraft.resources.ResourceKey<Feature<?>>, Feature<?>> entry : BuiltInRegistries.FEATURE.entrySet()) {
+        for (Map.Entry<net.minecraft.resources.ResourceKey<Feature<?>>, Feature<?>> entry : Registry.FEATURE.entrySet()) {
             String id = entry.getKey().location().toString();
             FeatureBytecodeScanner.ScanResult result = FeatureBytecodeScanner.scan(entry.getValue().getClass());
             Map<String, Object> report = new LinkedHashMap<>();
@@ -115,7 +115,7 @@ public class FeatureBytecodeScanTest {
     }
 
     private static List<String> blockIds(Set<Block> blocks) {
-        return blocks.stream().map(BuiltInRegistries.BLOCK::getKey).map(ResourceLocation::toString).sorted().toList();
+        return blocks.stream().map(Registry.BLOCK::getKey).map(ResourceLocation::toString).sorted().toList();
     }
 
     private static List<String> tagIds(Set<TagKey<Block>> tags) {

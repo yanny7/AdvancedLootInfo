@@ -4,7 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
@@ -131,14 +131,6 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getReferenceTooltip(IServerUtils utils, FunctionReference fun) {
-        return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.name).build(Lang.Value.NAME));
-            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
-        }, Lang.Functions.REFERENCE);
-    }
-
-    @NotNull
     public static TooltipBuilder getSetAttributesTooltip(IServerUtils utils, SetAttributesFunction fun) {
         return TooltipBuilder.array((b) -> {
             if (!fun.modifiers.isEmpty()) {
@@ -192,7 +184,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetEnchantmentsTooltip(IServerUtils utils, SetEnchantmentsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getMapTooltip(utils, fun.enchantments, Comparator.comparing(BuiltInRegistries.ENCHANTMENT::getKey), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
+            b.add(getMapTooltip(utils, fun.enchantments, Comparator.comparing(Registry.ENCHANTMENT::getKey), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));
         }, Lang.Functions.SET_ENCHANTMENTS);
@@ -255,7 +247,7 @@ public class FunctionTooltipUtils {
     public static TooltipBuilder getSetStewEffectTooltip(IServerUtils utils, SetStewEffectFunction fun) {
         return TooltipBuilder.array((b) -> {
             if (!fun.effectDurationMap.isEmpty()) {
-                b.add(getMapTooltip(utils, fun.effectDurationMap, Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectDurationEntryTooltip));
+                b.add(getMapTooltip(utils, fun.effectDurationMap, Comparator.comparing(Registry.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectDurationEntryTooltip));
             }
 
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.PREDICATES));

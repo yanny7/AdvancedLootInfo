@@ -1,6 +1,5 @@
 package com.yanny.awi.test.utils;
 
-import com.mojang.serialization.Lifecycle;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
@@ -10,9 +9,7 @@ import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.registries.VanillaRegistries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
@@ -29,7 +26,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 /**
- * Runs the base-layout scan against vanilla worldgen data without a running server: {@code VanillaRegistries} supplies
+ * Runs the base-layout scan against vanilla worldgen data without a running server: {@code RegistryAccess.BUILTIN} supplies
  * the datapack registries and the vanilla {@code WorldPreset} supplies real {@link LevelStem}s, so the scan sees the
  * same dimensions/biome sources/noise settings it sees in game.
  */
@@ -37,7 +34,7 @@ public class BaseLayoutTestUtils {
     public static final Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> SURFACE_RULE_HANDLERS =
             Map.of(BandlandsLayout.TYPE, (context) -> BandlandsLayout.create(context.randomState()));
 
-    private static HolderLookup.Provider lookup;
+    private static RegistryAccess lookup;
     private static RegistryAccess registryAccess;
     private static Registry<LevelStem> levelStems;
 
@@ -50,14 +47,12 @@ public class BaseLayoutTestUtils {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
         Bootstrap.bootStrap();
 
-        lookup = VanillaRegistries.createLookup();
+        lookup = RegistryAccess.BUILTIN.get();
+        registryAccess = lookup;
 
-        // The scan only ever asks for BIOME (the ProtoChunk biome palette) and NOISE (RandomState).
-        registryAccess = new RegistryAccess.ImmutableRegistryAccess(List.of(copy(Registries.BIOME), copy(Registries.NOISE)));
+        WorldPreset preset = lookup.registryOrThrow(Registry.WORLD_PRESET_REGISTRY).getOrThrow(WorldPresets.NORMAL);
 
-        WorldPreset preset = lookup.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.NORMAL).value();
-
-        levelStems = preset.createWorldDimensions().dimensions();
+        levelStems = preset.createWorldGenSettings(0, true, false).dimensions();
     }
 
     /**
@@ -71,8 +66,6 @@ public class BaseLayoutTestUtils {
 
     @NotNull
     public static BaseLayoutScanner scanner(long seed, NodeUtils.ScanSettings settings, boolean logStatistics) {
-        // The copied registries are a different HolderOwner than the one the surface rules' holders came from, so the
-        // codec ops have to go through the original lookup or the specializer's encode fails its ownership check.
         return BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, (dimension) -> true, SURFACE_RULE_HANDLERS, settings, logStatistics);
     }
 
@@ -104,7 +97,7 @@ public class BaseLayoutTestUtils {
             }
 
             lines.add("%s %s [%s] %s %s%s%s".formatted(
-                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(info.block()),
+                    net.minecraft.core.Registry.BLOCK.getKey(info.block()),
                     info.storageType(), ranges, info.water(), info.placement(),
                     info.layerShift() > 0 ? " shift=±" + info.layerShift() : "",
                     info.heights().isEmpty() ? "" : " y=[" + String.join(", ", info.heights().stream().map(NumberFormatter::slot).toList()) + "]"));
@@ -116,7 +109,7 @@ public class BaseLayoutTestUtils {
     }
 
     @NotNull
-    public static HolderLookup.Provider lookup() {
+    public static RegistryAccess lookup() {
         return lookup;
     }
 
@@ -133,14 +126,5 @@ public class BaseLayoutTestUtils {
     @NotNull
     public static String biomeName(Holder<Biome> biome) {
         return biome.unwrapKey().map((key) -> key.location().toString()).orElse("<unnamed biome>");
-    }
-
-    @NotNull
-    private static <T> Registry<T> copy(ResourceKey<? extends Registry<T>> key) {
-        MappedRegistry<T> registry = new MappedRegistry<>(key, Lifecycle.stable());
-
-        lookup.lookupOrThrow(key).listElements().forEach((ref) -> Registry.register(registry, ref.key(), ref.value()));
-
-        return registry.freeze();
     }
 }

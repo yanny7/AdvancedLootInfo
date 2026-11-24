@@ -134,24 +134,6 @@ ali:loot_table
     ali:item minecraft:cooked_porkchop x1
       | Chance: 7.69%
       | Count: 1
-  ali:loot_pool
-    | Selects random entry
-    | Rolls: 1
-    ali:empty
-      | Drops nothing
-      | Chance: 91.67%
-    ali:item minecraft:snout_armor_trim_smithing_template x1
-      | Chance: 8.33%
-      | Count: 1
-  ali:loot_pool
-    | Selects random entry
-    | Rolls: 1
-    ali:empty
-      | Drops nothing
-      | Chance: 90%
-    ali:item minecraft:netherite_upgrade_smithing_template x1
-      | Chance: 10%
-      | Count: 1
   ali:item minecraft:diamond x1
     | Chance: 1%
     | Count: 1

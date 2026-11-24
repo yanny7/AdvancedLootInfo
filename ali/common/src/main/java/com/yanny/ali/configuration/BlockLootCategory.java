@@ -6,8 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 public class BlockLootCategory extends LootCategory<Block> {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -31,22 +31,20 @@ public class BlockLootCategory extends LootCategory<Block> {
 
     public BlockLootCategory(JsonObject object) {
         super(Type.BLOCK, object);
-        blocks = GsonHelper.getAsJsonArray(object, "blocks")
-                .asList()
-                .stream()
+        blocks = StreamSupport.stream(GsonHelper.getAsJsonArray(object, "blocks").spliterator(), false)
                 .map(JsonElement::getAsString)
                 .map((s) -> {
                     if (s.startsWith("#")) {
                         ResourceLocation location = ResourceLocation.tryParse(s.substring(1));
 
                         if (location != null) {
-                            return Either.<TagKey<Block>, Block>left(TagKey.create(Registries.BLOCK, location));
+                            return Either.<TagKey<Block>, Block>left(TagKey.create(Registry.BLOCK_REGISTRY, location));
                         }
                     } else {
                         ResourceLocation location = ResourceLocation.tryParse(s);
 
-                        if (location != null && BuiltInRegistries.BLOCK.containsKey(location)) {
-                            return Either.<TagKey<Block>, Block>right(BuiltInRegistries.BLOCK.get(location));
+                        if (location != null && Registry.BLOCK.containsKey(location)) {
+                            return Either.<TagKey<Block>, Block>right(Registry.BLOCK.get(location));
                         }
                     }
 
@@ -63,7 +61,7 @@ public class BlockLootCategory extends LootCategory<Block> {
 
         for (Either<TagKey<Block>, Block> entry : blocks) {
             entry.ifLeft((tag) -> array.add("#" + tag.location()));
-            entry.ifRight((block) -> array.add(BuiltInRegistries.BLOCK.getKey(block).toString()));
+            entry.ifRight((block) -> array.add(Registry.BLOCK.getKey(block).toString()));
         }
 
         object.add("blocks", array);

@@ -4,8 +4,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -30,7 +29,7 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
                 continue;
             }
 
-            TooltipNode cond = utils.getValueTooltip(utils, ResourceKey.create(Registries.VILLAGER_TYPE, BuiltInRegistries.VILLAGER_TYPE.getKey(type))).build(Lang.Value.VILLAGER_TYPE);
+            TooltipNode cond = utils.getValueTooltip(utils, ResourceKey.create(Registry.VILLAGER_TYPE_REGISTRY, Registry.VILLAGER_TYPE.getKey(type))).build(Lang.Value.VILLAGER_TYPE);
 
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }

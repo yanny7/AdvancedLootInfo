@@ -30,8 +30,3 @@ ali:loot_table
     ali:item minecraft:compass x1
       | Chance: 1.92%
       | Count: 1
-  ali:loot_pool
-    | Selects random entry
-    | Rolls: 1
-    ali:item minecraft:eye_armor_trim_smithing_template x1
-      | Count: 1

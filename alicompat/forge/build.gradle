@@ -258,10 +258,14 @@ dependencies {
         common(project(path: p, configuration: "namedElements")) { transitive false }
     }
 
-    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}") {
+        exclude group: "org.jetbrains", module: "annotations"
+        exclude group: "org.jspecify", module: "jspecify"
+    }
+    forgeRuntimeLibrary "net.mezzdev:deduplicating-runner:0.1.0"
 
     // MoreJS' trade classes extend KubeJS types no shim imports, so nothing else pulls KubeJS in and they fail to load
-    modCompileOnly "curse.maven:kubejs-238086:5853326"
+    modCompileOnly "curse.maven:kubejs-238086:5408722"
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }

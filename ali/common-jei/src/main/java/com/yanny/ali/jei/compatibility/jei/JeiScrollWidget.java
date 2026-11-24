@@ -1,8 +1,10 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.inputs.IJeiInputHandler;
@@ -10,9 +12,7 @@ import mezz.jei.api.gui.inputs.IJeiUserInput;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenPosition;
-import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,14 +37,8 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
 
     @NotNull
     @Override
-    public ScreenRectangle getArea() {
-        return new ScreenRectangle(rect.x(), rect.y(), rect.width(), rect.height());
-    }
-
-    @NotNull
-    @Override
-    public ScreenPosition getPosition() {
-        return new ScreenPosition(rect.x(), rect.y());
+    public Rect2i getArea() {
+        return new Rect2i(rect.x(), rect.y(), rect.width(), rect.height());
     }
 
     @NotNull
@@ -71,18 +65,19 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     }
 
     @Override
-    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void drawWidget(PoseStack pose, double mouseX, double mouseY) {
+        GuiGraphics guiGraphics = new GuiGraphics(pose);
         render(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         for (IRecipeWidget widget : widgets) {
-            if (widget instanceof JeiLootSlotWidget && isOutsideViewport(widget.getPosition().x(), widget.getPosition().y(), SLOT_SIZE, SLOT_SIZE)) {
+            if (widget instanceof JeiLootSlotWidget && isOutsideViewport(widget.getArea().getX(), widget.getArea().getY(), SLOT_SIZE, SLOT_SIZE)) {
                 continue;
             }
 
-            widget.drawWidget(guiGraphics, mouseX, mouseY);
+            widget.drawWidget(guiGraphics.pose(), mouseX, mouseY);
         }
     }
 

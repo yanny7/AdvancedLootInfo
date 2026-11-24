@@ -1,11 +1,12 @@
 package com.yanny.aci.compatibility;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.tooltip.TooltipLine;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -77,7 +78,18 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
     }
 
     @Override
-    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
+    public void renderImage(Font font, int x, int y, PoseStack poseStack, ItemRenderer itemRenderer, int blitOffset) {
+        poseStack.pushPose();
+        poseStack.translate(0, 0, blitOffset);
+
+        try {
+            renderImage(font, x, y, new GuiGraphics(poseStack));
+        } finally {
+            poseStack.popPose();
+        }
+    }
+
+    private void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         Layout layout = getLayout(font);
         int visible = layout.visibleLines();
         int totalLines = layout.totalLines();

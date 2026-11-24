@@ -10,9 +10,9 @@ ali:loot_table
       | Any Of:
       |   -> Match Tool:
       |     -> Item: Shears
-      |   -> All Of:
-      |     -> Killed by player
-      |     -> Inverted:
+      |   -> Inverted:
+      |     -> Any Of:
+      |       -> Killed by player
       |       -> Random Chance:
       |         -> Probability: 0.3
     ali:item minecraft:orange_dye x1
@@ -98,8 +98,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Damage Source Properties:
-      |   -> Tags:
-      |     -> Is: minecraft:is_fire
+      |   -> Is Fire: True
     ali:item minecraft:pink_dye x1
       | Chance: 8.33%
       | Count: 1

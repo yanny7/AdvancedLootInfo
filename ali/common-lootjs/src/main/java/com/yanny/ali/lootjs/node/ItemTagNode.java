@@ -11,7 +11,7 @@ import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -67,7 +67,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     public ItemTagNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
+        tag = TagKey.create(Registry.ITEM_REGISTRY, buf.readResourceLocation());
         items = NodeUtils.resolveItems(Either.right(tag));
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = NumberExpr.decode(buf);

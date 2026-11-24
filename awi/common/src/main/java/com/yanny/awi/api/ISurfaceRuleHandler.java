@@ -1,7 +1,7 @@
 package com.yanny.awi.api;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.level.levelgen.RandomState;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public interface ISurfaceRuleHandler {
         return true;
     }
 
-    record Context(RandomState randomState, HolderLookup.Provider lookup) {}
+    record Context(RandomState randomState, RegistryAccess lookup) {}
 
     record GhostObservation(NavigableSet<Integer> absoluteY, BlockInfo.WaterConstraint water, BlockInfo.Placement placement) {}
 }

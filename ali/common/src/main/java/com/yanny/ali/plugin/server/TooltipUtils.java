@@ -11,7 +11,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.Util;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,9 +21,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.LootDataId;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.world.level.storage.loot.ItemModifierManager;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -130,7 +129,7 @@ public class TooltipUtils {
 
     @NotNull
     public static NumberExpr level(Enchantment enchantment) {
-        return NumberExpr.level(String.valueOf(BuiltInRegistries.ENCHANTMENT.getKey(enchantment)), enchantment.getMaxLevel());
+        return NumberExpr.level(String.valueOf(Registry.ENCHANTMENT.getKey(enchantment)), enchantment.getMaxLevel());
     }
 
     @NotNull
@@ -202,36 +201,20 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static List<LootItemCondition> unwrapAllOf(IServerUtils ignoredUtils, AllOfCondition condition) {
-        return Arrays.asList(condition.terms);
-    }
-
-    @NotNull
-    public static List<LootItemCondition> unwrapCompositePredicate(IServerUtils ignoredUtils, LootDataManager.CompositePredicate condition) {
+    public static List<LootItemCondition> unwrapCompositePredicate(IServerUtils ignoredUtils, PredicateManager.CompositePredicate condition) {
         return Arrays.asList(condition.terms);
     }
 
     @Unmodifiable
     @Nullable
     public static List<LootItemCondition> unwrapConditionReference(IServerUtils utils, ConditionReference condition) {
-        LootItemCondition referenced = utils.getServerLevel().getServer().getLootData().getElement(new LootDataId<>(LootDataType.PREDICATE, condition.name));
+        LootItemCondition referenced = utils.getServerLevel().getServer().getPredicateManager().get(condition.name);
         return referenced != null ? Collections.singletonList(referenced) : null;
     }
 
     @NotNull
-    public static List<LootItemFunction> unwrapFunctionSequence(IServerUtils ignoredUtils, LootDataManager.FunctionSequence function) {
+    public static List<LootItemFunction> unwrapFunctionSequence(IServerUtils ignoredUtils, ItemModifierManager.FunctionSequence function) {
         return Arrays.asList(function.functions);
-    }
-
-    @Unmodifiable
-    @Nullable
-    public static List<LootItemFunction> unwrapFunctionReference(IServerUtils utils, FunctionReference function) {
-        if (isConditional(function)) {
-            return null;
-        }
-
-        LootItemFunction referenced = utils.getServerLevel().getServer().getLootData().getElement(new LootDataId<>(LootDataType.MODIFIER, function.name));
-        return referenced != null ? Collections.singletonList(referenced) : null;
     }
 
     @NotNull
@@ -242,7 +225,7 @@ public class TooltipUtils {
             List<Enchantment> enchantments = function.enchantments;
 
             if (enchantments.isEmpty()) {
-                enchantments = BuiltInRegistries.ENCHANTMENT.stream().filter(Enchantment::isDiscoverable).filter((enchantment) -> isBook || enchantment.canEnchant(finalItemStack)).toList();
+                enchantments = Registry.ENCHANTMENT.stream().filter(Enchantment::isDiscoverable).filter((enchantment) -> isBook || enchantment.canEnchant(finalItemStack)).toList();
             }
 
             if (enchantments.size() == 1 && enchantments.get(0).getMinLevel() == enchantments.get(0).getMaxLevel()) {
@@ -337,7 +320,7 @@ public class TooltipUtils {
 
     public static TooltipBuilder getJsonTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
-            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e).rawKey(key))));
+            return TooltipBuilder.array((b) -> element.getAsJsonObject().entrySet().forEach((e) -> b.add(getElementTooltip(utils, e.getValue()).rawKey(e.getKey()))));
         }
 
         return getElementTooltip(utils, element);
@@ -459,7 +442,7 @@ public class TooltipUtils {
 
     private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
-            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e)).rawKey(key)));
+            return TooltipBuilder.array((b) -> element.getAsJsonObject().entrySet().forEach((e) -> b.add(getElementTooltip(utils, e.getValue())).rawKey(e.getKey())));
         } else if (element.isJsonArray()) {
             return TooltipBuilder.array((b) -> element.getAsJsonArray().forEach((e) -> b.add(getElementTooltip(utils, e))));
         } else if (element.isJsonPrimitive()) {

@@ -115,9 +115,9 @@ public class LanguageHolder {
         put(CopyNameFunction.NameSource.KILLER_PLAYER, "Killer Player");
         put(CopyNameFunction.NameSource.BLOCK_ENTITY, "Block Entity");
 
-        put(Explosion.BlockInteraction.KEEP, "Keep Blocks");
-        put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks");
-        put(Explosion.BlockInteraction.DESTROY_WITH_DECAY, "Destroy Blocks With Decay");
+        put(Explosion.BlockInteraction.NONE, "Keep Blocks");
+        put(Explosion.BlockInteraction.BREAK, "Destroy Blocks");
+        put(Explosion.BlockInteraction.DESTROY, "Destroy Blocks With Decay");
 
         verifyEnumTranslations();
 
@@ -126,13 +126,11 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.entity_loot", "Entity Drops");
         TRANSLATION_MAP.put("emi.category.ali.chest_loot", "Chest Loot");
         TRANSLATION_MAP.put("emi.category.ali.fishing_loot", "Fishing Loot");
-        TRANSLATION_MAP.put("emi.category.ali.archaeology_loot", "Archaeology Loot");
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
         TRANSLATION_MAP.put("emi.category.ali.trade_loot", "Trading Loot");
         TRANSLATION_MAP.put("emi.category.ali.cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
-        TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
 
         TRANSLATION_MAP.put("ali/loot_table/minecraft/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/chests/ancient_city", "Ancient City Chest");
@@ -178,13 +176,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/minecraft/chests/village/village_weaponsmith", "Village Weaponsmith Chest");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/chests/woodland_mansion", "Woodland Mansion Chest");
 
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/desert_pyramid", "Desert Pyramid");
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/desert_well", "Desert Well");
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/ocean_ruin_cold", "Ocean Ruin Cold");
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/ocean_ruin_warm", "Ocean Ruins Warm");
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/trail_ruins_common", "Trail Ruins Common");
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/archaeology/trail_ruins_rare", "Trail Ruins Rare");
-
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift");
@@ -204,7 +195,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/fishing/fish", "Fishing: Fish");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/fishing/treasure", "Fishing: Treasure");
 
-        TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/sniffer_digging", "Sniffer Digging");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("ali/loot_table/minecraft/gameplay/piglin_bartering", "Piglin Bartering");
     }

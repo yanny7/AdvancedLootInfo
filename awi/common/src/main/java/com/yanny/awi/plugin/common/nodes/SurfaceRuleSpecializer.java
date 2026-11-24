@@ -9,7 +9,7 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -92,7 +92,7 @@ public class SurfaceRuleSpecializer {
      *                    equal values still fails the codec's ownership check and turns specialization off. In game
      *                    that is the level's {@code RegistryAccess}.
      */
-    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup,
+    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, RegistryAccess codecLookup,
                                   Map<String, ISurfaceRuleHandler> handlers, boolean logStatistics) {
         JsonElement json = null;
         DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, codecLookup);

@@ -36,8 +36,6 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.*;
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifierType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
@@ -121,7 +119,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(AboveRootPlacement.class, ValueTooltipUtils::getAboveRootPlacementTooltip);
         registry.registerValueTooltip(SimpleWeightedRandomList.class, ValueTooltipUtils::getSimpleWeightedRandomListTooltip);
         registry.registerValueTooltip(PosRuleTest.class, ValueTooltipUtils::getPosRuleTestTooltip);
-        registry.registerValueTooltip(RuleBlockEntityModifier.class, ValueTooltipUtils::getRuleBlockEntityModifierTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
@@ -140,7 +137,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(FloatProviderType.class, RegistriesTooltipUtils::getFloatProviderTooltip);
         registry.registerValueTooltip(StructureProcessorType.class, RegistriesTooltipUtils::getStructureProcessorTypeTooltip);
         registry.registerValueTooltip(PosRuleTestType.class, RegistriesTooltipUtils::getPosRuleTestTypeTooltip);
-        registry.registerValueTooltip(RuleBlockEntityModifierType.class, RegistriesTooltipUtils::getRuleBlockEntityModifierTooltip);
 
         registry.registerFeatureTooltip(BlockColumnConfiguration.class, FeatureConfigurationTooltipUtils::getBlockColumnConfigurationTooltip);
         registry.registerFeatureTooltip(BlockPileConfiguration.class, FeatureConfigurationTooltipUtils::getBlockPileConfigurationTooltip);
@@ -310,7 +306,6 @@ public class Plugin implements IPlugin {
         registry.registerTrunkPlacerTooltip(FancyTrunkPlacer.class, TrunkPlacerTooltipUtils::getFancyTrunkPlacerTooltip);
         registry.registerTrunkPlacerTooltip(BendingTrunkPlacer.class, TrunkPlacerTooltipUtils::getBendingTrunkPlacerTooltip);
         registry.registerTrunkPlacerTooltip(UpwardsBranchingTrunkPlacer.class, TrunkPlacerTooltipUtils::getUpwardBranchingTrunkPlacerTooltip);
-        registry.registerTrunkPlacerTooltip(CherryTrunkPlacer.class, TrunkPlacerTooltipUtils::getCherryTrunkPlacerTooltip);
 
         registry.registerTreeDecoratorTooltip(TrunkVineDecorator.class, TreeDecoratorTooltipUtils::getTrunkVineDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(LeaveVineDecorator.class, TreeDecoratorTooltipUtils::getLeaveVineDecoratorTooltip);
@@ -329,7 +324,6 @@ public class Plugin implements IPlugin {
         registry.registerFoliagePlacerTooltip(MegaPineFoliagePlacer.class, FoliagePlacerTooltipUtils::getMegaPineFoliagePlacerTooltip);
         registry.registerFoliagePlacerTooltip(DarkOakFoliagePlacer.class, FoliagePlacerTooltipUtils::getDarkOakFoliagePlacerTooltip);
         registry.registerFoliagePlacerTooltip(RandomSpreadFoliagePlacer.class, FoliagePlacerTooltipUtils::getRandomSpreadFoliagePlacerTooltip);
-        registry.registerFoliagePlacerTooltip(CherryFoliagePlacer.class, FoliagePlacerTooltipUtils::getCherryFoliagePlacerTooltip);
 
         registry.registerFeatureSizeTooltip(TwoLayersFeatureSize.class, FeatureSizeTooltipUtils::getTwoLayersFeatureSizeTooltip);
         registry.registerFeatureSizeTooltip(ThreeLayersFeatureSize.class, FeatureSizeTooltipUtils::getThreeLayersFeatureSizeTooltip);
@@ -340,7 +334,6 @@ public class Plugin implements IPlugin {
         registry.registerStructureProcessorTooltip(BlockAgeProcessor.class, StructureProcessorTooltipUtils::getBlockAgeProcessorTooltip);
         registry.registerStructureProcessorTooltip(BlockIgnoreProcessor.class, StructureProcessorTooltipUtils::getBlockIgnoreProcessorTooltip);
         registry.registerStructureProcessorTooltip(BlockRotProcessor.class, StructureProcessorTooltipUtils::getBlockRotProcessorTooltip);
-        registry.registerStructureProcessorTooltip(CappedProcessor.class, StructureProcessorTooltipUtils::getCappedProcessorTooltip);
         registry.registerStructureProcessorTooltip(GravityProcessor.class, StructureProcessorTooltipUtils::getGravityProcessorTooltip);
         registry.registerStructureProcessorTooltip(JigsawReplacementProcessor.class, StructureProcessorTooltipUtils::getJigsawReplacementProcessorTooltip);
         registry.registerStructureProcessorTooltip(LavaSubmergedBlockProcessor.class, StructureProcessorTooltipUtils::getLavaSubmergedBlockProcessorTooltip);

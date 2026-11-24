@@ -317,7 +317,6 @@ awi:biome minecraft:mangrove_swamp
       |           -> Position Predicate: minecraft:always_true
       |           -> Output State:
       |             -> Block: Deepslate Diamond Ore
-      |           -> Block Entity Modifier: minecraft:passthrough
       |       -> Protected Blocks:
       |         -> Cannot Replace: minecraft:features_cannot_replace
       |     -> Max Empty Corners Allowed: 4

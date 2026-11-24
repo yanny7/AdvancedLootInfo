@@ -1,6 +1,7 @@
 package com.yanny.awi.compatibility;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.RegistryNames;
 import com.yanny.aci.tooltip.TooltipLine;
@@ -21,9 +22,7 @@ import com.yanny.awi.plugin.client.WidgetUtils;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -159,7 +158,7 @@ public class GenericUtils {
         }
 
         ResourceLocation location = ResourceLocation.tryParse(itemId);
-        Item item = location != null ? BuiltInRegistries.ITEM.getOptional(location).orElse(Items.AIR) : Items.AIR;
+        Item item = location != null ? Registry.ITEM.getOptional(location).orElse(Items.AIR) : Items.AIR;
 
         if (item == Items.AIR) {
             LOGGER.warn("Unknown icon item '{}' for dimension {}, using the default icon", itemId, dimension);
@@ -225,12 +224,12 @@ public class GenericUtils {
     }
 
     public static Component getFormattedCategoryTitle(ResourceLocation location) {
-        return RegistryNames.name(Registries.LEVEL_STEM, location, categoryTitle(location));
+        return RegistryNames.name(Registry.LEVEL_STEM_REGISTRY, location, categoryTitle(location));
     }
 
     @NotNull
     public static Component getBiomeTitle(ResourceLocation location) {
-        return RegistryNames.name(Registries.BIOME, location, location.toString());
+        return RegistryNames.name(Registry.BIOME_REGISTRY, location, location.toString());
     }
 
     private static String categoryTitle(ResourceLocation location) {

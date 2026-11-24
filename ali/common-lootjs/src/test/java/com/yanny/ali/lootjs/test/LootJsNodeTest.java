@@ -15,14 +15,11 @@ import com.yanny.ali.lootjs.mixin.*;
 import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.common.nodes.EmptyNode;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -174,31 +171,9 @@ public class LootJsNodeTest {
     }
 
     @Test
-    public void testAddLootNodeVanillaWrappedEntry() {
+    public void testAddLootNodeEmptyItemEntry() {
         AddLootNode node = new AddLootNode(UTILS, addLootAction(AddLootAction.AddType.SEQUENCE,
-                entry(new LootEntry.VanillaWrappedLootEntry(LootItem.lootTableItem(Items.DIAMOND).build()), 1)
-        ), List.of(), List.of());
-
-        Assertions.assertEquals(ItemNode.ID, child(node, 0).getId());
-    }
-
-    @Test
-    public void testAddLootNodeIngredientEntry() {
-        AddLootNode itemNode = new AddLootNode(UTILS, addLootAction(AddLootAction.AddType.SEQUENCE,
-                entry(new LootEntry.RandomIngredientGenerator(Ingredient.of(Items.DIAMOND)), 1)
-        ), List.of(), List.of());
-        AddLootNode tagNode = new AddLootNode(UTILS, addLootAction(AddLootAction.AddType.SEQUENCE,
-                entry(new LootEntry.RandomIngredientGenerator(Ingredient.of(ItemTags.PLANKS)), 1)
-        ), List.of(), List.of());
-
-        Assertions.assertEquals(ItemStackNode.ID, child(itemNode, 0).getId());
-        Assertions.assertEquals(ItemTagNode.ID, child(tagNode, 0).getId());
-    }
-
-    @Test
-    public void testAddLootNodeEmptyIngredientEntry() {
-        AddLootNode node = new AddLootNode(UTILS, addLootAction(AddLootAction.AddType.SEQUENCE,
-                entry(new LootEntry.RandomIngredientGenerator(Ingredient.EMPTY), 1)
+                itemEntry(ItemStack.EMPTY, 1)
         ), List.of(), List.of());
 
         Assertions.assertEquals(EmptyNode.ID, child(node, 0).getId());
@@ -251,13 +226,9 @@ public class LootJsNodeTest {
     }
 
     private static LootEntry itemEntry(ItemStack itemStack, int weight) {
-        return entry(new LootEntry.ItemGenerator(itemStack), weight);
-    }
-
-    private static LootEntry entry(LootEntry.Generator generator, int weight) {
         LootEntry entry = mock(LootEntry.class, MixinLootEntry.class);
 
-        Mockito.when(((MixinLootEntry) entry).getGenerator()).thenReturn(generator);
+        Mockito.when(((MixinLootEntry) entry).getItemStack()).thenReturn(itemStack);
         Mockito.when(((MixinLootEntry) entry).getPostModifications()).thenReturn(List.of());
         Mockito.when(((MixinLootEntry) entry).getConditions()).thenReturn(List.of());
         Mockito.when(((MixinLootEntry) entry).getWeight()).thenReturn(weight);

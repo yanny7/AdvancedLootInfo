@@ -12,7 +12,6 @@ import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -41,57 +40,57 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static AutoDetected getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier placement) {
-        return serialized(utils, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, placement.type(), placement.type().codec(), placement, "placement modifier");
+        return serialized(utils, Registry.PLACEMENT_MODIFIERS, placement.type(), placement.type().codec(), placement, "placement modifier");
     }
 
     @NotNull
     public static AutoDetected getMissingRuleTestTooltip(IServerUtils utils, RuleTest test) {
-        return serialized(utils, BuiltInRegistries.RULE_TEST, test.getType(), test.getType().codec(), test, "rule test");
+        return serialized(utils, Registry.RULE_TEST, test.getType(), test.getType().codec(), test, "rule test");
     }
 
     @NotNull
     public static AutoDetected getMissingHeightProviderTooltip(IServerUtils utils, HeightProvider provider) {
-        return serialized(utils, BuiltInRegistries.HEIGHT_PROVIDER_TYPE, provider.getType(), provider.getType().codec(), provider, "height provider");
+        return serialized(utils, Registry.HEIGHT_PROVIDER_TYPES, provider.getType(), provider.getType().codec(), provider, "height provider");
     }
 
     @NotNull
     public static AutoDetected getMissingBlockPredicateTooltip(IServerUtils utils, BlockPredicate predicate) {
-        return serialized(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, predicate.type(), predicate.type().codec(), predicate, "block predicate");
+        return serialized(utils, Registry.BLOCK_PREDICATE_TYPES, predicate.type(), predicate.type().codec(), predicate, "block predicate");
     }
 
     @NotNull
     public static AutoDetected getMissingBlockStateProviderTooltip(IServerUtils utils, BlockStateProvider provider) {
-        return serialized(utils, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, provider.type(), provider.type().codec(), provider, "block state provider");
+        return serialized(utils, Registry.BLOCKSTATE_PROVIDER_TYPES, provider.type(), provider.type().codec(), provider, "block state provider");
     }
 
     @NotNull
     public static AutoDetected getMissingTreeDecoratorTooltip(IServerUtils utils, TreeDecorator decorator) {
-        return serialized(utils, BuiltInRegistries.TREE_DECORATOR_TYPE, decorator.type(), decorator.type().codec(), decorator, "tree decorator");
+        return serialized(utils, Registry.TREE_DECORATOR_TYPES, decorator.type(), decorator.type().codec(), decorator, "tree decorator");
     }
 
     @NotNull
     public static AutoDetected getMissingFeatureSizeTooltip(IServerUtils utils, FeatureSize size) {
-        return serialized(utils, BuiltInRegistries.FEATURE_SIZE_TYPE, size.type(), size.type().codec(), size, "feature size");
+        return serialized(utils, Registry.FEATURE_SIZE_TYPES, size.type(), size.type().codec(), size, "feature size");
     }
 
     @NotNull
     public static AutoDetected getMissingRootPlacerTooltip(IServerUtils utils, RootPlacer placer) {
-        return serialized(utils, BuiltInRegistries.ROOT_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "root placer");
+        return serialized(utils, Registry.ROOT_PLACER_TYPES, placer.type(), placer.type().codec(), placer, "root placer");
     }
 
     @NotNull
     public static AutoDetected getMissingFoliagePlacerTooltip(IServerUtils utils, FoliagePlacer placer) {
-        return serialized(utils, BuiltInRegistries.FOLIAGE_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "foliage placer");
+        return serialized(utils, Registry.FOLIAGE_PLACER_TYPES, placer.type(), placer.type().codec(), placer, "foliage placer");
     }
 
     @NotNull
     public static AutoDetected getMissingTrunkPlacerTooltip(IServerUtils utils, TrunkPlacer placer) {
-        return serialized(utils, BuiltInRegistries.TRUNK_PLACER_TYPE, placer.type(), placer.type().codec(), placer, "trunk placer");
+        return serialized(utils, Registry.TRUNK_PLACER_TYPES, placer.type(), placer.type().codec(), placer, "trunk placer");
     }
 
     @NotNull
     public static AutoDetected getMissingStructureProcessorTooltip(IServerUtils utils, StructureProcessor processor) {
-        return serialized(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, processor.getType(), processor.getType().codec(), processor, "structure processor");
+        return serialized(utils, Registry.STRUCTURE_PROCESSOR, processor.getType(), processor.getType().codec(), processor, "structure processor");
     }
 
     @NotNull

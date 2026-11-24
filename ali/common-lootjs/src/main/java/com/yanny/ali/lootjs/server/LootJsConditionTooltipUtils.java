@@ -5,7 +5,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.mixin.*;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -38,7 +38,7 @@ public class LootJsConditionTooltipUtils {
     public static TooltipBuilder anyDimensionTooltip(IServerUtils utils, AnyDimension condition) {
         MixinAnyDimension cond = (MixinAnyDimension) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, Arrays.stream(cond.getDimensions()).map((dimension) -> ResourceKey.create(Registries.DIMENSION, dimension)).toList()).build(Lang.Branch.DIMENSIONS)), Lang.Conditions.ANY_DIMENSION);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, Arrays.stream(cond.getDimensions()).map((dimension) -> ResourceKey.create(Registry.DIMENSION_REGISTRY, dimension)).toList()).build(Lang.Branch.DIMENSIONS)), Lang.Conditions.ANY_DIMENSION);
     }
 
     @NotNull

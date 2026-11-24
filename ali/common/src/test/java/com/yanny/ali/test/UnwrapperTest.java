@@ -9,9 +9,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.LootDataId;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.functions.FunctionReference;
+import net.minecraft.world.level.storage.loot.ItemModifierManager;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
@@ -36,25 +35,11 @@ import static org.mockito.Mockito.*;
 public class UnwrapperTest {
     private static final ResourceLocation PREDICATE = new ResourceLocation("test", "predicate");
     private static final ResourceLocation CYCLIC_PREDICATE = new ResourceLocation("test", "cyclic_predicate");
-    private static final ResourceLocation MODIFIER = new ResourceLocation("test", "modifier");
     private static final ResourceLocation MISSING = new ResourceLocation("test", "missing");
 
     @Test
-    public void testAllOfChance() {
-        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
-                AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.25f)).build()
-        ), 1)).build(), List.of("Chance: 25%"));
-        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
-                AllOfCondition.allOf(
-                        AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.5f)),
-                        LootItemRandomChanceCondition.randomChance(0.5f)
-                ).build()
-        ), 1)).build(), List.of("Chance: 25%"));
-    }
-
-    @Test
     public void testCompositePredicateChance() {
-        LootItemCondition composite = LootDataManager.createComposite(new LootItemCondition[]{LootItemRandomChanceCondition.randomChance(0.25f).build()});
+        LootItemCondition composite = new PredicateManager.CompositePredicate(new LootItemCondition[]{LootItemRandomChanceCondition.randomChance(0.25f).build()});
 
         assertTooltip(getChanceTooltip(getChance(UTILS, List.of(composite), 1)).build(), List.of("Chance: 25%"));
     }
@@ -62,7 +47,7 @@ public class UnwrapperTest {
     @Test
     public void testInexactConditionsKept() {
         assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
-                AnyOfCondition.anyOf(LootItemRandomChanceCondition.randomChance(0.25f)).build()
+                AlternativeLootItemCondition.alternative(LootItemRandomChanceCondition.randomChance(0.25f)).build()
         ), 1)).build(), List.of());
         assertTooltip(getChanceTooltip(getChance(UTILS, List.of(
                 LootItemRandomChanceCondition.randomChance(0.25f).invert().build()
@@ -80,25 +65,14 @@ public class UnwrapperTest {
 
     @Test
     public void testFunctionSequenceCount() {
-        LootItemFunction sequence = LootDataManager.createComposite(new LootItemFunction[]{SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()});
+        LootItemFunction sequence = new ItemModifierManager.FunctionSequence(new LootItemFunction[]{SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()});
 
         assertTooltip(getCountTooltip(getCount(UTILS, List.of(sequence)), null).build(), List.of("Count: 10"));
     }
 
     @Test
-    public void testFunctionReferenceCount() {
-        IServerUtils utils = resolvingUtils();
-
-        assertTooltip(getCountTooltip(getCount(utils, List.of(FunctionReference.functionReference(MODIFIER).build())), null).build(), List.of("Count: 10"));
-        assertTooltip(getCountTooltip(getCount(utils, List.of(
-                FunctionReference.functionReference(MODIFIER).when(LootItemRandomChanceCondition.randomChance(0.5f)).build()
-        )), null).build(), List.of("Count: 1"));
-        assertTooltip(getCountTooltip(getCount(utils, List.of(FunctionReference.functionReference(MISSING).build())), null).build(), List.of("Count: 1"));
-    }
-
-    @Test
     public void testFunctionSequenceItemStack() {
-        LootItemFunction sequence = LootDataManager.createComposite(new LootItemFunction[]{SetNameFunction.setName(Component.literal("Unwrapped")).build()});
+        LootItemFunction sequence = new ItemModifierManager.FunctionSequence(new LootItemFunction[]{SetNameFunction.setName(Component.literal("Unwrapped")).build()});
         ItemStack stack = TooltipUtils.getItemStack(UTILS, Items.DIAMOND.getDefaultInstance(), List.of(sequence));
 
         assertEquals("Unwrapped", stack.getHoverName().getString());
@@ -107,27 +81,26 @@ public class UnwrapperTest {
     @Test
     public void testHasPredicates() {
         assertFalse(NodeUtils.hasPredicates(UTILS, List.of(
-                AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.5f), ExplosionCondition.survivesExplosion()).build()
+                new PredicateManager.CompositePredicate(new LootItemCondition[]{LootItemRandomChanceCondition.randomChance(0.5f).build(), ExplosionCondition.survivesExplosion().build()})
         )));
         assertTrue(NodeUtils.hasPredicates(UTILS, List.of(
-                AllOfCondition.allOf(LootItemRandomChanceCondition.randomChance(0.5f), WeatherCheck.weather().setRaining(true)).build()
+                new PredicateManager.CompositePredicate(new LootItemCondition[]{LootItemRandomChanceCondition.randomChance(0.5f).build(), WeatherCheck.weather().setRaining(true).build()})
         )));
     }
 
     @NotNull
     private static IServerUtils resolvingUtils() {
-        Map<ResourceLocation, Object> elements = Map.of(
+        Map<ResourceLocation, LootItemCondition> elements = Map.of(
                 PREDICATE, LootItemRandomChanceCondition.randomChance(0.25f).build(),
-                CYCLIC_PREDICATE, ConditionReference.conditionReference(CYCLIC_PREDICATE).build(),
-                MODIFIER, SetItemCountFunction.setCount(ConstantValue.exactly(10)).build()
+                CYCLIC_PREDICATE, ConditionReference.conditionReference(CYCLIC_PREDICATE).build()
         );
-        LootDataManager lootData = mock(LootDataManager.class);
+        PredicateManager predicates = mock(PredicateManager.class);
         MinecraftServer server = mock(MinecraftServer.class);
         ServerLevel level = mock(ServerLevel.class);
         IServerUtils utils = spy(UTILS);
 
-        doAnswer((i) -> elements.get(i.<LootDataId<?>>getArgument(0).location())).when(lootData).getElement(any());
-        doReturn(lootData).when(server).getLootData();
+        doAnswer((i) -> elements.get(i.<ResourceLocation>getArgument(0))).when(predicates).get(any());
+        doReturn(predicates).when(server).getPredicateManager();
         doReturn(server).when(level).getServer();
         doReturn(level).when(utils).getServerLevel();
         return utils;

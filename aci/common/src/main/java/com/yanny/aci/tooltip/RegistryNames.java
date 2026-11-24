@@ -3,8 +3,6 @@ package com.yanny.aci.tooltip;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.Utils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,13 +26,13 @@ public final class RegistryNames {
     private static final Set<String> LOGGED_FAILURES = ConcurrentHashMap.newKeySet();
 
     static {
-        register(Registries.ITEM, (item) -> item.getDefaultInstance().getHoverName());
-        register(Registries.BLOCK, Block::getName);
-        register(Registries.ENTITY_TYPE, EntityType::getDescription);
-        register(Registries.MOB_EFFECT, MobEffect::getDisplayName);
-        register(Registries.ENCHANTMENT, (enchantment) -> Component.translatable(enchantment.getDescriptionId()));
-        register(Registries.ATTRIBUTE, (attribute) -> Component.translatable(attribute.getDescriptionId()));
-        register(Registries.POTION, (potion) -> Component.translatable(potion.getName("item.minecraft.potion.effect.")));
+        register(Registry.ITEM_REGISTRY, (item) -> item.getDefaultInstance().getHoverName());
+        register(Registry.BLOCK_REGISTRY, Block::getName);
+        register(Registry.ENTITY_TYPE_REGISTRY, EntityType::getDescription);
+        register(Registry.MOB_EFFECT_REGISTRY, MobEffect::getDisplayName);
+        register(Registry.ENCHANTMENT_REGISTRY, (enchantment) -> Component.translatable(enchantment.getDescriptionId()));
+        register(Registry.ATTRIBUTE_REGISTRY, (attribute) -> Component.translatable(attribute.getDescriptionId()));
+        register(Registry.POTION_REGISTRY, (potion) -> Component.translatable(potion.getName("item.minecraft.potion.effect.")));
     }
 
     private RegistryNames() {}
@@ -57,7 +55,7 @@ public final class RegistryNames {
         try {
             ResourceLocation registryId = new ResourceLocation(encoded.substring(1, split));
             ResourceLocation entryId = new ResourceLocation(entry);
-            Registry<?> registry = BuiltInRegistries.REGISTRY.get(registryId);
+            Registry<?> registry = Registry.REGISTRY.get(registryId);
             Function<Object, Component> resolver = RESOLVERS.get(registryId);
 
             if (registry != null && resolver != null && registry.containsKey(entryId)) {

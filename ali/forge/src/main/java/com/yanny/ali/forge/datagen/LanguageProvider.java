@@ -2,10 +2,10 @@ package com.yanny.ali.forge.datagen;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.datagen.LanguageHolder;
-import net.minecraft.data.PackOutput;
+import net.minecraft.data.DataGenerator;
 
 class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
-    public LanguageProvider(PackOutput output, String locale) {
+    public LanguageProvider(DataGenerator output, String locale) {
         super(output, Utils.MOD_ID, locale);
     }
 

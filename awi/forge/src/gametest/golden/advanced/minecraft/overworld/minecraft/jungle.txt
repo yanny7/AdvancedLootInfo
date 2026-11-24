@@ -1785,8 +1785,6 @@ awi:biome minecraft:jungle
       |           -> All Of:
       |             -> Predicates:
       |               -> Replaceable:
-      |               -> Matching Fluids:
-      |                 -> Fluid: minecraft:empty
       |               -> Matching Blocks:
       |                 -> Block: Grass Block
       |                 -> Offset: [0,-1,0]

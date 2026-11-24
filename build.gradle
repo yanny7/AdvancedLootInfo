@@ -317,18 +317,25 @@ subprojects {
                     }
                 }
                 if (jei_available && recipe_viewer == "jei") {
-                    modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+                    modRuntimeOnly("mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}") {
+                        exclude group: "org.jetbrains", module: "annotations"
+                        exclude group: "org.jspecify", module: "jspecify"
+                    }
+
+                    if (project.name == "forge") {
+                        forgeRuntimeLibrary "net.mezzdev:deduplicating-runner:0.1.0"
+                    }
                 }
                 if (rei_available) {
                     modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
 
                     if (recipe_viewer == "rei") {
-                        modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
-
-                        if (project.name == "forge") {
-                            modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                            modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                        modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}") {
+                            exclude group: "net.fabricmc", module: "fabric-loader"
                         }
+
+                        modRuntimeOnly "me.shedaniel.cloth:cloth-config-${project.name}:${cloth_config_version}"
+                        modRuntimeOnly "dev.architectury:architectury-${project.name}:${architectury_version}"
                     }
                 }
             }
@@ -533,7 +540,7 @@ uploadTargets.each { target, targetInfo ->
     ]
 }
 
-["ali", "awi", "aci", "alicompat"].each { modId ->
+["ali", "awi", "aci"].each { modId ->
     uploadTargets.each { target, targetInfo ->
         pythonRunConfigs << [
                 task       : "generateUploadRunConfig${modId.capitalize()}${targetInfo.suffix}",

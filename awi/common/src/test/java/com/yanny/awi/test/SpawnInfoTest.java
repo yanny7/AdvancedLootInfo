@@ -5,7 +5,7 @@ import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -28,6 +28,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,9 +50,9 @@ public class SpawnInfoTest {
 
     @BeforeAll
     static void setup() {
-        biomes = new MappedRegistry<>(Registries.BIOME, Lifecycle.stable());
-        levelStems = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable());
-        structures = new MappedRegistry<>(Registries.STRUCTURE, Lifecycle.stable());
+        biomes = new MappedRegistry<>(Registry.BIOME_REGISTRY, Lifecycle.stable(), null);
+        levelStems = new MappedRegistry<>(Registry.LEVEL_STEM_REGISTRY, Lifecycle.stable(), null);
+        structures = new MappedRegistry<>(Registry.STRUCTURE_REGISTRY, Lifecycle.stable(), null);
 
         Holder<Biome> a = biome("a", new MobSpawnSettings.Builder()
                 .addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 95, 4, 4))
@@ -92,7 +93,7 @@ public class SpawnInfoTest {
         levelStem("nether", e);
         levelStem("wide", wide.toArray(Holder[]::new));
 
-        Registry.register(structures, key(Registries.STRUCTURE, "fort"), new SwampHutStructure(new Structure.StructureSettings(
+        Registry.register(structures, key(Registry.STRUCTURE_REGISTRY, "fort"), new SwampHutStructure(new Structure.StructureSettings(
                 HolderSet.direct(e),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.PIECE,
                         WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.BLAZE, 10, 2, 3)))),
@@ -103,7 +104,7 @@ public class SpawnInfoTest {
         biomes.freeze();
         levelStems.freeze();
         structures.freeze();
-        spawnInfo = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), OWN_SETTINGS, (t) -> true, false);
+        spawnInfo = new SpawnInfo(Utils.MOD_ID, access(biomes, structures), levelStems, OWN_SETTINGS, (t) -> true, false);
     }
 
     @Test
@@ -268,9 +269,9 @@ public class SpawnInfoTest {
     @Test
     public void testBiomeSpawnsMergeBiomeAndStructure() {
         MappedRegistry<Structure> registry = structures(Map.of(
-                "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.ZOMBIE)
+                "camp", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "a"))), EntityType.ZOMBIE)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes, registry), levelStems, OWN_SETTINGS, (t) -> true, false);
         Map<EntityType<?>, TooltipNode> spawns = info.getBiomeSpawns(new ResourceLocation("test", "a"));
 
         assertEquals(List.of(EntityType.SKELETON, EntityType.SPIDER, EntityType.ZOMBIE, EntityType.COW), List.copyOf(spawns.keySet()));
@@ -287,7 +288,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testStructuresWithSameSpawnAreGrouped() {
-        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a")));
+        HolderSet<Biome> biomeSet = HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "a")));
         MappedRegistry<Structure> registry = structures(Map.of(
                 "camp", spawnSettings(biomeSet, EntityType.WITCH),
                 "hut", spawnSettings(biomeSet, EntityType.WITCH),
@@ -299,7 +300,7 @@ public class SpawnInfoTest {
                         TerrainAdjustment.NONE
                 )
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes, registry), levelStems, OWN_SETTINGS, (t) -> true, false);
 
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
                 "Spawns:",
@@ -330,13 +331,13 @@ public class SpawnInfoTest {
     @Test
     public void testStructureSettingsFromPlatform() {
         Structure.StructureSettings modified = new Structure.StructureSettings(
-                HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))),
+                HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "a"))),
                 Map.of(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE,
                         WeightedRandomList.create(new MobSpawnSettings.SpawnerData(EntityType.WITCH, 1, 1, 1)))),
                 GenerationStep.Decoration.SURFACE_STRUCTURES,
                 TerrainAdjustment.NONE
         );
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, structures)), (s) -> modified, (t) -> true, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes, structures), levelStems, (s) -> modified, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.BLAZE).isBlank(false));
         assertTooltip(info.getEntityTooltip(EntityType.WITCH), List.of(
@@ -352,11 +353,11 @@ public class SpawnInfoTest {
     @Test
     public void testFailingStructureSettingsSkipOnlyThatStructure() {
         MappedRegistry<Structure> registry = structures(Map.of(
-                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
-                "hut", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "a"))), EntityType.WITCH)
+                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "e"))), EntityType.BLAZE),
+                "hut", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "a"))), EntityType.WITCH)
         ));
-        Structure fort = registry.getOrThrow(key(Registries.STRUCTURE, "fort"));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), (s) -> {
+        Structure fort = registry.getOrThrow(key(Registry.STRUCTURE_REGISTRY, "fort"));
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes, registry), levelStems, (s) -> {
             if (s == fort) {
                 throw new IllegalStateException("broken structure");
             }
@@ -384,12 +385,12 @@ public class SpawnInfoTest {
 
     @Test
     public void testUnboundBiomeTagSpawnsNowhere() {
-        HolderSet<Biome> unbound = HolderSet.emptyNamed(biomes.holderOwner(), TagKey.create(Registries.BIOME, new ResourceLocation("test", "unbound")));
+        HolderSet<Biome> unbound = biomes.getOrCreateTag(TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation("test", "unbound")));
         MappedRegistry<Structure> registry = structures(Map.of(
-                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registries.BIOME, "e"))), EntityType.BLAZE),
+                "fort", spawnSettings(HolderSet.direct(biomes.getHolderOrThrow(key(Registry.BIOME_REGISTRY, "e"))), EntityType.BLAZE),
                 "tagged", spawnSettings(unbound, EntityType.WITCH)
         ));
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes, levelStems, registry)), OWN_SETTINGS, (t) -> true, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes, registry), levelStems, OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTypes().contains(EntityType.WITCH));
         assertTrue(info.getEntityTooltip(EntityType.WITCH).isBlank(false));
@@ -398,7 +399,7 @@ public class SpawnInfoTest {
 
     @Test
     public void testMissingRegistriesYieldNoSpawns() {
-        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, new RegistryAccess.ImmutableRegistryAccess(List.of(biomes)), OWN_SETTINGS, (t) -> true, false);
+        SpawnInfo info = new SpawnInfo(Utils.MOD_ID, access(biomes), new MappedRegistry<>(Registry.LEVEL_STEM_REGISTRY, Lifecycle.stable(), null), OWN_SETTINGS, (t) -> true, false);
 
         assertTrue(info.getEntityTooltip(EntityType.ZOMBIE).isBlank(false));
         assertEquals(Set.of(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.COW, EntityType.STRIDER, EntityType.CREEPER,
@@ -407,9 +408,9 @@ public class SpawnInfoTest {
 
     @NotNull
     private static MappedRegistry<Structure> structures(Map<String, Structure.StructureSettings> settings) {
-        MappedRegistry<Structure> registry = new MappedRegistry<>(Registries.STRUCTURE, Lifecycle.stable());
+        MappedRegistry<Structure> registry = new MappedRegistry<>(Registry.STRUCTURE_REGISTRY, Lifecycle.stable(), null);
 
-        settings.forEach((name, s) -> Registry.register(registry, key(Registries.STRUCTURE, name), new SwampHutStructure(s)));
+        settings.forEach((name, s) -> Registry.register(registry, key(Registry.STRUCTURE_REGISTRY, name), new SwampHutStructure(s)));
         registry.freeze();
         return registry;
     }
@@ -428,7 +429,7 @@ public class SpawnInfoTest {
     @NotNull
     private static Holder<Biome> biome(String name, MobSpawnSettings.Builder spawns) {
         Biome biome = new Biome.BiomeBuilder()
-                .hasPrecipitation(false)
+                .precipitation(Biome.Precipitation.NONE)
                 .temperature(0.5F)
                 .downfall(0.5F)
                 .specialEffects(new BiomeSpecialEffects.Builder().fogColor(0).waterColor(0).waterFogColor(0).skyColor(0).build())
@@ -436,15 +437,26 @@ public class SpawnInfoTest {
                 .generationSettings(BiomeGenerationSettings.EMPTY)
                 .build();
 
-        return Registry.registerForHolder(biomes, key(Registries.BIOME, name), biome);
+        return biomes.register(key(Registry.BIOME_REGISTRY, name), biome, Lifecycle.stable());
     }
 
     @SafeVarargs
     private static void levelStem(String name, Holder<Biome>... possibleBiomes) {
-        Holder<DimensionType> type = LOOKUP.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(BuiltinDimensionTypes.OVERWORLD);
+        Holder<DimensionType> type = LOOKUP.registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getHolderOrThrow(BuiltinDimensionTypes.OVERWORLD);
         BiomeSource biomeSource = new CheckerboardColumnBiomeSource(HolderSet.direct(possibleBiomes), 2);
 
-        Registry.register(levelStems, key(Registries.LEVEL_STEM, name), new LevelStem(type, new NoiseBasedChunkGenerator(biomeSource, Holder.direct(NoiseGeneratorSettings.dummy()))));
+        Registry.register(levelStems, key(Registry.LEVEL_STEM_REGISTRY, name), new LevelStem(type, new NoiseBasedChunkGenerator(LOOKUP.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), LOOKUP.registryOrThrow(Registry.NOISE_REGISTRY), biomeSource, Holder.direct(NoiseGeneratorSettings.dummy()))));
+    }
+
+    @NotNull
+    private static RegistryAccess access(Registry<?>... registries) {
+        Map<ResourceKey<? extends Registry<?>>, Registry<?>> map = new HashMap<>();
+
+        for (Registry<?> registry : registries) {
+            map.put(registry.key(), registry);
+        }
+
+        return new RegistryAccess.ImmutableRegistryAccess(map);
     }
 
     @NotNull

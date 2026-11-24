@@ -14,13 +14,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataResolver;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
-import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.DamageSourceCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
@@ -38,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -120,7 +120,7 @@ public class GlobalLootModifierUtils {
 
     @NotNull
     public static Verdict testPage(IServerUtils utils, Object value, LootPage page, @Nullable IPageResolver<Object> resolver,
-                                   List<ILootContextPreparer> preparers, LootDataResolver lootData) {
+                                   List<ILootContextPreparer> preparers, Function<ResourceLocation, LootItemCondition> predicates) {
         if (resolver != null) {
             Verdict verdict = resolver.test(utils, value, page);
 
@@ -129,14 +129,14 @@ public class GlobalLootModifierUtils {
             }
         }
 
-        if (value instanceof AllOfCondition allOf) {
+        if (value instanceof PredicateManager.CompositePredicate allOf) {
             return testAllOf(utils, allOf.terms, page);
-        } else if (value instanceof AnyOfCondition anyOf) {
+        } else if (value instanceof AlternativeLootItemCondition anyOf) {
             return testAnyOf(utils, anyOf.terms, page);
         } else if (value instanceof InvertedLootItemCondition inverted) {
             return invert(utils.testPage(utils, inverted.term, page));
         } else if (value instanceof LootItemCondition condition) {
-            return LootContextProbe.probe(utils, condition, page, preparers, lootData);
+            return LootContextProbe.probe(utils, condition, page, preparers, predicates);
         }
 
         return Verdict.UNKNOWN;

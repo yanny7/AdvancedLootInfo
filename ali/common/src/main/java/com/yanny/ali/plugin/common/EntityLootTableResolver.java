@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.ICommonUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -37,7 +37,7 @@ public class EntityLootTableResolver {
 
         // config, then plugins, before anything derived: a claimed table keeps its entity even if it resolves elsewhere
         utils.getConfiguration().entityLootTables.forEach((entityId, lootTables) -> {
-            Optional<EntityType<?>> type = BuiltInRegistries.ENTITY_TYPE.getOptional(entityId);
+            Optional<EntityType<?>> type = Registry.ENTITY_TYPE.getOptional(entityId);
 
             if (type.isPresent()) {
                 lootTables.forEach((lootTable) -> addMapping(lootTable, type.get(), PageReason.CONFIGURATION));
@@ -48,7 +48,7 @@ public class EntityLootTableResolver {
 
         registeredLootTables.forEach((lootTable, types) -> types.forEach((type) -> addMapping(lootTable, type, PageReason.PLUGIN)));
 
-        for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+        for (EntityType<?> type : Registry.ENTITY_TYPE) {
             if (type != EntityType.PLAYER) {
                 addMapping(type.getDefaultLootTable(), type, null);
             }
@@ -73,7 +73,7 @@ public class EntityLootTableResolver {
                     }
                 });
 
-        for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
+        for (EntityType<?> type : Registry.ENTITY_TYPE) {
             for (ResourceLocation lootTable : tablesByType.getOrDefault(type, Collections.emptySet())) {
                 List<EntityType<?>> types = resolve(lootTable);
 
@@ -138,8 +138,8 @@ public class EntityLootTableResolver {
             long startTime = System.currentTimeMillis();
             int scannedTypes = 0;
 
-            for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
-                if (type != EntityType.PLAYER && BuiltInRegistries.ENTITY_TYPE.getKey(type).getNamespace().equals(namespace)) {
+            for (EntityType<?> type : Registry.ENTITY_TYPE) {
+                if (type != EntityType.PLAYER && Registry.ENTITY_TYPE.getKey(type).getNamespace().equals(namespace)) {
                     scannedTypes++;
 
                     for (Entity entity : getEntities(type)) {

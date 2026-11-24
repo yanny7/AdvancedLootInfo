@@ -85,10 +85,10 @@ dependencies {
 
     // LootJS
     [
-            "curse.maven:kubejs-238086:5853321",
-            "curse.maven:rhino-416294:6186969",
-            "curse.maven:architectury-api-419699:5137936",
-            "curse.maven:lootjs-570630:7551185",
+            "curse.maven:kubejs-238086:5408721",
+            "curse.maven:rhino-416294:4953344",
+            "curse.maven:architectury-api-419699:5137941",
+            "curse.maven:lootjs-570630:4709098",
     ].each {
         modCompileOnly it
         modGametestRuntimeOnly it

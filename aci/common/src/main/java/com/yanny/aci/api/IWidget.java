@@ -1,7 +1,7 @@
 package com.yanny.aci.api;
 
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.tooltip.TooltipLine;
-import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

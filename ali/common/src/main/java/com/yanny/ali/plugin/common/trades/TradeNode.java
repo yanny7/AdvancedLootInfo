@@ -8,7 +8,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.api.TradeLevel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -50,13 +50,13 @@ public class TradeNode extends ListNode {
     public TradeNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
-        entityType = BuiltInRegistries.ENTITY_TYPE.get(buf.readResourceLocation());
+        entityType = Registry.ENTITY_TYPE.get(buf.readResourceLocation());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
-        buf.writeResourceLocation(BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+        buf.writeResourceLocation(Registry.ENTITY_TYPE.getKey(entityType));
     }
 
     @NotNull

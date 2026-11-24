@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -22,7 +23,7 @@ import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.config.ConfigObject;
-import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.AbstractRenderer;
 import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
 import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
@@ -34,8 +35,7 @@ import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -200,7 +200,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     private static List<EntryStack<ItemStack>> tagStacks(TagKey<? extends ItemLike> tag, IItemNode node) {
-        if (tag.isFor(Registries.ITEM)) {
+        if (tag.isFor(Registry.ITEM_REGISTRY)) {
             return EntryIngredients.ofItemTag(tag).castAsList();
         }
 
@@ -209,14 +209,15 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
     private record Holder(List<IDataNode> options, RelativeRect rect) {}
 
-    private static class PredicatesRenderer implements Renderer {
+    private static class PredicatesRenderer extends AbstractRenderer {
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(PoseStack pose, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
             guiGraphics.fill(bounds.getX() + 1, bounds.getY() + 1, bounds.getMaxX() - 1, bounds.getMaxY() - 1, WidgetUtils.PREDICATES_COLOR);
         }
     }
 
-    private static class SlotCountRenderer implements Renderer {
+    private static class SlotCountRenderer extends AbstractRenderer {
         private final Supplier<NumberInterval> countGetter;
         @Nullable
         private NumberInterval shownCount;
@@ -229,7 +230,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(PoseStack pose, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            GuiGraphics guiGraphics = new GuiGraphics(pose);
             setCount(countGetter.get());
 
             if (count != null) {

@@ -5,7 +5,7 @@ import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -51,7 +51,7 @@ public class TestServerUtils implements ICoreServerUtils<TestServerUtils> {
 
     @NotNull
     @Override
-    public HolderLookup.Provider lookupProvider() {
+    public RegistryAccess lookupProvider() {
         throw new UnsupportedOperationException();
     }
 

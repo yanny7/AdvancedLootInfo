@@ -5,7 +5,7 @@ import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -99,7 +99,7 @@ public class BaseLayoutBandsTest {
     private static Set<BlockInfo> scan(long seed, ResourceKey<Biome> biomeKey, NodeUtils.ScanSettings settings) {
         NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.registryAccess(),
                 BaseLayoutTestUtils.lookup(), generator(), randomState(seed), BaseLayoutTestUtils.SURFACE_RULE_HANDLERS);
-        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(biomeKey);
+        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getHolderOrThrow(biomeKey);
 
         return NodeUtils.getBaseBlocksForBiome(context, biome, new NodeUtils.ScanOptions(settings, false)).getBlockInfos();
     }
@@ -140,6 +140,6 @@ public class BaseLayoutBandsTest {
 
     private static RandomState randomState(long seed) {
         return RandomState.create(generator().generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), seed);
+                BaseLayoutTestUtils.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), seed);
     }
 }

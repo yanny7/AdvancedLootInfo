@@ -327,8 +327,8 @@ public class NumberTooltipTest {
 
         @NotNull
         @Override
-        public String getOrDefault(String key, String fallback) {
-            return translations.getOrDefault(key, fallback);
+        public String getOrDefault(String key) {
+            return translations.getOrDefault(key, key);
         }
 
         @Override

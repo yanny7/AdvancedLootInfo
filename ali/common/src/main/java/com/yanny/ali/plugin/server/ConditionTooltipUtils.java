@@ -5,6 +5,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,12 +18,12 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 public class ConditionTooltipUtils {
 
     @NotNull
-    public static TooltipBuilder getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
+    public static TooltipBuilder getAllOfTooltip(IServerUtils utils, PredicateManager.CompositePredicate cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)), Lang.Conditions.ALL_OF);
     }
 
     @NotNull
-    public static TooltipBuilder getAnyOfTooltip(IServerUtils utils, AnyOfCondition cond) {
+    public static TooltipBuilder getAnyOfTooltip(IServerUtils utils, AlternativeLootItemCondition cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)), Lang.Conditions.ANY_OF);
     }
 

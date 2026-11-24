@@ -2099,8 +2099,11 @@ awi:biome minecraft:lush_caves
       |                   -> Air
       |                   -> Cave Air
       |                   -> Void Air
+      |                   -> Water
       |               -> Matching Block Tag:
-      |                 -> Tag: minecraft:replaceable_by_trees
+      |                 -> Tag: minecraft:leaves
+      |               -> Matching Block Tag:
+      |                 -> Tag: minecraft:replaceable_plants
       |           -> Matching Block Tag:
       |             -> Tag: minecraft:azalea_grows_on
       |             -> Offset: [0,-1,0]

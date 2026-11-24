@@ -31,7 +31,7 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStarted(MinecraftServer server) {
         PluginManager.getInstance().registerServerEvent(server.overworld());
-        CommonAliMod.SERVER.readLootTables(server.getLootData());
+        CommonAliMod.SERVER.readLootTables(server.getLootTables());
     }
 
     private static void onServerStopping(MinecraftServer server) {
@@ -41,7 +41,7 @@ public class FabricCommonBusSubscriber {
     private static void onReload(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         if (success) {
             PluginManager.getInstance().reloadServer();
-            CommonAliMod.SERVER.readLootTables(server.getLootData());
+            CommonAliMod.SERVER.readLootTables(server.getLootTables());
         }
     }
 

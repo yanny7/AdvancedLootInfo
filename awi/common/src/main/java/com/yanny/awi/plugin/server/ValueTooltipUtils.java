@@ -35,7 +35,6 @@ import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
@@ -284,7 +283,6 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.locPredicate).build(Lang.Branch.LOCATION_PREDICATE));
             b.add(utils.getValueTooltip(utils, value.posPredicate).build(Lang.Value.POSITION_PREDICATE));
             b.add(utils.getValueTooltip(utils, value.outputState).build(Lang.Branch.OUTPUT_STATE));
-            b.add(utils.getValueTooltip(utils, value.blockEntityModifier).build(Lang.Value.BLOCK_ENTITY_MODIFIER));
         });
     }
 
@@ -318,11 +316,6 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getPosRuleTestTooltip(IServerUtils utils, PosRuleTest value) {
-        return utils.getValueTooltip(utils, value.getType());
-    }
-
-    @NotNull
-    public static TooltipBuilder getRuleBlockEntityModifierTooltip(IServerUtils utils, RuleBlockEntityModifier value) {
         return utils.getValueTooltip(utils, value.getType());
     }
 }

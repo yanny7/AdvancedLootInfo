@@ -3,12 +3,12 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.nodes.ReferenceNode;
-import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

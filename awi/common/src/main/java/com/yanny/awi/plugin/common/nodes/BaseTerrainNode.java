@@ -8,7 +8,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
 import com.yanny.awi.plugin.server.TooltipUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -47,7 +47,7 @@ public class BaseTerrainNode extends ListNode {
         baseBlocks.stream()
                 .collect(Collectors.groupingBy(BlockInfo::block))
                 .entrySet().stream()
-                .sorted(Comparator.comparing((entry) -> BuiltInRegistries.BLOCK.getKey(entry.getKey()).getPath()))
+                .sorted(Comparator.comparing((entry) -> Registry.BLOCK.getKey(entry.getKey()).getPath()))
                 .forEach((entry) -> addChildren(new BlockNode(utils, entry.getKey(), TooltipUtils.getBlockInfosTooltip(utils, entry.getValue()).build())));
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();

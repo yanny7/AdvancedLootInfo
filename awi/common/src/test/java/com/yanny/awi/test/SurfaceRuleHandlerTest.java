@@ -8,7 +8,7 @@ import com.yanny.awi.plugin.common.nodes.BandlandsLayout;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -83,10 +83,10 @@ public class SurfaceRuleHandlerTest {
     private static Set<BlockInfo> scan(Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> factories) {
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEED);
+                BaseLayoutTestUtils.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), SEED);
         NodeUtils.DimensionContext context = new NodeUtils.DimensionContext(BaseLayoutTestUtils.registryAccess(),
                 BaseLayoutTestUtils.lookup(), generator, randomState, factories);
-        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.BADLANDS);
+        Holder<Biome> biome = BaseLayoutTestUtils.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getHolderOrThrow(Biomes.BADLANDS);
 
         return NodeUtils.getBaseBlocksForBiome(context, biome, NodeUtils.ScanOptions.DEFAULT).getBlockInfos();
     }

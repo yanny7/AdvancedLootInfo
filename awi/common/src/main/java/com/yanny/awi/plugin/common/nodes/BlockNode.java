@@ -7,8 +7,7 @@ import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IServerUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -54,8 +53,8 @@ public class BlockNode implements IDataNode, IBlockNode {
     }
 
     public BlockNode(IClientUtils utils, FriendlyByteBuf buf) {
-        block = buf.readEither((b) -> BuiltInRegistries.BLOCK.get(b.readResourceLocation()),
-                (b) -> TagKey.create(Registries.BLOCK, b.readResourceLocation()));
+        block = buf.readEither((b) -> Registry.BLOCK.get(b.readResourceLocation()),
+                (b) -> TagKey.create(Registry.BLOCK_REGISTRY, b.readResourceLocation()));
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
         blocks = resolve(block);
@@ -75,7 +74,7 @@ public class BlockNode implements IDataNode, IBlockNode {
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeEither(block, (b, value) -> b.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(value)),
+        buf.writeEither(block, (b, value) -> b.writeResourceLocation(Registry.BLOCK.getKey(value)),
                 (b, tag) -> b.writeResourceLocation(tag.location()));
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeFloat(chance);
@@ -111,7 +110,7 @@ public class BlockNode implements IDataNode, IBlockNode {
     private static List<Block> resolve(Either<Block, TagKey<Block>> block) {
         List<Block> members = new ArrayList<>();
 
-        block.ifLeft(members::add).ifRight((tag) -> BuiltInRegistries.BLOCK.getTag(tag)
+        block.ifLeft(members::add).ifRight((tag) -> Registry.BLOCK.getTag(tag)
                 .ifPresent((named) -> named.forEach((holder) -> members.add(holder.value()))));
         return members;
     }

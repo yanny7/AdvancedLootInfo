@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -177,14 +177,6 @@ public class FunctionTooltipTest {
     }
 
     @Test
-    public void testReferenceTooltip() {
-        assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, (FunctionReference) FunctionReference.functionReference(new ResourceLocation("gameplay/fishing")).build()).build(), List.of(
-                "Reference:",
-                "  -> Name: minecraft:gameplay/fishing"
-        ));
-    }
-
-    @Test
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()).build(), List.of());
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
@@ -219,8 +211,8 @@ public class FunctionTooltipTest {
     @Test
     public void testSetBannerPatternTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetBannerPatternTooltip(UTILS, (SetBannerPatternFunction) SetBannerPatternFunction.setBannerPattern(true)
-                .addPattern(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)
-                .addPattern(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))), DyeColor.GREEN)
+                .addPattern(Holder.direct(Objects.requireNonNull(Registry.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)
+                .addPattern(Holder.direct(Objects.requireNonNull(Registry.BANNER_PATTERN.get(BannerPatterns.CREEPER))), DyeColor.GREEN)
                 .build()).build(), List.of(
                 "Set Banner Pattern:",
                 "  -> Append: True",

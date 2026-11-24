@@ -10,16 +10,17 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.alicompat.ModCompatManager;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.resources.AssetIndex;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.Registry;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
@@ -97,7 +98,7 @@ public class CompatTooltipSuite {
 
             frozen.setAccessible(true);
 
-            for (Registry<?> registry : BuiltInRegistries.REGISTRY) {
+            for (Registry<?> registry : Registry.REGISTRY) {
                 if (registry instanceof MappedRegistry<?> mappedRegistry) {
                     frozen.set(mappedRegistry, false);
                 }
@@ -140,8 +141,9 @@ public class CompatTooltipSuite {
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
-        PackRepository resourcePackRepository = new PackRepository(clientpacksource);
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.toFile(), new AssetIndex(resourcePackDirectory.resolve("assets").toFile(), ""));
+        PackRepository resourcePackRepository = new PackRepository((id, title, required, resources, metadata, position, source, hidden) ->
+                new Pack(id, title, required, resources, metadata, PackType.CLIENT_RESOURCES, position, source, hidden), clientpacksource);
 
         resourcePackRepository.reload();
         resourcePackRepository.setSelected(List.of("vanilla"));

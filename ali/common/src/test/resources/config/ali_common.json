@@ -52,26 +52,6 @@
       ]
     },
     {
-      "key": "ali:archaeology_loot",
-      "type": "GAMEPLAY",
-      "icon": "minecraft:decorated_pot",
-      "hide": false,
-      "catalysts": [
-        {
-          "item": "minecraft:brush"
-        },
-        {
-          "item": "minecraft:suspicious_sand"
-        },
-        {
-          "item": "minecraft:suspicious_gravel"
-        }
-      ],
-      "pattern": [
-        "^.*:archaeology/.*$"
-      ]
-    },
-    {
       "key": "ali:hero_loot",
       "type": "GAMEPLAY",
       "icon": "minecraft:emerald",
@@ -109,20 +89,6 @@
       ],
       "pattern": [
         "^.*:gameplay/piglin_bartering.*$"
-      ]
-    },
-    {
-      "key": "ali:sniffer_digging",
-      "type": "GAMEPLAY",
-      "icon": "minecraft:sniffer_egg",
-      "hide": false,
-      "catalysts": [
-        {
-          "item": "minecraft:sniffer_spawn_egg"
-        }
-      ],
-      "pattern": [
-        "^.*:gameplay/sniffer_digging.*$"
       ]
     },
     {

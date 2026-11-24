@@ -1,9 +1,11 @@
 package com.yanny.ali.jei.compatibility.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
@@ -26,8 +28,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -69,10 +70,11 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
             private static final int WIDGET_SIZE = 36;
             final Rect rect = new Rect((CATEGORY_WIDTH - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
             final Rect nameRect = GenericUtils.getCenteredTextRect(recipe.entityType().getDescription(), CATEGORY_WIDTH / 2, 0);
-            final ScreenPosition position = new ScreenPosition(0, 0);
+            final Rect2i position = new Rect2i(0, 0, 0, 0);
 
             @Override
-            public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void drawWidget(PoseStack pose, double mouseX, double mouseY) {
+                GuiGraphics guiGraphics = new GuiGraphics(pose);
                 Level level = Minecraft.getInstance().level;
 
                 if (level != null) {
@@ -97,7 +99,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
 
             @NotNull
             @Override
-            public ScreenPosition getPosition() {
+            public Rect2i getArea() {
                 return position;
             }
         });

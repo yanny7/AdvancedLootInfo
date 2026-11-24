@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.api.IDataNode;
@@ -10,7 +11,6 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 

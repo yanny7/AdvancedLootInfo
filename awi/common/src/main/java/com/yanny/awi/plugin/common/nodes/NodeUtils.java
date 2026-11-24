@@ -7,10 +7,8 @@ import com.yanny.awi.api.BlockInfo;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -95,7 +93,7 @@ public class NodeUtils {
     }
 
     public static class DimensionContext {
-        private final HolderLookup.Provider codecLookup;
+        private final RegistryAccess codecLookup;
         private final SurfaceRules.RuleSource masterSurfaceRule;
         private final Supplier<SurfaceRules.Context> freshContext;
         private SurfaceRules.Context context;
@@ -117,9 +115,9 @@ public class NodeUtils {
         private Supplier<Holder<Biome>> biomeSupplier = () -> biomeWrapper.currentBiome;
 
         /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
-        public DimensionContext(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
+        public DimensionContext(RegistryAccess registryAccess, RegistryAccess codecLookup, NoiseBasedChunkGenerator noiseGenerator,
                                 RandomState randomState, Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories) {
-            Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+            Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
             this.codecLookup = codecLookup;

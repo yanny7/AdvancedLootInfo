@@ -4,9 +4,12 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector4f;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.Utils;
@@ -24,10 +27,9 @@ import com.yanny.ali.plugin.common.trades.TradeNode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -47,8 +49,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 import oshi.util.tuples.Triplet;
@@ -76,15 +76,15 @@ public class GenericUtils {
         Window window = minecraft.getWindow();
         PoseStack poseStack = guiGraphics.pose();
 
-        Matrix4f modelViewMatrix = new Matrix4f(poseStack.last().pose());
-        Matrix4f projectionMatrix = new Matrix4f(RenderSystem.getProjectionMatrix());
-        Matrix4f mvpMatrix = projectionMatrix.mul(modelViewMatrix);
-        Vector4f topLeftWorld = new Vector4f(0, 0, 0, 1);
-        Vector4f topLeftClip = mvpMatrix.transform(topLeftWorld);
-        Vector4f topLeftNDC = new Vector4f(topLeftClip.x / topLeftClip.w, topLeftClip.y / topLeftClip.w, 0, 1);
+        Matrix4f mvpMatrix = RenderSystem.getProjectionMatrix().copy();
+        mvpMatrix.multiply(poseStack.last().pose());
+        Vector4f topLeftClip = new Vector4f(0, 0, 0, 1);
+        topLeftClip.transform(mvpMatrix);
+        float topLeftNdcX = topLeftClip.x() / topLeftClip.w();
+        float topLeftNdcY = topLeftClip.y() / topLeftClip.w();
 
-        int screenX = Math.round((topLeftNDC.x + 1) / 2f * window.getGuiScaledWidth());
-        int screenY = Math.round((1 - topLeftNDC.y) / 2f * window.getGuiScaledHeight());
+        int screenX = Math.round((topLeftNdcX + 1) / 2f * window.getGuiScaledWidth());
+        int screenY = Math.round((1 - topLeftNdcY) / 2f * window.getGuiScaledHeight());
 
         if (entity instanceof LivingEntity livingEntity) {
             guiGraphics.pose().pushPose();
@@ -106,10 +106,14 @@ public class GenericUtils {
                 guiGraphics.enableScissor(screenX + bounds.x() + 1, screenY + bounds.y() + 1, screenX + bounds.right() - 1, screenY + bounds.bottom() - 1);
 
                 EntityDimensions dimensions = entity.getType().getDimensions();
+                PoseStack modelViewStack = RenderSystem.getModelViewStack();
+
+                modelViewStack.pushPose();
+                modelViewStack.mulPoseMatrix(poseStack.last().pose());
+                RenderSystem.applyModelViewMatrix();
 
                 try {
-                    InventoryScreen.renderEntityInInventoryFollowsMouse(
-                            guiGraphics,
+                    InventoryScreen.renderEntityInInventory(
                             bounds.x() + bounds.width() / 2,
                             bounds.y() + WIDGET_SIZE - 5,
                             (int) (Math.min(20 / dimensions.height, 20 / dimensions.width)),
@@ -119,12 +123,15 @@ public class GenericUtils {
                     );
                 } catch (Throwable e) {
                     BROKEN_ENTITY_RENDERERS.add(entity.getType());
-                    LOGGER.warn("Failed to render entity {}, skipping it from now on: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()), e.getMessage(), e);
+                    LOGGER.warn("Failed to render entity {}, skipping it from now on: {}", Registry.ENTITY_TYPE.getKey(entity.getType()), e.getMessage(), e);
 
                     // InventoryScreen#renderEntityInInventory pushed the pose and changed the render state, but never restored it
-                    guiGraphics.pose().popPose();
+                    modelViewStack.popPose();
                     minecraft.getEntityRenderDispatcher().setRenderShadow(true);
                     Lighting.setupFor3DItems();
+                } finally {
+                    modelViewStack.popPose();
+                    RenderSystem.applyModelViewMatrix();
                 }
 
                 guiGraphics.disableScissor();
@@ -154,7 +161,7 @@ public class GenericUtils {
 
     @NotNull
     public static List<TooltipLine> getEntityNameTooltip(EntityType<?> type) {
-        ResourceLocation id = BuiltInRegistries.ENTITY_TYPE.getKey(type);
+        ResourceLocation id = Registry.ENTITY_TYPE.getKey(type);
         List<TooltipLine> lines = new ArrayList<>();
 
         lines.add(TooltipLine.text(type.getDescription()));
@@ -182,7 +189,7 @@ public class GenericUtils {
     public static Component ellipsis(String text, String fallback, int maxWidth) {
         Font font = Minecraft.getInstance().font;
 
-        text = Language.getInstance().getOrDefault(text, getFallbackText(fallback));
+        text = Language.getInstance().has(text) ? Language.getInstance().getOrDefault(text) : getFallbackText(fallback);
 
         if (font.width(text) > maxWidth) {
             int index = 20;
@@ -330,7 +337,7 @@ public class GenericUtils {
         Set<ResourceLocation> claimedLootTables = new HashSet<>();
         Map<ResourceLocation, Set<Item>> handledBlockItems = new HashMap<>();
 
-        for (Block block : BuiltInRegistries.BLOCK) {
+        for (Block block : Registry.BLOCK) {
             ResourceLocation location = Utils.getLootTableKey(block);
 
             //noinspection ConstantValue
@@ -355,7 +362,7 @@ public class GenericUtils {
         List<Map.Entry<ResourceLocation, IDataNode>> entityEntries = lootData.entrySet()
                 .stream()
                 .filter((e) -> e.getValue() instanceof EntityLootTableNode)
-                .sorted(Comparator.<Map.Entry<ResourceLocation, IDataNode>>comparingInt((e) -> BuiltInRegistries.ENTITY_TYPE.getId(((EntityLootTableNode) e.getValue()).getEntityType()))
+                .sorted(Comparator.<Map.Entry<ResourceLocation, IDataNode>>comparingInt((e) -> Registry.ENTITY_TYPE.getId(((EntityLootTableNode) e.getValue()).getEntityType()))
                         .thenComparing(Map.Entry::getKey))
                 .toList();
 
@@ -380,7 +387,7 @@ public class GenericUtils {
 
         lootData.clear();
 
-        List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
+        List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = Registry.VILLAGER_PROFESSION.entrySet()
                 .stream()
                 .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
                 .toList();
@@ -423,7 +430,7 @@ public class GenericUtils {
         Predicate<Holder<PoiType>> acquirableJobSite = profession.acquirableJobSite();
 
         try {
-            return BuiltInRegistries.POINT_OF_INTEREST_TYPE.holders()
+            return Registry.POINT_OF_INTEREST_TYPE.holders()
                     .filter(acquirableJobSite)
                     .flatMap((holder) -> holder.value().matchingStates().stream())
                     .map(BlockBehaviour.BlockStateBase::getBlock)
@@ -462,7 +469,7 @@ public class GenericUtils {
         Font font = Minecraft.getInstance().font;
         EntityType<?> entityType = type.entityType();
         SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
-        Component titleTooltip = Component.literal(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString());
+        Component titleTooltip = Component.literal(Registry.ENTITY_TYPE.getKey(entityType).toString());
         Rect spawnEggRect = new Rect(0, 0, SLOT_SIZE, SLOT_SIZE);
         int titleX = 0;
         int titleY = 0;
@@ -515,7 +522,7 @@ public class GenericUtils {
     // every villager profession, modded ones included, is named by a key under the vanilla villager prefix
     @NotNull
     private static String getTraderTranslationKey(ResourceLocation location, EntityType<?> entityType) {
-        if (BuiltInRegistries.VILLAGER_PROFESSION.containsKey(location)) {
+        if (Registry.VILLAGER_PROFESSION.containsKey(location)) {
             return "entity.minecraft.villager." + location.getPath();
         }
 

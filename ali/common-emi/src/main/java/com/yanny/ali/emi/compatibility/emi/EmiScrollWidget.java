@@ -1,11 +1,12 @@
 package com.yanny.ali.emi.compatibility.emi;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
                         continue;
                     }
 
-                    widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
+                    widget.render(guiGraphics.pose(), (int) mouseX, (int) mouseY, 0);
                 }
             }
         };
@@ -83,7 +84,8 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
     }
 
     @Override
-    public void render(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+    public void render(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics draw = new GuiGraphics(pose);
         scrollWidget.render(draw, mouseX, mouseY);
     }
 

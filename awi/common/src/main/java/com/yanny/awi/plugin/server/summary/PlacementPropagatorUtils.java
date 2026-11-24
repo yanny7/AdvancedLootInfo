@@ -3,7 +3,7 @@ package com.yanny.awi.plugin.server.summary;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.api.IServerUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.placement.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class PlacementPropagatorUtils {
 
     @NotNull
     private static <T extends PlacementModifier> PlacementContribution worldDependentCount(IServerUtils utils, T placement) {
-        NumberExpr count = NumberExpr.opaque(String.valueOf(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.type())));
+        NumberExpr count = NumberExpr.opaque(String.valueOf(Registry.PLACEMENT_MODIFIERS.getKey(placement.type())));
 
         return PlacementContribution.ofCount(count, utils.getPlacementModifierTooltip(utils, placement).build());
     }

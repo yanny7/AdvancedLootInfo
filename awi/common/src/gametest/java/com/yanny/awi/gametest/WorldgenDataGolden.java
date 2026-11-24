@@ -18,7 +18,7 @@ import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.GenerationStepNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import com.yanny.awi.plugin.common.nodes.PlacedFeatureNode;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.FriendlyByteBuf;
@@ -106,7 +106,7 @@ public class WorldgenDataGolden {
             @Override
             protected String describe(ICoreDataNode<?> node) {
                 if (node instanceof IBlockNode blockNode) {
-                    return blockNode.getBlock().map((block) -> BuiltInRegistries.BLOCK.getKey(block).toString(), (tag) -> "#" + tag.location());
+                    return blockNode.getBlock().map((block) -> Registry.BLOCK.getKey(block).toString(), (tag) -> "#" + tag.location());
                 } else if (node instanceof PlacedFeatureNode placedFeatureNode) {
                     return placedFeatureNode.getFeatureId().toString();
                 } else if (node instanceof GenerationStepNode generationStepNode) {
@@ -122,9 +122,9 @@ public class WorldgenDataGolden {
             protected void appendExtra(StringBuilder builder, String indent, ICoreDataNode<?> node) {
                 if (node instanceof BiomeNode biomeNode) {
                     biomeNode.getSpawns().entrySet().stream()
-                            .sorted(Comparator.comparing((entry) -> BuiltInRegistries.ENTITY_TYPE.getKey(entry.getKey()).toString()))
+                            .sorted(Comparator.comparing((entry) -> Registry.ENTITY_TYPE.getKey(entry.getKey()).toString()))
                             .forEach((entry) -> {
-                                builder.append(indent).append("  spawn ").append(BuiltInRegistries.ENTITY_TYPE.getKey(entry.getKey())).append('\n');
+                                builder.append(indent).append("  spawn ").append(Registry.ENTITY_TYPE.getKey(entry.getKey())).append('\n');
                                 appendTooltip(builder, indent + "  ", entry.getValue());
                             });
                 }

@@ -63,7 +63,7 @@ public class TreeDecoratorTooltipTest {
                 0.1f,
                 2,
                 1,
-                BlockStateProvider.simple(Blocks.CHERRY_LEAVES),
+                BlockStateProvider.simple(Blocks.MANGROVE_LEAVES),
                 2,
                 List.of(Direction.UP, Direction.DOWN)
         )).build(), List.of(
@@ -74,7 +74,7 @@ public class TreeDecoratorTooltipTest {
                 "  -> Block Provider:",
                 "    -> Simple:",
                 "      -> State:",
-                "        -> Block: Cherry Leaves",
+                "        -> Block: Mangrove Leaves",
                 "        -> Properties:",
                 "          -> distance: 7",
                 "          -> persistent: false",

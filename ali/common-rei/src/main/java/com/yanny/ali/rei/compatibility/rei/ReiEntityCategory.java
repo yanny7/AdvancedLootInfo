@@ -1,6 +1,8 @@
 package com.yanny.ali.rei.compatibility.rei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.ali.compatibility.common.EntityStorage;
@@ -9,6 +11,7 @@ import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.gui.AbstractRenderer;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -58,17 +61,21 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         Rectangle entityBounds = new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE);
         List<TooltipLine> spawnTooltip = GenericUtils.getSpawnTooltip(display.getLootData());
 
-        innerWidgets.add(Widgets.wrapRenderer(entityBounds, (graphics, bounds1, mouseX, mouseY, delta) -> {
-            Level level = Minecraft.getInstance().level;
+        innerWidgets.add(Widgets.wrapRenderer(entityBounds, new AbstractRenderer() {
+            @Override
+            public void render(PoseStack pose, Rectangle bounds1, int mouseX, int mouseY, float delta) {
+                GuiGraphics graphics = new GuiGraphics(pose);
+                Level level = Minecraft.getInstance().level;
 
-            if (level != null) {
-                Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, display.getEntityType(), level, display.getVariant());
+                if (level != null) {
+                    Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, display.getEntityType(), level, display.getVariant());
 
-                graphics.pose().pushPose();
-                graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-                GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
-                GenericUtils.renderSpawnInfoIcon(display.getLootData(), rect, graphics);
-                graphics.pose().popPose();
+                    graphics.pose().pushPose();
+                    graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
+                    GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
+                    GenericUtils.renderSpawnInfoIcon(display.getLootData(), rect, graphics);
+                    graphics.pose().popPose();
+                }
             }
         }));
         innerWidgets.add(Widgets.createTooltip((point) -> entityBounds.contains(point) && !spawnTooltip.isEmpty() ? Tooltip.from(Tooltip.entry(new ScrollableTooltip(spawnTooltip))) : null));

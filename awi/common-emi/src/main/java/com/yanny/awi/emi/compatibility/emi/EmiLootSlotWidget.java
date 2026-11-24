@@ -3,6 +3,7 @@ package com.yanny.awi.emi.compatibility.emi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -13,7 +14,6 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +44,8 @@ public class EmiLootSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void drawOverlay(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+    public void drawOverlay(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics draw = new GuiGraphics(pose);
         if (count != null) {
             Font font = Minecraft.getInstance().font;
             PoseStack stack = draw.pose();
@@ -66,7 +67,7 @@ public class EmiLootSlotWidget extends SlotWidget {
             stack.popPose();
         }
 
-        super.drawOverlay(draw, mouseX, mouseY, delta);
+        super.drawOverlay(pose, mouseX, mouseY, delta);
     }
 
     private void setCount(NumberExpr count) {

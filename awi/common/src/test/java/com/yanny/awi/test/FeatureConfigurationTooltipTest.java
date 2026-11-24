@@ -996,7 +996,6 @@ public class FeatureConfigurationTooltipTest {
                 Blocks.CRIMSON_NYLIUM.defaultBlockState(),
                 Blocks.SHROOMLIGHT.defaultBlockState(),
                 Blocks.WARPED_WART_BLOCK.defaultBlockState(),
-                BlockPredicate.solid(),
                 true
         )).build(), List.of(
                 "Huge Fungus:",
@@ -1008,8 +1007,6 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Shroomlight",
                 "  -> Decor State:",
                 "    -> Block: Warped Wart Block",
-                "  -> Replaceable Blocks:",
-                "    -> Solid:",
                 "  -> Planted: True"
         ));
     }

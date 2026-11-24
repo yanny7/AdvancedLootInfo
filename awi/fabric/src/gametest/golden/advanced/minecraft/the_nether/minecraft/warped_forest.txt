@@ -499,66 +499,6 @@ awi:biome minecraft:warped_forest
       |       -> Block: Warped Wart Block
       |     -> Decor State:
       |       -> Block: Shroomlight
-      |     -> Replaceable Blocks:
-      |       -> Matching Blocks:
-      |         -> Blocks:
-      |           -> Oak Sapling
-      |           -> Spruce Sapling
-      |           -> Birch Sapling
-      |           -> Jungle Sapling
-      |           -> Acacia Sapling
-      |           -> Cherry Sapling
-      |           -> Dark Oak Sapling
-      |           -> Mangrove Propagule
-      |           -> Dandelion
-      |           -> Torchflower
-      |           -> Poppy
-      |           -> Blue Orchid
-      |           -> Allium
-      |           -> Azure Bluet
-      |           -> Red Tulip
-      |           -> Orange Tulip
-      |           -> White Tulip
-      |           -> Pink Tulip
-      |           -> Oxeye Daisy
-      |           -> Cornflower
-      |           -> Wither Rose
-      |           -> Lily of the Valley
-      |           -> Brown Mushroom
-      |           -> Red Mushroom
-      |           -> Wheat Crops
-      |           -> Sugar Cane
-      |           -> Attached Pumpkin Stem
-      |           -> Attached Melon Stem
-      |           -> Pumpkin Stem
-      |           -> Melon Stem
-      |           -> Lily Pad
-      |           -> Nether Wart
-      |           -> Cocoa
-      |           -> Carrots
-      |           -> Potatoes
-      |           -> Chorus Plant
-      |           -> Chorus Flower
-      |           -> Torchflower Crop
-      |           -> Pitcher Crop
-      |           -> Beetroots
-      |           -> Sweet Berry Bush
-      |           -> Warped Fungus
-      |           -> Crimson Fungus
-      |           -> Weeping Vines
-      |           -> Weeping Vines Plant
-      |           -> Twisting Vines
-      |           -> Twisting Vines Plant
-      |           -> Cave Vines
-      |           -> Cave Vines Plant
-      |           -> Spore Blossom
-      |           -> Azalea
-      |           -> Flowering Azalea
-      |           -> Moss Carpet
-      |           -> Pink Petals
-      |           -> Big Dripleaf
-      |           -> Big Dripleaf Stem
-      |           -> Small Dripleaf
       |     -> Planted: False
       | Placement:
       |   -> Count On Every Layer:

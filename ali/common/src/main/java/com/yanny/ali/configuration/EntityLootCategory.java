@@ -6,8 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.ali.Utils;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.StreamSupport;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
@@ -31,22 +31,20 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
 
     public EntityLootCategory(JsonObject object) {
         super(Type.ENTITY, object);
-        entityTypes = GsonHelper.getAsJsonArray(object, "entityTypes")
-                .asList()
-                .stream()
+        entityTypes = StreamSupport.stream(GsonHelper.getAsJsonArray(object, "entityTypes").spliterator(), false)
                 .map(JsonElement::getAsString)
                 .map((s) -> {
                     if (s.startsWith("#")) {
                         ResourceLocation location = ResourceLocation.tryParse(s.substring(1));
 
                         if (location != null) {
-                            return Either.<TagKey<EntityType<?>>, EntityType<?>>left(TagKey.create(Registries.ENTITY_TYPE, location));
+                            return Either.<TagKey<EntityType<?>>, EntityType<?>>left(TagKey.create(Registry.ENTITY_TYPE_REGISTRY, location));
                         }
                     } else {
                         ResourceLocation location = ResourceLocation.tryParse(s);
 
-                        if (location != null && BuiltInRegistries.ENTITY_TYPE.containsKey(location)) {
-                            return Either.<TagKey<EntityType<?>>, EntityType<?>>right(BuiltInRegistries.ENTITY_TYPE.get(location));
+                        if (location != null && Registry.ENTITY_TYPE.containsKey(location)) {
+                            return Either.<TagKey<EntityType<?>>, EntityType<?>>right(Registry.ENTITY_TYPE.get(location));
                         }
                     }
 
@@ -63,7 +61,7 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
 
         for (Either<TagKey<EntityType<?>>, EntityType<?>> entry : entityTypes) {
             entry.ifLeft((tag) -> array.add("#" + tag.location()));
-            entry.ifRight((entityType) -> array.add(BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString()));
+            entry.ifRight((entityType) -> array.add(Registry.ENTITY_TYPE.getKey(entityType).toString()));
         }
 
         object.add("entityTypes", array);

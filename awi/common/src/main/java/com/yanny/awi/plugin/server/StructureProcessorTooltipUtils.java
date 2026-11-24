@@ -64,12 +64,4 @@ public class StructureProcessorTooltipUtils {
     public static TooltipBuilder getProtectedBlockProcessorTooltip(IServerUtils utils, ProtectedBlockProcessor processor) {
         return array((b) -> b.add(utils.getValueTooltip(utils, processor.cannotReplace).build(Lang.Value.CANNOT_REPLACE)), Lang.StructureProcessor.PROTECTED_BLOCKS);
     }
-
-    @NotNull
-    public static TooltipBuilder getCappedProcessorTooltip(IServerUtils utils, CappedProcessor processor) {
-        return array((b) -> {
-            b.add(utils.getValueTooltip(utils, processor.delegate).build(Lang.Branch.DELEGATE));
-            b.add(utils.getValueTooltip(utils, processor.limit).build(Lang.Branch.LIMIT));
-        }, Lang.StructureProcessor.CAPPED);
-    }
 }

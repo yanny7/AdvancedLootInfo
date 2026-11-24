@@ -1,6 +1,7 @@
 package com.yanny.ali.lootjs.mixin;
 
 import com.almostreliable.lootjs.core.LootEntry;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +12,7 @@ import java.util.List;
 @Mixin(LootEntry.class)
 public interface MixinLootEntry {
     @Accessor
-    LootEntry.Generator getGenerator();
+    ItemStack getItemStack();
 
     @Accessor
     List<LootItemFunction> getPostModifications();

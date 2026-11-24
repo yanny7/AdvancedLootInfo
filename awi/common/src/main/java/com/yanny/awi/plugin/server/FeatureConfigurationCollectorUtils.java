@@ -303,7 +303,7 @@ public class FeatureConfigurationCollectorUtils {
                 .forEach((id) -> manager.get(id).ifPresent((template) -> {
                     for (StructureTemplate.Palette palette : template.palettes) { // private field unlocked via awi.accesswidener
                         for (StructureTemplate.StructureBlockInfo info : palette.blocks()) {
-                            Block block = info.state().getBlock();
+                            Block block = info.state.getBlock();
 
                             if (block != Blocks.AIR && block != Blocks.STRUCTURE_VOID) { // palettes contain structure_void markers
                                 blocks.add(Either.left(block));

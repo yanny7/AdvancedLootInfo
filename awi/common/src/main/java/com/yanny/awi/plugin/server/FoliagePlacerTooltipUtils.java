@@ -73,18 +73,6 @@ public class FoliagePlacerTooltipUtils {
         }, Lang.FoliagePlacer.RANDOM_SPREAD);
     }
 
-    @NotNull
-    public static TooltipBuilder getCherryFoliagePlacerTooltip(IServerUtils utils, CherryFoliagePlacer placer) {
-        return TooltipBuilder.array((b) -> {
-            addBaseFoliagePlacerTooltip(utils, b, placer);
-            b.add(utils.getValueTooltip(utils, placer.height).build(Lang.Branch.HEIGHT));
-            b.add(utils.getValueTooltip(utils, placer.wideBottomLayerHoleChance).build(Lang.Value.WIDE_BOTTOM_LAYER_HOLE_CHANCE));
-            b.add(utils.getValueTooltip(utils, placer.cornerHoleChance).build(Lang.Value.CORNER_HOLE_CHANCE));
-            b.add(utils.getValueTooltip(utils, placer.hangingLeavesChance).build(Lang.Value.HANGING_LEAVES_CHANCE));
-            b.add(utils.getValueTooltip(utils, placer.hangingLeavesExtensionChance).build(Lang.Value.HANGING_LEAVES_EXTENSION_CHANCE));
-        }, Lang.FoliagePlacer.CHERRY);
-    }
-
     private static void addBlobFoliagePlacerTooltip(IServerUtils utils, TooltipBuilder builder, BlobFoliagePlacer placer) {
         addBaseFoliagePlacerTooltip(utils, builder, placer);
         builder.add(utils.getValueTooltip(utils, placer.height).build(Lang.Value.HEIGHT));

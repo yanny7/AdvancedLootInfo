@@ -11,7 +11,7 @@ public record NumberOptions(boolean showFormulas, boolean showCharts, Locale loc
     @NotNull
     public static NumberOptions client(boolean showCharts) {
         Minecraft minecraft = Minecraft.getInstance();
-        String[] code = minecraft.getLanguageManager().getSelected().split("_", 2);
+        String[] code = minecraft.getLanguageManager().getSelected().getCode().split("_", 2);
         Locale locale = code.length == 2 ? new Locale(code[0], code[1]) : new Locale(code[0]);
 
         return new NumberOptions(minecraft.options.advancedItemTooltips, showCharts, locale);

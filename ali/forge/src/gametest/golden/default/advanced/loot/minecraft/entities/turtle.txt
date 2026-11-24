@@ -23,5 +23,4 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Damage Source Properties:
-      |   -> Tags:
-      |     -> Is: minecraft:is_lightning
+      |   -> Is Lightning: True

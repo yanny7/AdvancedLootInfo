@@ -21,7 +21,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
@@ -123,8 +123,8 @@ public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, ResourceLocation> {
     private record TooltipWidget(Component component, Rect rect) implements IRecipeWidget {
         @NotNull
         @Override
-        public ScreenPosition getPosition() {
-            return new ScreenPosition(rect().x(), rect.y());
+        public Rect2i getArea() {
+            return new Rect2i(rect.x(), rect.y(), rect.width(), rect.height());
         }
 
         @Override

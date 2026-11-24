@@ -12,7 +12,7 @@ import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import com.yanny.awi.plugin.common.nodes.SurfaceRuleSpecializer;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -155,7 +155,7 @@ public class BaseLayoutTest {
         NoiseBasedChunkGenerator generator = (NoiseBasedChunkGenerator) BaseLayoutTestUtils.levelStems().getOrThrow(LevelStem.OVERWORLD).generator();
         SurfaceRules.RuleSource rule = generator.generatorSettings().value().surfaceRule();
         RandomState randomState = RandomState.create(generator.generatorSettings().value(),
-                BaseLayoutTestUtils.registryAccess().lookupOrThrow(Registries.NOISE), SEEDS.get(0));
+                BaseLayoutTestUtils.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), SEEDS.get(0));
         SurfaceRuleSpecializer specializer = new SurfaceRuleSpecializer(rule, BaseLayoutTestUtils.lookup(),
                 Map.of(BandlandsLayout.TYPE.toString(), BandlandsLayout.create(randomState)), false);
         List<Executable> checks = new ArrayList<>();

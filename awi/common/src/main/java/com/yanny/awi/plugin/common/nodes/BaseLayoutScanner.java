@@ -4,10 +4,8 @@ import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.ISurfaceRuleHandler;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
@@ -85,7 +83,7 @@ public class BaseLayoutScanner {
 
     /** @param codecLookup see {@link SurfaceRuleSpecializer}; the same object as {@code registryAccess} in game. */
     @NotNull
-    public static BaseLayoutScanner scan(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+    public static BaseLayoutScanner scan(RegistryAccess registryAccess, RegistryAccess codecLookup, long seed,
                                          Registry<LevelStem> levelStemRegistry, Predicate<ResourceLocation> isDimensionVisible,
                                          Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories,
                                          NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
@@ -182,7 +180,7 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    private static TaskResult runTask(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+    private static TaskResult runTask(Task task, RegistryAccess registryAccess, RegistryAccess codecLookup, long seed,
                                       Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories,
                                       Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache,
                                       NodeUtils.ScanOptions scanOptions) {
@@ -251,12 +249,12 @@ public class BaseLayoutScanner {
         private NodeUtils.DimensionContext context;
 
         @NotNull
-        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, RegistryAccess codecLookup, long seed,
                                        Map<ResourceLocation, Function<ISurfaceRuleHandler.Context, ISurfaceRuleHandler>> handlerFactories) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
                         task.generator().generatorSettings().value(),
-                        registryAccess.lookupOrThrow(Registries.NOISE),
+                        registryAccess.registryOrThrow(Registry.NOISE_REGISTRY),
                         seed
                 );
 

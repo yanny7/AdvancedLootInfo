@@ -12,7 +12,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.Deserializers;
@@ -43,7 +43,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", Registry.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
@@ -63,7 +63,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get function info from serialized data for {} in {}", Registry.LOOT_FUNCTION_TYPE.getKey(function.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
@@ -83,7 +83,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", Registry.LOOT_CONDITION_TYPE.getKey(condition.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);

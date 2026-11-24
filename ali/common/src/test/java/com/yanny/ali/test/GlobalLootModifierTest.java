@@ -8,7 +8,6 @@ import com.yanny.ali.plugin.server.LootConditionTypes;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
@@ -22,8 +21,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataId;
-import net.minecraft.world.level.storage.loot.LootDataResolver;
+import net.minecraft.world.level.storage.loot.PredicateManager;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -35,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -50,14 +49,7 @@ public class GlobalLootModifierTest {
     private static final ResourceLocation PREDICATE = new ResourceLocation("test", "predicate");
     private static final Map<LootContext, ResourceLocation> QUERIED_IDS = Collections.synchronizedMap(new WeakHashMap<>());
     private static final Map<LootContext, ResourceLocation> EXTENSION_IDS = Collections.synchronizedMap(new WeakHashMap<>());
-    private static final LootDataResolver LOOT_DATA = new LootDataResolver() {
-        @Nullable
-        @Override
-        public <T> T getElement(LootDataId<T> id) {
-            //noinspection unchecked
-            return id.location().equals(PREDICATE) ? (T) LootItemRandomChanceCondition.randomChance(0.5F).build() : null;
-        }
-    };
+    private static final Function<ResourceLocation, LootItemCondition> PREDICATES = (id) -> id.equals(PREDICATE) ? LootItemRandomChanceCondition.randomChance(0.5F).build() : null;
 
     private static final IServerUtils UTILS = serverUtils(List.of(GlobalLootModifierTest::prepareTableId), null);
 
@@ -195,7 +187,7 @@ public class GlobalLootModifierTest {
         assertEquals(Verdict.yes(false), verdict(entityPage(EntityType.ZOMBIE), condition));
         assertEquals(Verdict.yes(false), verdict(entityPage(EntityType.CREEPER), condition));
         assertEquals(Verdict.NO, verdict(entityPage(EntityType.SKELETON), condition));
-        assertEquals(List.of("AnyOfCondition"), retained(entityPage(EntityType.ZOMBIE), condition));
+        assertEquals(List.of("AlternativeLootItemCondition"), retained(entityPage(EntityType.ZOMBIE), condition));
     }
 
     @Test
@@ -349,7 +341,6 @@ public class GlobalLootModifierTest {
 
         assertEquals(Verdict.UNKNOWN, verdict(entityPage(EntityType.ZOMBIE), condition));
         assertEquals(Verdict.NO, verdict(blockPage(Blocks.STONE), condition));
-        assertEquals(Verdict.NO, verdict(page(DUNGEON, LootContextParamSets.ARCHAEOLOGY), condition));
         assertEquals(Verdict.NO, verdict(page(DUNGEON, LootContextParamSets.GIFT), condition));
         assertEquals(Verdict.NO, verdict(page(DUNGEON, LootContextParamSets.PIGLIN_BARTER), condition));
         assertEquals(Verdict.UNKNOWN, verdict(page(DUNGEON, LootContextParamSets.ALL_PARAMS), condition));
@@ -454,7 +445,7 @@ public class GlobalLootModifierTest {
         assertEquals(Verdict.NO, verdict(block, anyOf(new ConfigValueCondition(false), new KilledByRealPlayerCondition())));
         assertEquals(Verdict.yes(false), verdict(block, anyOf(new ConfigValueCondition(true), new ConfigChanceCondition(0.5F))));
         assertEquals(Verdict.yes(false), verdict(page(DUNGEON, LootContextParamSets.CHEST), anyOf(new ConfigValueCondition(false), new TableIdCondition(DUNGEON))));
-        assertEquals(List.of("AnyOfCondition"), retained(page(DUNGEON, LootContextParamSets.CHEST), anyOf(new ConfigValueCondition(false), new TableIdCondition(DUNGEON))));
+        assertEquals(List.of("AlternativeLootItemCondition"), retained(page(DUNGEON, LootContextParamSets.CHEST), anyOf(new ConfigValueCondition(false), new TableIdCondition(DUNGEON))));
     }
 
     @Test
@@ -504,7 +495,7 @@ public class GlobalLootModifierTest {
 
     @Test
     public void burningMobDropIsExcludedByItsBlacklistAndOffEntityPages() {
-        LootItemCondition fire = DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().tag(TagPredicate.is(DamageTypeTags.IS_FIRE))).build();
+        LootItemCondition fire = DamageSourceCondition.hasDamageSource(DamageSourcePredicate.Builder.damageType().isFire(true)).build();
         LootItemCondition blacklist = inverted(entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.SKELETON))));
         LootItemCondition onFire = entity(LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity()
                 .flags(EntityFlagsPredicate.Builder.flags().setOnFire(true).build()));
@@ -525,7 +516,7 @@ public class GlobalLootModifierTest {
     private static IServerUtils resolvingServerUtils(List<ILootContextPreparer> preparers, IEntitySubPredicateResolver<EntitySubPredicate> subPredicateResolver) {
         IServerUtils utils = mock(IServerUtils.class);
 
-        doAnswer((i) -> GlobalLootModifierUtils.testPage(i.getArgument(0), i.getArgument(1), i.getArgument(2), resolver(i.getArgument(1)), preparers, LOOT_DATA))
+        doAnswer((i) -> GlobalLootModifierUtils.testPage(i.getArgument(0), i.getArgument(1), i.getArgument(2), resolver(i.getArgument(1)), preparers, PREDICATES))
                 .when(utils).testPage(any(), any(), any());
         doAnswer((i) -> GlobalLootModifierUtils.getParamState(i.getArgument(0), i.getArgument(1))).when(utils).getParamState(any(), any());
         doAnswer((i) -> subPredicateResolver.test(i.getArgument(0), i.getArgument(1), i.getArgument(2))).when(utils).testEntitySubPredicate(any(), any(), any());
@@ -630,12 +621,12 @@ public class GlobalLootModifierTest {
 
     @NotNull
     private static LootItemCondition allOf(LootItemCondition... conditions) {
-        return AllOfCondition.allOf(builders(conditions)).build();
+        return new PredicateManager.CompositePredicate(conditions);
     }
 
     @NotNull
     private static LootItemCondition anyOf(LootItemCondition... conditions) {
-        return AnyOfCondition.anyOf(builders(conditions)).build();
+        return AlternativeLootItemCondition.alternative(builders(conditions)).build();
     }
 
     @NotNull

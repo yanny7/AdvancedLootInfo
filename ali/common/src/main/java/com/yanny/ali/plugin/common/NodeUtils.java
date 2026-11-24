@@ -16,7 +16,6 @@ import com.yanny.ali.plugin.server.LootCount;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -430,7 +429,7 @@ public class NodeUtils {
 
         return conditions.stream()
                 .flatMap((c) -> utils.unwrapCondition(utils, c).stream())
-                .anyMatch((c) -> !ignored.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+                .anyMatch((c) -> !ignored.contains(Registry.LOOT_CONDITION_TYPE.getKey(c.getType())));
     }
 
     @NotNull
@@ -633,7 +632,7 @@ public class NodeUtils {
     @NotNull
     private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<? extends ItemLike> tag) {
         //noinspection unchecked
-        Registry<T> registry = (Registry<T>) BuiltInRegistries.REGISTRY.get(tag.registry().location());
+        Registry<T> registry = (Registry<T>) Registry.REGISTRY.get(tag.registry().location());
 
         if (registry != null) {
             //noinspection unchecked
@@ -651,7 +650,7 @@ public class NodeUtils {
                 predicate::test,
                 (tagKey) -> {
                     //noinspection unchecked
-                    Registry<T> registry = (Registry<T>)BuiltInRegistries.REGISTRY.get(tagKey.registry().location());
+                    Registry<T> registry = (Registry<T>)Registry.REGISTRY.get(tagKey.registry().location());
 
                     if (registry != null) {
                         //noinspection unchecked

@@ -8,8 +8,6 @@ import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -33,7 +31,7 @@ public class SpawnInfo {
     private static final int MAX_INCLUDED_BIOMES = 10;
     private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
-            .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
+            .thenComparing((e) -> Registry.ENTITY_TYPE.getKey(e.type()));
     private static final Comparator<Map.Entry<Spawn, SortedSet<ResourceLocation>>> GROUP_ORDER =
             Comparator.<Map.Entry<Spawn, SortedSet<ResourceLocation>>>comparingInt((e) -> -e.getValue().size()).thenComparing((e) -> e.getValue().first());
 
@@ -47,13 +45,13 @@ public class SpawnInfo {
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityBiomes = new HashMap<>();
     private final Map<EntityType<?>, Map<ResourceLocation, List<Spawn>>> entityStructures = new HashMap<>();
 
-    public SpawnInfo(String modId, RegistryAccess registryAccess, Function<Structure, Structure.StructureSettings> structureSettings,
+    public SpawnInfo(String modId, RegistryAccess registryAccess, Registry<LevelStem> levelStems, Function<Structure, Structure.StructureSettings> structureSettings,
                      Predicate<EntityType<?>> entityFilter, boolean showInGameNames) {
         logger = CommonLogUtils.getLogger(modId);
         this.showInGameNames = showInGameNames;
         this.entityFilter = entityFilter;
 
-        for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : entries(registryAccess, Registries.LEVEL_STEM)) {
+        for (Map.Entry<ResourceKey<LevelStem>, LevelStem> entry : levelStems.entrySet()) {
             try {
                 dimensionBiomes.put(entry.getKey().location(), toIds(entry.getValue().generator().getBiomeSource().possibleBiomes()));
             } catch (Throwable e) {
@@ -61,7 +59,7 @@ public class SpawnInfo {
             }
         }
 
-        for (Map.Entry<ResourceKey<Biome>, Biome> entry : entries(registryAccess, Registries.BIOME)) {
+        for (Map.Entry<ResourceKey<Biome>, Biome> entry : entries(registryAccess, Registry.BIOME_REGISTRY)) {
             try {
                 addBiome(entry.getKey().location(), entry.getValue().getMobSettings());
             } catch (Throwable e) {
@@ -69,7 +67,7 @@ public class SpawnInfo {
             }
         }
 
-        for (Map.Entry<ResourceKey<Structure>, Structure> entry : entries(registryAccess, Registries.STRUCTURE)) {
+        for (Map.Entry<ResourceKey<Structure>, Structure> entry : entries(registryAccess, Registry.STRUCTURE_REGISTRY)) {
             try {
                 addStructure(entry.getKey().location(), structureSettings.apply(entry.getValue()));
             } catch (Throwable e) {
@@ -91,7 +89,7 @@ public class SpawnInfo {
         try {
             return buildEntityTooltip(type);
         } catch (Throwable e) {
-            logger.warn("Failed to build spawn tooltip of entity {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e);
+            logger.warn("Failed to build spawn tooltip of entity {}", Registry.ENTITY_TYPE.getKey(type), e);
             return TooltipNode.empty();
         }
     }
@@ -113,7 +111,7 @@ public class SpawnInfo {
 
         return TooltipBuilder.branch((root) -> dimensionBiomes.forEach((dimension, biomesInDimension) -> {
             Map<Spawn, SortedSet<ResourceLocation>> groups = new HashMap<>();
-            TooltipBuilder dimensionBuilder = TooltipBuilder.value(name(Registries.LEVEL_STEM, dimension)).key(CoreLang.Spawn.DIMENSION);
+            TooltipBuilder dimensionBuilder = TooltipBuilder.value(name(Registry.LEVEL_STEM_REGISTRY, dimension)).key(CoreLang.Spawn.DIMENSION);
             boolean spawnsHere = false;
 
             for (ResourceLocation biome : biomesInDimension) {
@@ -240,7 +238,7 @@ public class SpawnInfo {
         List<ResourceLocation> listed = excluded ? biomesInDimension.stream().filter((b) -> !biomes.contains(b)).toList() : List.copyOf(biomes);
 
         for (int i = 0; i < listed.size(); i++) {
-            TooltipBuilder line = TooltipBuilder.value(name(Registries.BIOME, listed.get(i))).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
+            TooltipBuilder line = TooltipBuilder.value(name(Registry.BIOME_REGISTRY, listed.get(i))).key(excluded ? CoreLang.Spawn.BIOME_EXCLUDED : CoreLang.Spawn.BIOME_INCLUDED);
 
             dimension.add(i == listed.size() - 1 ? addSpawn(line, spawn) : line);
         }
@@ -259,7 +257,7 @@ public class SpawnInfo {
             List<ResourceLocation> listed = List.copyOf(group.getValue());
 
             for (int i = 0; i < listed.size(); i++) {
-                TooltipBuilder line = TooltipBuilder.value(name(Registries.STRUCTURE, listed.get(i))).key(CoreLang.Spawn.STRUCTURE);
+                TooltipBuilder line = TooltipBuilder.value(name(Registry.STRUCTURE_REGISTRY, listed.get(i))).key(CoreLang.Spawn.STRUCTURE);
 
                 builder.add(i == listed.size() - 1 ? addSpawn(line, group.getKey()) : line);
             }
@@ -285,7 +283,7 @@ public class SpawnInfo {
         builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 
         if (spawn.cost() != null) {
-            builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().charge()), COST_FORMAT.format(spawn.cost().energyBudget())).build(CoreLang.Spawn.SPAWN_COST));
+            builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().getCharge()), COST_FORMAT.format(spawn.cost().getEnergyBudget())).build(CoreLang.Spawn.SPAWN_COST));
         }
 
         return builder;

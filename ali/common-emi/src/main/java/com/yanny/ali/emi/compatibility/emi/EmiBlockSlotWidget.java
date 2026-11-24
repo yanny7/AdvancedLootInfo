@@ -2,12 +2,12 @@ package com.yanny.ali.emi.compatibility.emi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
+import com.yanny.aci.compatibility.GuiGraphics;
 import com.yanny.ali.mixin.MixinBushBlock;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.joml.Vector3f;
 
 import java.util.List;
 
@@ -40,14 +39,18 @@ public class EmiBlockSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        drawBackground(guiGraphics, mouseX, mouseY, delta);
-        drawOverlay(guiGraphics, mouseX, mouseY, delta);
+    public void render(PoseStack pose, int mouseX, int mouseY, float delta) {
+        GuiGraphics guiGraphics = new GuiGraphics(pose);
+        drawBackground(pose, mouseX, mouseY, delta);
+        drawOverlay(pose, mouseX, mouseY, delta);
         BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
         PoseStack poseStack = guiGraphics.pose();
 
-        Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
-        Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
+        Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F);
+        Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F);
+
+        light0.normalize();
+        light1.normalize();
         RenderSystem.setShaderLights(light0, light1);
 
         poseStack.pushPose();
@@ -56,8 +59,8 @@ public class EmiBlockSlotWidget extends SlotWidget {
         if (isPlant) {
             poseStack.translate(19, 12.5, 300);
             poseStack.scale(9, -9, 9);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(30f));
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(225f));
             blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 
             BlockState base;
@@ -74,8 +77,8 @@ public class EmiBlockSlotWidget extends SlotWidget {
         } else {
             poseStack.translate(25.5, 21, 100);
             poseStack.scale(18, -18, 18);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(30f));
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(225f));
             blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
             poseStack.translate(0, -1, 0);
         }

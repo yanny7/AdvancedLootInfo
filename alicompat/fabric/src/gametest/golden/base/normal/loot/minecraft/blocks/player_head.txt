@@ -9,11 +9,6 @@ ali:loot_table
       | Copy Nbt:
       |   -> Nbt Provider: minecraft:context
       |   -> Operations:
-      |     -> Entry:
-      |       -> Source: SkullOwner
-      |       -> Target: SkullOwner
-      |       -> Merge Strategy: Replace
-      |     -> Entry:
-      |       -> Source: note_block_sound
-      |       -> Target: BlockEntityTag.note_block_sound
-      |       -> Merge Strategy: Replace
+      |     -> Source: SkullOwner
+      |     -> Target: SkullOwner
+      |     -> Merge Strategy: Replace
