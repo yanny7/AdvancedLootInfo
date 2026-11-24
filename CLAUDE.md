@@ -29,10 +29,10 @@ Cross-cutting mechanisms are documented **once**, in whichever doc owns them, an
 
 ## Repo/branch layout
 
-This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is.
+This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.19.2`, `1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Branches are typically worked on as separate checkouts, one per Minecraft version — read `minecraft_version` in the repo-root `gradle.properties` to know which version the current checkout is.
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.20.1` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`forge`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.19.2` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.20.1` branch, ALI, AWI, ACI and ALICompat all ship `fabric`+`forge`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
@@ -66,7 +66,7 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 - `common` — platform-agnostic mod logic (loader-independent). Depends on `aci:common`.
 - `common-emi`, `common-jei`, `common-rei` — optional integrations for each supported recipe viewer, enabled independently via `gradle.properties` flags (`<viewer>_enabled` + `<platform>_<viewer>_enabled`).
 - `common-lootjs` (ALI only) — optional LootJS compatibility module.
-- `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch (`forge` from `1.20.1` on, `neoforge` from `1.21.1` on).
+- `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch (`forge` from `1.19.2` on, `neoforge` from `1.21.1` on).
 
 `alicompat` has `common` + the loader modules too, plus one extra source set per target mod (`<loader>/src/compat/<slug>/`) — see `alicompat/CLAUDE.md`.
 
@@ -125,7 +125,7 @@ Run the game (client) with a given loader/viewer combination — generated per-p
 ```
 (Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks — e.g. `run*Neoforge*` tasks only exist on `1.21.1`+ branches.)
 
-A client started for a check runs in the background through the task the generated one wraps, which opens the `New World` save in `<mod>/<loader>/run/saves` by itself: `./gradlew :ali:fabric:runClient -Precipe_viewer=jei --args="--quickPlaySingleplayer 'New World'"`. The game never exits on its own, so stop it as soon as the log line the check needs appears: kill the JVM whose `/proc/<pid>/cwd` is `<mod>/<loader>/run`, never `pkill -f` (it matches the shell) or "the newest java" (it may be the IDE or the Gradle daemon).
+A client started for a check runs in the background through the task the generated one wraps, which opens the `New World` save in `<mod>/<loader>/run/saves` by itself on Minecraft 1.20 and later: `./gradlew :ali:fabric:runClient -Precipe_viewer=jei --args="--quickPlaySingleplayer 'New World'"`. The game never exits on its own, so stop it as soon as the log line the check needs appears: kill the JVM whose `/proc/<pid>/cwd` is `<mod>/<loader>/run`, never `pkill -f` (it matches the shell) or "the newest java" (it may be the IDE or the Gradle daemon).
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```

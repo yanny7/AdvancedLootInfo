@@ -1,5 +1,6 @@
 ## []
 
+- Added Minecraft 1.19.2 (Fabric, Forge)
 - Added `registerData` to the shared client registry
 - Removed `getCurrentDataFuture`, replaced by `registerData`
 - Added `find`, `reportMissing`, `reportAutoDetected` and `shortClassName` to the managed registry
