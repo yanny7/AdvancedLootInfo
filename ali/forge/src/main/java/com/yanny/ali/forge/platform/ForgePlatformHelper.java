@@ -61,7 +61,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json) {
-        return ForgeHooks.loadLootTable(gson, location, json, false);
+        return ForgeHooks.loadLootTable(gson, location, json, true);
     }
 
     @Override

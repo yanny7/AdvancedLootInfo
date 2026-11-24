@@ -18,6 +18,7 @@
 - Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
 - Faster server start in modpacks with many global loot modifiers
 - Fixed loot tables with the same path in different mods sharing one translated name
+- Fixed loot that other mods add on Forge showing twice for mobs that drop their equipment
 - Added Traditional Chinese translation (Andy2088-TW)
 
 ## [2.5.0]
