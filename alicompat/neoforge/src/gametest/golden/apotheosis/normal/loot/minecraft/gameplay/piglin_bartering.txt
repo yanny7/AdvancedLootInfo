@@ -12,6 +12,8 @@ ali:loot_table
         | Enchant Randomly:
         |   -> Enchantment: Soul Speed
         |   -> Only Compatible: True
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_boots x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 1.74%
         | Count: 1

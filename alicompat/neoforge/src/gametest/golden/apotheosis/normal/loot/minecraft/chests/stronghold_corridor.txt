@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_pickaxe x1
         | Chance: 5%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:iron_sword x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_sword x1
         | Chance: 5%
         | Count: 1
@@ -24,6 +28,8 @@ ali:loot_table
       ali:item minecraft:iron_chestplate x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_chestplate x1
         | Chance: 5%
         | Count: 1
@@ -32,6 +38,8 @@ ali:loot_table
       ali:item minecraft:iron_helmet x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_helmet x1
         | Chance: 5%
         | Count: 1
@@ -40,6 +48,8 @@ ali:loot_table
       ali:item minecraft:iron_leggings x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_leggings x1
         | Chance: 5%
         | Count: 1
@@ -48,6 +58,8 @@ ali:loot_table
       ali:item minecraft:iron_boots x1
         | Chance: 1.75%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_boots x1
         | Chance: 5%
         | Count: 1

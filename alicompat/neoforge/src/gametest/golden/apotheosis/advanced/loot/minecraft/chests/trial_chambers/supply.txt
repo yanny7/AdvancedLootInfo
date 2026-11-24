@@ -8,9 +8,6 @@ ali:loot_table
       ali:item minecraft:stone_pickaxe x1
         | Chance: 3.89%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Set Count:
         |   -> Count: 1
@@ -18,6 +15,8 @@ ali:loot_table
         | Set Damage:
         |   -> Damage: U[15%; 80%)
         |   -> Add: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_pickaxe x1
         | Chance: 11.11%
         | Count: 1

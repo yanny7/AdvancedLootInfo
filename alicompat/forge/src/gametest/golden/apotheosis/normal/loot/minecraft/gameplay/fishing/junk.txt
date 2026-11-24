@@ -12,8 +12,10 @@ ali:loot_table
         | Set Damage:
         |   -> Damage: 0% to 90%
         |   -> Add: False
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_boots x1 {Damage:0}
         | Chance: 9.09%
         | Count: 1

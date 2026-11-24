@@ -8,8 +8,10 @@ ali:loot_table
       ali:item minecraft:golden_sword x1 {Damage:0}
         | Chance: 2.4%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_sword x1 {Damage:0}
         | Chance: 6.85%
         | Count: 1
@@ -18,8 +20,10 @@ ali:loot_table
       ali:item minecraft:golden_chestplate x1 {Damage:0}
         | Chance: 2.4%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:golden_chestplate x1 {Damage:0}
         | Chance: 6.85%
         | Count: 1

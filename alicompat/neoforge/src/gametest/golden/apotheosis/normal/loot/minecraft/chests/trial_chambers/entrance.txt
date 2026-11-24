@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:wooden_axe x1
         | Chance: 9.72%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:wooden_axe x1
         | Chance: 27.78%
         | Count: 1

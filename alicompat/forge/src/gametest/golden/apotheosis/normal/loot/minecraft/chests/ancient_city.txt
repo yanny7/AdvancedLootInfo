@@ -12,8 +12,10 @@ ali:loot_table
         | Enchant With Levels:
         |   -> Levels: 30 to 50
         |   -> Treasure: True
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:diamond_leggings x1 {Damage:0}
         | Chance: 2.33%
         | Count: 1
@@ -30,8 +32,10 @@ ali:loot_table
         | Enchant With Levels:
         |   -> Levels: 20 to 39
         |   -> Treasure: True
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_leggings x1 {Damage:0}
         | Chance: 3.49%
         | Count: 1

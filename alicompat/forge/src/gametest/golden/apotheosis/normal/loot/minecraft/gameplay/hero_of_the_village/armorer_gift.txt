@@ -8,8 +8,10 @@ ali:loot_table
       ali:item minecraft:chainmail_helmet x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:chainmail_helmet x1 {Damage:0}
         | Chance: 25%
         | Count: 1
@@ -18,8 +20,10 @@ ali:loot_table
       ali:item minecraft:chainmail_chestplate x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:chainmail_chestplate x1 {Damage:0}
         | Chance: 25%
         | Count: 1
@@ -28,8 +32,10 @@ ali:loot_table
       ali:item minecraft:chainmail_leggings x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:chainmail_leggings x1 {Damage:0}
         | Chance: 25%
         | Count: 1
@@ -38,8 +44,10 @@ ali:loot_table
       ali:item minecraft:chainmail_boots x1 {Damage:0}
         | Chance: 8.75%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:chainmail_boots x1 {Damage:0}
         | Chance: 25%
         | Count: 1
