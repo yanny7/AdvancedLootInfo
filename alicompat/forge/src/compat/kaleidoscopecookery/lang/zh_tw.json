@@ -1,0 +1,9 @@
+{
+  "alicompat.kaleidoscope_cookery.property.branch.inputs": "輸入：",
+  "alicompat.kaleidoscope_cookery.property.branch.output": "輸出：",
+  "alicompat.kaleidoscope_cookery.property.value.flex_recipe": "彈性配方：%s",
+  "alicompat.kaleidoscope_cookery.property.value.recipe_type": "配方類型：%s",
+  "alicompat.kaleidoscope_cookery.type.condition.advance_block_match_tool": "開採者工具：",
+  "alicompat.kaleidoscope_cookery.type.condition.advance_entity_match_tool": "擊殺者工具：",
+  "alicompat.kaleidoscope_cookery.type.function.recipe_randomly": "隨機配方："
+}
