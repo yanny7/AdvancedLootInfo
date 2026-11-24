@@ -74,7 +74,7 @@ Each mod (`ali/`, `awi/`, `aci/`) follows the same subproject pattern:
 
 `alicompat` has `common` + the loader modules too, plus one extra source set per target mod (`<loader>/src/compat/<slug>/`) — see `alicompat/CLAUDE.md`.
 
-`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic (no platform-service implementation, and no mixins except `aci/forge`'s one workaround for a Forge bug, see `aci/forge/CLAUDE.md`); they exist to shadow `aci:common` into a loadable jar and to ship `aci.accesswidener` (see `aci/CLAUDE.md`). `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`), while the ALI/AWI loader modules take `modImplementation project(":aci:<loader>")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
+`aci` has only `common` + the loader modules — no viewer or compat subprojects, since it registers nothing with a recipe viewer. Its loader modules carry no mod logic (no platform-service implementation, and no mixins except `aci/forge`'s one workaround for a Forge bug, see `aci/forge/CLAUDE.md`); they exist to shadow `aci:common` into a loadable jar and to ship `aci.accesswidener` (see `aci/CLAUDE.md`). `ali:common`/`awi:common` compile against `aci:common` directly (`configuration: "namedElements"`). The ALI/AWI/ALICompat loader modules take it through architectury's `common` configuration (compile and dev classpath, never `shadowCommon`) plus `runtimeOnly project(path: ":aci:<loader>", configuration: "namedElements")` for the runtime — `aci:common` is deliberately **not** in their `commonProjects` list, so `com.yanny.aci.*` is not duplicated inside their jars.
 
 Every ACI/ALI/AWI module that compiles mixins sets `loom { mixin { useLegacyMixinAp = true; defaultRefmapName = "<mod>[.<module>].refmap.json" } }`. Loom's default (annotation processor off, mixin targets remapped straight into the bytecode) ships no refmaps, and a Forge or NeoForge mod dev environment depending on ALI/AWI cannot apply their mixins without them.
 
@@ -120,10 +120,6 @@ Build/work on a single mod or module:
 ./gradlew :aci:neoforge:build
 ```
 
-On a checkout with no `aci/<loader>/build/libs/` jar yet, **every** Gradle invocation fails while configuring `:ali:fabric` with `NoSuchFileException: aci/fabric/build/libs/AdvancedCoreInfo-fabric-<version>.jar` — `modImplementation project(":aci:<loader>")` resolves at configuration time. `--configure-on-demand` does not help (loom then fails with `Cannot get MappingsProvider before it has been setup`). Bootstrap it by commenting out the six `modImplementation project(":aci:<loader>")` lines in the ALI/AWI loader build scripts, building the three `:aci:<loader>:build` targets, then restoring them.
-
-After editing `aci`, a dev run may keep loading a stale copy: loom caches remapped mod dependencies keyed on version, and `aci_version` does not move during development. Clear it with `rm -rf .gradle/loom-cache/remapped_mods/*/com/yanny/aci`.
-
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```
 ./gradlew runAliForgeJeiClient
@@ -133,6 +129,8 @@ Run the game (client) with a given loader/viewer combination — generated per-p
 ./gradlew runAwiForgeJeiClient
 ```
 (Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks — e.g. `run*Neoforge*` tasks only exist on `1.21.1`+ branches.)
+
+A client started for a check runs in the background through the task the generated one wraps, which opens the `New World` save in `<mod>/<loader>/run/saves` by itself: `./gradlew :ali:fabric:runClient -Precipe_viewer=jei --args="--quickPlaySingleplayer 'New World'"`. The game never exits on its own, so stop it as soon as the log line the check needs appears: kill the JVM whose `/proc/<pid>/cwd` is `<mod>/<loader>/run`, never `pkill -f` (it matches the shell) or "the newest java" (it may be the IDE or the Gradle daemon).
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```
@@ -166,6 +164,8 @@ ALI's integration test is a GameTest run per loader: a headless server with the 
 ./gradlew :ali:forge:runGametest -Precipe_viewer=none -Pali_golden_regenerate=true
 ```
 
+A Forge run that logs the EULA message has started a dedicated server instead of the GameTest server and never exits: kill the JVM whose `/proc/<pid>/cwd` is `ali/forge/build/gametest/run`.
+
 ALICompat's GameTest runs once per target mod and stores what that mod changes against a base run without target mods (see `alicompat/CLAUDE.md`'s gametest section); the base has to be regenerated before the mods whenever ALI's output changes, which `all` does in one Gradle invocation, base first:
 ```
 ./gradlew :alicompat:forge:runGametest -Precipe_viewer=none
@@ -182,13 +182,25 @@ AWI has the same per-loader GameTest over a vanilla world with seed 0 (see `awi/
 ./gradlew :awi:neoforge:runGametest -Precipe_viewer=none
 ```
 
-The client side has no GameTest. `scripts/client_check.py` (IDE run configuration `Client Check ALL`) runs every enabled ALI/AWI `runClient` combination of loader and recipe viewer serially, joins the `New World` save each `<mod>/<loader>/run/saves` must hold, and passes a run on `Data registration finished successfully.`; an error logged by `CoreClientRegistry.registerData`, a crash, an early exit or the timeout fails it. It echoes the `[ali]`/`[awi]`/`[aci]` log lines, writes each full log to `build/client_check/`, stops the game JVM found by its `/proc/<pid>/cwd`, and exits with the number of failed runs:
+The client side has no GameTest. `scripts/client_check.py` (IDE run configuration `Client Check ALL`) runs every enabled ALI/AWI `runClient` combination of loader and recipe viewer serially, joins the `New World` save each `<mod>/<loader>/run/saves` must hold — on NeoForge with `showLoadWarnings` switched off in `run/config/neoforge-client.toml` for the run and restored afterwards, since the screen listing mod loading warnings waits for a click and older NeoForge versions show it without logging anything — and passes a run on `Data registration finished successfully.`; an error logged by `CoreClientRegistry.registerData`, a crash, an early exit, no registration within two minutes of the `Player login received` line or the timeout fails it. It echoes the `[ali]`/`[awi]`/`[aci]` log lines, writes each full log to `build/client_check/`, stops the game JVM found by its `/proc/<pid>/cwd`, and exits with the number of failed runs:
 ```
 python3 scripts/client_check.py
 python3 scripts/client_check.py --mod ali --loader forge --viewer jei --timeout 300
 ```
 
 Generate data (recipes/loot/lang, per loader) via the IDE run configurations in `.idea/runConfigurations/Minecraft_Data_*.xml`, or the equivalent `run<Platform><Loader>Datagen`-style Gradle tasks wired by the `architectury-loom` plugin. All four mods have datagen; ACI's generates only its own `aci.*` language keys, ALICompat's only the tooltip keys of the compat shims that are built into it. Fabric datagen initialises the `fabric-datagen` entrypoint of every loaded mod, so a broken ACI datagen class breaks ALI's and AWI's datagen runs too.
+
+Fabric datagen exits on its own. Forge/NeoForge datagen writes every file and then never shuts its JVM down: `Caching: total files: …, written: N`, logged by `HashCache.purgeStaleAndWrite()` as the last step of `DataGenerator.run()`, means everything is on disk, so kill the game JVM (by its `/proc/<pid>/cwd`, `<mod>/<loader>/run`) the moment that line appears rather than after a fixed wait. The Gradle task then fails with exit 143, which is expected; judge the run by that line and the diff under `<mod>/<loader>/src/main/generated/`. Datagen of different mods cannot share one Gradle invocation (included-build path clash), so each is its own `./gradlew` call:
+```
+LOG=$(mktemp); DIR=$PWD/ali/neoforge/run
+./gradlew runAliNeoforgeDatagen >"$LOG" 2>&1 & G=$!
+timeout 900 grep -m1 -qE 'Caching: |BUILD (FAILED|SUCCESSFUL)' <(tail -F "$LOG")
+for p in $(pgrep java); do [ "$(readlink /proc/$p/cwd)" = "$DIR" ] && kill $p; done
+wait $G
+```
+The `timeout` only guards against a crash that prints neither line.
+
+A dev, datagen or gametest run that refuses to start because it "requires version X" of `aci` or `ali` reads stale build output, not a real mismatch: a dependent reads the processed loader metadata (`fabric.mod.json`, `META-INF/mods.toml`, `META-INF/neoforge.mods.toml`) of the module it depends on, so rerun `./gradlew :<mod>:<loader>:processResources --rerun-tasks` for the mod the error names, then start the run again.
 
 Language files other than `en_us.json` belong to the translators: a change adds and edits English text only, and a key missing from another locale shows its English text.
 
@@ -221,6 +233,12 @@ Every run then diffs each built shim against the jar it is measured against — 
 | `~` | the shim registers a class whose instance fields differ between the pinned file and the newest one — it compiles, and any field the tooltip should show is silently missing |
 
 A `~` exists only while a newer file than the pin is out: it compares those two jars, so it is reported identically by a plain run and by the `--update` that repins, and disappears once the pin is the newest file — act on it in that run. A field that is internal state rather than loot data needs nothing, and there is no ignore list for it, since the finding clears itself. Every `+` is either work to do or noise to record in that shim's `scan_ignore.json` (see `alicompat/CLAUDE.md`); a scan whose `+` findings are all either registered or ignored prints `[OK]`. A maven pin is measured against all of its artifacts together. Jars come from the gradle cache when the pinned file is already there and are downloaded into `build/compat_jars/` otherwise, so a re-run of an unchanged branch touches no network. The hierarchy is walked against `scripts/base_types.json`, the Minecraft jar from `.gradle/loom-cache`, every other pinned target jar and the libraries those jars bundle under `META-INF/jars/` — a shim's supertype chain routinely leaves its own jar — with Fabric's intermediary class names translated through loom's `mappings.tiny`. A bundled library never counts as the bundling mod's own classes, so it yields no `+` of its own, but a registered class that lives in one is located, parents resolved and its fields diffed for `-`, `!` and `~` like any other, the jar's own copy of a class taking precedence. A hook whose base type is absent on this Minecraft version, or whose loader half is not on the classpath, is reported as unchecked rather than guessed at.
+
+## Code style
+
+Strings are formatted with `String.format(...)`, never `"…".formatted(...)`.
+
+A modernization pass applies the IntelliJ inspections the branch's `java_version` enables in full rather than where they read best — on Java 21+ `getFirst()`/`getLast()` even beside positional `get(1)`, record patterns with explicit component types (a clashing name gets a `1` suffix, as IntelliJ's quick fix does), pattern `switch` instead of `instanceof` chains — and removes unused imports. Dormant ALICompat shims are left untouched, since nothing compiles them.
 
 ## Versioning
 
@@ -260,7 +278,7 @@ The `testArtifacts` configuration on `aci:common` (the shared `TestUtils`) is no
 
 ## Wiki
 
-The user-facing documentation is the project's GitHub wiki — a separate repository, not part of this one. It is a single wiki covering **all** supported Minecraft versions, split into a `Users/` section (no implementation details — no Gson/codecs/registries/API names there) and a `Developers/` section (plugin API). Version-specific behaviour is marked inline per Minecraft version; mod versions are never mentioned, only current behaviour is documented.
+The user-facing documentation is the project's GitHub wiki — a separate repository, not part of this one. It is a single wiki covering **all** supported Minecraft versions, split into a `Users/` section (no implementation details — no Gson/codecs/registries/API names there) and a `Developers/` section (plugin API). Version-specific behaviour is marked inline per Minecraft version; mod versions are never mentioned, only current behaviour is documented. A change made on one branch is described as if it were already merged to every branch: a Minecraft version is called out only for behaviour that differs by version for good (a vanilla API difference, a loader not available there), never for a merge still pending.
 
 **A change that adds, removes or alters user-visible behaviour, a config option, the config format, the datapack format (`fake_loot`), or the plugin API is not done until the matching wiki page(s) are updated.** A change to `compat_mods` counts: the `Users/ALI Compat` page lists the supported mods per Minecraft version and per loader, so activating, porting or dropping a shim leaves it wrong. The wiki is not part of this repo, so nothing here catches the drift. The two published schemas the wiki links to are kept current the same way: `ali_config.schema.json` must match `configuration/AliConfig` and the `LootCategory` subclasses, and `awi_config.schema.json` must match `configuration/AwiConfig`.
 
