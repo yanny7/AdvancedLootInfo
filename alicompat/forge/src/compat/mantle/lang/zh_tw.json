@@ -1,0 +1,15 @@
+{
+  "alicompat.mantle.property.branch.container": "容器：",
+  "alicompat.mantle.type.condition.block_tag": "方塊標籤：",
+  "alicompat.mantle.type.condition.has_loot_context_set": "具有戰利品環境設定：",
+  "alicompat.mantle.type.condition.tag_empty": "標籤為空：",
+  "alicompat.mantle.type.condition.tag_filled": "標籤非空：",
+  "alicompat.mantle.type.entry.tag_preference": "標籤偏好：",
+  "alicompat.mantle.type.function.retextured": "重貼材質：",
+  "alicompat.mantle.type.function.set_fluid": "設定流體：",
+  "alicompat.mantle.type.ingredient.fluid_container": "流體容器：",
+  "alicompat.mantle.type.ingredient.item_name": "物品名稱：",
+  "alicompat.mantle.type.ingredient.nbt_name": "帶有 NBT 的物品：",
+  "alicompat.mantle.type.ingredient.potion_display": "任意藥水：",
+  "alicompat.mantle.type.ingredient.potion": "藥水材料："
+}
