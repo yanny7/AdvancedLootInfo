@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_pickaxe x1
         | Chance: 4.67%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:iron_sword x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_sword x1
         | Chance: 4.67%
         | Count: 1
@@ -24,6 +28,8 @@ ali:loot_table
       ali:item minecraft:iron_spear x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_spear x1
         | Chance: 4.67%
         | Count: 1
@@ -32,6 +38,8 @@ ali:loot_table
       ali:item minecraft:copper_spear x1
         | Chance: 2.29%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:copper_spear x1
         | Chance: 6.54%
         | Count: 1
@@ -40,6 +48,8 @@ ali:loot_table
       ali:item minecraft:iron_chestplate x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_chestplate x1
         | Chance: 4.67%
         | Count: 1
@@ -48,6 +58,8 @@ ali:loot_table
       ali:item minecraft:iron_helmet x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_helmet x1
         | Chance: 4.67%
         | Count: 1
@@ -56,6 +68,8 @@ ali:loot_table
       ali:item minecraft:iron_leggings x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_leggings x1
         | Chance: 4.67%
         | Count: 1
@@ -64,6 +78,8 @@ ali:loot_table
       ali:item minecraft:iron_boots x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_boots x1
         | Chance: 4.67%
         | Count: 1

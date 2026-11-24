@@ -8,9 +8,8 @@ ali:loot_table
       ali:item minecraft:stone_pickaxe x1
         | Chance: 8.75%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_pickaxe x1
         | Chance: 25%
         | Count: 1
@@ -19,9 +18,8 @@ ali:loot_table
       ali:item minecraft:stone_axe x1
         | Chance: 8.75%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_axe x1
         | Chance: 25%
         | Count: 1
@@ -30,9 +28,8 @@ ali:loot_table
       ali:item minecraft:stone_shovel x1
         | Chance: 8.75%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_shovel x1
         | Chance: 25%
         | Count: 1

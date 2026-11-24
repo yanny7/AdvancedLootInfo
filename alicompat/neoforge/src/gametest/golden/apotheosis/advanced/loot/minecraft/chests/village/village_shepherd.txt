@@ -8,9 +8,8 @@ ali:loot_table
       ali:item minecraft:shears x1
         | Chance: 1.52%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:shears x1
         | Chance: 4.35%
         | Count: 1
