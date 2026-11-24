@@ -1,0 +1,13 @@
+{
+  "alicompat.the_bumblezone.property.value.is_failed": "是否失敗：%s",
+  "alicompat.the_bumblezone.property.value.is_loading": "是否載入中：%s",
+  "alicompat.the_bumblezone.property.value.located_special_structure": "已定位特殊結構：%s",
+  "alicompat.the_bumblezone.property.value.locked": "已鎖定：%s",
+  "alicompat.the_bumblezone.property.value.search_id": "搜尋 ID：%s",
+  "alicompat.the_bumblezone.type.condition.essence_only_spawn": "玩家攜帶蜜蜂精華",
+  "alicompat.the_bumblezone.type.entity_sub_predicate.honey_slime": "蜂蜜史萊姆：",
+  "alicompat.the_bumblezone.type.function.drop_container_items": "掉落容器內物品",
+  "alicompat.the_bumblezone.type.function.honey_compass_locate_structure": "蜂蜜指南針定位結構：",
+  "alicompat.the_bumblezone.type.function.tag_item_removals": "標籤物品移除：",
+  "alicompat.the_bumblezone.type.function.uniquify_if_has_items": "若包含物品則去除重複"
+}

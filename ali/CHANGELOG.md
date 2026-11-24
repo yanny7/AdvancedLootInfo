@@ -1,5 +1,6 @@
 ## []
 
+- Added Minecraft 1.19.2 (Fabric, Forge)
 - Server log names trading mobs whose trades ALI cannot show
 - Fixed tooltips of unsupported values showing a name that changes on every server start
 - Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
@@ -16,6 +17,7 @@
 - Hovering a mob's name on its loot page shows the mod it comes from and, with advanced tooltips, its ID
 - Faster server start in modpacks with many global loot modifiers
 - Fixed loot tables with the same path in different mods sharing one translated name
+- Added Traditional Chinese translation (Andy2088-TW)
 
 ## [2.5.0]
 
