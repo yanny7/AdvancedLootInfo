@@ -8,9 +8,6 @@ ali:loot_table
       ali:item minecraft:bow x1 {Damage:0}
         | Chance: 5.83%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Probability: 0.35
         | ----- Modifiers -----
         | Set Damage:
         |   -> Damage: U[0%; 25%)
@@ -18,8 +15,10 @@ ali:loot_table
         | Enchant With Levels:
         |   -> Levels: 30
         |   -> Treasure: True
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:bow x1 {Damage:0}
         | Chance: 16.67%
         | Count: 1

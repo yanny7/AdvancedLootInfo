@@ -8,11 +8,10 @@ ali:loot_table
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Chance: 4.37%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_chestplate x1 {Damage:0}
         | Chance: 12.5%
         | Count: 1
@@ -21,11 +20,10 @@ ali:loot_table
       ali:item minecraft:leather_boots x1 {Damage:0}
         | Chance: 4.37%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_boots x1 {Damage:0}
         | Chance: 12.5%
         | Count: 1
@@ -34,11 +32,10 @@ ali:loot_table
       ali:item minecraft:leather_helmet x1 {Damage:0}
         | Chance: 4.37%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_helmet x1 {Damage:0}
         | Chance: 12.5%
         | Count: 1
@@ -47,11 +44,10 @@ ali:loot_table
       ali:item minecraft:leather_leggings x1 {Damage:0}
         | Chance: 4.37%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:leather_leggings x1 {Damage:0}
         | Chance: 12.5%
         | Count: 1

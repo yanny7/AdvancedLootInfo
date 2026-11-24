@@ -8,11 +8,10 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_pickaxe x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1
@@ -21,11 +20,10 @@ ali:loot_table
       ali:item minecraft:iron_sword x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_sword x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1
@@ -34,11 +32,10 @@ ali:loot_table
       ali:item minecraft:iron_chestplate x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_chestplate x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1
@@ -47,11 +44,10 @@ ali:loot_table
       ali:item minecraft:iron_helmet x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_helmet x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1
@@ -60,11 +56,10 @@ ali:loot_table
       ali:item minecraft:iron_leggings x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_leggings x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1
@@ -73,11 +68,10 @@ ali:loot_table
       ali:item minecraft:iron_boots x1 {Damage:0}
         | Chance: 1.86%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
+        | Affix Conversion:
         |   -> Probability: 0.35
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:iron_boots x1 {Damage:0}
         | Chance: 5.32%
         | Count: 1

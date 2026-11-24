@@ -6,6 +6,7 @@
 - Grimoire of Gaia dwarf and minotaurus variants, mimic chests, Twilight Forest Questing Ram and Death Tome, and Iron's Spellbooks bosses per-player and ominous loot show under their mob instead of gameplay loot
 - Faster server start with Grimoire of Gaia, Twilight Forest, Iron's Spellbooks and Bumblezone
 - Bumblezone on Fabric shows the stinger drops it adds to bees and the fishing loot of its dimension
+- Apotheosis gear converted into affixed loot is labelled as affix conversion
 - Added Traditional Chinese translation (Andy2088-TW)
 
 ## [1.3.0]

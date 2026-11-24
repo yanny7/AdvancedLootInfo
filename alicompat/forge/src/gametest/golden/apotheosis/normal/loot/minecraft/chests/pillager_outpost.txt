@@ -8,8 +8,10 @@ ali:loot_table
       ali:item minecraft:crossbow x1 {Damage:0}
         | Chance: 35%
         | Count: 1
-        | Min Rarity: apotheosis:common
-        | Max Rarity: apotheosis:rare
+        | Affix Conversion:
+        |   -> Probability: 0.35
+        |   -> Min Rarity: apotheosis:common
+        |   -> Max Rarity: apotheosis:rare
       ali:item minecraft:crossbow x1 {Damage:0}
         | Count: 1
   ali:loot_pool
