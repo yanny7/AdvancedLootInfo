@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:crossbow x1
         | Chance: 35%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:crossbow x1
         | Count: 1
   ali:loot_pool

@@ -16,13 +16,12 @@ ali:loot_table
             ali:item minecraft:shield x1
               | Chance: 3.65%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Damage:
               |   -> Damage: U[50%; 100%)
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:shield x1
               | Chance: 10.43%
               | Count: 1
@@ -35,15 +34,14 @@ ali:loot_table
             ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 3.65%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 5 to 15
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:bow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 10.43%
               | Count: 1
@@ -58,15 +56,14 @@ ali:loot_table
             ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 2.43%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 5 to 20
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:crossbow x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 6.96%
               | Count: 1
@@ -81,15 +78,14 @@ ali:loot_table
             ali:item minecraft:iron_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 2.43%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 0 to 10
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:iron_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 6.96%
               | Count: 1
@@ -104,15 +100,14 @@ ali:loot_table
             ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 2.43%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 0 to 10
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 6.96%
               | Count: 1
@@ -127,15 +122,14 @@ ali:loot_table
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 1.22%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 5 to 15
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 3.48%
               | Count: 1
@@ -150,15 +144,14 @@ ali:loot_table
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 1.22%
               | Count: 1
-              | ----- Predicates -----
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Enchant With Levels:
               |   -> Levels: 5 to 15
               |   -> Options:
               |     -> Tag: minecraft:on_random_loot
               |   -> Include Additional Cost Component: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
               | Chance: 3.48%
               | Count: 1
@@ -379,8 +372,8 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.25
-              | Random Chance:
-              |   -> Chance: 0.35
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:trident x1
               | Chance: 2.08%
               | Count: 1

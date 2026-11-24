@@ -8,9 +8,8 @@ ali:loot_table
       ali:item minecraft:iron_axe x1
         | Chance: 2.33%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_axe x1
         | Chance: 6.67%
         | Count: 1

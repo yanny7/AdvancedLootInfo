@@ -158,15 +158,14 @@ ali:loot_table
       ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 1.36%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 3.89%
@@ -188,15 +187,14 @@ ali:loot_table
       ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 1.36%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_axe x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 3.89%
@@ -218,15 +216,14 @@ ali:loot_table
       ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 1.36%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_pickaxe x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 3.89%
@@ -248,15 +245,14 @@ ali:loot_table
       ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 0.91%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 2.59%
@@ -278,15 +274,14 @@ ali:loot_table
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 0.91%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 2.59%
@@ -308,15 +303,14 @@ ali:loot_table
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 0.91%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 2.59%
@@ -338,15 +332,14 @@ ali:loot_table
       ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 0.91%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
         | ----- Modifiers -----
         | Enchant Randomly:
         |   -> Enchantments:
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
         | Quality: 5
         | Chance: 2.59%

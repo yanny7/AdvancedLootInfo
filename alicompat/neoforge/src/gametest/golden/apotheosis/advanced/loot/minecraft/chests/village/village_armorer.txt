@@ -8,9 +8,8 @@ ali:loot_table
       ali:item minecraft:iron_helmet x1
         | Chance: 4.37%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_helmet x1
         | Chance: 12.5%
         | Count: 1

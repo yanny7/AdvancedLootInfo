@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:chainmail_chestplate x1
         | Chance: 3.27%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:chainmail_chestplate x1
         | Chance: 9.35%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:diamond_chestplate x1
         | Chance: 1.64%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_chestplate x1
         | Chance: 4.67%
         | Count: 1
