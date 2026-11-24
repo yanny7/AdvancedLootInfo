@@ -1,10 +1,12 @@
 ## []
 
+- Added Minecraft 1.19.2 (Fabric, Forge)
 - Recipe viewer stops waiting for data from the server as soon as the connection to it is lost
 - Fixed recipe viewer waiting 30 seconds for data when the game reloads while it is loading
 - Fixed recipe viewer waiting a minute and a half and logging an error on servers without AWI
 - Unsupported values show a short class name, the full class name shows with advanced tooltips
 - Server log warns only about what cannot be shown in full, things shown completely auto-detected are logged with `logMoreStatistics`
+- Added Traditional Chinese translation (Andy2088-TW)
 
 ## [1.3.2]
 

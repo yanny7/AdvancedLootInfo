@@ -1,0 +1,12 @@
+{
+  "alicompat.immersiveengineering.type.condition.block_state_from_location": "指定位置方塊狀態：",
+  "alicompat.immersiveengineering.type.entry.drop_inventory": "掉落物品欄內容：",
+  "alicompat.immersiveengineering.type.entry.multiblock_drops": "多方塊結構掉落物：",
+  "alicompat.immersiveengineering.type.entry.tile_drop": "方塊實體掉落物：",
+  "alicompat.immersiveengineering.type.function.conveyor_cover": "輸送帶護蓋",
+  "alicompat.immersiveengineering.type.function.property_count": "屬性數量：",
+  "alicompat.immersiveengineering.type.function.revolverperk": "左輪手槍特技",
+  "alicompat.immersiveengineering.type.function.secret_bluprintz": "機密藍圖",
+  "alicompat.immersiveengineering.type.function.windmill": "風車扇葉",
+  "alicompat.immersiveengineering.type.item_sub_predicate.blueprint": "工程藍圖："
+}
