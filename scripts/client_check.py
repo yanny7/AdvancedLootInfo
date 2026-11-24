@@ -20,6 +20,8 @@ WORLD = "New World"
 SEPARATOR = "=" * 100
 
 SUCCESS = "Data registration finished successfully."
+LOGIN = "Player login received"
+LOGIN_TIMEOUT = 120
 FAILURES = [
     "Failed to finish registering data",
     "Registration thread interrupted!",
@@ -28,6 +30,7 @@ FAILURES = [
     "#@!@# Game crashed!",
 ]
 MOD_LOG = re.compile(r"\[(ali|awi|aci)] ")
+LOAD_WARNINGS = re.compile(r"^(\s*showLoadWarnings\s*=\s*)true\b", re.MULTILINE)
 GRACE_SECONDS = 3
 TAIL_LINES = 60
 
@@ -108,6 +111,24 @@ def stop_game(gradle: subprocess.Popen, run_dir: Path):
     gradle.wait()
 
 
+def hide_load_warnings(config: Path):
+    if not config.is_file():
+        config.parent.mkdir(parents=True, exist_ok=True)
+        config.write_text("showLoadWarnings = false\n", encoding="utf-8")
+        return None
+
+    original = config.read_text(encoding="utf-8")
+    config.write_text(LOAD_WARNINGS.sub(r"\1false", original), encoding="utf-8")
+    return original
+
+
+def restore_load_warnings(config: Path, original):
+    if original is None:
+        config.unlink(missing_ok=True)
+    else:
+        config.write_text(original, encoding="utf-8")
+
+
 def pump(stream, lines: queue.Queue):
     for line in stream:
         lines.put(line.rstrip("\n"))
@@ -123,6 +144,8 @@ def run_combination(mod: str, loader: str, viewer: str, timeout: int):
     if not (run_dir / "saves" / WORLD).is_dir():
         return False, f"missing save {run_dir / 'saves' / WORLD}", []
 
+    neoforge_config = run_dir / "config" / "neoforge-client.toml"
+    original_config = hide_load_warnings(neoforge_config) if loader == "neoforge" else None
     command = [
         str(PROJECT_DIR / "gradlew"), "--console=plain", f":{mod}:{loader}:runClient", f"-Precipe_viewer={viewer}",
         f"--args=--quickPlaySingleplayer '{WORLD}'",
@@ -164,6 +187,10 @@ def run_combination(mod: str, loader: str, viewer: str, timeout: int):
                     result, reason = True, SUCCESS
                     break
 
+                if LOGIN in line and MOD_LOG.search(line):
+                    deadline = min(deadline, time.monotonic() + LOGIN_TIMEOUT)
+                    reason = f"recipe viewer registered no data within {LOGIN_TIMEOUT}s after login"
+
                 failure = next((marker for marker in FAILURES if marker in line), None)
 
                 if failure:
@@ -171,6 +198,9 @@ def run_combination(mod: str, loader: str, viewer: str, timeout: int):
                     deadline = time.monotonic() + GRACE_SECONDS
     finally:
         stop_game(gradle, run_dir)
+
+        if loader == "neoforge":
+            restore_load_warnings(neoforge_config, original_config)
 
     return result is True, reason, list(tail)
 
@@ -182,6 +212,7 @@ def main():
     parser.add_argument("--viewer", action="append", choices=VIEWERS, help="Recipe viewer to check, repeatable (default: all)")
     parser.add_argument("--timeout", type=int, default=600, help="Seconds one run may take (default: 600)")
     args = parser.parse_args()
+    signal.signal(signal.SIGTERM, lambda signum, frame: sys.exit(128 + signum))
 
     properties = read_gradle_properties()
     loaders = args.loader or read_enabled_loaders(properties)
