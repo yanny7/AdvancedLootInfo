@@ -17,6 +17,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_sword x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -43,6 +45,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_spear x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -69,6 +73,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -95,6 +101,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -121,6 +129,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_leggings x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -147,6 +157,8 @@ ali:loot_table
         |     -> Tag: minecraft:on_random_loot
         |   -> Only Compatible: True
         |   -> Include Additional Cost Component: False
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
         | Chance: 5.36%
         | Count: 1
@@ -164,6 +176,8 @@ ali:loot_table
       ali:item minecraft:diamond_sword x1
         | Chance: 1.87%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_sword x1
         | Chance: 5.36%
         | Count: 1
@@ -172,6 +186,8 @@ ali:loot_table
       ali:item minecraft:diamond_spear x1
         | Chance: 1.87%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_spear x1
         | Chance: 5.36%
         | Count: 1
@@ -180,6 +196,8 @@ ali:loot_table
       ali:item minecraft:diamond_chestplate x1
         | Chance: 1.56%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_chestplate x1
         | Chance: 4.46%
         | Count: 1
@@ -188,6 +206,8 @@ ali:loot_table
       ali:item minecraft:diamond_helmet x1
         | Chance: 1.56%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_helmet x1
         | Chance: 4.46%
         | Count: 1
@@ -196,6 +216,8 @@ ali:loot_table
       ali:item minecraft:diamond_boots x1
         | Chance: 1.56%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_boots x1
         | Chance: 4.46%
         | Count: 1
@@ -204,6 +226,8 @@ ali:loot_table
       ali:item minecraft:diamond_leggings x1
         | Chance: 1.56%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:diamond_leggings x1
         | Chance: 4.46%
         | Count: 1

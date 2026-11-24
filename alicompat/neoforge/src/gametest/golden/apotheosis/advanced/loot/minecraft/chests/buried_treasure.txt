@@ -61,9 +61,8 @@ ali:loot_table
       ali:item minecraft:leather_chestplate x1
         | Chance: 11.67%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:leather_chestplate x1
         | Chance: 33.33%
         | Count: 1
@@ -72,9 +71,8 @@ ali:loot_table
       ali:item minecraft:iron_sword x1
         | Chance: 11.67%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_sword x1
         | Chance: 33.33%
         | Count: 1
@@ -83,9 +81,8 @@ ali:loot_table
       ali:item minecraft:iron_spear x1
         | Chance: 11.67%
         | Count: 1
-        | ----- Predicates -----
-        | Random Chance:
-        |   -> Chance: 0.35
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_spear x1
         | Chance: 33.33%
         | Count: 1

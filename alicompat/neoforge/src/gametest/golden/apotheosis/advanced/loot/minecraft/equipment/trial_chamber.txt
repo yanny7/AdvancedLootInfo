@@ -19,8 +19,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -36,6 +34,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:chainmail_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
               | Chance: 28.57%
               | Count: 1
@@ -68,8 +68,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -85,6 +83,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:chainmail_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:bolt"}}
               | Chance: 28.57%
               | Count: 1
@@ -122,8 +122,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -139,6 +137,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:iron_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
               | Chance: 14.29%
               | Count: 1
@@ -171,8 +171,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -188,6 +186,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:iron_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
               | Chance: 14.29%
               | Count: 1
@@ -225,8 +225,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -242,6 +240,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
               | Chance: 7.14%
               | Count: 1
@@ -274,8 +274,6 @@ ali:loot_table
               | ----- Predicates -----
               | Random Chance:
               |   -> Chance: 0.5
-              | Random Chance:
-              |   -> Chance: 0.35
               | ----- Modifiers -----
               | Set Components:
               |   -> Components:
@@ -291,6 +289,8 @@ ali:loot_table
               |     -> Protection
               |       -> Levels: 4
               |   -> Add: False
+              | Affix Conversion:
+              |   -> Probability: 0.35
             ali:item minecraft:diamond_chestplate x1 {"minecraft:enchantment_glint_override":1b,"minecraft:trim":{material:"minecraft:copper",pattern:"minecraft:flow"}}
               | Chance: 7.14%
               | Count: 1

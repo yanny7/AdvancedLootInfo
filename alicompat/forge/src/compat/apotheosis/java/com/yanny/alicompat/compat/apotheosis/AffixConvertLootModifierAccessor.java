@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
@@ -59,17 +60,22 @@ public class AffixConvertLootModifierAccessor extends BaseAccessor<AffixConvertL
     @NotNull
     private static List<IDataNode> getNodes(IServerUtils utils, LootPage page, List<LootItemCondition> conditions, IDataNode src) {
         IItemNode node = (IItemNode) src;
-        LootItemCondition chance = LootItemRandomChanceCondition.randomChance(ApotheosisUtils.chance(AdventureConfig.AFFIX_CONVERT_LOOT_RULES, page.tableId())).build();
-        List<LootItemCondition> allConditions = Stream.concat(Stream.concat(conditions.stream(), node.getConditions().stream()), Stream.of(chance)).toList();
+        float chance = ApotheosisUtils.chance(AdventureConfig.AFFIX_CONVERT_LOOT_RULES, page.tableId());
+        List<LootItemCondition> shownConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
+        List<LootItemCondition> allConditions = Stream.concat(shownConditions.stream(), Stream.of(LootItemRandomChanceCondition.randomChance(chance).build())).toList();
         LootCount itemChance = NodeUtils.getChance(utils, allConditions, node.getChance());
         NumberExpr count = node.getCount();
-        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), allConditions);
+        TooltipBuilder tooltip = TooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, itemChance, LootCount.of(count), NodeUtils.getCountLimit(node.getItem()), node.getFunctions(), shownConditions);
         RarityClamp rarities = AdventureConfig.AFFIX_CONVERT_RARITIES.get(utils.getServerLevel().dimension().location());
 
-        if (rarities != null) {
-            tooltip.add(utils.getValueTooltip(utils, rarities.getMinRarity()).build(ApotheosisLang.Value.MIN_RARITY));
-            tooltip.add(utils.getValueTooltip(utils, rarities.getMaxRarity()).build(ApotheosisLang.Value.MAX_RARITY));
-        }
+        tooltip.add(TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, chance).build(Lang.Value.PROBABILITY));
+
+            if (rarities != null) {
+                b.add(utils.getValueTooltip(utils, rarities.getMinRarity()).build(ApotheosisLang.Value.MIN_RARITY));
+                b.add(utils.getValueTooltip(utils, rarities.getMaxRarity()).build(ApotheosisLang.Value.MAX_RARITY));
+            }
+        }, ApotheosisLang.GlobalLootModifier.AFFIX_CONVERSION));
 
         ItemNode replacement = new ItemNode(node.getChance(), count, node.getItem(), tooltip.build(), node.getFunctions(), allConditions);
 

@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:stone_axe x1
         | Chance: 11.67%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_axe x1
         | Chance: 33.33%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:golden_axe x1
         | Chance: 11.67%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:golden_axe x1
         | Chance: 33.33%
         | Count: 1
@@ -24,6 +28,8 @@ ali:loot_table
       ali:item minecraft:iron_axe x1
         | Chance: 11.67%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_axe x1
         | Chance: 33.33%
         | Count: 1

@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:iron_pickaxe x1
         | Chance: 3.3%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_pickaxe x1
         | Chance: 9.43%
         | Count: 1
@@ -16,6 +18,8 @@ ali:loot_table
       ali:item minecraft:iron_shovel x1
         | Chance: 3.3%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:iron_shovel x1
         | Chance: 9.43%
         | Count: 1

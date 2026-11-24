@@ -8,6 +8,8 @@ ali:loot_table
       ali:item minecraft:stone_spear x1
         | Chance: 2.12%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:stone_spear x1
         | Chance: 6.06%
         | Count: 1
@@ -31,6 +33,8 @@ ali:loot_table
       ali:item minecraft:leather_chestplate x1
         | Chance: 1.52%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:leather_chestplate x1
         | Chance: 4.35%
         | Count: 1
@@ -39,6 +43,8 @@ ali:loot_table
       ali:item minecraft:golden_helmet x1
         | Chance: 1.52%
         | Count: 1
+        | Affix Conversion:
+        |   -> Probability: 0.35
       ali:item minecraft:golden_helmet x1
         | Chance: 4.35%
         | Count: 1
