@@ -1,5 +1,6 @@
 ## []
 
+- Added Minecraft 1.19.2 (Fabric, Forge)
 - Server log names trading mobs whose trades ALI cannot show
 - Fixed tooltips of unsupported trades showing a name that changes on every server start
 - Fixed an error in another mod's trader, ingredient or loot modifier support taking down more than that one part, or the whole server start
