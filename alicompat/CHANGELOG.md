@@ -2,6 +2,7 @@
 
 - Added Snow! Real Magic! support on Fabric
 - Added VillagerTradingPlus support
+- Added Traditional Chinese translation (Andy2088-TW)
 
 ## [1.3.0]
 

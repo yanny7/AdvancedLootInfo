@@ -1,0 +1,5 @@
+{
+  "alicompat.computercraft.type.condition.block_named": "方塊已命名",
+  "alicompat.computercraft.type.condition.has_computer_id": "具有電腦 ID",
+  "alicompat.computercraft.type.condition.player_creative": "玩家處於創造模式"
+}
