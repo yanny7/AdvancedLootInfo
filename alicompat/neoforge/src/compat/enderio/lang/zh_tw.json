@@ -1,0 +1,9 @@
+{
+  "alicompat.enderio.property.value.copy_primary": "複製主要產物：%s",
+  "alicompat.enderio.type.function.copy_paint": "複製彩繪：",
+  "alicompat.enderio.type.function.set_loot_capacitor": "設定戰利品電容器：",
+  "alicompat.enderio.type.ingredient.any_soul_storage": "靈魂儲存器（空或已裝填）：",
+  "alicompat.enderio.type.ingredient.conduit": "導管：",
+  "alicompat.enderio.type.ingredient.empty_soul_storage": "空靈魂儲存器：",
+  "alicompat.enderio.type.ingredient.filled_soul_storage": "已裝填靈魂儲存器："
+}
