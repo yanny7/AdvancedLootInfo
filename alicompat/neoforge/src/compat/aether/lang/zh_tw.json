@@ -1,8 +1,8 @@
 {
   "alicompat.aether.property.value.config": "設定：%s",
   "alicompat.aether.type.condition.config_enabled": "設定已啟用：",
-  "alicompat.aether.type.function.double_drops": "雙倍掉落：",
-  "alicompat.aether.type.function.spawn_tnt": "生成 TNT：",
-  "alicompat.aether.type.function.spawn_xp": "生成經驗值：",
+  "alicompat.aether.type.function.double_drops": "雙倍掉落",
+  "alicompat.aether.type.function.spawn_tnt": "生成 TNT",
+  "alicompat.aether.type.function.spawn_xp": "生成經驗值",
   "alicompat.aether.type.function.whirlwind_spawn_entity": "旋風生成實體："
 }

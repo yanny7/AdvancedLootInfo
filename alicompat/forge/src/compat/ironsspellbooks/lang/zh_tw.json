@@ -1,0 +1,14 @@
+{
+  "alicompat.irons_spellbooks.property.branch.applicable_spells": "適用法術：",
+  "alicompat.irons_spellbooks.property.branch.spell_filter": "法術過濾：",
+  "alicompat.irons_spellbooks.property.branch.spells": "法術：",
+  "alicompat.irons_spellbooks.property.value.force": "強度：%s",
+  "alicompat.irons_spellbooks.property.value.school": "法術學派：%s",
+  "alicompat.irons_spellbooks.property.value.spell_level": "法術等級：%s",
+  "alicompat.irons_spellbooks.property.value.spell": "法術：%s",
+  "alicompat.irons_spellbooks.type.function.random_potion": "隨機藥水",
+  "alicompat.irons_spellbooks.type.function.random_spell_scroll": "隨機法術卷軸：",
+  "alicompat.irons_spellbooks.type.function.randomize_ring_enhancement": "隨機戒指強化：",
+  "alicompat.irons_spellbooks.type.function.randomize_spell": "隨機法術：",
+  "alicompat.irons_spellbooks.type.function.set_furled_map": "設定捲起的地圖："
+}
