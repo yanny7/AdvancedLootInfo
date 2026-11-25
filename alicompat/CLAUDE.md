@@ -134,7 +134,7 @@ Register nothing ALI already registers: node ids, widgets and data-node factorie
 
 ## Unit tests
 
-`CompatTooltipSuite` in each loader's `test` tree runs every `*TooltipTest` under `com.yanny.alicompat.compat` against the target mods on the test classpath, with no loader launch behind it.
+`CompatTooltipSuite` in each loader's `test` tree runs every `*TooltipTest` under `com.yanny.alicompat.compat` against the target mods on the test classpath, with no loader launch behind it. Those tests come only from the `src/compat/<slug>/test` of slugs in `compat_mods`, and the root `build.gradle` skips the `test` task when none of them has one (an empty `compat_mods`, say), since the suite fails a run that discovers no test.
 
 On Fabric that means no Knot, so `AccessWidenerSessionListener`, a JUnit `LauncherSessionListener` that runs before any test class loads, applies the access wideners of every `fabric.mod.json` on the classpath through a ByteBuddy agent, as Knot does at runtime — read with the `class-tweaker` library, since mods may ship them in the `classTweaker` format, whose enum extensions and interface injections it skips (Fabric API's makes `Ingredient` extendable, which Farmer's Delight's `ToolActionIngredient` needs). The suite then unfreezes the built-in registries, intrusive holders included, and installs a server-side `FabricLauncher`, so target mods can register from their class initializers. It fails when any `com.yanny.alicompat` logger warns or errors while a shim that has a test package of its own is registering, which `CompatFailureAppender` attributes by the first `com.yanny.alicompat.compat.<slug>` frame of the stack. A shim without tests only logs: Ad Astra's trade classes need its mod initializer to have run.
 

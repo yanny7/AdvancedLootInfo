@@ -1,4 +1,4 @@
-## []
+## [1.6.0]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)
 - Added `registerData` to the shared client registry
