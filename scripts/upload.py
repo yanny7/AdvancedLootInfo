@@ -437,10 +437,6 @@ if __name__ == "__main__":
 
     mod_loaders = [[platform] for platform in props["enabled_platforms"].split(",") if props.get(f"{platform}_enabled") == "true"]
 
-    # branches without a neoforge module ship one Forge jar that NeoForge loads too
-    if ["forge"] in mod_loaders and ["neoforge"] not in mod_loaders:
-        mod_loaders[mod_loaders.index(["forge"])] = ["forge", "neoforge"]
-
     for mod_id in mod_ids:
         succeeded = upload_mod(
             mod_id=mod_id,
