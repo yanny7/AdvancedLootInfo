@@ -1,4 +1,4 @@
-## []
+## [1.4.0]
 
 - Added Snow! Real Magic! support on Fabric
 - Added VillagerTradingPlus support
