@@ -1,4 +1,4 @@
-## []
+## [2.6.0]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)
 - Server log names trading mobs whose trades ALI cannot show

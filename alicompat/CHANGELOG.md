@@ -1,4 +1,4 @@
-## []
+## [1.3.1]
 
 - Fixed a stray colon after loot functions that carry no values (Farmer's Delight, Sophisticated Backpacks and Sophisticated Storage)
 - Added Traditional Chinese translation (Andy2088-TW)
