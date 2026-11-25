@@ -4,5 +4,6 @@
   "alicompat.artifacts.type.condition.artifact_rarity_adjusted_chance": "遺物稀有度調整機率：",
   "alicompat.artifacts.type.condition.config_value": "設定值：",
   "alicompat.artifacts.type.condition.config_value_chance": "設定機率值：",
+  "alicompat.artifacts.type.consume_effect.heal": "治療：",
   "alicompat.artifacts.type.function.replace_with_loot_table": "以戰利品表取代："
 }
