@@ -228,6 +228,7 @@ subprojects {
 
             // only the suite bootstraps Minecraft, so a per-mod test class must not also be run on its own
             test {
+                onlyIf { compatMods.any { file("src/compat/$it/test").exists() } }
                 useJUnitPlatform {
                     includeEngines "junit-platform-suite"
                 }

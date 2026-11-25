@@ -354,7 +354,7 @@ def upload_mod(mod_id: str, props: dict, mod_loaders: list, modrinth_project_id:
         version = f"{props['minecraft_version']}-{props[f"{mod_id}_version"]}"
         file_name = f"{props[f"{mod_id}_mod_name"]}-{mod_loader[0]}-{version}.jar"
         file_path = f"{path}/{file_name}"
-        name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props[f"{mod_id}_mod_name"])} {version}"
+        name = f"{re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', props[f"{mod_id}_mod_name"])} {version}"
 
         modrinth_uploaded = modrinth_project_id is None or upload_to_modrinth(
             api_token=modrinth_api_token,
