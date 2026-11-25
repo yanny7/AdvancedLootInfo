@@ -1,4 +1,4 @@
-## []
+## [1.3.3]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)
 - Recipe viewer stops waiting for data from the server as soon as the connection to it is lost

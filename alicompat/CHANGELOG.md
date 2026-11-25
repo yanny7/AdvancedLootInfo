@@ -1,4 +1,4 @@
-## []
+## [1.3.1]
 
 - Fixed a stray colon after loot functions that carry no values (Applied Cooking, ExtraStorage, Farmer's Delight, Refined Storage, Sophisticated Backpacks and Sophisticated Storage)
 - Grimoire of Gaia dwarf and minotaurus variants and mimic chests show their loot under their mob instead of gameplay loot
