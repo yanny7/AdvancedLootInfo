@@ -321,6 +321,13 @@ subprojects {
                     modRuntimeOnly("mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}") {
                         exclude group: "org.jetbrains", module: "annotations"
                         exclude group: "org.jspecify", module: "jspecify"
+
+                        // JEI's POM adds unshaded common/lib/gui jars needing a Lucene the forge jar ships only relocated
+                        if (project.name == "forge") {
+                            exclude group: "mezz.jei", module: "jei-${minecraft_version}-common"
+                            exclude group: "mezz.jei", module: "jei-${minecraft_version}-lib"
+                            exclude group: "mezz.jei", module: "jei-${minecraft_version}-gui"
+                        }
                     }
 
                     if (project.name == "forge") {
