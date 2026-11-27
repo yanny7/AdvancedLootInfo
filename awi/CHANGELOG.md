@@ -1,3 +1,7 @@
+## []
+
+- Added a block generation page for every block, listing where and how it generates, with a chart of attempts per chunk by height, ore variants such as stone and deepslate sharing one page
+
 ## [1.3.3]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)

@@ -6,7 +6,7 @@ Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<plat
 
 ## Package contents
 
-`ReiCompatibility` (entry point), `ReiBaseCategory`/`ReiBiomeCategory` (implement `DisplayCategory` — AWI has a single Biome family, where ALI has four: Block/Entity/Gameplay/Trade), `ReiBaseDisplay`/`ReiBiomeDisplay` (implement `Display`), `ReiWidgetWrapper`, `ReiScrollWidget`, `RecipeHolder`.
+`ReiCompatibility` (entry point), `ReiBaseCategory`/`ReiBiomeCategory` (implement `DisplayCategory` — one category per dimension with one display per biome, where ALI has four families: Block/Entity/Gameplay/Trade), `ReiBaseDisplay`/`ReiBiomeDisplay` (implement `Display`), `ReiBlockGenerationCategory`/`ReiBlockGenerationDisplay` (the single `awi:block_generation` category, one display per block family with every member as an output, rendered by `BlockGenerationWidget` — see `awi/CLAUDE.md`'s `compatibility` section; the category implements `DisplayCategory` directly and reuses `ReiBaseCategory`'s width, height, stack and block-model helpers, its filler is registered by class rather than by predicate), `ReiWidgetWrapper`, `ReiScrollWidget`, `RecipeHolder`.
 
 ## Domain substitution vs `ali/common-rei`
 

@@ -37,6 +37,8 @@ public class LevelStemNode extends ListNode {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final TooltipNode tooltip;
+    private final int minY;
+    private final int height;
 
     public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts,
                          WorldgenNodeCache nodeCache, @Nullable SpawnInfo spawnInfo) {
@@ -66,16 +68,30 @@ public class LevelStemNode extends ListNode {
         }
 
         tooltip = TooltipNode.empty();
+        minY = columnContext.minY();
+        height = columnContext.height();
     }
 
     public LevelStemNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
+        minY = buf.readVarInt();
+        height = buf.readVarInt();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
+        buf.writeVarInt(minY);
+        buf.writeVarInt(height);
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     @NotNull
