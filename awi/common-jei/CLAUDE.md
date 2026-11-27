@@ -6,7 +6,7 @@ Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<plat
 
 ## Package contents
 
-`JeiCompatibility` (entry point), `JeiBaseLoot`, `JeiBiomeLoot` (implement `IRecipeCategory` directly — AWI has a single Biome recipe family, where ALI has four: Block/Entity/Gameplay/Trade), `JeiWidgetWrapper`, `JeiScrollWidget`, slot widgets, `RecipeHolder`.
+`JeiCompatibility` (entry point), `JeiBaseLoot`, `JeiBiomeLoot` (implement `IRecipeCategory` directly — one category per dimension with one recipe per biome, where ALI has four families: Block/Entity/Gameplay/Trade), `JeiBlockGenerationCategory` (the single `awi:block_generation` category, `IRecipeCategory<BlockGeneration.Page>` with one recipe per block family and every member as an output slot, rendered by `BlockGenerationWidget` — see `awi/CLAUDE.md`'s `compatibility` section; it reuses `JeiBaseLoot`'s width and height but not its node-tree layout), `JeiWidgetWrapper`, `JeiScrollWidget`, slot widgets, `RecipeHolder`.
 
 ## Domain substitution vs `ali/common-jei`
 

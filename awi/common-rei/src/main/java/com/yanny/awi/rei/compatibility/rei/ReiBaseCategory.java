@@ -96,6 +96,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
      */
     @Override
     public int getDisplayHeight() {
+        return getAvailableHeight();
+    }
+
+    static int getAvailableHeight() {
         ConfigObject config = ConfigObject.getInstance();
         int topMargin = OUTER_PADDING + (config.isUsingCompactTabs() ? COMPACT_TAB_SIZE : TAB_SIZE) - 2 + TAB_OVERFLOW_HEIGHT;
         int bottomMargin = OUTER_PADDING + (config.getSearchFieldLocation() == SearchFieldLocation.CENTER ? CENTERED_SEARCH_HEIGHT : 0);
@@ -172,7 +176,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     @NotNull
-    private static EntryStack<?> toStack(Block block) {
+    static EntryStack<?> toStack(Block block) {
         return GenericUtils.rendersAsFluid(block) ? EntryStacks.of(block.defaultBlockState().getFluidState().getType()) : EntryStacks.of(block);
     }
 
@@ -229,7 +233,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
     protected record PreparedWidgets(Rectangle innerBounds, Rectangle fullBounds, int contentWidth, List<Widget> widgets){}
 
-    private static class BlockSlotRenderer extends AbstractRenderer {
+    static class BlockSlotRenderer extends AbstractRenderer {
         private final BlockState blockState;
 
         public BlockSlotRenderer(Block block) {
