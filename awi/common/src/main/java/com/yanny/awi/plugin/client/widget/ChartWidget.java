@@ -21,6 +21,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +38,9 @@ public class ChartWidget implements IWidget {
     private static final int COLUMN_GAP = 4;
     private static final int ROW_GAP = 4;
     private static final int MAX_COLUMNS = 3;
+    private static final double SCALE_FLOOR = 1e-4;
+    private static final double SCALE_CEILING = 10;
+    private static final double MIN_EXTENT = 0.15;
 
     private final RelativeRect rect;
     private final BlockGenerationChart chart;
@@ -130,10 +136,20 @@ public class ChartWidget implements IWidget {
             guiGraphics.fill(left - 1, top, left, bottom + 1, 0xFF404040);
 
             if (!cell.column.terrain()) {
-                String max = NumberText.formatNumber(cell.column.max(), locale);
+                int end = left + extent(cell.column);
+                String max = formatValue(cell.column.max(), locale);
+                int maxX = end - font.width(max);
+
+                if (maxX < left + font.width("0") + AXIS_GAP) {
+                    maxX = Math.min(end + AXIS_GAP, right - font.width(max));
+                }
+
+                if (end < right) {
+                    guiGraphics.fill(end, top, end + 1, bottom + 1, 0x80404040);
+                }
 
                 guiGraphics.drawString(font, "0", left, bottom + AXIS_GAP, LabelWidget.COLOR, false);
-                guiGraphics.drawString(font, max, right - font.width(max), bottom + AXIS_GAP, LabelWidget.COLOR, false);
+                guiGraphics.drawString(font, max, maxX, bottom + AXIS_GAP, LabelWidget.COLOR, false);
             }
         }
     }
@@ -149,16 +165,35 @@ public class ChartWidget implements IWidget {
     }
 
     private void renderStack(GuiGraphics guiGraphics, BlockGenerationChart.Column column, int bin, int left, int row) {
+        int extent = extent(column);
         double cumulative = 0;
 
         for (BlockGenerationChart.Series series : column.series()) {
             double value = series.values()[bin];
-            int x0 = left + (int) Math.round(cumulative / column.max() * columnWidth);
-            int x1 = left + (int) Math.round((cumulative + value) / column.max() * columnWidth);
+            int x0 = left + (int) Math.round(cumulative / column.max() * extent);
+            int x1 = left + (int) Math.round((cumulative + value) / column.max() * extent);
 
             guiGraphics.fill(x0, row, x1, row + 1, color(series));
             cumulative += value;
         }
+    }
+
+    private int extent(BlockGenerationChart.Column column) {
+        double fraction = Math.log10(column.max() / SCALE_FLOOR) / Math.log10(SCALE_CEILING / SCALE_FLOOR);
+
+        return (int) Math.round(Math.max(MIN_EXTENT, Math.min(1, fraction)) * columnWidth);
+    }
+
+    @NotNull
+    private static String formatValue(double value, Locale locale) {
+        if (value <= 0 || value >= 1) {
+            return NumberText.formatNumber(value, locale);
+        }
+
+        DecimalFormat format = new DecimalFormat("0." + "#".repeat(1 - (int) Math.floor(Math.log10(value))), DecimalFormatSymbols.getInstance(locale));
+
+        format.setRoundingMode(RoundingMode.HALF_UP);
+        return format.format(value);
     }
 
     private int color(BlockGenerationChart.Series series) {
@@ -233,7 +268,7 @@ public class ChartWidget implements IWidget {
                 .filter((s) -> s.values()[bin] > 0)
                 .sorted(Comparator.comparingDouble((BlockGenerationChart.Series s) -> -s.values()[bin]))
                 .forEach((s) -> addSeriesLines(lines, s, s.values()[bin], locale));
-        lines.add(TooltipLine.text(Component.translatable(Lang.BlockGeneration.CHART_TOTAL.singular(), NumberText.formatNumber(column.total(bin), locale))));
+        lines.add(TooltipLine.text(Component.translatable(Lang.BlockGeneration.CHART_TOTAL.singular(), formatValue(column.total(bin), locale))));
         return lines;
     }
 
@@ -243,7 +278,7 @@ public class ChartWidget implements IWidget {
         PlacedFeatureNode.Stats stats = feature != null ? feature.getStats() : null;
 
         lines.add(TooltipLine.text(square(series).append(name)));
-        lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART.singular()), Component.literal(NumberText.formatNumber(value, locale))));
+        lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART.singular()), Component.literal(formatValue(value, locale))));
 
         if (stats != null && stats.veinSize() > 0) {
             lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART_VEIN.singular()), Component.literal(String.valueOf(stats.veinSize()))));
