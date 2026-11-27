@@ -1,3 +1,7 @@
+## []
+
+- Fixed long tooltips running off the screen edge on Minecraft 1.19.2
+
 ## [1.6.0]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)

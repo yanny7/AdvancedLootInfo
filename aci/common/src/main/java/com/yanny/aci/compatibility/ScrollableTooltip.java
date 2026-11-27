@@ -19,7 +19,7 @@ import java.util.List;
 public class ScrollableTooltip implements TooltipComponent, ClientTooltipComponent {
     private static final int LINE_HEIGHT = TooltipLine.LINE_HEIGHT;
     private static final int SCREEN_MARGIN = 10;
-    private static final int WINDOW_MARGIN = 8;
+    private static final int CURSOR_MARGIN = 20;
     private static final int TITLE_GAP = 2;
     private static final int SCROLL_LINES = 3;
     private static final int SCROLL_STEP_DIVISOR = 8;
@@ -238,7 +238,8 @@ public class ScrollableTooltip implements TooltipComponent, ClientTooltipCompone
 
     @NotNull
     private Layout getLayout(Font font) {
-        int wrapWidth = Math.max(1, Minecraft.getInstance().getWindow().getGuiScaledWidth() - WINDOW_MARGIN);
+        // 1.19.2 Screen.renderTooltipInternal flips a too-wide tooltip left of the cursor without clamping it to the screen
+        int wrapWidth = Math.max(1, Minecraft.getInstance().getWindow().getGuiScaledWidth() / 2 - CURSOR_MARGIN);
         int capacity = getCapacity();
 
         if (layout == null || layout.wrapWidth() != wrapWidth || layout.capacity() != capacity) {
