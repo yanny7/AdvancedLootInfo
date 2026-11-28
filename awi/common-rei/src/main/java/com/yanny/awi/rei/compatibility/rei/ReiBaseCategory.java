@@ -8,6 +8,7 @@ import com.mojang.math.Vector3f;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.compatibility.GuiGraphics;
+import com.yanny.aci.compatibility.ScaledText;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
@@ -213,12 +214,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                 stack.translate(bounds.getX(), bounds.getY(), 0);
 
                 if (isRange) {
-                    stack.translate(17, 13, 200);
-                    stack.pushPose();
-                    stack.scale(0.5f, 0.5f, 0.5f);
-                    //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                    stack.popPose();
+                    ScaledText.drawSlotRange(guiGraphics, font, count);
                 } else {
                     stack.translate(18, 10, 200);
                     guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);

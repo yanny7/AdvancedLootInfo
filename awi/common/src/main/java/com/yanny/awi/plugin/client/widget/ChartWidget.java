@@ -5,6 +5,8 @@ import com.yanny.aci.api.NumberText;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.compatibility.GuiGraphics;
+import com.yanny.aci.compatibility.ScaledText;
+import com.yanny.aci.compatibility.SmallFont;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipStyle;
 import com.yanny.awi.compatibility.BlockGeneration;
@@ -38,7 +40,6 @@ public class ChartWidget implements IWidget {
     private static final double SCALE_FLOOR = 1e-4;
     private static final double SCALE_CEILING = 10;
     private static final double MIN_EXTENT = 0.15;
-    private static final float AXIS_SCALE = 0.5F;
     private static final int AXIS_HEIGHT = 5;
 
     private final RelativeRect rect;
@@ -154,15 +155,24 @@ public class ChartWidget implements IWidget {
     }
 
     private static void drawAxisText(GuiGraphics guiGraphics, Font font, String text, int x, int y) {
+        if (SmallFont.canRender(text)) {
+            guiGraphics.drawString(font, SmallFont.text(text), x, y, LabelWidget.COLOR, false);
+            return;
+        }
+
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x, y, 0);
-        guiGraphics.pose().scale(AXIS_SCALE, AXIS_SCALE, 1);
+        guiGraphics.pose().scale(ScaledText.halfScale(), ScaledText.halfScale(), 1);
         guiGraphics.drawString(font, text, 0, 0, LabelWidget.COLOR, false);
         guiGraphics.pose().popPose();
     }
 
     private static int axisWidth(Font font, String text) {
-        return (int) Math.ceil(font.width(text) * AXIS_SCALE);
+        if (SmallFont.canRender(text)) {
+            return font.width(SmallFont.text(text));
+        }
+
+        return (int) Math.ceil(font.width(text) * ScaledText.halfScale());
     }
 
     private void renderLanes(GuiGraphics guiGraphics, BlockGenerationChart.Column column, int bin, int left, int row) {
