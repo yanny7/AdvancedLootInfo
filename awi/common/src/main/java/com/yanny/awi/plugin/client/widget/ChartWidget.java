@@ -4,6 +4,8 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.NumberText;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.compatibility.ScaledText;
+import com.yanny.aci.compatibility.SmallFont;
 import com.yanny.aci.tooltip.TooltipLine;
 import com.yanny.aci.tooltip.TooltipStyle;
 import com.yanny.awi.compatibility.BlockGeneration;
@@ -35,6 +37,10 @@ public class ChartWidget implements IWidget {
     private static final int COLUMN_GAP = 4;
     private static final int ROW_GAP = 4;
     private static final int MAX_COLUMNS = 3;
+    private static final double SCALE_FLOOR = 1e-4;
+    private static final double SCALE_CEILING = 10;
+    private static final double MIN_EXTENT = 0.15;
+    private static final int AXIS_HEIGHT = 5;
 
     private final RelativeRect rect;
     private final BlockGenerationChart chart;
@@ -52,7 +58,7 @@ public class ChartWidget implements IWidget {
         this.rect = rect;
         this.chart = chart;
         this.colors = colors;
-        labelWidth = Math.max(font.width(String.valueOf(chart.minY())), font.width(String.valueOf(topY))) + AXIS_GAP;
+        labelWidth = Math.max(axisWidth(font, String.valueOf(chart.minY())), axisWidth(font, String.valueOf(topY))) + AXIS_GAP;
         tickStep = IntStream.of(TICK_STEPS).filter((s) -> s / chart.binSize() >= MIN_TICK_SPACING).findFirst().orElse(TICK_STEPS[TICK_STEPS.length - 1]);
         columnWidth = (width - labelWidth - COLUMN_GAP * (perRow - 1)) / perRow;
 
@@ -109,7 +115,7 @@ public class ChartWidget implements IWidget {
                 if (cell.x == labelWidth) {
                     String label = String.valueOf(y);
 
-                    guiGraphics.drawString(font, label, left - AXIS_GAP - font.width(label), row - 4, LabelWidget.COLOR, false);
+                    drawAxisText(guiGraphics, font, label, left - AXIS_GAP - axisWidth(font, label), row - 2);
                 }
             }
 
@@ -130,12 +136,43 @@ public class ChartWidget implements IWidget {
             guiGraphics.fill(left - 1, top, left, bottom + 1, 0xFF404040);
 
             if (!cell.column.terrain()) {
+                int end = left + extent(cell.column);
                 String max = NumberText.formatNumber(cell.column.max(), locale);
+                int maxX = end - axisWidth(font, max);
 
-                guiGraphics.drawString(font, "0", left, bottom + AXIS_GAP, LabelWidget.COLOR, false);
-                guiGraphics.drawString(font, max, right - font.width(max), bottom + AXIS_GAP, LabelWidget.COLOR, false);
+                if (maxX < left + axisWidth(font, "0") + AXIS_GAP) {
+                    maxX = Math.min(end + AXIS_GAP, right - axisWidth(font, max));
+                }
+
+                if (end < right) {
+                    guiGraphics.fill(end, top, end + 1, bottom + 1, 0x80404040);
+                }
+
+                drawAxisText(guiGraphics, font, "0", left, bottom + AXIS_GAP);
+                drawAxisText(guiGraphics, font, max, maxX, bottom + AXIS_GAP);
             }
         }
+    }
+
+    private static void drawAxisText(GuiGraphics guiGraphics, Font font, String text, int x, int y) {
+        if (SmallFont.canRender(text)) {
+            guiGraphics.drawString(font, SmallFont.text(text), x, y, LabelWidget.COLOR, false);
+            return;
+        }
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x, y, 0);
+        guiGraphics.pose().scale(ScaledText.halfScale(), ScaledText.halfScale(), 1);
+        guiGraphics.drawString(font, text, 0, 0, LabelWidget.COLOR, false);
+        guiGraphics.pose().popPose();
+    }
+
+    private static int axisWidth(Font font, String text) {
+        if (SmallFont.canRender(text)) {
+            return font.width(SmallFont.text(text));
+        }
+
+        return (int) Math.ceil(font.width(text) * ScaledText.halfScale());
     }
 
     private void renderLanes(GuiGraphics guiGraphics, BlockGenerationChart.Column column, int bin, int left, int row) {
@@ -149,16 +186,23 @@ public class ChartWidget implements IWidget {
     }
 
     private void renderStack(GuiGraphics guiGraphics, BlockGenerationChart.Column column, int bin, int left, int row) {
+        int extent = extent(column);
         double cumulative = 0;
 
         for (BlockGenerationChart.Series series : column.series()) {
             double value = series.values()[bin];
-            int x0 = left + (int) Math.round(cumulative / column.max() * columnWidth);
-            int x1 = left + (int) Math.round((cumulative + value) / column.max() * columnWidth);
+            int x0 = left + (int) Math.round(cumulative / column.max() * extent);
+            int x1 = left + (int) Math.round((cumulative + value) / column.max() * extent);
 
             guiGraphics.fill(x0, row, x1, row + 1, color(series));
             cumulative += value;
         }
+    }
+
+    private int extent(BlockGenerationChart.Column column) {
+        double fraction = Math.log10(column.max() / SCALE_FLOOR) / Math.log10(SCALE_CEILING / SCALE_FLOOR);
+
+        return (int) Math.round(Math.max(MIN_EXTENT, Math.min(1, fraction)) * columnWidth);
     }
 
     private int color(BlockGenerationChart.Series series) {
@@ -272,7 +316,7 @@ public class ChartWidget implements IWidget {
     }
 
     private int rowHeight() {
-        return LabelWidget.HEIGHT + chart.bins() + AXIS_GAP + LabelWidget.HEIGHT;
+        return LabelWidget.HEIGHT + chart.bins() + AXIS_GAP + AXIS_HEIGHT;
     }
 
     private int barTop(Cell cell) {

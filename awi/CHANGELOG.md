@@ -1,6 +1,7 @@
 ## []
 
 - Added a block generation page for every block, listing where and how it generates, with a chart of attempts per chunk by height, ore variants such as stone and deepslate sharing one page
+- Fixed block count ranges on slots drawn with uneven strokes at odd GUI scales
 
 ## [1.3.3]
 

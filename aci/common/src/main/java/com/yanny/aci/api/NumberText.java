@@ -62,7 +62,9 @@ public sealed interface NumberText {
             return value > 0 ? "∞" : "−∞";
         }
 
-        DecimalFormat format = new DecimalFormat("0.##", DecimalFormatSymbols.getInstance(locale));
+        double magnitude = Math.abs(value);
+        int decimals = magnitude > 0 && magnitude < 1 ? Math.max(2, 1 - (int) Math.floor(Math.log10(magnitude))) : 2;
+        DecimalFormat format = new DecimalFormat("0." + "#".repeat(decimals), DecimalFormatSymbols.getInstance(locale));
 
         format.setRoundingMode(RoundingMode.HALF_UP);
 
