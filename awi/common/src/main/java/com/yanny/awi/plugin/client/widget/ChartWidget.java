@@ -21,9 +21,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -137,7 +134,7 @@ public class ChartWidget implements IWidget {
 
             if (!cell.column.terrain()) {
                 int end = left + extent(cell.column);
-                String max = formatValue(cell.column.max(), locale);
+                String max = NumberText.formatNumber(cell.column.max(), locale);
                 int maxX = end - font.width(max);
 
                 if (maxX < left + font.width("0") + AXIS_GAP) {
@@ -182,18 +179,6 @@ public class ChartWidget implements IWidget {
         double fraction = Math.log10(column.max() / SCALE_FLOOR) / Math.log10(SCALE_CEILING / SCALE_FLOOR);
 
         return (int) Math.round(Math.max(MIN_EXTENT, Math.min(1, fraction)) * columnWidth);
-    }
-
-    @NotNull
-    private static String formatValue(double value, Locale locale) {
-        if (value <= 0 || value >= 1) {
-            return NumberText.formatNumber(value, locale);
-        }
-
-        DecimalFormat format = new DecimalFormat("0." + "#".repeat(1 - (int) Math.floor(Math.log10(value))), DecimalFormatSymbols.getInstance(locale));
-
-        format.setRoundingMode(RoundingMode.HALF_UP);
-        return format.format(value);
     }
 
     private int color(BlockGenerationChart.Series series) {
@@ -268,7 +253,7 @@ public class ChartWidget implements IWidget {
                 .filter((s) -> s.values()[bin] > 0)
                 .sorted(Comparator.comparingDouble((BlockGenerationChart.Series s) -> -s.values()[bin]))
                 .forEach((s) -> addSeriesLines(lines, s, s.values()[bin], locale));
-        lines.add(TooltipLine.text(Component.translatable(Lang.BlockGeneration.CHART_TOTAL.singular(), formatValue(column.total(bin), locale))));
+        lines.add(TooltipLine.text(Component.translatable(Lang.BlockGeneration.CHART_TOTAL.singular(), NumberText.formatNumber(column.total(bin), locale))));
         return lines;
     }
 
@@ -278,7 +263,7 @@ public class ChartWidget implements IWidget {
         PlacedFeatureNode.Stats stats = feature != null ? feature.getStats() : null;
 
         lines.add(TooltipLine.text(square(series).append(name)));
-        lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART.singular()), Component.literal(formatValue(value, locale))));
+        lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART.singular()), Component.literal(NumberText.formatNumber(value, locale))));
 
         if (stats != null && stats.veinSize() > 0) {
             lines.add(branch(Component.translatable(Lang.BlockGeneration.CHART_VEIN.singular()), Component.literal(String.valueOf(stats.veinSize()))));

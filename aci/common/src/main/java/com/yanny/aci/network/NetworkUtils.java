@@ -3,6 +3,7 @@ package com.yanny.aci.network;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.NumberText;
 import com.yanny.aci.tooltip.TooltipContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,14 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.zip.GZIPOutputStream;
 
 public class NetworkUtils {
     private static final int MAX_CHUNK_SIZE = 32 * 1024; // 32 KB
-    private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
 
     public static void compressAndStoreData(String modId, ByteBuf rawBuf, BiConsumer<Integer, byte[]> chunkConsumer) {
         int rawSize = rawBuf.readableBytes();
@@ -44,8 +44,8 @@ public class NetworkUtils {
         rawBuf.release();
 
         CommonLogUtils.getLogger(modId).info("Compressed data ({} MB -> {} MB) and stored in {} chunk(s)",
-                DOUBLE_FORMAT.format(rawSize / 1024.0 / 1024.0),
-                DOUBLE_FORMAT.format(compressedData.length / 1024.0 / 1024.0),
+                NumberText.formatNumber(rawSize / 1024.0 / 1024.0, Locale.ROOT),
+                NumberText.formatNumber(compressedData.length / 1024.0 / 1024.0, Locale.ROOT),
                 totalChunks);
     }
 

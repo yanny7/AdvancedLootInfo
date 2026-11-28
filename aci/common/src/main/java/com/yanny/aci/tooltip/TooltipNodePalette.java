@@ -3,6 +3,7 @@ package com.yanny.aci.tooltip;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.NumberText;
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -121,7 +122,7 @@ public class TooltipNodePalette {
 
         logger.info("Node Statistics:");
         logger.info("Total Requests: {}", (int) total);
-        logger.info("Hits (Reused):  {} ({})", hits, String.format("%.2f%%", (hits / total) * 100));
-        logger.info("Misses (New):   {} ({})", misses, String.format("%.2f%%", (misses / total) * 100));
+        logger.info("Hits (Reused):  {} ({})", hits, NumberText.formatNumber(hits / total * 100, Locale.ROOT) + "%");
+        logger.info("Misses (New):   {} ({})", misses, NumberText.formatNumber(misses / total * 100, Locale.ROOT) + "%");
     }
 }

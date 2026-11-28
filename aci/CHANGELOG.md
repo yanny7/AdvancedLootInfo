@@ -1,6 +1,7 @@
 ## []
 
 - Fixed long tooltips running off the screen edge on Minecraft 1.19.2
+- Numbers below 1 show two significant digits instead of rounding to 0
 
 ## [1.6.0]
 
