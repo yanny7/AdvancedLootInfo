@@ -38,6 +38,8 @@ public class ChartWidget implements IWidget {
     private static final double SCALE_FLOOR = 1e-4;
     private static final double SCALE_CEILING = 10;
     private static final double MIN_EXTENT = 0.15;
+    private static final float AXIS_SCALE = 0.5F;
+    private static final int AXIS_HEIGHT = 5;
 
     private final RelativeRect rect;
     private final BlockGenerationChart chart;
@@ -55,7 +57,7 @@ public class ChartWidget implements IWidget {
         this.rect = rect;
         this.chart = chart;
         this.colors = colors;
-        labelWidth = Math.max(font.width(String.valueOf(chart.minY())), font.width(String.valueOf(topY))) + AXIS_GAP;
+        labelWidth = Math.max(axisWidth(font, String.valueOf(chart.minY())), axisWidth(font, String.valueOf(topY))) + AXIS_GAP;
         tickStep = IntStream.of(TICK_STEPS).filter((s) -> s / chart.binSize() >= MIN_TICK_SPACING).findFirst().orElse(TICK_STEPS[TICK_STEPS.length - 1]);
         columnWidth = (width - labelWidth - COLUMN_GAP * (perRow - 1)) / perRow;
 
@@ -112,7 +114,7 @@ public class ChartWidget implements IWidget {
                 if (cell.x == labelWidth) {
                     String label = String.valueOf(y);
 
-                    guiGraphics.drawString(font, label, left - AXIS_GAP - font.width(label), row - 4, LabelWidget.COLOR, false);
+                    drawAxisText(guiGraphics, font, label, left - AXIS_GAP - axisWidth(font, label), row - 2);
                 }
             }
 
@@ -135,20 +137,32 @@ public class ChartWidget implements IWidget {
             if (!cell.column.terrain()) {
                 int end = left + extent(cell.column);
                 String max = NumberText.formatNumber(cell.column.max(), locale);
-                int maxX = end - font.width(max);
+                int maxX = end - axisWidth(font, max);
 
-                if (maxX < left + font.width("0") + AXIS_GAP) {
-                    maxX = Math.min(end + AXIS_GAP, right - font.width(max));
+                if (maxX < left + axisWidth(font, "0") + AXIS_GAP) {
+                    maxX = Math.min(end + AXIS_GAP, right - axisWidth(font, max));
                 }
 
                 if (end < right) {
                     guiGraphics.fill(end, top, end + 1, bottom + 1, 0x80404040);
                 }
 
-                guiGraphics.drawString(font, "0", left, bottom + AXIS_GAP, LabelWidget.COLOR, false);
-                guiGraphics.drawString(font, max, maxX, bottom + AXIS_GAP, LabelWidget.COLOR, false);
+                drawAxisText(guiGraphics, font, "0", left, bottom + AXIS_GAP);
+                drawAxisText(guiGraphics, font, max, maxX, bottom + AXIS_GAP);
             }
         }
+    }
+
+    private static void drawAxisText(GuiGraphics guiGraphics, Font font, String text, int x, int y) {
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x, y, 0);
+        guiGraphics.pose().scale(AXIS_SCALE, AXIS_SCALE, 1);
+        guiGraphics.drawString(font, text, 0, 0, LabelWidget.COLOR, false);
+        guiGraphics.pose().popPose();
+    }
+
+    private static int axisWidth(Font font, String text) {
+        return (int) Math.ceil(font.width(text) * AXIS_SCALE);
     }
 
     private void renderLanes(GuiGraphics guiGraphics, BlockGenerationChart.Column column, int bin, int left, int row) {
@@ -292,7 +306,7 @@ public class ChartWidget implements IWidget {
     }
 
     private int rowHeight() {
-        return LabelWidget.HEIGHT + chart.bins() + AXIS_GAP + LabelWidget.HEIGHT;
+        return LabelWidget.HEIGHT + chart.bins() + AXIS_GAP + AXIS_HEIGHT;
     }
 
     private int barTop(Cell cell) {
