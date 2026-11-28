@@ -2,6 +2,7 @@ package com.yanny.aci.spawn;
 
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.aci.api.NumberExpr;
+import com.yanny.aci.api.NumberText;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -24,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -33,7 +32,6 @@ import java.util.stream.Collectors;
 
 public class SpawnInfo {
     private static final int MAX_INCLUDED_BIOMES = 10;
-    private static final DecimalFormat COST_FORMAT = new DecimalFormat("0.###", DecimalFormatSymbols.getInstance(Locale.ROOT));
     private static final Comparator<Entry> ENTRY_ORDER = Comparator.<Entry, MobCategory>comparing((e) -> e.spawn().category())
             .thenComparing((e) -> BuiltInRegistries.ENTITY_TYPE.getKey(e.type()));
     private static final Comparator<Map.Entry<Spawn, SortedSet<Identifier>>> GROUP_ORDER =
@@ -291,7 +289,7 @@ public class SpawnInfo {
         builder.add(TooltipBuilder.number(NumberExpr.uniformInt(spawn.minCount(), spawn.maxCount())).build(CoreLang.Spawn.GROUP_SIZE));
 
         if (spawn.cost() != null) {
-            builder.add(TooltipBuilder.value(COST_FORMAT.format(spawn.cost().charge()), COST_FORMAT.format(spawn.cost().energyBudget())).build(CoreLang.Spawn.SPAWN_COST));
+            builder.add(TooltipBuilder.value(NumberText.formatNumber(spawn.cost().charge(), Locale.ROOT), NumberText.formatNumber(spawn.cost().energyBudget(), Locale.ROOT)).build(CoreLang.Spawn.SPAWN_COST));
         }
 
         return builder;

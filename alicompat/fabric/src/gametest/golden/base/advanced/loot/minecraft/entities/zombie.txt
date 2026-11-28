@@ -53,11 +53,11 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killed by player
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.03
-      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.04
-      |     -> Looting II: 0.04
-      |     -> Looting III: 0.05
+      |   -> Chance: 0.025
+      |     -> Looting LVL: [0.025][LVL] | 0.035 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.035
+      |     -> Looting II: 0.045
+      |     -> Looting III: 0.055
     ali:item minecraft:carrot x1
       | Chance: 0.83%
       |   -> Looting LVL: 33.33% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -68,11 +68,11 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killed by player
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.03
-      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.04
-      |     -> Looting II: 0.04
-      |     -> Looting III: 0.05
+      |   -> Chance: 0.025
+      |     -> Looting LVL: [0.025][LVL] | 0.035 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.035
+      |     -> Looting II: 0.045
+      |     -> Looting III: 0.055
     ali:item minecraft:potato x1
       | Chance: 0.83%
       |   -> Looting LVL: 33.33% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -83,11 +83,11 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killed by player
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.03
-      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.04
-      |     -> Looting II: 0.04
-      |     -> Looting III: 0.05
+      |   -> Chance: 0.025
+      |     -> Looting LVL: [0.025][LVL] | 0.035 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.035
+      |     -> Looting II: 0.045
+      |     -> Looting III: 0.055
       | ----- Modifiers -----
       | Furnace Smelt
       |   -> Predicates:
@@ -143,9 +143,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -172,9 +172,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -201,9 +201,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -230,9 +230,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -259,9 +259,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -288,9 +288,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -317,9 +317,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -346,9 +346,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -375,9 +375,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -404,9 +404,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -433,9 +433,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -462,9 +462,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -491,9 +491,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -520,9 +520,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -549,9 +549,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -578,9 +578,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -607,9 +607,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -636,9 +636,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -665,9 +665,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -694,9 +694,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -723,9 +723,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:
@@ -752,9 +752,9 @@ ali:entity_loot_table
         | Count: 1
         | ----- Predicates -----
         | Random Chance With Enchanted Bonus:
-        |   -> Chance: 0.09
-        |     -> Looting LVL: [0.09][LVL] | 0.09 + 0.01 × (LVL − 1)
-        |     -> Looting I: 0.09
+        |   -> Chance: 0.085
+        |     -> Looting LVL: [0.085][LVL] | 0.095 + 0.01 × (LVL − 1)
+        |     -> Looting I: 0.095
         |     -> Looting II: 0.1
         |     -> Looting III: 0.11
         | Entity Properties:

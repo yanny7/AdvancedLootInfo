@@ -6,7 +6,7 @@ Enabled independently per branch via `gradle.properties` (`emi_enabled` + `<plat
 
 ## Package contents
 
-`EmiCompatibility` (entry point), `EmiBaseLoot`, `EmiBiomeLoot` (extend `EmiRecipe` — AWI has a single Biome recipe family, where ALI has four: Block/Entity/Gameplay/Trade), `EmiWidgetWrapper`, `EmiScrollWidget`, slot widgets, `IMouseEvents`, `mixin.MixinRecipeScreen`.
+`EmiCompatibility` (entry point), `EmiBaseLoot`, `EmiBiomeLoot` (extend `EmiRecipe` — one category per dimension with one recipe per biome, where ALI has four families: Block/Entity/Gameplay/Trade), `EmiBlockGenerationRecipe` (the single `awi:block_generation` category, one recipe per block family with every member as an output, rendered by `BlockGenerationWidget` — see `awi/CLAUDE.md`'s `compatibility` section; it reuses `EmiBaseLoot`'s width, height and stack helpers but not its node-tree layout), `EmiWidgetWrapper`, `EmiScrollWidget`, slot widgets, `IMouseEvents`, `mixin.MixinRecipeScreen`.
 
 ## Domain substitution vs `ali/common-emi`
 

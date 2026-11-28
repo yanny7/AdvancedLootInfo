@@ -205,7 +205,7 @@ ali:loot_table
             | Count: 1
             | ----- Predicates -----
             | Random Chance:
-            |   -> Chance: 0.03
+            |   -> Chance: 0.025
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

@@ -275,7 +275,7 @@ ali:loot_table
             | Count: 1
           ali:item minecraft:skeleton_skull x1
             | Chance: 0.13%
-            |   -> Bad Luck: 0.09%
+            |   -> Bad Luck: 0.089%
             |   -> Luck 1: 0.17%
             |   -> Luck 2: 0.2%
             |   -> Luck 3: 0.24%
@@ -283,7 +283,7 @@ ali:loot_table
             | Count: 1
           ali:item minecraft:zombie_head x1
             | Chance: 0.13%
-            |   -> Bad Luck: 0.09%
+            |   -> Bad Luck: 0.089%
             |   -> Luck 1: 0.17%
             |   -> Luck 2: 0.2%
             |   -> Luck 3: 0.24%
@@ -346,7 +346,7 @@ ali:loot_table
             |   -> Luck 4: 3.5%
             | Count: 4 to 12
           ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.08%
+            | Chance: 0.083%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 0.5%
             |   -> Luck 2: 0.92%
@@ -366,7 +366,7 @@ ali:loot_table
             |     -> Tag: minecraft:curse
             |   -> Only Compatible: True
           ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.08%
+            | Chance: 0.083%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 0.5%
             |   -> Luck 2: 0.92%

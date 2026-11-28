@@ -166,7 +166,7 @@ ali:loot_table
             |   -> Luck 1: 0.37%
             |   -> Luck 2: 0.28%
             |   -> Luck 3: 0.19%
-            |   -> Luck 4: 0.09%
+            |   -> Luck 4: 0.095%
             | Count: 1
           ali:item minecraft:stick x1
             | Chance: 0.45%
@@ -174,27 +174,27 @@ ali:loot_table
             |   -> Luck 1: 0.37%
             |   -> Luck 2: 0.28%
             |   -> Luck 3: 0.19%
-            |   -> Luck 4: 0.09%
+            |   -> Luck 4: 0.095%
             | Count: 1
           ali:item minecraft:fishing_rod x1
             | Chance: 0.18%
             |   -> Bad Luck: 0.22%
             |   -> Luck 1: 0.15%
             |   -> Luck 2: 0.11%
-            |   -> Luck 3: 0.07%
-            |   -> Luck 4: 0.04%
+            |   -> Luck 3: 0.075%
+            |   -> Luck 4: 0.038%
             | Count: 1
             | ----- Modifiers -----
             | Set Damage:
             |   -> Damage: 0% to 90%
             |   -> Add: False
           ali:item minecraft:ink_sac x10
-            | Chance: 0.09%
+            | Chance: 0.091%
             |   -> Bad Luck: 0.11%
-            |   -> Luck 1: 0.07%
-            |   -> Luck 2: 0.06%
-            |   -> Luck 3: 0.04%
-            |   -> Luck 4: 0.02%
+            |   -> Luck 1: 0.073%
+            |   -> Luck 2: 0.056%
+            |   -> Luck 3: 0.037%
+            |   -> Luck 4: 0.019%
             | Count: 10
     ali:reference
       | Selects all entries

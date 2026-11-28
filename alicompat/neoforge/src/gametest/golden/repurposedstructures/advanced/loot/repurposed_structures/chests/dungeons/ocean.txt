@@ -542,7 +542,7 @@ ali:loot_table
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:diamond_nautilus_armor x1
-            | Chance: 0.07%
+            | Chance: 0.074%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
@@ -652,14 +652,14 @@ ali:loot_table
             | Drops nothing
             | Chance: 0.61%
           ali:item minecraft:copper_nautilus_armor x1
-            | Chance: 0.08%
+            | Chance: 0.082%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:iron_nautilus_armor x1
-            | Chance: 0.04%
+            | Chance: 0.041%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:
@@ -673,7 +673,7 @@ ali:loot_table
             |   -> Count: 1
             |   -> Add: False
           ali:item minecraft:diamond_nautilus_armor x1
-            | Chance: 0.01%
+            | Chance: 0.0082%
             | Count: 1
             | ----- Modifiers -----
             | Set Count:

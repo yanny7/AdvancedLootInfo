@@ -1,3 +1,7 @@
+## []
+
+- Fixed item count ranges on slots drawn with uneven strokes at odd GUI scales
+
 ## [2.6.0]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)

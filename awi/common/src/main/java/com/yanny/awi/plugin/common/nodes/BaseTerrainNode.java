@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.BlockInfo;
@@ -16,7 +17,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +51,8 @@ public class BaseTerrainNode extends ListNode {
                 .collect(Collectors.groupingBy(BlockInfo::block))
                 .entrySet().stream()
                 .sorted(Comparator.comparing((entry) -> BuiltInRegistries.BLOCK.getKey(entry.getKey()).getPath()))
-                .forEach((entry) -> addChildren(new BlockNode(utils, entry.getKey(), TooltipUtils.getBlockInfosTooltip(utils, entry.getValue()).build())));
+                .forEach((entry) -> addChildren(new BlockNode(utils, entry.getKey(), TooltipUtils.getBlockInfosTooltip(utils, entry.getValue()).build(),
+                        absoluteHeights(entry.getValue()))));
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();
     }
@@ -73,5 +77,22 @@ public class BaseTerrainNode extends ListNode {
     @Override
     public Identifier getId() {
         return ID;
+    }
+
+    @NotNull
+    private static List<NumberInterval> absoluteHeights(List<BlockInfo> infos) {
+        List<NumberInterval> heights = new ArrayList<>();
+
+        for (BlockInfo info : infos) {
+            if (info.storageType() != BlockInfo.StorageType.RELATIVE) {
+                heights.addAll(info.ranges());
+            } else if (!info.heights().isEmpty()) {
+                heights.addAll(info.heights());
+            } else {
+                return List.of();
+            }
+        }
+
+        return heights;
     }
 }

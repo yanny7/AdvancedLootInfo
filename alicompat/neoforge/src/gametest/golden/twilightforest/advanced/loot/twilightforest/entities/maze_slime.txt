@@ -59,8 +59,8 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Killed by player
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.01
-      |     -> Looting LVL: [0.01][LVL] | 0.02 + 0 × (LVL − 1)
+      |   -> Chance: 0.015
+      |     -> Looting LVL: [0.015][LVL] | 0.02 + 0.005 × (LVL − 1)
       |     -> Looting I: 0.02
-      |     -> Looting II: 0.02
+      |     -> Looting II: 0.025
       |     -> Looting III: 0.03
