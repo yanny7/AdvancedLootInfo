@@ -3,9 +3,12 @@ package com.yanny.awi.jei.compatibility;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.compatibility.BlockGeneration;
 import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.jei.compatibility.jei.JeiBiomeLoot;
+import com.yanny.awi.jei.compatibility.jei.JeiBlockGenerationCategory;
 import com.yanny.awi.jei.compatibility.jei.RecipeHolder;
+import com.yanny.awi.language.Lang;
 import com.yanny.awi.manager.AwiClientRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
@@ -24,6 +27,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -38,10 +42,13 @@ public class JeiCompatibility implements IModPlugin {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private static final Map<IRecipeCategory<RecipeHolder>, List<RecipeHolder>> dimensions = new HashMap<>();
+    private static final List<BlockGeneration.Page> blockGeneration = new ArrayList<>();
+    private static final RecipeType<BlockGeneration.Page> BLOCK_GENERATION = new RecipeType<>(Utils.modLoc("block_generation"), BlockGeneration.Page.class);
 
     @Override
     public void onRuntimeUnavailable() {
         dimensions.clear();
+        blockGeneration.clear();
     }
 
     @Override
@@ -52,6 +59,10 @@ public class JeiCompatibility implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         dimensions.forEach((category, recipes) -> registration.addRecipes(category.getRecipeType(), recipes));
+
+        if (!blockGeneration.isEmpty()) {
+            registration.addRecipes(BLOCK_GENERATION, blockGeneration);
+        }
     }
 
     private void registerData(IRecipeCategoryRegistration registration, byte[] fullCompressedData) {
@@ -82,6 +93,11 @@ public class JeiCompatibility implements IModPlugin {
 
                 dimensions.put(category, recipes);
             });
+
+            registration.addRecipeCategories(new JeiBlockGenerationCategory(BLOCK_GENERATION, Component.translatable(Lang.BlockGeneration.TITLE.singular()),
+                    guiHelper.createDrawableItemLike(Items.GRASS_BLOCK)));
+            blockGeneration.clear();
+            blockGeneration.addAll(BlockGeneration.build(worldgenData));
         }
     }
 

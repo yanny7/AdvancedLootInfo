@@ -151,7 +151,7 @@ ali:loot_table
           |   -> Loot Table Id:
           |     -> minecraft:chests/village/village_weaponsmith
           | Random Chance:
-          |   -> Chance: 0.06
+          |   -> Chance: 0.063
           | ----- Modifiers -----
           | Set Count:
           |   -> Count: 1

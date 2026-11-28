@@ -3,8 +3,11 @@ package com.yanny.awi.emi.compatibility;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.compatibility.BlockGeneration;
 import com.yanny.awi.compatibility.GenericUtils;
+import com.yanny.awi.emi.compatibility.emi.EmiBlockGenerationRecipe;
 import com.yanny.awi.emi.compatibility.emi.EmiBiomeLoot;
+import com.yanny.awi.language.Lang;
 import com.yanny.awi.manager.AwiClientRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
@@ -20,6 +23,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 
@@ -63,6 +67,19 @@ public class EmiCompatibility implements EmiPlugin {
                     }
                 }
             });
+
+            EmiRecipeCategory blockCategory = new RecipeCategory(Utils.modLoc("block_generation"), Items.GRASS_BLOCK,
+                    Component.translatable(Lang.BlockGeneration.TITLE.singular()));
+
+            registry.addCategory(blockCategory);
+
+            for (BlockGeneration.Page page : BlockGeneration.build(worldgenData)) {
+                try {
+                    registry.addRecipe(new EmiBlockGenerationRecipe(blockCategory, page));
+                } catch (Throwable e) {
+                    LOGGER.error("Failed to add EMI block generation recipe for {}", page.blocks(), e);
+                }
+            }
         }
     }
 
@@ -81,8 +98,12 @@ public class EmiCompatibility implements EmiPlugin {
         private final Component title;
 
         public RecipeCategory(Identifier id, Item icon) {
+            this(id, icon, GenericUtils.getFormattedCategoryTitle(id));
+        }
+
+        public RecipeCategory(Identifier id, Item icon, Component title) {
             super(id, EmiStack.of(icon));
-            title = GenericUtils.getFormattedCategoryTitle(id);
+            this.title = title;
         }
 
         @Override

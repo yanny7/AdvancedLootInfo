@@ -868,7 +868,7 @@ ali:trade
         |     -> Entry:
         |       -> Attribute: Gravity
         |       -> Operation: Add Value
-        |       -> Amount: −0.07
+        |       -> Amount: −0.067
         |       -> Id: goblintraders:goblins_gravity
         |       -> Equipment Slot: Feet
         |     -> Entry:

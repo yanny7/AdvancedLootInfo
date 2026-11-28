@@ -21,11 +21,11 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.03
-      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.04
-      |     -> Looting II: 0.04
-      |     -> Looting III: 0.05
+      |   -> Chance: 0.025
+      |     -> Looting LVL: [0.025][LVL] | 0.035 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.035
+      |     -> Looting II: 0.045
+      |     -> Looting III: 0.055
     ali:item grimoireofgaia:bag_book x1
       | Chance: 1.25%
       |   -> Looting LVL: 50% × [2.5%][LVL] | 3.5% + 1% × (LVL − 100%)
@@ -35,11 +35,11 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.03
-      |     -> Looting LVL: [0.03][LVL] | 0.04 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.04
-      |     -> Looting II: 0.04
-      |     -> Looting III: 0.05
+      |   -> Chance: 0.025
+      |     -> Looting LVL: [0.025][LVL] | 0.035 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.035
+      |     -> Looting II: 0.045
+      |     -> Looting III: 0.055
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

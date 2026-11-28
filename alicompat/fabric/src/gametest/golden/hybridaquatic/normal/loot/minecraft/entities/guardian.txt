@@ -280,15 +280,15 @@ ali:entity_loot_table
                 | Selects random entry
                 | Rolls: 1
                 ali:item hybrid_aquatic:crab_pot x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -317,15 +317,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:hybrid_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -354,15 +354,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:oak_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -391,15 +391,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:spruce_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -428,15 +428,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:birch_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -465,15 +465,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:dark_oak_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -502,15 +502,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:acacia_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -539,15 +539,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:jungle_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -576,15 +576,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:bamboo_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -613,15 +613,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:mangrove_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -650,15 +650,15 @@ ali:entity_loot_table
                   |                   -> Enchantments:
                   |                     -> Tag: minecraft:smelts_loot
                 ali:item hybrid_aquatic:cherry_crate x1
-                  | Chance: 0.02%
-                  |   -> Bad Luck: 0.02%
+                  | Chance: 0.018%
+                  |   -> Bad Luck: 0.016%
                   |   -> Luck 1: 0.02%
-                  |   -> Luck 2: 0.02%
-                  |   -> Luck 3: 0.02%
-                  |   -> Luck 4: 0.02%
-                  |   -> Looting I: 0.03%
-                  |   -> Looting II: 0.03%
-                  |   -> Looting III: 0.04%
+                  |   -> Luck 2: 0.022%
+                  |   -> Luck 3: 0.023%
+                  |   -> Luck 4: 0.025%
+                  |   -> Looting I: 0.025%
+                  |   -> Looting II: 0.032%
+                  |   -> Looting III: 0.039%
                   | Count: 1
                   | ----- Predicates -----
                   | Killed by player
@@ -718,15 +718,15 @@ ali:entity_loot_table
             |                   -> Enchantments:
             |                     -> Tag: minecraft:smelts_loot
           ali:item minecraft:tropical_fish x1
-            | Chance: 0.03%
-            |   -> Bad Luck: 0.03%
-            |   -> Luck 1: 0.03%
-            |   -> Luck 2: 0.03%
-            |   -> Luck 3: 0.02%
-            |   -> Luck 4: 0.02%
-            |   -> Looting I: 0.04%
-            |   -> Looting II: 0.05%
-            |   -> Looting III: 0.06%
+            | Chance: 0.026%
+            |   -> Bad Luck: 0.027%
+            |   -> Luck 1: 0.026%
+            |   -> Luck 2: 0.025%
+            |   -> Luck 3: 0.024%
+            |   -> Luck 4: 0.024%
+            |   -> Looting I: 0.037%
+            |   -> Looting II: 0.047%
+            |   -> Looting III: 0.058%
             | Count: 1
             | ----- Predicates -----
             | Killed by player

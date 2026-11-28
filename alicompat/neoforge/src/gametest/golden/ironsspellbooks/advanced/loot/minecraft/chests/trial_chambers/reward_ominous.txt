@@ -289,10 +289,10 @@ ali:loot_table
           | Count: 1
           | ----- Predicates -----
           | Random Chance:
-          |   -> Chance: 0.08
+          |   -> Chance: 0.075
         ali:item irons_spellbooks:visibility_ring x1
           | Chance: 3.75%
           | Count: 1
           | ----- Predicates -----
           | Random Chance:
-          |   -> Chance: 0.08
+          |   -> Chance: 0.075

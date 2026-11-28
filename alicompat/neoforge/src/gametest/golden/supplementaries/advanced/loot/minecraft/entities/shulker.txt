@@ -13,7 +13,7 @@ ali:entity_loot_table
       | ----- Predicates -----
       | Random Chance With Enchanted Bonus:
       |   -> Chance: 0.5
-      |     -> Looting LVL: [0.5][LVL] | 0.56 + 0.06 × (LVL − 1)
+      |     -> Looting LVL: [0.5][LVL] | 0.56 + 0.063 × (LVL − 1)
       |     -> Looting I: 0.56
       |     -> Looting II: 0.63
       |     -> Looting III: 0.69

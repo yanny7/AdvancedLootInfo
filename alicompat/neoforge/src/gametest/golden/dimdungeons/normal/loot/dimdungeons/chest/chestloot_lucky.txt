@@ -261,7 +261,7 @@ ali:loot_table
             | Chance: 0.19%
             | Count: 1
           ali:item minecraft:enchanted_golden_apple x1
-            | Chance: 0.08%
+            | Chance: 0.077%
             | Count: 1
         ali:loot_pool
           | Selects random entry
@@ -677,13 +677,13 @@ ali:loot_table
             | Chance: 0.11%
             | Count: 2 to 8
           ali:item minecraft:bell x1
-            | Chance: 0.02%
+            | Chance: 0.023%
             | Count: 1
           ali:item minecraft:enchanted_golden_apple x1
-            | Chance: 0.02%
+            | Chance: 0.023%
             | Count: 1
           ali:item minecraft:gold_block x1-2
-            | Chance: 0.02%
+            | Chance: 0.023%
             | Count: 1 to 2
         ali:loot_pool
           | Selects random entry
@@ -971,5 +971,5 @@ ali:loot_table
             | Chance: 0.25%
             | Count: 1
           ali:item minecraft:diamond_nautilus_armor x1
-            | Chance: 0.1%
+            | Chance: 0.098%
             | Count: 1
