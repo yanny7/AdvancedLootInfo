@@ -32,11 +32,11 @@ ali:entity_loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance With Enchanted Bonus:
-      |   -> Chance: 0.06
-      |     -> Looting LVL: [0.06][LVL] | 0.07 + 0.01 × (LVL − 1)
-      |     -> Looting I: 0.07
-      |     -> Looting II: 0.08
-      |     -> Looting III: 0.09
+      |   -> Chance: 0.063
+      |     -> Looting LVL: [0.063][LVL] | 0.072 + 0.01 × (LVL − 1)
+      |     -> Looting I: 0.072
+      |     -> Looting II: 0.082
+      |     -> Looting III: 0.092
       | Entity Properties:
       |   -> Target: Attacker
       |   -> Predicate:

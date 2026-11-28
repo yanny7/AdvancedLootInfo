@@ -1,3 +1,7 @@
+## []
+
+- Numbers below 1 show two significant digits instead of rounding to 0
+
 ## [1.6.0]
 
 - Added Minecraft 1.19.2 (Fabric, Forge)

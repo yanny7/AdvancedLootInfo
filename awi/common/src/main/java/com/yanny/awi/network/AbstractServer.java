@@ -1,6 +1,7 @@
 package com.yanny.awi.network;
 
 import com.yanny.aci.CommonLogUtils;
+import com.yanny.aci.api.NumberText;
 import com.yanny.aci.network.NetworkUtils;
 import com.yanny.aci.spawn.SpawnInfo;
 import com.yanny.aci.tooltip.TooltipContext;
@@ -28,16 +29,15 @@ import net.minecraft.world.level.dimension.LevelStem;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class AbstractServer {
-    private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
     private final List<WorldgenDataChunkMessage> chunks = new ArrayList<>();
@@ -121,7 +121,7 @@ public abstract class AbstractServer {
             LOGGER.info("Base Layout scanned {} dimensions using {} distinct surface rules ({} distinct rule instances)",
                     baseLayoutStats.scannedDimensionCount(), baseLayoutStats.distinctSurfaceRules(), baseLayoutStats.distinctSurfaceRuleInstances());
             LOGGER.info("Base Layout time per biome: min {}ms, max {}ms, mean {}ms",
-                    baseLayoutStats.minBiomeTimeMs(), baseLayoutStats.maxBiomeTimeMs(), DOUBLE_FORMAT.format(baseLayoutStats.meanBiomeTimeMs()));
+                    baseLayoutStats.minBiomeTimeMs(), baseLayoutStats.maxBiomeTimeMs(), NumberText.formatNumber(baseLayoutStats.meanBiomeTimeMs(), Locale.ROOT));
 
             LOGGER.info("Placed feature nodes: {} built, {} reused from cache", nodeCache.getPlacedFeatureMisses(), nodeCache.getPlacedFeatureHits());
             LOGGER.info("Generation step nodes: {} built, {} reused from cache", nodeCache.getGenerationStepMisses(), nodeCache.getGenerationStepHits());

@@ -324,7 +324,7 @@ ali:loot_table
           ali:item the_bumblezone:honey_compass x1
             | Chance: 0.15%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 200% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.09%
+            |   -> Bad Luck: 0.088%
             |   -> Luck 1: 0.2%
             |   -> Luck 2: 0.26%
             |   -> Luck 3: 0.31%
@@ -341,7 +341,7 @@ ali:loot_table
             | Quality: 1
             | Chance: 0.15%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.04%
+            |   -> Bad Luck: 0.044%
             |   -> Luck 1: 0.3%
             |   -> Luck 2: 0.51%
             |   -> Luck 3: 0.78%
@@ -374,7 +374,7 @@ ali:loot_table
             | Quality: 1
             | Chance: 0.15%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 200% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.04%
+            |   -> Bad Luck: 0.044%
             |   -> Luck 1: 0.3%
             |   -> Luck 2: 0.51%
             |   -> Luck 3: 0.78%
@@ -404,9 +404,9 @@ ali:loot_table
             |   -> Search Radius: 50
             |   -> Skip Known Structures: False
           ali:item #the_bumblezone:music_discs x1
-            | Chance: 0.07%
+            | Chance: 0.073%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.04%
+            |   -> Bad Luck: 0.044%
             |   -> Luck 1: 0.1%
             |   -> Luck 2: 0.13%
             |   -> Luck 3: 0.16%
@@ -420,9 +420,9 @@ ali:loot_table
             |       -> Fishing Hook:
             |         -> Is In Open Water: True
           ali:item the_bumblezone:sentry_watcher_spawn_egg x1
-            | Chance: 0.07%
+            | Chance: 0.073%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.04%
+            |   -> Bad Luck: 0.044%
             |   -> Luck 1: 0.1%
             |   -> Luck 2: 0.13%
             |   -> Luck 3: 0.16%
@@ -437,7 +437,7 @@ ali:loot_table
             |         -> Is In Open Water: True
           ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_throne_description",customName:"item.the_bumblezone.honey_compass_throne_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
             | Quality: 1
-            | Chance: 0.07%
+            | Chance: 0.073%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × max(0%; 100% + floor(luck)) ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
             |   -> Bad Luck: 0%
             |   -> Luck 1: 0.2%
@@ -470,9 +470,9 @@ ali:loot_table
             |   -> Skip Known Structures: False
           ali:reference
             | Selects all entries
-            | Chance: 0.07%
+            | Chance: 0.073%
             |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck)))
-            |   -> Bad Luck: 0.04%
+            |   -> Bad Luck: 0.044%
             |   -> Luck 1: 0.1%
             |   -> Luck 2: 0.13%
             |   -> Luck 3: 0.16%
@@ -484,10 +484,10 @@ ali:loot_table
                 | Rolls: 1
                 ali:empty
                   | Drops nothing
-                  | Chance: 0.07%
+                  | Chance: 0.067%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × 7400% ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
-                  |   -> Bad Luck: 0.04%
-                  |   -> Luck 1: 0.09%
+                  |   -> Bad Luck: 0.044%
+                  |   -> Luck 1: 0.087%
                   |   -> Luck 2: 0.1%
                   |   -> Luck 3: 0.12%
                   |   -> Luck 4: 0.13%
@@ -501,13 +501,13 @@ ali:loot_table
                   | Player carries an Essence of the Bees
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_red_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:
@@ -535,13 +535,13 @@ ali:loot_table
                   |   -> Skip Known Structures: False
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_purple_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:
@@ -569,13 +569,13 @@ ali:loot_table
                   |   -> Skip Known Structures: False
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_blue_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:
@@ -603,13 +603,13 @@ ali:loot_table
                   |   -> Skip Known Structures: False
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_green_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:
@@ -637,13 +637,13 @@ ali:loot_table
                   |   -> Skip Known Structures: False
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_yellow_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:
@@ -671,13 +671,13 @@ ali:loot_table
                   |   -> Skip Known Structures: False
                 ali:item the_bumblezone:honey_compass x1 {"the_bumblezone:honey_compass_base_data":{compassType:"",customDescription:"item.the_bumblezone.honey_compass_white_sanctum_structure_description",customName:"item.the_bumblezone.honey_compass_sanctum_structure"},"the_bumblezone:honey_compass_state_data":{isFailed:0b,isLoading:0b,locatedSpecialStructure:0b,locked:1b}}
                   | Quality: 1
-                  | Chance: 0%
+                  | Chance: 0.00091%
                   |   -> luck: max(0%; 500% + floor(200% × luck)) ÷ (max(0%; 7500% + floor(−400% × luck)) + max(0%; 500% + floor(200% × luck))) × 100% ÷ (8100% + max(0%; 200% + floor(luck)) + max(0%; 200% + floor(luck)) + max(0%; 100% + floor(luck))) × max(0%; 100% + floor(luck)) ÷ (max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + max(0%; 100% + floor(luck)) + 7400%)
                   |   -> Bad Luck: 0%
-                  |   -> Luck 1: 0%
-                  |   -> Luck 2: 0%
-                  |   -> Luck 3: 0.01%
-                  |   -> Luck 4: 0.01%
+                  |   -> Luck 1: 0.0023%
+                  |   -> Luck 2: 0.0042%
+                  |   -> Luck 3: 0.0064%
+                  |   -> Luck 4: 0.0089%
                   | Count: 1
                   | ----- Predicates -----
                   | Entity Properties:

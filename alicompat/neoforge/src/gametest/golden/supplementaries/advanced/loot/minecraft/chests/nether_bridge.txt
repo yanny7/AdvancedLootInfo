@@ -89,7 +89,7 @@ ali:loot_table
             | Count: 1
             | ----- Predicates -----
             | Random Chance:
-            |   -> Chance: 0.04
+            |   -> Chance: 0.035
   ali:loot_pool
     | Selects random entry
     | Rolls: 1

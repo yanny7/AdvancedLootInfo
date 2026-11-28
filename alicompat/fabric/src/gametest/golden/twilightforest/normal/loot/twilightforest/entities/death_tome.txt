@@ -88,10 +88,10 @@ ali:entity_loot_table
           ali:item minecraft:enchanted_book x1
             | Chance: 0.1%
             |   -> Bad Luck: 0.11%
-            |   -> Luck 1: 0.09%
-            |   -> Luck 2: 0.08%
-            |   -> Luck 3: 0.07%
-            |   -> Luck 4: 0.07%
+            |   -> Luck 1: 0.089%
+            |   -> Luck 2: 0.079%
+            |   -> Luck 3: 0.072%
+            |   -> Luck 4: 0.065%
             | Count: 1
             | ----- Modifiers -----
             | Enchant With Levels:

@@ -54,7 +54,7 @@ ali:loot_table
             | Chance: 0.69%
             | Count: 1
           ali:item irons_spellbooks:rare_ink x1
-            | Chance: 0.07%
+            | Chance: 0.069%
             | Count: 1
     ali:item irons_spellbooks:arcane_essence x0-4
       | Chance: 3.45%

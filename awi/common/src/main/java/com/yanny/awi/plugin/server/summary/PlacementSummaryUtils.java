@@ -9,6 +9,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -48,13 +49,22 @@ public class PlacementSummaryUtils {
         return new PlacementSummary(count, countConditions, countDetails, chance, chanceConditions, height);
     }
 
-    public static void appendSummary(TooltipBuilder b, IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
-        PlacementSummary summary;
-
+    @Nullable
+    public static PlacementSummary trySummarize(IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
         try {
-            summary = summarize(utils, modifiers, ctx);
+            return summarize(utils, modifiers, ctx);
         } catch (Throwable e) {
             LOGGER.warn("Failed to summarize placement: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public static void appendSummary(TooltipBuilder b, IServerUtils utils, List<PlacementModifier> modifiers, ColumnContext ctx) {
+        appendSummary(b, utils, trySummarize(utils, modifiers, ctx));
+    }
+
+    public static void appendSummary(TooltipBuilder b, IServerUtils utils, @Nullable PlacementSummary summary) {
+        if (summary == null) {
             return;
         }
 

@@ -2,6 +2,7 @@ package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.ScaledText;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.Rect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -63,11 +64,7 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
             stack.translate(rect.x(), rect.y());
 
             if (isRange) {
-                stack.translate(17, 13);
-                stack.pushMatrix();
-                stack.scale(0.5f);
-                guiGraphics.text(font, count, -font.width(count), 0, -1, false);
-                stack.popMatrix();
+                ScaledText.drawSlotRange(guiGraphics, font, count);
             } else {
                 stack.translate(18, 10);
                 guiGraphics.text(font, count, -font.width(count), 0, -1, true);

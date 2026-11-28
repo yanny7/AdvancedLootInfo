@@ -3,6 +3,7 @@ package com.yanny.awi.emi.compatibility.emi;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.ScaledText;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.compatibility.ScrollableTooltip;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -51,12 +52,8 @@ public class EmiLootSlotWidget extends SlotWidget {
             stack.pushPose();
 
             if (isRange) {
-                stack.translate(x + 17, y + 13, 200);
-                stack.pushPose();
-                stack.scale(0.5f, 0.5f, 0.5f);
-                //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                draw.drawString(font, count, -font.width(count), 0, 16777215, false);
-                stack.popPose();
+                stack.translate(x, y, 0);
+                ScaledText.drawSlotRange(draw, font, count);
             } else {
                 stack.translate(x + 18, y + 10, 200);
                 draw.drawString(font, count, -font.width(count), 0, 16777215, true);

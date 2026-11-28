@@ -277,20 +277,20 @@ ali:loot_table
       |   -> Luck 4: 0.11%
       | Count: 1
     ali:item #minecraft:candles x2-5
-      | Chance: 0.06%
-      |   -> Bad Luck: 0.06%
-      |   -> Luck 1: 0.06%
-      |   -> Luck 2: 0.06%
-      |   -> Luck 3: 0.06%
-      |   -> Luck 4: 0.06%
+      | Chance: 0.059%
+      |   -> Bad Luck: 0.059%
+      |   -> Luck 1: 0.058%
+      |   -> Luck 2: 0.057%
+      |   -> Luck 3: 0.057%
+      |   -> Luck 4: 0.056%
       | Count: 2 to 5
     ali:item #the_bumblezone:super_candles x2-4
-      | Chance: 0.06%
-      |   -> Bad Luck: 0.06%
-      |   -> Luck 1: 0.06%
-      |   -> Luck 2: 0.06%
-      |   -> Luck 3: 0.06%
-      |   -> Luck 4: 0.06%
+      | Chance: 0.059%
+      |   -> Bad Luck: 0.059%
+      |   -> Luck 1: 0.058%
+      |   -> Luck 2: 0.057%
+      |   -> Luck 3: 0.057%
+      |   -> Luck 4: 0.056%
       | Count: 2 to 4
   ali:loot_pool
     | Selects random entry

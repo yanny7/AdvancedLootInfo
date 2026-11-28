@@ -39,5 +39,5 @@ ali:entity_loot_table
       |   -> Target: Item Name
       |   -> Predicates:
       |     -> Random Chance:
-      |       -> Chance: 0
+      |       -> Chance: 0.002
       |     -> Killed by player
