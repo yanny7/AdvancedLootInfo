@@ -40,6 +40,7 @@ public class LanguageHolder {
         CoreLang.register(TRANSLATION_MAP, Lang.GenerationStep.class);
         CoreLang.register(TRANSLATION_MAP, Lang.StructureProcessor.class);
         CoreLang.register(TRANSLATION_MAP, Lang.Numbers.class);
+        CoreLang.register(TRANSLATION_MAP, Lang.BlockGeneration.class);
 
         put(Direction.DOWN, "Down");
         put(Direction.UP, "Up");

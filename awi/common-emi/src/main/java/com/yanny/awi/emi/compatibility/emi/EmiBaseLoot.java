@@ -91,7 +91,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     /** EMI clamps this only for the recipe background - the fill/tree/screenshot buttons are positioned from the raw value. */
     @Override
     public final int getDisplayHeight() {
-        return Math.min(getContentHeight(), getAvailableHeight());
+        return Math.min(getContentHeight(), getAvailableHeight(getCategory()));
     }
 
     private int getContentHeight() {
@@ -99,12 +99,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     /** Mirrors {@code RecipeScreen#init} + {@code RecipeTab#getVerticalRecipeSpace} - EMI exposes neither. */
-    private int getAvailableHeight() {
+    static int getAvailableHeight(EmiRecipeCategory category) {
         int screenHeight = Math.min(EmiConfig.maximumRecipeScreenHeight, Minecraft.getInstance().getWindow().getGuiScaledHeight() - 52 - EmiConfig.verticalMargin);
         int height = screenHeight - 46;
 
         if (EmiConfig.workstationLocation == SidebarSide.BOTTOM
-                && (!EmiApi.getRecipeManager().getWorkstations(getCategory()).isEmpty() || RecipeScreen.resolve != null)) {
+                && (!EmiApi.getRecipeManager().getWorkstations(category).isEmpty() || RecipeScreen.resolve != null)) {
             height -= 23;
         }
 
@@ -181,7 +181,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     @NotNull
-    private static EmiStack toStack(Block block) {
+    static EmiStack toStack(Block block) {
         return GenericUtils.rendersAsFluid(block) ? EmiStack.of(block.defaultBlockState().getFluidState().getType()) : EmiStack.of(block);
     }
 

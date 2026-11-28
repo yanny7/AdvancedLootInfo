@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.math.Axis;
 import com.yanny.aci.api.NumberExpr;
 import com.yanny.aci.api.NumberInterval;
+import com.yanny.aci.compatibility.ScaledText;
 import com.yanny.aci.number.NumberFormatter;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.compatibility.AbstractScrollWidget;
@@ -97,6 +98,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
      */
     @Override
     public int getDisplayHeight() {
+        return getAvailableHeight();
+    }
+
+    static int getAvailableHeight() {
         ConfigObject config = ConfigObject.getInstance();
         int topMargin = OUTER_PADDING + (config.isUsingCompactTabs() ? COMPACT_TAB_SIZE : TAB_SIZE) - 2 + TAB_OVERFLOW_HEIGHT;
         int bottomMargin = OUTER_PADDING + (config.getSearchFieldLocation() == SearchFieldLocation.CENTER ? CENTERED_SEARCH_HEIGHT : 0);
@@ -173,7 +178,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     @NotNull
-    private static EntryStack<?> toStack(Block block) {
+    static EntryStack<?> toStack(Block block) {
         return GenericUtils.rendersAsFluid(block) ? EntryStacks.of(block.defaultBlockState().getFluidState().getType()) : EntryStacks.of(block);
     }
 
@@ -209,12 +214,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                 stack.translate(bounds.getX(), bounds.getY(), 0);
 
                 if (isRange) {
-                    stack.translate(17, 13, 200);
-                    stack.pushPose();
-                    stack.scale(0.5f, 0.5f, 0.5f);
-                    //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                    stack.popPose();
+                    ScaledText.drawSlotRange(guiGraphics, font, count);
                 } else {
                     stack.translate(18, 10, 200);
                     guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
@@ -229,7 +229,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
     protected record PreparedWidgets(Rectangle innerBounds, Rectangle fullBounds, int contentWidth, List<Widget> widgets){}
 
-    private static class BlockSlotRenderer implements Renderer {
+    static class BlockSlotRenderer implements Renderer {
         private final BlockState blockState;
 
         public BlockSlotRenderer(Block block) {

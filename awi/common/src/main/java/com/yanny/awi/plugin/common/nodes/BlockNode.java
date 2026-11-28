@@ -1,6 +1,7 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.NumberInterval;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IBlockNode;
@@ -32,6 +33,7 @@ public class BlockNode implements IDataNode, IBlockNode {
     private final Either<Block, TagKey<Block>> block;
     private final TooltipNode tooltip;
     private final float chance;
+    private final List<NumberInterval> heights;
     /** Resolved members, in registry order so a cycling slot does not jitter between reloads. Mutated by {@link #retainBlocks}. */
     private final List<Block> blocks;
 
@@ -47,9 +49,18 @@ public class BlockNode implements IDataNode, IBlockNode {
         this(utils, Either.left(block), tooltip);
     }
 
+    public BlockNode(IServerUtils ignoredUtils, Block block, TooltipNode tooltip, List<NumberInterval> heights) {
+        this(Either.left(block), tooltip, heights);
+    }
+
     public BlockNode(IServerUtils ignoredUtils, Either<Block, TagKey<Block>> block, TooltipNode tooltip) {
+        this(block, tooltip, List.of());
+    }
+
+    private BlockNode(Either<Block, TagKey<Block>> block, TooltipNode tooltip, List<NumberInterval> heights) {
         this.block = block;
         this.tooltip = tooltip;
+        this.heights = heights;
         blocks = resolve(block);
         chance = 1f;
     }
@@ -60,6 +71,7 @@ public class BlockNode implements IDataNode, IBlockNode {
                 : Either.right(TagKey.create(Registries.BLOCK, buf.readResourceLocation()));
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
+        heights = buf.readList((b) -> new NumberInterval(b.readDouble(), b.readDouble(), b.readBoolean(), b.readBoolean()));
         blocks = resolve(block);
     }
 
@@ -86,6 +98,12 @@ public class BlockNode implements IDataNode, IBlockNode {
         });
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeFloat(chance);
+        buf.writeCollection(heights, (b, h) -> {
+            b.writeDouble(h.lo());
+            b.writeDouble(h.hi());
+            b.writeBoolean(h.loClosed());
+            b.writeBoolean(h.hiClosed());
+        });
     }
 
     @NotNull
@@ -103,6 +121,11 @@ public class BlockNode implements IDataNode, IBlockNode {
     @Override
     public float getChance() {
         return chance;
+    }
+
+    @NotNull
+    public List<NumberInterval> getHeights() {
+        return heights;
     }
 
     /**

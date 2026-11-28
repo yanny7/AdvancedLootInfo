@@ -715,6 +715,40 @@ public final class Lang {
         }
     }
 
+    public enum BlockGeneration implements ITooltipKey {
+        ALL_BIOMES("all_biomes", "All biomes"),
+        BIOMES("biomes", "%s biomes"),
+        BIOMES_LIST("biomes_list", "Biomes"),
+        CHART("chart", "Attempts per chunk by height"),
+        CHART_AIR("chart_air", "Discarded on air exposure"),
+        CHART_EXCLUDES("chart_excludes", "Base terrain without a fixed height, surface placements and unknown counts or heights are not charted"),
+        CHART_RANGE("chart_range", "Y %s to %s"),
+        CHART_TERRAIN("chart_terrain", "Base terrain by height"),
+        CHART_TOTAL("chart_total", "Total: %s"),
+        CHART_VEIN("chart_vein", "Vein size"),
+        EXCLUDED_BASE_TERRAIN("excluded_base_terrain", "Not in chart: base terrain without a fixed height"),
+        EXCLUDED_NO_PLACEMENT("excluded_no_placement", "Not in chart: unknown placement"),
+        EXCLUDED_OUTSIDE_WORLD("excluded_outside_world", "Not in chart: height outside the world"),
+        EXCLUDED_SURFACE("excluded_surface", "Not in chart: placed relative to the surface"),
+        EXCLUDED_UNKNOWN_COUNT("excluded_unknown_count", "Not in chart: unknown count, e.g. noise based"),
+        EXCLUDED_UNKNOWN_HEIGHT("excluded_unknown_height", "Not in chart: unknown height"),
+        TITLE("title", "Block Generation"),
+        VARIOUS_BIOMES("various_biomes", "Various biomes"),
+        ;
+
+        private final Translation translation;
+
+        BlockGeneration(String k, String e) {
+            this.translation = new Translation("awi.block_generation." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
     public enum Numbers implements ITooltipKey {
         FN_BIASED_TO_BOTTOM("fn.biased_to_bottom", "biased"),
         FN_VERY_BIASED_TO_BOTTOM("fn.very_biased_to_bottom", "very_biased"),

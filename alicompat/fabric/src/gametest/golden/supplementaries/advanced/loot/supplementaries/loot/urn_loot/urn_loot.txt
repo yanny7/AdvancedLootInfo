@@ -379,7 +379,7 @@ ali:loot_table
           ali:item minecraft:skeleton_skull x1
             | Chance: 0.13%
             |   -> luck: max(0%; 700% + floor(200% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 1.85%
-            |   -> Bad Luck: 0.09%
+            |   -> Bad Luck: 0.089%
             |   -> Luck 1: 0.17%
             |   -> Luck 2: 0.2%
             |   -> Luck 3: 0.24%
@@ -388,7 +388,7 @@ ali:loot_table
           ali:item minecraft:zombie_head x1
             | Chance: 0.13%
             |   -> luck: max(0%; 700% + floor(200% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 1.85%
-            |   -> Bad Luck: 0.09%
+            |   -> Bad Luck: 0.089%
             |   -> Luck 1: 0.17%
             |   -> Luck 2: 0.2%
             |   -> Luck 3: 0.24%
@@ -473,7 +473,7 @@ ali:loot_table
             |   -> Count: 4 to 12
             |   -> Add: False
           ali:item minecraft:diamond_helmet x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.08%
+            | Chance: 0.083%
             |   -> luck: max(0%; 100% + floor(500% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 8.33%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 0.5%
@@ -494,7 +494,7 @@ ali:loot_table
             |     -> Tag: minecraft:curse
             |   -> Only Compatible: True
           ali:item minecraft:diamond_boots x1 {"minecraft:enchantment_glint_override":1b}
-            | Chance: 0.08%
+            | Chance: 0.083%
             |   -> luck: max(0%; 100% + floor(500% × luck)) ÷ (max(0%; 6000% + floor(−500% × luck)) + max(0%; 3200% + floor(−200% × luck)) + max(0%; 700% + floor(200% × luck)) + max(0%; 100% + floor(500% × luck))) × 8.33%
             |   -> Bad Luck: 0%
             |   -> Luck 1: 0.5%

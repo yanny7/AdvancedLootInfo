@@ -3,7 +3,9 @@ package com.yanny.awi.rei.compatibility;
 import com.yanny.aci.CommonLogUtils;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.compatibility.BlockGeneration;
 import com.yanny.awi.compatibility.GenericUtils;
+import com.yanny.awi.language.Lang;
 import com.yanny.awi.manager.AwiClientRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
@@ -12,6 +14,8 @@ import com.yanny.awi.rei.compatibility.rei.RecipeHolder;
 import com.yanny.awi.rei.compatibility.rei.ReiBaseCategory;
 import com.yanny.awi.rei.compatibility.rei.ReiBiomeCategory;
 import com.yanny.awi.rei.compatibility.rei.ReiBiomeDisplay;
+import com.yanny.awi.rei.compatibility.rei.ReiBlockGenerationCategory;
+import com.yanny.awi.rei.compatibility.rei.ReiBlockGenerationDisplay;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import me.shedaniel.rei.api.client.config.ConfigObject;
@@ -27,6 +31,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -42,11 +47,15 @@ import java.util.function.Predicate;
 public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = CommonLogUtils.getLogger(Utils.MOD_ID);
 
+    private static final CategoryIdentifier<ReiBlockGenerationDisplay> BLOCK_GENERATION = CategoryIdentifier.of(Utils.modLoc("block_generation"));
+
     private final Map<Holder, List<RecipeHolder>> dimensions = new LinkedHashMap<>();
+    private final List<BlockGeneration.Page> blockGeneration = new ArrayList<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
         dimensions.clear();
+        blockGeneration.clear();
 
         GenericUtils.register(registry, this::registerData);
     }
@@ -54,6 +63,8 @@ public class ReiCompatibility implements REIClientPlugin {
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         registerFiller(registry, dimensions, ReiCompatibility::biomePredicate);
+        registry.registerFiller(BlockGeneration.Page.class, (BlockGeneration.Page page) -> new ReiBlockGenerationDisplay(page, BLOCK_GENERATION));
+        blockGeneration.forEach(registry::add);
     }
 
     private void registerData(CategoryRegistry registry, byte[] fullCompressedData) {
@@ -81,6 +92,9 @@ public class ReiCompatibility implements REIClientPlugin {
                 dimensions.put(holder, recipes);
                 registry.add(holder.category);
             });
+
+            registry.add(new ReiBlockGenerationCategory(BLOCK_GENERATION, Component.translatable(Lang.BlockGeneration.TITLE.singular()), Items.GRASS_BLOCK));
+            blockGeneration.addAll(BlockGeneration.build(worldgenData));
         } else {
             LOGGER.warn("REI integration was not loaded! Level is null!");
         }

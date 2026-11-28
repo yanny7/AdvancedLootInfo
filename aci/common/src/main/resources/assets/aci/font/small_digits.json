@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "aci:font/small_digits.png",
+      "height": 8,
+      "ascent": 7,
+      "chars": [
+        "0123456789.,-−%"
+      ]
+    }
+  ]
+}

@@ -68,7 +68,7 @@ ali:loot_table
       | Count: 1
       | ----- Predicates -----
       | Random Chance:
-      |   -> Chance: 0.06
+      |   -> Chance: 0.063
       | ----- Modifiers -----
       | Set Count:
       |   -> Count: 1

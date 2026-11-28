@@ -354,7 +354,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:cooldown_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -369,7 +369,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:heavy_chain_necklace x1
                 | Chance: 0.58%
                 | Count: 1
@@ -384,7 +384,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:emerald_stoneplate_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -399,7 +399,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:fireward_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -414,7 +414,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:frostward_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -429,7 +429,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:cast_time_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -444,7 +444,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:conjurers_talisman x1
                 | Chance: 0.58%
                 | Count: 1
@@ -459,7 +459,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:poisonward_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -474,7 +474,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:concentration_amulet x1
                 | Chance: 0.58%
                 | Count: 1
@@ -489,7 +489,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:invisibility_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -504,7 +504,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:teleportation_amulet x1
                 | Chance: 0.58%
                 | Count: 1
@@ -519,7 +519,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
               ali:item irons_spellbooks:affinity_ring x1
                 | Chance: 0.58%
                 | Count: 1
@@ -534,7 +534,7 @@ ali:loot_table
                 |   -> Loot Table Id:
                 |     -> minecraft:chests/bastion_other
                 | Random Chance:
-                |   -> Chance: 0.08
+                |   -> Chance: 0.075
                 | ----- Modifiers -----
                 | Randomize Ring Enhancement:
                 |   -> Spell Filter:

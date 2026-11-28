@@ -418,7 +418,11 @@ public class NumberExprTest {
         assertEquals("0.15", NumberText.formatNumber(0.15, Locale.ROOT));
         assertEquals("−64", NumberText.formatNumber(-64, Locale.ROOT));
         assertEquals("8.33", NumberText.formatNumber(8.333333, Locale.ROOT));
-        assertEquals("0", NumberText.formatNumber(-0.001, Locale.ROOT));
+        assertEquals("0", NumberText.formatNumber(-0.0, Locale.ROOT));
+        assertEquals("−0.001", NumberText.formatNumber(-0.001, Locale.ROOT));
+        assertEquals("0.0047", NumberText.formatNumber(0.00467, Locale.ROOT));
+        assertEquals("0.063", NumberText.formatNumber(0.0625, Locale.ROOT));
+        assertEquals("1", NumberText.formatNumber(0.999, Locale.ROOT));
     }
 
     @Test
